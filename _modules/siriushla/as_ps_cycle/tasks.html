@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_cycle.tasks &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_cycle.tasks</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ps_cycle.tasks</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span> <span class="k">as</span> <span class="n">_dcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">_datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QThread</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.cycle</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSCycler</span><span class="p">,</span> <span class="n">LinacPSCycler</span><span class="p">,</span> <span class="n">PSCyclerFBP</span><span class="p">,</span> <span class="n">FOFBPSCycler</span><span class="p">,</span>\
+    <span class="n">CycleController</span>
+
+
+<span class="n">TIMEOUT_CHECK</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">TIMEOUT_SLEEP</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">TIMEOUT_CONN</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<div class="viewcode-block" id="BaseTask">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseTask</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base Task.&quot;&quot;&quot;</span>
+
+    <span class="n">_cyclers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">_controller</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">currentItem</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">itemDone</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+    <span class="n">completed</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">psnames</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">timing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">need_controller</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isadv</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span> <span class="o">=</span> <span class="n">psnames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timing</span> <span class="o">=</span> <span class="n">timing</span>
+        <span class="k">if</span> <span class="n">need_controller</span><span class="p">:</span>
+            <span class="n">cyclers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">psnames</span><span class="p">:</span>
+                <span class="n">cyclers</span><span class="p">[</span><span class="n">ps</span><span class="p">]</span> <span class="o">=</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_cyclers</span><span class="p">[</span><span class="n">ps</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_controller</span><span class="p">:</span>
+                <span class="n">BaseTask</span><span class="o">.</span><span class="n">_controller</span> <span class="o">=</span> <span class="n">CycleController</span><span class="p">(</span>
+                    <span class="n">cyclers</span><span class="o">=</span><span class="n">cyclers</span><span class="p">,</span> <span class="n">timing</span><span class="o">=</span><span class="n">timing</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">isadv</span><span class="o">=</span><span class="n">isadv</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">BaseTask</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cyclers</span> <span class="o">=</span> <span class="n">cyclers</span>
+                <span class="n">BaseTask</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">timing</span> <span class="o">=</span> <span class="n">timing</span>
+                <span class="n">BaseTask</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BaseTask.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task size.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.exit_task">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask.exit_task">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exit_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set flag to quit thread.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.run">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run task.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_interrupted</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interrupted</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.update">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">_datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">-%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">now</span><span class="o">+</span><span class="s1">&#39;  &#39;</span><span class="o">+</span><span class="n">message</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.BaseTask.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Must be reimplemented in each class.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+            <span class="n">cycler</span> <span class="o">=</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_cyclers</span><span class="p">[</span><span class="n">ps</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cycler</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">(</span><span class="n">TIMEOUT_CONN</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cycler</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+            <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_interrupted</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">TIMEOUT_CHECK</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interrupted</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">need_check</span> <span class="o">=</span> <span class="n">_dcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ps</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">need_check</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">cycler</span> <span class="o">=</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_cyclers</span><span class="p">[</span><span class="n">ps</span><span class="p">]</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cycler</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+                    <span class="n">need_check</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_interrupted</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">need_check</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">TIMEOUT_SLEEP</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">need_check</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CreateCyclers">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.CreateCyclers">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateCyclers</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create cyclers.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CreateCyclers.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.CreateCyclers.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create cyclers.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">psname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">psname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_cyclers</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">PVName</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span><span class="o">.</span><span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;LI&#39;</span><span class="p">:</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">LinacPSCycler</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;FOFB_PS&#39;</span><span class="p">:</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">FOFBPSCycler</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;FBP&#39;</span><span class="p">:</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">PSCyclerFBP</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">PSCycler</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+                <span class="n">BaseTask</span><span class="o">.</span><span class="n">_cyclers</span><span class="p">[</span><span class="n">psname</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">psname</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_interrupted</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="VerifyPS">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.VerifyPS">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VerifyPS</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify power supply initial state.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="VerifyPS.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.VerifyPS.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task size.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psnames</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VerifyPS.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.VerifyPS.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify if PS is ready for cycle.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_on&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_intlks&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SaveTiming">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.SaveTiming">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SaveTiming</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save timing initial state.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SaveTiming.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.SaveTiming.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">save_timing_size</span></div>
+
+
+<div class="viewcode-block" id="SaveTiming.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.SaveTiming.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">save_timing_max_duration</span></div>
+
+
+<div class="viewcode-block" id="SaveTiming.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.SaveTiming.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">save_timing_initial_state</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PrepareTiming">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PrepareTiming">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PrepareTiming</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare timing to cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PrepareTiming.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PrepareTiming.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_timing_size</span></div>
+
+
+<div class="viewcode-block" id="PrepareTiming.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PrepareTiming.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_timing_max_duration</span></div>
+
+
+<div class="viewcode-block" id="PrepareTiming.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PrepareTiming.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_timing</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PreparePSIDFFMode">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PreparePSIDFFMode</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare power suplies to cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreparePSIDFFMode.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_idffmode_size</span></div>
+
+
+<div class="viewcode-block" id="PreparePSIDFFMode.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_idffmode_max_duration</span></div>
+
+
+<div class="viewcode-block" id="PreparePSIDFFMode.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_pwrsupplies_idffmode</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PreparePSOpModeSlowRef">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PreparePSOpModeSlowRef</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare power suplies to cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreparePSOpModeSlowRef.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_opmode_slowref_size</span></div>
+
+
+<div class="viewcode-block" id="PreparePSOpModeSlowRef.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_opmode_slowref_max_duration</span></div>
+
+
+<div class="viewcode-block" id="PreparePSOpModeSlowRef.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_pwrsupplies_opmode_slowref</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PreparePSCurrentZero">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PreparePSCurrentZero</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare power suplies to cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreparePSCurrentZero.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_current_zero_size</span></div>
+
+
+<div class="viewcode-block" id="PreparePSCurrentZero.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_current_zero_max_duration</span></div>
+
+
+<div class="viewcode-block" id="PreparePSCurrentZero.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_pwrsupplies_current_zero</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PreparePSParams">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PreparePSParams</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare power suplies to cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreparePSParams.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSParams.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_params_size</span></div>
+
+
+<div class="viewcode-block" id="PreparePSParams.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSParams.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_params_max_duration</span></div>
+
+
+<div class="viewcode-block" id="PreparePSParams.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSParams.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_pwrsupplies_parameters</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PreparePSOpModeCycle">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PreparePSOpModeCycle</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare power suplies to cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreparePSOpModeCycle.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_opmode_cycle_size</span></div>
+
+
+<div class="viewcode-block" id="PreparePSOpModeCycle.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_ps_opmode_cycle_max_duration</span></div>
+
+
+<div class="viewcode-block" id="PreparePSOpModeCycle.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">prepare_pwrsupplies_opmode_cycle</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CycleTrims">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.CycleTrims">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CycleTrims</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CycleTrims.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.CycleTrims.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cycle_trims_size</span></div>
+
+
+<div class="viewcode-block" id="CycleTrims.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.CycleTrims.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cycle_trims_max_duration</span></div>
+
+
+<div class="viewcode-block" id="CycleTrims.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.CycleTrims.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cycle_trims</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Cycle">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.Cycle">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cycle</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cycle.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Cycle.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.Cycle.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cycle_size</span></div>
+
+
+<div class="viewcode-block" id="Cycle.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.Cycle.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cycle_max_duration</span></div>
+
+
+<div class="viewcode-block" id="Cycle.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.Cycle.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RestoreTiming">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.RestoreTiming">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RestoreTiming</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Restore timing initial state.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">need_controller</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RestoreTiming.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.RestoreTiming.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">restore_timing_size</span></div>
+
+
+<div class="viewcode-block" id="RestoreTiming.duration">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.RestoreTiming.duration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return task maximum duration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">restore_timing_max_duration</span></div>
+
+
+<div class="viewcode-block" id="RestoreTiming.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_cycle.html#siriushla.as_ps_cycle.tasks.RestoreTiming.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">restore_timing_initial_state</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

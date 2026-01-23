@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.widgets.spectrogram_view &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.widgets.spectrogram_view</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.widgets.spectrogram_view</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;SiriusSpectrogramView widget.</span>
+
+<span class="sd">Based on ImageView from pydm and GradientLegend from pyqtgraph.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QActionGroup</span><span class="p">,</span> <span class="n">QToolTip</span><span class="p">,</span> <span class="n">QMenu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span><span class="p">,</span> <span class="n">QLinearGradient</span><span class="p">,</span> <span class="n">QBrush</span><span class="p">,</span> <span class="n">QPen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">Property</span><span class="p">,</span> <span class="n">QTimer</span><span class="p">,</span> <span class="n">Q_ENUMS</span><span class="p">,</span> \
+    <span class="n">QThread</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QRectF</span><span class="p">,</span> <span class="n">QPointF</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyqtgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewBox</span><span class="p">,</span> <span class="n">ImageItem</span><span class="p">,</span> <span class="n">AxisItem</span><span class="p">,</span> <span class="n">GraphicsLayoutWidget</span><span class="p">,</span> \
+    <span class="n">ColorMap</span><span class="p">,</span> <span class="n">GraphicsWidget</span><span class="p">,</span> <span class="n">LabelItem</span><span class="p">,</span> <span class="n">PlotCurveItem</span><span class="p">,</span> <span class="n">mkPen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.channel</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMChannel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.colormaps</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmaps</span><span class="p">,</span> <span class="n">cmap_names</span><span class="p">,</span> <span class="n">PyDMColorMap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMWidget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadingOrder</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_GradientLegend</span><span class="p">(</span><span class="n">GraphicsWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to make GradientLegend a GraphicsWidget.</span>
+
+<span class="sd">    Draws a color gradient rectangle along with text labels denoting the value</span>
+<span class="sd">    at specific points along the gradient.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    size : list of int, optional</span>
+<span class="sd">        Size of the widget within the GraphicsWidget rectangle.</span>
+<span class="sd">    colors : a list of RGB codes, optional</span>
+<span class="sd">        The lookup table to be used to design the gradient.</span>
+<span class="sd">    labels : dict of keys = strings and values = int</span>
+<span class="sd">        The labels that will appear along the colorbar.</span>
+<span class="sd">        The values determine the sequence of labels in descending order.</span>
+<span class="sd">    minVal : int, optional</span>
+<span class="sd">        If labels is None, so only minVal and maxVal are displayed in the</span>
+<span class="sd">        beggining and in the end of the colorbar.</span>
+<span class="sd">    maxVal : int, optional</span>
+<span class="sd">        If labels is None, so only minVal and maxVal are displayed in the</span>
+<span class="sd">        beggining and in the end of the colorbar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxVal</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">GraphicsWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAcceptedMouseButtons</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">NoButton</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+
+        <span class="c1"># if min and max values are None, assume normalized data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minVal</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">minVal</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">minVal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxVal</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">maxVal</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">maxVal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">}</span> <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{: .3f}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span> <span class="o">=</span> <span class="n">QLinearGradient</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setIntColorScale</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">,</span>
+                              <span class="n">minVal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minVal</span><span class="p">,</span> <span class="n">maxVal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">maxVal</span><span class="p">,</span>
+                              <span class="n">labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setIntColorScale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxVal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># generate color gradient</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">QLinearGradient</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">setColorAt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">QColor</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setGradient</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+        <span class="c1"># add labels</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">minVal</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">maxVal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setLabels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setLabels</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">minVal</span><span class="p">),</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">maxVal</span><span class="p">)})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setLabels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setGradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">minVal</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">maxVal</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">minVal</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">minVal</span> <span class="ow">and</span> <span class="n">maxVal</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxVal</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minVal</span> <span class="o">=</span> <span class="n">minVal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxVal</span> <span class="o">=</span> <span class="n">maxVal</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">newv</span> <span class="o">=</span> <span class="n">minVal</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">maxVal</span> <span class="o">-</span> <span class="n">minVal</span><span class="p">)</span>
+            <span class="n">newv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">newv</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">newv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLabels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define labels to appear next to the color scale.</span>
+
+<span class="sd">        Accepts a dict of {text: value} pairs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">widget</span><span class="p">):</span>
+        <span class="n">GraphicsWidget</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">widget</span><span class="p">)</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">()</span>  <span class="c1"># Boundaries of visible area in scene coord</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+            <span class="k">else</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span><span class="p">()</span><span class="o">-</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span><span class="p">(),</span> <span class="n">rect</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">top</span><span class="p">()]</span>
+
+        <span class="c1"># determine max width of all labels</span>
+        <span class="n">textPadding</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># in px</span>
+        <span class="n">labelWidth</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">labelHeight</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">(</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                               <span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="n">labelWidth</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">labelWidth</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">width</span><span class="p">())</span>
+            <span class="n">labelHeight</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">labelHeight</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+
+        <span class="n">x1_back</span> <span class="o">=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">left</span><span class="p">()</span> <span class="o">-</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">x2_back</span> <span class="o">=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">left</span><span class="p">()</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">y1_back</span> <span class="o">=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">top</span><span class="p">()</span> <span class="o">-</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">y2_back</span> <span class="o">=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">top</span><span class="p">()</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">x1_grad</span> <span class="o">=</span> <span class="n">x1_back</span> <span class="o">+</span> <span class="n">textPadding</span><span class="o">*</span><span class="mi">2</span>
+        <span class="n">x2_grad</span> <span class="o">=</span> <span class="n">x2_back</span> <span class="o">-</span> <span class="p">(</span><span class="n">labelWidth</span> <span class="o">+</span> <span class="n">textPadding</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">y1_grad</span> <span class="o">=</span> <span class="n">y1_back</span> <span class="o">+</span> <span class="p">(</span><span class="n">labelHeight</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">textPadding</span><span class="p">)</span>
+        <span class="n">y2_grad</span> <span class="o">=</span> <span class="n">y2_back</span> <span class="o">-</span> <span class="p">(</span><span class="n">labelHeight</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">textPadding</span><span class="p">)</span>
+
+        <span class="c1"># Draw background</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">setBrush</span><span class="p">(</span><span class="n">QBrush</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">QRectF</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">x1_back</span><span class="p">,</span> <span class="n">y1_back</span><span class="p">),</span>
+                      <span class="n">QPointF</span><span class="p">(</span><span class="n">x2_back</span><span class="p">,</span> <span class="n">y2_back</span><span class="p">))</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">drawRect</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+        <span class="c1"># Draw color bar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">setStart</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y2_grad</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">setFinalStop</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y1_grad</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">setBrush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">)</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">QRectF</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">x1_grad</span><span class="p">,</span> <span class="n">y1_grad</span><span class="p">),</span>
+                      <span class="n">QPointF</span><span class="p">(</span><span class="n">x2_grad</span><span class="p">,</span> <span class="n">y2_grad</span><span class="p">))</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">drawRect</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+        <span class="c1"># draw labels</span>
+        <span class="n">tx</span> <span class="o">=</span> <span class="n">x2_grad</span> <span class="o">+</span> <span class="n">textPadding</span><span class="o">*</span><span class="mi">2</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="n">labelWidth</span>
+        <span class="n">lh</span> <span class="o">=</span> <span class="n">labelHeight</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y1_grad</span> <span class="o">+</span> <span class="n">key</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2_grad</span><span class="o">-</span><span class="n">y1_grad</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">QRectF</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">lh</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">lh</span><span class="p">),</span>
+                       <span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="n">labelWidth</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">textPadding</span> <span class="o">+</span> <span class="mi">20</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SpectrogramUpdateThread">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SpectrogramUpdateThread">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SpectrogramUpdateThread</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Thread to update image.&quot;&quot;&quot;</span>
+
+    <span class="n">updateSignal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spectrogram_view</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Thread.&quot;&quot;&quot;</span>
+        <span class="n">QThread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span> <span class="o">=</span> <span class="n">spectrogram_view</span>
+
+<div class="viewcode-block" id="SpectrogramUpdateThread.run">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SpectrogramUpdateThread.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Thread main.&quot;&quot;&quot;</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">image_waveform</span>
+        <span class="n">needs_redraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">needs_redraw</span>
+        <span class="n">image_dimensions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">imageWidth</span>
+        <span class="n">reading_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">readingOrder</span>
+        <span class="n">normalize_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">_normalize_data</span>
+        <span class="n">cm_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">cm_min</span>
+        <span class="n">cm_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">cm_max</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">needs_redraw</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;ImageUpdateThread - needs redraw is False. Aborting.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">image_dimensions</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">width</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># We don&#39;t have a width for this image yet, so we can&#39;t draw it</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s2">&quot;ImageUpdateThread - no width available. Aborting.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">reading_order</span> <span class="o">==</span> <span class="n">ReadingOrder</span><span class="o">.</span><span class="n">Clike</span><span class="p">:</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Invalid width for image during reshape: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="n">width</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ImageUpdateThread - Will Process Image&quot;</span><span class="p">)</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">process_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">normalize_data</span><span class="p">:</span>
+            <span class="n">mini</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">maxi</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mini</span> <span class="o">=</span> <span class="n">cm_min</span>
+            <span class="n">maxi</span> <span class="o">=</span> <span class="n">cm_max</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ImageUpdateThread - Emit Update Signal&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">([</span><span class="n">mini</span><span class="p">,</span> <span class="n">maxi</span><span class="p">,</span> <span class="n">img</span><span class="p">])</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ImageUpdateThread - Set Needs Redraw -&gt; False&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spectrogram_view</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">False</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SiriusSpectrogramView</span><span class="p">(</span>
+        <span class="n">GraphicsLayoutWidget</span><span class="p">,</span> <span class="n">PyDMWidget</span><span class="p">,</span> <span class="n">PyDMColorMap</span><span class="p">,</span> <span class="n">ReadingOrder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A SpectrogramView with support for Channels and more from PyDM.</span>
+
+<span class="sd">    If there is no :attr:`channelWidth` it is possible to define the width of</span>
+<span class="sd">    the image with the :attr:`width` property.</span>
+
+<span class="sd">    The :attr:`normalizeData` property defines if the colors of the images are</span>
+<span class="sd">    relative to the :attr:`colorMapMin` and :attr:`colorMapMax` property or to</span>
+<span class="sd">    the minimum and maximum values of the image.</span>
+
+<span class="sd">    Use the :attr:`newImageSignal` to hook up to a signal that is emitted when</span>
+<span class="sd">    a new image is rendered in the widget.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the Label</span>
+<span class="sd">    image_channel : str, optional</span>
+<span class="sd">        The channel to be used by the widget for the image data.</span>
+<span class="sd">    xaxis_channel : str, optional</span>
+<span class="sd">        The channel to be used by the widget to receive the image width</span>
+<span class="sd">        (if ReadingOrder == Clike), and to set the xaxis values</span>
+<span class="sd">    yaxis_channel : str, optional</span>
+<span class="sd">        The channel to be used by the widget to receive the image width</span>
+<span class="sd">        (if ReadingOrder == Fortranlike), and to set the yaxis values</span>
+<span class="sd">    background : QColor, optional</span>
+<span class="sd">        QColor to set the background color of the GraphicsView</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Q_ENUMS</span><span class="p">(</span><span class="n">PyDMColorMap</span><span class="p">)</span>
+    <span class="n">Q_ENUMS</span><span class="p">(</span><span class="n">ReadingOrder</span><span class="p">)</span>
+
+    <span class="n">color_maps</span> <span class="o">=</span> <span class="n">cmaps</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">xaxis_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yaxis_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">roioffsetx_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roioffsety_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">roiwidth_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roiheight_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                 <span class="n">image_width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">image_height</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize widget.&quot;&quot;&quot;</span>
+        <span class="n">GraphicsLayoutWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">PyDMWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span> <span class="o">=</span> <span class="mi">7</span><span class="o">*</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_waveform</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="n">image_width</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">xaxis_channel</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">=</span> <span class="n">image_height</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">yaxis_channel</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_data</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_auto_downsample</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_auto_colorbar_lims</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format_tooltip</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.4g}</span><span class="s1">, </span><span class="si">{1:.4g}</span><span class="s1">&#39;</span>
+
+        <span class="c1"># ViewBox and imageItem.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span> <span class="o">=</span> <span class="n">ViewBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="p">)</span>
+
+        <span class="c1"># ROI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROICurve</span> <span class="o">=</span> <span class="n">PlotCurveItem</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROIColor</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="n">pen</span> <span class="o">=</span> <span class="n">mkPen</span><span class="p">()</span>
+        <span class="n">pen</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s1">&#39;transparent&#39;</span><span class="p">))</span>
+        <span class="n">pen</span><span class="o">.</span><span class="n">setWidth</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROICurve</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">pen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ROICurve</span><span class="p">)</span>
+
+        <span class="c1"># Axis.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span> <span class="o">=</span> <span class="n">AxisItem</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">xaxis_channel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span> <span class="o">=</span> <span class="n">AxisItem</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">yaxis_channel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Colorbar legend.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colorbar</span> <span class="o">=</span> <span class="n">_GradientLegend</span><span class="p">()</span>
+
+        <span class="c1"># Title.</span>
+        <span class="n">start_row</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">LabelItem</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#000000&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">start_row</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Set layout.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="p">,</span> <span class="n">start_row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="p">,</span> <span class="n">start_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colorbar</span><span class="p">,</span> <span class="n">start_row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">start_row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setBackground</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">setColumnSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">setRowSpacing</span><span class="p">(</span><span class="n">start_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Set color map limits.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span> <span class="o">=</span> <span class="mf">255.0</span>
+
+        <span class="c1"># Set default reading order of numpy array data to Clike.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reading_order</span> <span class="o">=</span> <span class="n">ReadingOrder</span><span class="o">.</span><span class="n">Clike</span>
+
+        <span class="c1"># Make a right-click menu for changing the color map.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cm_group</span> <span class="o">=</span> <span class="n">QActionGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmap_for_action</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">color_maps</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_group</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">cmap_names</span><span class="p">[</span><span class="n">cm</span><span class="p">])</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmap_for_action</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="n">cm</span>
+
+        <span class="c1"># Set the default colormap.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cm_colors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colorMap</span> <span class="o">=</span> <span class="n">PyDMColorMap</span><span class="o">.</span><span class="n">Inferno</span>
+
+        <span class="c1"># Setup the redraw timer.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redraw_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redraw_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">redrawImage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_redraw_rate</span> <span class="o">=</span> <span class="mi">30</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxRedrawRate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redraw_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newImageSignal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">sigImageChanged</span>
+
+        <span class="c1"># Set Channels.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imageChannel</span> <span class="o">=</span> <span class="n">image_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xAxisChannel</span> <span class="o">=</span> <span class="n">xaxis_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yAxisChannel</span> <span class="o">=</span> <span class="n">yaxis_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROIOffsetXChannel</span> <span class="o">=</span> <span class="n">roioffsetx_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROIOffsetYChannel</span> <span class="o">=</span> <span class="n">roioffsety_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROIWidthChannel</span> <span class="o">=</span> <span class="n">roiwidth_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROIHeightChannel</span> <span class="o">=</span> <span class="n">roiheight_channel</span>
+
+        <span class="c1"># Handle view range changed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">sigRangeChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_axis_range</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">suggestPadding</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Context menu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contextMenuEvent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">cm_menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="s2">&quot;Color Map&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmap_for_action</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cm_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+        <span class="n">cm_menu</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_changeColorMap</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span><span class="o">.</span><span class="n">contextMenu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cm_menu</span><span class="p">)</span>
+
+    <span class="c1"># --- Colormap methods ---</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_changeColorMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked by the colormap Action Menu.</span>
+
+<span class="sd">        Changes the current colormap used to render the image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        action : QAction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colorMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmap_for_action</span><span class="p">[</span><span class="n">action</span><span class="p">]</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">colorMapMin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Minimum value for the colormap.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span>
+
+    <span class="nd">@colorMapMin</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">colorMapMin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_min</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the minimum value for the colormap.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_min : float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span> <span class="o">!=</span> <span class="n">new_min</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span> <span class="o">=</span> <span class="n">new_min</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">colorMapMax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maximum value for the colormap.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span>
+
+    <span class="nd">@colorMapMax</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">colorMapMax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_max</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the maximum value for the colormap.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_max : float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span> <span class="o">!=</span> <span class="n">new_max</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span> <span class="o">=</span> <span class="n">new_max</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span>
+
+<div class="viewcode-block" id="SiriusSpectrogramView.setColorMapLimits">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.setColorMapLimits">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setColorMapLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the limit values for the colormap.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mn : int</span>
+<span class="sd">            The lower limit</span>
+<span class="sd">        mx : int</span>
+<span class="sd">            The upper limit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">mn</span> <span class="o">&gt;=</span> <span class="n">mx</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cm_max</span> <span class="o">=</span> <span class="n">mx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cm_min</span> <span class="o">=</span> <span class="n">mn</span></div>
+
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="n">PyDMColorMap</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">colorMap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the color map used by the SpectrogramView.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PyDMColorMap</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colormap</span>
+
+    <span class="nd">@colorMap</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">colorMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_cmap</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the color map used by the SpectrogramView.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------</span>
+<span class="sd">        new_cmap : PyDMColorMap</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colormap</span> <span class="o">=</span> <span class="n">new_cmap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cm_colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color_maps</span><span class="p">[</span><span class="n">new_cmap</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setColorMap</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_group</span><span class="o">.</span><span class="n">actions</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmap_for_action</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colormap</span><span class="p">:</span>
+                <span class="n">action</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">action</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SiriusSpectrogramView.setColorMap">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.setColorMap">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setColorMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the image colormap.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cmap : ColorMap</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmap</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cm_colors</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">return</span>
+            <span class="c1"># Take default values</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cm_colors</span><span class="p">))</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">ColorMap</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cm_colors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">setBackgroundColor</span><span class="p">(</span><span class="n">cmap</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">lut</span> <span class="o">=</span> <span class="n">cmap</span><span class="o">.</span><span class="n">getLookupTable</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">setIntColorScale</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="n">lut</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">setLookupTable</span><span class="p">(</span><span class="n">lut</span><span class="p">)</span></div>
+
+
+    <span class="c1"># --- Connection Slots ---</span>
+<div class="viewcode-block" id="SiriusSpectrogramView.image_connection_state_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.image_connection_state_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the Image Channel connection state is changed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redraw_timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redraw_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.yaxis_connection_state_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.yaxis_connection_state_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yaxis_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connected</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the TimeAxis Channel connection state is changed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeaxis_connected</span> <span class="o">=</span> <span class="n">connected</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roioffsetx_connection_state_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roioffsetx_connection_state_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roioffsetx_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetX Channel connection state changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roioffsety_connection_state_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roioffsety_connection_state_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roioffsety_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetY Channel connection state changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roiwidth_connection_state_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roiwidth_connection_state_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roiwidth_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIWidth Channel connection state changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roiheight_connection_state_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roiheight_connection_state_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roiheight_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIHeight Channel connection state changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+    <span class="c1"># --- Value Slots ---</span>
+<div class="viewcode-block" id="SiriusSpectrogramView.image_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.image_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_image</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the Image Channel value is changed.</span>
+
+<span class="sd">        We try to do as little as possible in this method, because it</span>
+<span class="sd">        gets called every time the image channel updates, which might</span>
+<span class="sd">        be extremely often.  Basically just store the data, and set</span>
+<span class="sd">        a flag requesting that the image be redrawn.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_image : np.ndarray</span>
+<span class="sd">            The new image data.  This can be a flat 1D array, or a 2D array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">new_image</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SpectrogramView Received New Image: Needs Redraw-&gt;True&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_waveform</span> <span class="o">=</span> <span class="n">new_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">=</span> <span class="n">new_image</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="n">new_image</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.xaxis_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.xaxis_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xaxis_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_array</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the Image Width Channel value is changed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_array : np.ndarray</span>
+<span class="sd">            The new x axis array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_array</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">new_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">new_array</span><span class="p">,</span> <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span> <span class="o">=</span> <span class="n">new_array</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reading_order</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Clike</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="n">new_array</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">=</span> <span class="n">new_array</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.yaxis_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.yaxis_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yaxis_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_array</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the TimeAxis Channel value is changed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_array : np.array</span>
+<span class="sd">            The new y axis array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_array</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">new_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">new_array</span><span class="p">,</span> <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span> <span class="o">=</span> <span class="n">new_array</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reading_order</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fortranlike</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="n">new_array</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">=</span> <span class="n">new_array</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roioffsetx_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roioffsetx_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roioffsetx_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetX Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_offsetx : int</span>
+<span class="sd">            The new image ROI horizontal offset</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span> <span class="o">=</span> <span class="n">new_offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roioffsety_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roioffsety_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roioffsety_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetY Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_offsety : int</span>
+<span class="sd">            The new image ROI vertical offset</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span> <span class="o">=</span> <span class="n">new_offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roiwidth_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roiwidth_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roiwidth_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_width</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIWidth Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_width : int</span>
+<span class="sd">            The new image ROI width</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.roiheight_value_changed">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.roiheight_value_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roiheight_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_height</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIHeight Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_height : int</span>
+<span class="sd">            The new image ROI height</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span></div>
+
+
+    <span class="c1"># --- Image update methods ---</span>
+<div class="viewcode-block" id="SiriusSpectrogramView.process_image">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.process_image">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Boilerplate method.</span>
+
+<span class="sd">        To be used by applications in order to add calculations and also modify</span>
+<span class="sd">        the image before it is displayed at the widget.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">           This code runs in a separated QThread so it **MUST** not try to</span>
+<span class="sd">           write to QWidgets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        image : np.ndarray</span>
+<span class="sd">            The Image Data as a 2D numpy array</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            The Image Data as a 2D numpy array after processing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">image</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.redrawImage">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.redrawImage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redrawImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the image data into the ImageItem, if needed.</span>
+
+<span class="sd">        If necessary, reshape the image to 2D first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">isFinished</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Image processing has taken longer than the refresh rate.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="n">SpectrogramUpdateThread</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_updateDisplay</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SpectrogramView RedrawImage Thread Launched&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_axis_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">iszx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">ixMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">ixMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iszx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">readingOrder</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Clike</span> \
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageHeight</span>
+            <span class="n">ixMin</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">ixMax</span> <span class="o">=</span> <span class="n">iszx</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">iszy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">iyMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">iyMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iszy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageHeight</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">readingOrder</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Clike</span> \
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span>
+            <span class="n">iyMin</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">iyMax</span> <span class="o">=</span> <span class="n">iszy</span>
+
+        <span class="p">[</span><span class="n">_vx</span><span class="p">,</span> <span class="n">_vy</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">viewRange</span><span class="p">()</span>
+        <span class="n">limsx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_vx</span><span class="p">)</span> <span class="o">/</span> <span class="n">iszx</span> <span class="o">*</span> <span class="p">(</span><span class="n">ixMax</span><span class="o">-</span><span class="n">ixMin</span><span class="p">)</span> <span class="o">+</span> <span class="n">ixMin</span>
+        <span class="n">limsy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_vy</span><span class="p">)</span> <span class="o">/</span> <span class="n">iszy</span> <span class="o">*</span> <span class="p">(</span><span class="n">iyMax</span><span class="o">-</span><span class="n">iyMin</span><span class="p">)</span> <span class="o">+</span> <span class="n">iyMin</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">limsx</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="n">limsx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">limsx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">limsy</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="n">limsy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">limsy</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_updateDisplay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SpectrogramView Update Display with new image&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoSetColorbarLims</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">setLimits</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">mini</span><span class="p">,</span> <span class="n">maxi</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">setLevels</span><span class="p">([</span><span class="n">mini</span><span class="p">,</span> <span class="n">maxi</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+            <span class="n">img</span><span class="p">,</span>
+            <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">autoDownsample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">autoDownsample</span><span class="p">)</span>
+
+    <span class="c1"># ROI update methods</span>
+<div class="viewcode-block" id="SiriusSpectrogramView.redrawROI">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.redrawROI">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redrawROI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">startx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span>
+        <span class="n">endx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span>
+        <span class="n">starty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span>
+        <span class="n">endy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROICurve</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">startx</span><span class="p">,</span> <span class="n">startx</span><span class="p">,</span> <span class="n">endx</span><span class="p">,</span> <span class="n">endx</span><span class="p">,</span> <span class="n">startx</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">,</span> <span class="n">endy</span><span class="p">,</span> <span class="n">starty</span><span class="p">,</span> <span class="n">starty</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.showROI">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.showROI">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">showROI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set ROI visibility.&quot;&quot;&quot;</span>
+        <span class="n">pen</span> <span class="o">=</span> <span class="n">mkPen</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">pen</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ROIColor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pen</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s1">&#39;transparent&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROICurve</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">pen</span><span class="p">)</span></div>
+
+
+    <span class="c1"># --- Properties ---</span>
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">autoDownsample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return if we should or not apply the autoDownsample option.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_downsample</span>
+
+    <span class="nd">@autoDownsample</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">autoDownsample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether we should or not apply the autoDownsample option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_value: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_downsample</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_auto_downsample</span> <span class="o">=</span> <span class="n">new_value</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">autoSetColorbarLims</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return if we should or not auto set colorbar limits.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_colorbar_lims</span>
+
+    <span class="nd">@autoSetColorbarLims</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">autoSetColorbarLims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether we should or not auto set colorbar limits.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_value: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_colorbar_lims</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_auto_colorbar_lims</span> <span class="o">=</span> <span class="n">new_value</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the width of the image.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span>
+
+    <span class="nd">@imageWidth</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_width</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the width of the image.</span>
+
+<span class="sd">        Can be overridden by :attr:`xAxisChannel` and :attr:`yAxisChannel`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_width: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">boo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_width</span><span class="p">)</span>
+        <span class="n">boo</span> <span class="o">&amp;=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span>
+        <span class="n">boo</span> <span class="o">&amp;=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span>
+        <span class="k">if</span> <span class="n">boo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_width</span><span class="p">)</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the height of the image.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetX</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the ROI offset in X axis in pixels.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span>
+
+    <span class="nd">@ROIOffsetX</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetX</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ROI offset in X axis in pixels.</span>
+
+<span class="sd">        Can be overridden by :attr:`ROIOffsetXChannel`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_offset: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">boo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_offset</span><span class="p">)</span>
+        <span class="n">boo</span> <span class="o">&amp;=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span>
+        <span class="k">if</span> <span class="n">boo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsetx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_offset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetY</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the ROI offset in Y axis in pixels.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span>
+
+    <span class="nd">@ROIOffsetY</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ROI offset in Y axis in pixels.</span>
+
+<span class="sd">        Can be overridden by :attr:`ROIOffsetYChannel`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_offset: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">boo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_offset</span><span class="p">)</span>
+        <span class="n">boo</span> <span class="o">&amp;=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span>
+        <span class="k">if</span> <span class="n">boo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_offsety</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_offset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the ROI width in pixels.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span>
+
+    <span class="nd">@ROIWidth</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_width</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ROI width in pixels.</span>
+
+<span class="sd">        Can be overridden by :attr:`ROIWidthChannel`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_width: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">boo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_width</span><span class="p">)</span>
+        <span class="n">boo</span> <span class="o">&amp;=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span>
+        <span class="k">if</span> <span class="n">boo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_width</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the ROI height in pixels.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span>
+
+    <span class="nd">@ROIHeight</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_height</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ROI height in pixels.</span>
+
+<span class="sd">        Can be overridden by :attr:`ROIHeightChannel`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_height: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">boo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_height</span><span class="p">)</span>
+        <span class="n">boo</span> <span class="o">&amp;=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span>
+        <span class="k">if</span> <span class="n">boo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roi_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_height</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redrawROI</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">normalizeData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return True if the colors are relative to data maximum and minimum.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_data</span>
+
+    <span class="nd">@normalizeData</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">normalizeData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_norm</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define if the colors are relative to minimum and maximum of the data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_norm: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_data</span> <span class="o">!=</span> <span class="n">new_norm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_data</span> <span class="o">=</span> <span class="n">new_norm</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="n">ReadingOrder</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">readingOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the reading order of the :attr:`imageChannel` array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ReadingOrder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reading_order</span>
+
+    <span class="nd">@readingOrder</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">readingOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set reading order of the :attr:`imageChannel` array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        order: ReadingOrder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reading_order</span> <span class="o">!=</span> <span class="n">order</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reading_order</span> <span class="o">=</span> <span class="n">order</span>
+
+        <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Clike</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="o">.</span><span class="n">size</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">elif</span> <span class="n">order</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fortranlike</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="o">.</span><span class="n">size</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maxRedrawRate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The maximum rate (in Hz) at which the plot will be redrawn.</span>
+
+<span class="sd">        The plot will not be redrawn if there is not new data to draw.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redraw_rate</span>
+
+    <span class="nd">@maxRedrawRate</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maxRedrawRate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">redraw_rate</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The maximum rate (in Hz) at which the plot will be redrawn.</span>
+
+<span class="sd">        The plot will not be redrawn if there is not new data to draw.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------</span>
+<span class="sd">        redraw_rate : int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_redraw_rate</span> <span class="o">=</span> <span class="n">redraw_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redraw_timer</span><span class="o">.</span><span class="n">setInterval</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redraw_rate</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="c1"># --- Events rederivations ---</span>
+<div class="viewcode-block" id="SiriusSpectrogramView.keyPressEvent">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.keyPressEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle keypress events.&quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.mouseMoveEvent">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.mouseMoveEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">height</span><span class="p">():</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
+        <span class="n">posaux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">mapFromDevice</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">posaux</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">posaux</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">posaux</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="ow">or</span> \
+                <span class="n">posaux</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">posaux</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">height</span><span class="p">():</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">pos_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">mapSceneToView</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">pos_scene</span><span class="o">.</span><span class="n">x</span><span class="p">())</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">pos_scene</span><span class="o">.</span><span class="n">y</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xAxisChannel</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maxx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">maxx</span> <span class="k">else</span> <span class="n">maxx</span>
+            <span class="n">valx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_xaxis_data</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valx</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">yAxisChannel</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maxy</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">maxy</span> <span class="k">else</span> <span class="n">maxy</span>
+            <span class="n">valy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_yaxis_data</span><span class="p">[</span><span class="n">y</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valy</span> <span class="o">=</span> <span class="n">y</span>
+
+        <span class="n">txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_tooltip</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">valx</span><span class="p">,</span> <span class="n">valy</span><span class="p">)</span>
+        <span class="n">QToolTip</span><span class="o">.</span><span class="n">showText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">pos</span><span class="p">),</span> <span class="n">txt</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">(),</span> <span class="mi">5000</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span></div>
+
+
+    <span class="c1"># --- Channels ---</span>
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The channel address in use for the image data .</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@imageChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The channel address in use for the image data .</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xAxisChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The channel address in use for the x-axis of image.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@xAxisChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xAxisChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The channel address in use for the x-axis of image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connectionStateChanged</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xaxis_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xaxischannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yAxisChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The channel address in use for the time axis.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@yAxisChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yAxisChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The channel address in use for the time axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">yaxis_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">yaxis_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yaxischannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetXChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI horizontal offset.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@ROIOffsetXChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetXChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI horizontal offset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roioffsetx_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roioffsetx_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetxchannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetYChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI vertical offset.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@ROIOffsetYChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetYChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI vertical offset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roioffsety_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roioffsety_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roioffsetychannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIWidthChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI width.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@ROIWidthChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIWidthChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI width.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roiwidth_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roiwidth_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roiwidthchannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIHeightChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI height.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@ROIHeightChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIHeightChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI height.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roiheight_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roiheight_value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_roiheightchannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SiriusSpectrogramView.channels">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channels being used for this Widget.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        channels : list</span>
+<span class="sd">            List of PyDMChannel objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="SiriusSpectrogramView.channels_for_tools">
+<a class="viewcode-back" href="../../../siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView.channels_for_tools">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels_for_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return channels for tools.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_imagechannel</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

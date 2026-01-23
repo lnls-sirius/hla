@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.util &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.util</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.util</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Util module.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_part</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.utilities.stylesheet</span><span class="w"> </span><span class="kn">import</span> <span class="n">_get_style_data</span> <span class="k">as</span> <span class="n">pydm_get_style_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QFile</span> <span class="k">as</span> <span class="n">_QFile</span><span class="p">,</span> <span class="n">QThread</span> <span class="k">as</span> <span class="n">_QThread</span><span class="p">,</span> <span class="n">Signal</span> <span class="k">as</span> <span class="n">_Signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> \
+    <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span>
+
+<span class="n">THREAD</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="get_package_version">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.get_package_version">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_package_version</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return siriushla version string.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">siriushla</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span> <span class="k">as</span> <span class="n">version</span>
+    <span class="k">return</span> <span class="n">version</span></div>
+
+
+
+<div class="viewcode-block" id="get_monitor_icon">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.get_monitor_icon">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_monitor_icon</span><span class="p">(</span><span class="n">icon_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">color</span> <span class="ow">or</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="n">icon_name</span><span class="p">,</span> <span class="s1">&#39;mdi.monitor&#39;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.07</span><span class="p">)),</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">))])</span></div>
+
+
+
+<div class="viewcode-block" id="set_style">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.set_style">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_style</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement sirius-hla-style.css as default Qt resource file HLA.&quot;&quot;&quot;</span>
+    <span class="n">abspath</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">abspath</span><span class="p">,</span> <span class="s1">&#39;sirius-hla-style.css&#39;</span><span class="p">)</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">_QFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">_QFile</span><span class="o">.</span><span class="n">ReadOnly</span><span class="p">):</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">readAll</span><span class="p">(),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">pydm_style</span> <span class="o">=</span> <span class="n">pydm_get_style_data</span><span class="p">()</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="n">style</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">pydm_style</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;set_style: &quot;</span><span class="si">{0}</span><span class="s1">&quot;: </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">stream</span><span class="o">.</span><span class="n">errorString</span><span class="p">()))</span></div>
+
+
+
+<div class="viewcode-block" id="get_window_id">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.get_window_id">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_window_id</span><span class="p">(</span><span class="n">w_class</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serialize parameters.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">w_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)])</span></div>
+
+
+
+<div class="viewcode-block" id="connect_window">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.connect_window">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">connect_window</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">w_class</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connect a widget to a window.&quot;&quot;&quot;</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="ow">or</span> <span class="n">get_appropriate_signal</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+    <span class="n">widget</span><span class="o">.</span><span class="n">w_class</span> <span class="o">=</span> <span class="n">w_class</span>
+    <span class="n">widget</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+    <span class="n">signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">app</span><span class="o">.</span><span class="n">open_window</span><span class="p">(</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">w_class</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">app</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="connect_newprocess">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.connect_newprocess">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">connect_newprocess</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">is_window</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">is_pydm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute a child program in a new process.&quot;&quot;&quot;</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="ow">or</span> <span class="n">get_appropriate_signal</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+    <span class="n">signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">run_newprocess</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="n">is_pydm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">is_window</span><span class="p">:</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="n">_show_loading_message</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">is_pydm</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="check_process">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.check_process">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">is_window</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Maximize the window if it exists, else create a new one</span>
+    <span class="n">scmd</span> <span class="o">=</span> <span class="p">(</span><span class="n">_subprocess</span><span class="o">.</span><span class="n">list2cmdline</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">is_pydm</span><span class="p">:</span>
+        <span class="n">cmdsplit</span> <span class="o">=</span> <span class="n">scmd</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">app</span> <span class="o">=</span> <span class="n">cmdsplit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">cmdsplit</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmdsplit</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">scmd</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;ps hx -o pid,command= | grep [s]iriushlacon&#39;</span> <span class="o">+</span>
+                <span class="sa">f</span><span class="s1">&#39; | grep </span><span class="si">{</span><span class="n">app</span><span class="si">}</span><span class="s1"> | grep &quot;/bin/pydm&quot;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
+            <span class="n">scmd</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; | grep &quot;</span><span class="si">{</span><span class="n">options</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+        <span class="k">if</span> <span class="n">sec</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="s1">&#39;tb&#39;</span><span class="p">,</span> <span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="s1">&#39;si&#39;</span><span class="p">}:</span>
+            <span class="n">scmd</span> <span class="o">+=</span> <span class="s1">&#39; | grep &#39;</span> <span class="o">+</span> <span class="n">sec</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;as&#39;</span><span class="p">:</span>
+            <span class="n">name1</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="s1">&#39;main&#39;</span><span class="p">)</span>
+            <span class="n">name2</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
+            <span class="n">scmd</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; | grep &quot;</span><span class="si">{</span><span class="n">name1</span><span class="si">}</span><span class="se">\\</span><span class="s1">|</span><span class="si">{</span><span class="n">name2</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="n">_subprocess</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span><span class="n">scmd</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">pidc</span><span class="p">,</span> <span class="n">comm</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="n">check_window_by_pid</span><span class="p">(</span><span class="n">pidc</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">window</span><span class="p">:</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="n">pidc</span>
+                <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sess</span> <span class="o">=</span> <span class="n">_subprocess</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span>
+            <span class="s1">&#39;ps -A -o sess,args | grep &quot;[p]s -A -o sess,args&quot; | xargs &#39;</span>
+            <span class="s1">&#39;| cut -f1 -d &quot; &quot; -&#39;</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">_subprocess</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span>
+            <span class="s1">&#39;ps h -A -o pid,sess,command= | grep &quot;[&#39;</span><span class="o">+</span><span class="n">scmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;]&#39;</span> <span class="o">+</span>
+            <span class="n">scmd</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">+</span><span class="s1">&#39;&quot; | grep &#39;</span><span class="o">+</span><span class="n">sess</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">info</span> <span class="ow">and</span> <span class="n">is_window</span><span class="p">:</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">pid</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">comm</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="n">check_window_by_pid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pid</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">window</span><span class="p">:</span>
+            <span class="n">infos</span> <span class="o">=</span> <span class="n">_subprocess</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span>
+                <span class="s1">&#39;ps h -o pid,command= --ppid &#39;</span> <span class="o">+</span> <span class="n">pid</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">pidc</span><span class="p">,</span> <span class="n">comm</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">window</span> <span class="o">=</span> <span class="n">check_window_by_pid</span><span class="p">(</span><span class="n">pidc</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">window</span><span class="p">:</span>
+                    <span class="n">pid</span> <span class="o">=</span> <span class="n">pidc</span>
+                    <span class="k">break</span>
+    <span class="k">return</span> <span class="n">pid</span><span class="p">,</span> <span class="n">window</span></div>
+
+
+
+<div class="viewcode-block" id="check_window_by_pid">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.check_window_by_pid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_window_by_pid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;edm&#39;</span> <span class="ow">in</span> <span class="n">comm</span><span class="p">:</span>
+        <span class="n">sts</span><span class="p">,</span> <span class="n">wind</span> <span class="o">=</span> <span class="n">_subprocess</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span>
+            <span class="s1">&#39;wmctrl -lpx | grep edm | grep SIRIUS&#39;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sts</span><span class="p">,</span> <span class="n">wind</span> <span class="o">=</span> <span class="n">_subprocess</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span><span class="s1">&#39;wmctrl -lpx | grep &#39;</span> <span class="o">+</span> <span class="n">pid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sts</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">wind</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">wind</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">window</span></div>
+
+
+
+<div class="viewcode-block" id="run_newprocess">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.run_newprocess">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_newprocess</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">is_window</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">pid</span><span class="p">,</span> <span class="n">window</span> <span class="o">=</span> <span class="n">check_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">is_window</span><span class="o">=</span><span class="n">is_window</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="n">is_pydm</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">window</span><span class="p">:</span>
+        <span class="n">_subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="s2">&quot;wmctrl -iR &quot;</span> <span class="o">+</span> <span class="n">window</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">_subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">pid</span><span class="p">:</span>
+        <span class="n">_subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_appropriate_color">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.get_appropriate_color">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_appropriate_color</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">):</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;AS&#39;</span><span class="p">:</span> <span class="s1">&#39;#d7ccc8&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LI&#39;</span><span class="p">:</span> <span class="s1">&#39;#f3d2d5&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TB&#39;</span><span class="p">:</span> <span class="s1">&#39;#fcaac7&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BO&#39;</span><span class="p">:</span> <span class="s1">&#39;#c8e6c9&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TS&#39;</span><span class="p">:</span> <span class="s1">&#39;#b2ebf2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SI&#39;</span><span class="p">:</span> <span class="s1">&#39;#56aeff&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ID&#39;</span><span class="p">:</span> <span class="s1">&#39;#bbbbdd&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;IT&#39;</span><span class="p">:</span> <span class="s1">&#39;#ffece6&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">section</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;#efefef&#39;</span>
+    <span class="k">return</span> <span class="n">dic</span><span class="p">[</span><span class="n">section</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_appropriate_signal">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.get_appropriate_signal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_appropriate_signal</span><span class="p">(</span><span class="n">widget</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">QAction</span><span class="p">):</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">triggered</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">):</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">clicked</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Undefined signal for </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">widget</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">signal</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_show_loading_message</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">THREAD</span>
+    <span class="n">THREAD</span> <span class="o">=</span> <span class="n">LoadingThread</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="n">is_pydm</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">LoadingDialog</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;Wait&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;h3&gt;Loading Window&lt;/h3&gt;&#39;</span><span class="p">)</span>
+    <span class="n">THREAD</span><span class="o">.</span><span class="n">openmessage</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">show</span><span class="p">)</span>
+    <span class="n">THREAD</span><span class="o">.</span><span class="n">closemessage</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
+    <span class="n">THREAD</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="LoadingDialog">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.LoadingDialog">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LoadingDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="n">message</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="LoadingThread">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.LoadingThread">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LoadingThread</span><span class="p">(</span><span class="n">_QThread</span><span class="p">):</span>
+
+    <span class="n">openmessage</span> <span class="o">=</span> <span class="n">_Signal</span><span class="p">()</span>
+    <span class="n">closemessage</span> <span class="o">=</span> <span class="n">_Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_pydm</span> <span class="o">=</span> <span class="n">is_pydm</span>
+
+<div class="viewcode-block" id="LoadingThread.run">
+<a class="viewcode-back" href="../../siriushla.html#siriushla.util.LoadingThread.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openmessage</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+        <span class="n">wind</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">wind</span> <span class="o">=</span> <span class="n">check_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">is_pydm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">wind</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closemessage</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

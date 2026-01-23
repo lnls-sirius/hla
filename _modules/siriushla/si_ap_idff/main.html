@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.si_ap_idff.main &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.si_ap_idff.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.si_ap_idff.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main window.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">strftime</span><span class="p">,</span> <span class="n">localtime</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span><span class="p">,</span> \
+    <span class="n">QWidget</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QSpacerItem</span><span class="p">,</span> \
+    <span class="n">QRadioButton</span><span class="p">,</span> <span class="n">QButtonGroup</span><span class="p">,</span> <span class="n">QStackedWidget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMPushButton</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.devices</span><span class="w"> </span><span class="kn">import</span> <span class="n">IDFF</span><span class="p">,</span> <span class="n">IDFFCtrl</span><span class="p">,</span> <span class="n">IDFFCtrlSoft</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.envars</span><span class="w"> </span><span class="kn">import</span> <span class="n">VACA_PREFIX</span> <span class="k">as</span> <span class="n">_VACA_PREFIX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">IDSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.idff.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">ETypes</span> <span class="k">as</span> <span class="n">IDFFEnums</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_window</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusMainWindow</span><span class="p">,</span> <span class="n">SiriusLabel</span><span class="p">,</span> <span class="n">SiriusSpinbox</span><span class="p">,</span> \
+    <span class="n">PyDMStateButton</span><span class="p">,</span> <span class="n">SiriusLedState</span><span class="p">,</span> <span class="n">PyDMLogLabel</span><span class="p">,</span> <span class="n">SiriusLedAlert</span><span class="p">,</span> \
+    <span class="n">SiriusConnectionSignal</span><span class="p">,</span> <span class="n">SiriusWaveformPlot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets.dialog</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatusDetailDialog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..as_ps_control.control_widget.ControlWidgetFactory</span><span class="w"> </span><span class="kn">import</span> \
+    <span class="n">ControlWidgetFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..as_ps_control</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSDetailWindow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.custom_widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigLineEdit</span><span class="p">,</span> <span class="n">SectionedWaveformCurveItem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_idff_icon</span>
+
+
+<div class="viewcode-block" id="IDFFWindow">
+<a class="viewcode-back" href="../../../siriushla.si_ap_idff.html#siriushla.si_ap_idff.main.IDFFWindow">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">IDFFWindow</span><span class="p">(</span><span class="n">SiriusMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ID FF main window.&quot;&quot;&quot;</span>
+
+    <span class="c1"># NOTE: in order to simplify this HLA class we could try to either</span>
+    <span class="c1"># a) implement low level FF for DELTA52 or ...</span>
+    <span class="c1"># b) change its soft FF IOC</span>
+    <span class="c1">#    so as to provide the same PVs as the low level ioc (particularly</span>
+    <span class="c1">#    &quot;IDPos-Mon&quot;)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">idname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="ow">or</span> <span class="n">_VACA_PREFIX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idname</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">idname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_llidff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="o">.</span><span class="n">dev</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;IVU&quot;</span><span class="p">,</span> <span class="s2">&quot;SIMUL&quot;</span><span class="p">,</span> <span class="s2">&quot;VPU&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_llidff</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="o">.</span><span class="n">dev</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;IVU&quot;</span><span class="p">,</span> <span class="s2">&quot;SIMUL&quot;</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SI-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="o">.</span><span class="n">sub</span><span class="si">}</span><span class="s2">:BS-IDFF-CHCV&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_llidff</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="o">.</span><span class="n">dev</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;VPU&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SI-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="o">.</span><span class="n">sub</span><span class="si">}</span><span class="s2">:BS-IDFF-CC&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SI-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="o">.</span><span class="n">sub</span><span class="si">}</span><span class="s2">:AP-IDFF&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="c1"># self._idffname = IDFFConst(idname).idffname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_idffdev</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idffdata</span> <span class="o">=</span> <span class="n">IDSearch</span><span class="o">.</span><span class="n">conv_idname_2_idff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;IDApp&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">get_idff_icon</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">StrongFocus</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h2&gt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">idname</span> <span class="o">+</span> <span class="s1">&#39; Feedforward Settings&lt;/h2&gt;&#39;</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_llidff</span><span class="p">:</span>
+            <span class="n">corrs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">corrs</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">ctrldev</span><span class="o">.</span><span class="n">IDFF_CH_LABELS</span>
+            <span class="n">corrs</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">ctrldev</span><span class="o">.</span><span class="n">IDFF_CV_LABELS</span>
+            <span class="n">corrs</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">ctrldev</span><span class="o">.</span><span class="n">IDFF_CC_LABELS</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_llStatusWidget</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_llSettingsWidget</span><span class="p">(</span><span class="n">corrs</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idStatusWidget</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_corrStatusWidget</span><span class="p">(),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basicSettingsWidget</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logWidget</span><span class="p">(),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_corrsMonitorWidget</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_llStatusWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;ID Status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+
+        <span class="n">lbl_gap</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Gap: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">gap_val</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IDPos-Mon&#39;</span><span class="p">))</span>
+        <span class="n">gap_val</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_gap</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gap_val</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_timestamp_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">strftime</span><span class="p">(</span>
+            <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">,</span> <span class="n">localtime</span><span class="p">(</span><span class="n">value</span><span class="o">/</span><span class="mi">1000</span><span class="p">)))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_llSettingsWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrs</span><span class="p">):</span>
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Settings&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+
+        <span class="n">ld_loopstate</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Loop State: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_loopstate</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopState-Sel&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_loopstate</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopState-Sts&#39;</span><span class="p">))</span>
+
+        <span class="n">lbl_table_pointer</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Table Pointer: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table_pointer</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TablePointer-Mon&#39;</span><span class="p">))</span>
+
+        <span class="n">lbl_alarm</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Alarm: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alarm_led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Alarms-Mon&#39;</span><span class="p">))</span>
+
+        <span class="n">alarm_details</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">alarm_details</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.list-ul&#39;</span><span class="p">))</span>
+        <span class="n">alarm_details</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Open Detailed Alarms View&#39;</span><span class="p">)</span>
+        <span class="n">alarm_details</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;sts&#39;</span><span class="p">)</span>
+        <span class="n">alarm_details</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#sts{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+        <span class="n">connect_window</span><span class="p">(</span>
+            <span class="n">alarm_details</span><span class="p">,</span> <span class="n">StatusDetailDialog</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">pvname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Alarms-Mon&#39;</span><span class="p">),</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Mode/Polar. out of range&quot;</span><span class="p">,</span> <span class="s2">&quot;Gap/phase out of range&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Gap/phase high deviation&quot;</span><span class="p">,</span> <span class="s2">&quot;Timeout for serial data&quot;</span><span class="p">],</span>
+            <span class="n">section</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;FeedForward Status&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_alarms</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Clear Alarms&quot;</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ClearFlags-Cmd&#39;</span><span class="p">))</span>
+
+        <span class="n">lbl_plc_counter</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;PLC Counter: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plc_counter</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PLCCounter-Mon&#39;</span><span class="p">))</span>
+
+        <span class="n">lbl_timestamp</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;PLC Timestamp: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;0:00:00&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp_mon</span> <span class="o">=</span> <span class="n">SiriusConnectionSignal</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PLCTimestamp-Mon&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp_mon</span><span class="o">.</span><span class="n">new_value_signal</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_format_timestamp_label</span><span class="p">)</span>
+
+        <span class="n">buttonGroupWid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">vlay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">buttonGroupWid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_group</span> <span class="o">=</span> <span class="n">QButtonGroup</span><span class="p">(</span><span class="n">buttonGroupWid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_group</span><span class="o">.</span><span class="n">buttonClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">btn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_group</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="n">btn</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">QStackedWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">corrs</span><span class="p">):</span>
+            <span class="n">channel_btn</span> <span class="o">=</span> <span class="n">QRadioButton</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">vlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">channel_btn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">button_group</span><span class="o">.</span><span class="n">addButton</span><span class="p">(</span><span class="n">channel_btn</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">channel_btn</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">graph</span> <span class="o">=</span> <span class="n">SiriusWaveformPlot</span><span class="p">()</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">setShowLegend</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">autoRangeX</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">autoRangeY</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">showXGrid</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">showYGrid</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">showLegend</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Index&#39;</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Current [A]&#39;</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">setBackgroundColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_addNewTableCurve</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">graph</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_rampcorr</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Ramp Corr: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ramp_corr</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span>
+            <span class="s1">&#39;mdi.escalator&#39;</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.5</span>
+        <span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Ramp correctors to correct values&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;rmpbtn&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_loopstate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_loopstate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_loopstate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_table_pointer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table_pointer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_alarm</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alarm_led</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">alarm_details</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clear_alarms</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_plc_counter</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plc_counter</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_timestamp</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttonGroupWid</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_rampcorr</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_addNewTableCurve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;ch&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">color_sp</span><span class="p">,</span> <span class="n">color_rb</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;darkBlue&#39;</span>
+        <span class="k">elif</span> <span class="s2">&quot;cv&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">color_sp</span><span class="p">,</span> <span class="n">color_rb</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;darkRed&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">color_sp</span><span class="p">,</span> <span class="n">color_rb</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;darkGreen&#39;</span>
+
+        <span class="n">curve_sp</span> <span class="o">=</span> <span class="n">SectionedWaveformCurveItem</span><span class="p">(</span>
+            <span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">,</span>
+            <span class="n">y_addr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Table-SP&#39;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SP&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="n">color_sp</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">_needs_redraw</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">addCurve</span><span class="p">(</span><span class="n">curve_sp</span><span class="p">,</span> <span class="n">curve_color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="n">color_sp</span><span class="p">))</span>
+        <span class="n">curve_sp</span><span class="o">.</span><span class="n">data_changed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">set_needs_redraw</span><span class="p">)</span>
+
+        <span class="n">curve_rb</span> <span class="o">=</span> <span class="n">SectionedWaveformCurveItem</span><span class="p">(</span>
+            <span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">,</span>
+            <span class="n">y_addr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Table-RB&#39;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;RB&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="n">color_rb</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">_needs_redraw</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">addCurve</span><span class="p">(</span><span class="n">curve_rb</span><span class="p">,</span> <span class="n">curve_color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="n">color_rb</span><span class="p">))</span>
+        <span class="n">curve_rb</span><span class="o">.</span><span class="n">data_changed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">set_needs_redraw</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">plt</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_basicSettingsWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ld_configname</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Config. Name: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">le_configname</span> <span class="o">=</span> <span class="n">ConfigLineEdit</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ConfigName-SP&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">le_configname</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:10em; max-width:10em;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_configname</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ConfigName-RB&#39;</span><span class="p">))</span>
+
+        <span class="n">ld_loopstate</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Loop State: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_loopstate</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopState-Sel&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_loopstate</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopState-Sts&#39;</span><span class="p">))</span>
+
+        <span class="n">ld_loopfreq</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Loop Freq.: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_loopfreq</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopFreq-SP&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_loopfreq</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopFreq-RB&#39;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_rampcorr</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Ramp Corr: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ramp_corr</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span>
+            <span class="s1">&#39;mdi.escalator&#39;</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.5</span>
+        <span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Ramp correctors to correct values&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;rmpbtn&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+
+        <span class="n">chnames</span> <span class="o">=</span> <span class="n">IDSearch</span><span class="o">.</span><span class="n">conv_idname_2_idff_chnames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="p">)</span>
+        <span class="n">cvnames</span> <span class="o">=</span> <span class="n">IDSearch</span><span class="o">.</span><span class="n">conv_idname_2_idff_cvnames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="p">)</span>
+        <span class="n">qsnames</span> <span class="o">=</span> <span class="n">IDSearch</span><span class="o">.</span><span class="n">conv_idname_2_idff_qsnames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="p">)</span>
+        <span class="n">lcnames</span> <span class="o">=</span> <span class="n">IDSearch</span><span class="o">.</span><span class="n">conv_idname_2_idff_lcnames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="p">)</span>
+        <span class="n">qnnames</span> <span class="o">=</span> <span class="n">IDSearch</span><span class="o">.</span><span class="n">conv_idname_2_idff_qnnames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idname</span><span class="p">)</span>
+        <span class="c1"># ccnames = IDSearch.conv_idname_2_idff_ccnames(self.idname)</span>
+
+        <span class="n">ld_calccorr</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Calc. values:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">glay_calccorr</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">glay_calccorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_calccorr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">corr_fams</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CH&#39;</span><span class="p">,</span> <span class="s1">&#39;CV&#39;</span><span class="p">,</span> <span class="s1">&#39;QS&#39;</span><span class="p">,</span> <span class="s1">&#39;LCH&#39;</span><span class="p">,</span> <span class="s1">&#39;QD1&#39;</span><span class="p">,</span> <span class="s1">&#39;QF&#39;</span><span class="p">,</span> <span class="s1">&#39;QD2&#39;</span><span class="p">,</span> <span class="s1">&#39;CC&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">ridx</span><span class="p">,</span> <span class="n">corr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">corr_fams</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">chnames</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">==</span> <span class="s1">&#39;CV&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cvnames</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">==</span> <span class="s1">&#39;QS&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">qsnames</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">==</span> <span class="s1">&#39;LCH&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lcnames</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;QD1&#39;</span><span class="p">,</span> <span class="s1">&#39;QF&#39;</span><span class="p">,</span> <span class="s1">&#39;QD2&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">qnnames</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">==</span> <span class="s1">&#39;CC&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># if corr == &#39;CC&#39; and not ccnames:</span>
+            <span class="c1">#     continue</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">ridx</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">hheader</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">corr</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">hheader</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;.QLabel{font-weight: bold;}&#39;</span><span class="p">)</span>
+            <span class="n">glay_calccorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">hheader</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="n">cidx</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">ridx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">vheader</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                    <span class="n">vheader</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;.QLabel{font-weight: bold;}&#39;</span><span class="p">)</span>
+                    <span class="n">glay_calccorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">vheader</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="n">propty</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Corr</span><span class="si">{</span><span class="n">corr</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">Current-Mon&#39;</span>
+                <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">propty</span><span class="p">)</span>
+                <span class="n">lbl</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">lbl</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">glay_calccorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+
+
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Settings&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_loopstate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_loopstate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_loopstate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_loopfreq</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_loopfreq</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_loopfreq</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_configname</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">le_configname</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_configname</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">),</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">5</span>
+
+        <span class="k">if</span> <span class="n">chnames</span><span class="p">:</span>
+            <span class="n">ld_controlch</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="s1">&#39;Control CH: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sb_controlch</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlCH-Sel&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lb_controlch</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlCH-Sts&#39;</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_controlch</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_controlch</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_controlch</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">cvnames</span><span class="p">:</span>
+            <span class="n">ld_controlcv</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="s1">&#39;Control CV: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sb_controlcv</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlCV-Sel&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lb_controlcv</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlCV-Sts&#39;</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_controlcv</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_controlcv</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_controlcv</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">qsnames</span><span class="p">:</span>
+            <span class="n">ld_controlqs</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="s1">&#39;Control QS: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sb_controlqs</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlQS-Sel&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lb_controlqs</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlQS-Sts&#39;</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_controlqs</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_controlqs</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_controlqs</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">lcnames</span><span class="p">:</span>
+            <span class="n">ld_controllc</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="s1">&#39;Control LC: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sb_controllc</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlLC-Sel&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lb_controllc</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlLC-Sts&#39;</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_controllc</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_controllc</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_controllc</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">qnnames</span><span class="p">:</span>
+            <span class="n">ld_controlqn</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="s1">&#39;Control QN: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sb_controlqn</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlQN-Sel&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lb_controlqn</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ControlQN-Sts&#39;</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_controlqn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_controlqn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_controlqn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># if ccnames:</span>
+        <span class="c1">#     ld_controlcc = QLabel(</span>
+        <span class="c1">#         &#39;Control CC: &#39;, self, alignment=Qt.AlignRight)</span>
+        <span class="c1">#     self.sb_controlcc = PyDMStateButton(</span>
+        <span class="c1">#         self, self.dev_pref.substitute(propty=&#39;ControlCC-Sel&#39;))</span>
+        <span class="c1">#     self.lb_controlcc = SiriusLedState(</span>
+        <span class="c1">#         self, self.dev_pref.substitute(propty=&#39;ControlCC-Sts&#39;))</span>
+        <span class="c1">#     lay.addWidget(ld_controlcc, row, 0)</span>
+        <span class="c1">#     lay.addWidget(self.sb_controlcc, row, 1)</span>
+        <span class="c1">#     lay.addWidget(self.lb_controlcc, row, 2)</span>
+        <span class="c1">#     row += 1</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">glay_calccorr</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_rampcorr</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_rampcorr</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_corrStatusWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ld_corconf</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Corr. Status: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_corr</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CorrStatus-Mon&#39;</span><span class="p">))</span>
+        <span class="n">pb_corsts</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">pb_corsts</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.list-ul&#39;</span><span class="p">))</span>
+        <span class="n">pb_corsts</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Open Detailed Status View&#39;</span><span class="p">)</span>
+        <span class="n">pb_corsts</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;sts&#39;</span><span class="p">)</span>
+        <span class="n">pb_corsts</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#sts{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+        <span class="n">connect_window</span><span class="p">(</span>
+            <span class="n">pb_corsts</span><span class="p">,</span> <span class="n">StatusDetailDialog</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">pvname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CorrStatus-Mon&#39;</span><span class="p">),</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">IDFFEnums</span><span class="o">.</span><span class="n">STS_LBLS_CORR</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Corrector Status&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_corconf</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CorrConfig-Cmd&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_corconf</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Send PwrState and OpMode&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_corconf</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.sync&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_corconf</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;conf&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_corconf</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#conf{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Corrector Status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_corconf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">led_corr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pb_corsts</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb_corconf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_idStatusWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;ID Status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdata</span><span class="p">[</span><span class="s1">&#39;pparameter&#39;</span><span class="p">]:</span>
+            <span class="n">pparam</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idffdata</span><span class="p">[</span><span class="s1">&#39;pparameter&#39;</span><span class="p">])</span>
+            <span class="n">ld_pparam</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="n">pparam</span><span class="o">.</span><span class="n">propty_name</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lb_pparam</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pparam</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lb_pparam</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_pparam</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lb_pparam</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdata</span><span class="p">[</span><span class="s1">&#39;kparameter&#39;</span><span class="p">]:</span>
+            <span class="n">kparam</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idffdata</span><span class="p">[</span><span class="s1">&#39;kparameter&#39;</span><span class="p">])</span>
+            <span class="n">ld_kparam</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                <span class="n">kparam</span><span class="o">.</span><span class="n">propty_name</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lb_kparam</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kparam</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lb_kparam</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_kparam</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lb_kparam</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">ld_polar</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Polarization: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_polar</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Polarization-Mon&#39;</span><span class="p">))</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_polar</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_polar</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_logWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">PyDMLogLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_pref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Log-Mon&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span>
+            <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setAlternatingRowColors</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">maxCount</span> <span class="o">=</span> <span class="mi">2000</span>
+
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_corrsMonitorWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">ControlWidgetFactory</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;corrector-idff&#39;</span><span class="p">,</span>
+            <span class="n">subsection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sub</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">wid</span> <span class="ow">in</span> <span class="n">widget</span><span class="o">.</span><span class="n">get_summary_widgets</span><span class="p">():</span>
+            <span class="n">detail_bt</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">get_detail_button</span><span class="p">()</span>
+            <span class="n">psname</span> <span class="o">=</span> <span class="n">detail_bt</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">psname</span><span class="p">:</span>
+                <span class="n">psname</span> <span class="o">=</span> <span class="n">detail_bt</span><span class="o">.</span><span class="n">toolTip</span><span class="p">()</span>
+            <span class="n">connect_window</span><span class="p">(</span><span class="n">detail_bt</span><span class="p">,</span> <span class="n">PSDetailWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">psname</span><span class="o">=</span><span class="n">psname</span><span class="p">)</span>
+
+        <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Correctors&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_idffdev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idffclass</span> <span class="o">=</span> <span class="n">IDFFCtrl</span><span class="o">.</span><span class="n">get_idffclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span><span class="p">)</span>
+        <span class="n">props2init_ctrl</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LoopState-Sts&#39;</span><span class="p">,</span> <span class="p">)</span>
+        <span class="c1"># PVNames to initialize depend whether a soft or hard IDFF</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">idffclass</span><span class="p">,</span> <span class="n">IDFFCtrlSoft</span><span class="p">):</span>
+            <span class="n">props2init_ctrl</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;ConfigName-RB&#39;</span><span class="p">,)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">props2init_ctrl</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;Table-RB&#39;</span><span class="p">,)</span>
+        <span class="n">props2init_corrs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Current-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;Current-SP&#39;</span><span class="p">,)</span>
+        <span class="n">idffdev</span> <span class="o">=</span> <span class="n">IDFF</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffname</span><span class="p">,</span>
+            <span class="n">props2init_ctrl</span><span class="o">=</span><span class="n">props2init_ctrl</span><span class="p">,</span>
+            <span class="n">props2init_corrs</span><span class="o">=</span><span class="n">props2init_corrs</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">idffdev</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ramp_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># NOTE:</span>
+        <span class="c1"># 1 - implement this ramp as a separate thread</span>
+        <span class="c1"># 2 - add a time icon to indicate when this therad is running</span>
+        <span class="c1"># 3 - add &#39;nrpts&#39; and &#39;time_interval&#39; parameters as edit widgets</span>
+        <span class="n">devctrl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">ctrldev</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">devctrl</span><span class="o">.</span><span class="n">loopstate</span><span class="p">:</span>
+            <span class="c1"># if softidff first must guarantee a config is loaded</span>
+            <span class="c1"># from clientconfig</span>
+            <span class="n">is_soft</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">devctrl</span><span class="p">,</span> <span class="n">IDFFCtrlSoft</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_soft</span><span class="p">:</span>
+                <span class="n">configname</span> <span class="o">=</span> <span class="n">devctrl</span><span class="o">.</span><span class="n">configname</span>
+                <span class="k">if</span> <span class="n">configname</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">idffconfig</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">configname</span><span class="p">)</span>
+            <span class="c1"># run correctors&#39; ramp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffdev</span><span class="o">.</span><span class="n">rampup_corr_currents</span><span class="p">(</span>
+                <span class="n">nrpts</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">time_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># NOTE: lauunch a popup warning window...</span>
+            <span class="k">pass</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.li_ap_mps.main &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.li_ap_mps.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.li_ap_mps.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39; Monitor Protection System Controller Interface &#39;&#39;&#39;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> \
+    <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QPushButton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">PV_MPS</span><span class="p">,</span> <span class="n">MPS_PREFIX</span><span class="p">,</span> <span class="n">CTRL_TYPE</span><span class="p">,</span> <span class="n">GROUP_POS</span><span class="p">,</span> \
+    <span class="n">GROUP_POSALL</span><span class="p">,</span> <span class="n">LBL_MPS</span><span class="p">,</span> <span class="n">LBL_WATER</span><span class="p">,</span> <span class="n">PV_TEMP_MPS</span><span class="p">,</span> <span class="n">TEMP_TYPE</span><span class="p">,</span> <span class="n">LBL_ALL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_appropriate_color</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMLedMultiChannel</span><span class="p">,</span> <span class="n">PyDMLed</span><span class="p">,</span> <span class="n">SiriusLabel</span><span class="p">,</span> \
+    <span class="n">SiriusPushButton</span><span class="p">,</span> <span class="n">SiriusSpinbox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.bypass_btn</span><span class="w"> </span><span class="kn">import</span> <span class="n">BypassBtn</span>
+
+
+<div class="viewcode-block" id="MPSControl">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MPSControl</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Monitor Protection System Controller Interface &#39;&#39;&#39;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Contain all the graphic interface data&#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">prefix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pv_obj</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_clicked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_clicked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="n">get_appropriate_color</span><span class="p">(</span><span class="s1">&#39;LI&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;LIApp&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.monitor-dashboard&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;LI MPS Controls&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MPSControl.eventFilter">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.eventFilter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_wid</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Hover listener with hover function&#39;&#39;&#39;</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pv_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QEvent</span><span class="o">.</span><span class="n">Leave</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">led_clicked</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">controlHiddenBox</span><span class="p">(</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;layout&quot;</span><span class="p">),</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getDeviceName">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getDeviceName">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getDeviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Set device name &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="s1">&#39;LA-RF:LLRF:KLY&#39;</span> <span class="ow">in</span> <span class="n">pv_name</span><span class="p">:</span>
+            <span class="n">device_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">device_name</span> <span class="o">=</span> <span class="n">MPS_PREFIX</span>
+        <span class="k">return</span> <span class="n">device_name</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getCtrlWidget">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getCtrlWidget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getCtrlWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">ctrl_type</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Display the specific control widget&#39;&#39;&#39;</span>
+        <span class="n">device_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span><span class="n">pv_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ctrl_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;_I&#39;</span><span class="p">,</span> <span class="s1">&#39;_L&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
+            <span class="n">ch2vals</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">device_name</span> <span class="o">+</span> <span class="n">pv_name</span> <span class="o">+</span> <span class="n">ctrl_type</span><span class="p">:</span> <span class="n">config</span><span class="p">}</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">set_channels2values</span><span class="p">(</span><span class="n">ch2vals</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pv_name</span> <span class="o">==</span> <span class="s1">&#39;HeartBeat&#39;</span><span class="p">:</span>
+                <span class="n">widget</span><span class="o">.</span><span class="n">setOffColor</span><span class="p">(</span><span class="n">PyDMLed</span><span class="o">.</span><span class="n">Yellow</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ctrl_type</span> <span class="o">==</span> <span class="s1">&#39;_B&#39;</span><span class="p">:</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">BypassBtn</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">init_channel</span><span class="o">=</span><span class="n">device_name</span> <span class="o">+</span> <span class="n">pv_name</span> <span class="o">+</span> <span class="n">ctrl_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ctrl_type</span> <span class="o">==</span> <span class="s1">&#39;_R&#39;</span><span class="p">:</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">SiriusPushButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">init_channel</span><span class="o">=</span><span class="n">device_name</span> <span class="o">+</span> <span class="n">pv_name</span> <span class="o">+</span> <span class="n">ctrl_type</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reset&#39;</span><span class="p">,</span>
+                <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">releaseValue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            min-width: 3.2em; max-width: 4.2em;</span>
+<span class="s1">            min-height: 1.29em; max-height: 1.29em;</span>
+<span class="s1">        &#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">widget</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.statusBox">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.statusBox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">statusBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the status widget&#39;&#39;&#39;</span>
+        <span class="n">sb_hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">sb_hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">getCtrlWidget</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sb_hlay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getTempWidget">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getTempWidget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTempWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">temp_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the temperature label widget &#39;&#39;&#39;</span>
+        <span class="n">device_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span><span class="n">pv_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">temp_type</span> <span class="o">==</span> <span class="s1">&#39;Thrd&#39;</span><span class="p">:</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">init_channel</span><span class="o">=</span><span class="n">device_name</span> <span class="o">+</span> <span class="n">pv_name</span> <span class="o">+</span> <span class="n">temp_type</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">init_channel</span><span class="o">=</span><span class="n">device_name</span> <span class="o">+</span> <span class="n">pv_name</span> <span class="o">+</span> <span class="n">temp_type</span>
+            <span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">widget</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.clearLayout">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.clearLayout">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clearLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lay</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Erase the layout&#39;s content&#39;&#39;&#39;</span>
+        <span class="k">while</span> <span class="n">lay</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">lay</span><span class="o">.</span><span class="n">takeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">widget</span><span class="p">():</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">widget</span><span class="p">()</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">lay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.controlHiddenBox">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.controlHiddenBox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlHiddenBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">cb_glay</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Display the status of the PV - Hidden control Box&#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">cb_glay</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">cb_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cb_glay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clearLayout</span><span class="p">(</span><span class="n">cb_glay</span><span class="p">)</span>
+
+        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCtrlWidget</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="s1">&#39;_L&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="n">cb_glay</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">cb_glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cb_glay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.controlBox">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.controlBox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">lay</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">has_title</span><span class="p">,</span> <span class="n">wid_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the control features - Open control Box&#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">lay</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">lay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clearLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_clicked</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">control_name</span> <span class="ow">in</span> <span class="n">CTRL_TYPE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParamAll</span><span class="p">(</span><span class="n">has_title</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">wid_type</span><span class="p">):</span>
+                <span class="n">lb_title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">control_name</span><span class="p">)</span>
+                <span class="n">lb_title</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_title</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ctrl_widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCtrlWidget</span><span class="p">(</span>
+                <span class="n">pv_name</span><span class="p">,</span> <span class="n">CTRL_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">control_name</span><span class="p">),</span> <span class="n">config</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ctrl_widget</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">lay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.controlWidget">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.controlWidget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">lay</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Create the control widget with opening and closing functions&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Default - closed&#39;&#39;&#39;</span>
+
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;WFS&#39;</span> <span class="ow">in</span> <span class="n">pv_name</span><span class="p">:</span>
+            <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setPvLbl</span><span class="p">(</span><span class="n">pv_name</span><span class="p">))</span>
+
+        <span class="n">control_layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlHiddenBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="n">lay</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">control_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pv_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="n">widget</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">pv_name</span><span class="p">,</span>
+                <span class="s2">&quot;layout&quot;</span><span class="p">:</span> <span class="n">control_layout</span><span class="p">,</span>
+                <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">config</span>
+            <span class="p">}})</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;Container&#39;</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            #Container::hover{</span>
+<span class="s1">                background-color: #ff8b98;</span>
+<span class="s1">                border-radius: 1em;</span>
+<span class="s1">            }</span>
+<span class="s1">        &#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hlay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.gateValve">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.gateValve">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gateValve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the gate valves widget &#39;&#39;&#39;</span>
+        <span class="n">device_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span><span class="n">pv_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;U&#39;</span> <span class="ow">in</span> <span class="n">pv_name</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="s1">&#39;Open&#39;</span> <span class="ow">in</span> <span class="n">pv_name</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Open&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Close&#39;</span>
+
+            <span class="n">pb_lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">SiriusPushButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">init_channel</span><span class="o">=</span><span class="n">device_name</span> <span class="o">+</span> <span class="n">pv_name</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">releaseValue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                min-width: 3.2em; max-width: 4.2em;</span>
+<span class="s1">                min-height: 1.29em; max-height: 1.29em;</span>
+<span class="s1">            &#39;&#39;&#39;</span><span class="p">)</span>
+            <span class="n">pb_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pb_lay</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">statusBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.tempMonBox">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.tempMonBox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tempMonBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the status features for the temperature monitor&#39;&#39;&#39;</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">temp_name</span> <span class="ow">in</span> <span class="n">TEMP_TYPE</span><span class="p">:</span>
+            <span class="n">ctrl_widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTempWidget</span><span class="p">(</span>
+                <span class="n">pv_name</span><span class="p">,</span> <span class="n">TEMP_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">temp_name</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ctrl_widget</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ctrl_widget</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.genStringTempPV">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.genStringTempPV">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">genStringTempPV</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">prefix_num</span><span class="p">,</span> <span class="n">name_num</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Generate Temperature PV name &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">name</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">prefix_num</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;Temp&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_num</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getPVConfig">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getPVConfig">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPVConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Get if the PV has configuration 1 or 0&#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">config</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getPVControl">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getPVControl">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPVControl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_control</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Get if the PV is a control or a status&#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">is_control</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">is_control</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">is_control</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.countGen">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.countGen">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countGen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Counter for water data positioning &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.countVA">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.countVA">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countVA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Counter for vaccum data positioning &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="p">]:</span>
+            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">]:</span>
+            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">3</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countGen</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.countWater">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.countWater">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countWater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+        <span class="p">]:</span>
+            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">3</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countGen</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.countTemp">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.countTemp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countTemp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Counter for temperature data positioning &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Water Temperature&#39;</span><span class="p">:</span>
+            <span class="n">orient</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">orient</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">count</span><span class="p">[</span><span class="n">orient</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">orient</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="n">count</span><span class="p">[</span><span class="n">orient</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">count</span><span class="p">[</span><span class="n">orient</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">count</span><span class="p">[</span><span class="n">orient</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.updateCount">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.updateCount">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">updateCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Update counter for data positioning &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Klystrons&#39;</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countGen</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Water&#39;</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countWater</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Modulator&#39;</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countGen</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Gate Valve&#39;</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countGen</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">title</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;Water Temperature&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">countTemp</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;VA&#39;</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countVA</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">countGen</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.setTitleLabel">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.setTitleLabel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setTitleLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display title labels &#39;&#39;&#39;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">lbl_header</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;&#39;</span><span class="o">+</span><span class="n">item</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;&lt;/h4&gt;&#39;</span><span class="p">)</span>
+            <span class="n">lbl_header</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_header</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">lbl_header</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                    <span class="s1">&#39;QLabel{min-width:6em; max-width:6em;}&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">layout</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.setPvLbl">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.setPvLbl">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setPvLbl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the water title label&#39;&#39;&#39;</span>
+        <span class="n">lbl_pv</span> <span class="o">=</span> <span class="n">LBL_WATER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pv_name</span><span class="p">)</span>
+        <span class="n">lbl_title_wid</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">lbl_pv</span><span class="p">)</span>
+        <span class="n">lbl_title_wid</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lbl_title_wid</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.setParamLabel">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.setParamLabel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setParamLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display Temperature parameters labels &#39;&#39;&#39;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">TEMP_TYPE</span><span class="p">:</span>
+                <span class="n">lbl_param</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="n">lbl_param</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_param</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">layout</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.setTempHeader">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.setTempHeader">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setTempHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display Temperature header labels &#39;&#39;&#39;</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">hd_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">:</span>
+            <span class="n">lbl_header</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;&#39;</span><span class="o">+</span><span class="n">item</span><span class="o">+</span><span class="s1">&#39;&lt;/h4&gt;&#39;</span><span class="p">)</span>
+            <span class="n">lbl_header</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">hd_glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_header</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="mi">3</span>
+
+        <span class="n">hd_glay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setParamLabel</span><span class="p">(</span><span class="n">hd_glay</span><span class="p">)</span>
+        <span class="n">hd_glay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">hd_glay</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">layout</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getSingleTitle">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getSingleTitle">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getSingleTitle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display a single Title &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">LBL_MPS</span><span class="p">:</span>
+            <span class="n">lbl_item</span> <span class="o">=</span> <span class="n">LBL_MPS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setTitleLabel</span><span class="p">(</span><span class="n">lbl_item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Water Temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;Temperature&#39;</span><span class="p">]:</span>
+                <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setTitleLabel</span><span class="p">(</span><span class="n">lbl_item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setTempHeader</span><span class="p">(</span><span class="n">lbl_item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">layout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">layout</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.getParamAll">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.getParamAll">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getParamAll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">has_title</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">wid_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">wid_type</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pv_name</span> <span class="ow">in</span> <span class="n">LBL_ALL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">has_title</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.dispayHiddenControls">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.dispayHiddenControls">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dispayHiddenControls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">control</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlWidget</span><span class="p">(</span>
+                <span class="n">pv_name</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">statusBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.dispayAllControls">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.dispayAllControls">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dispayAllControls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">control</span><span class="p">:</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s1">&#39;WFS&#39;</span> <span class="ow">in</span> <span class="n">pv_name</span><span class="p">:</span>
+                <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setPvLbl</span><span class="p">(</span><span class="n">pv_name</span><span class="p">))</span>
+            <span class="n">control_layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">control_layout</span><span class="p">)</span>
+            <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">hlay</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">statusBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayGroup">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayGroup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_data</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">group_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display one MPS group &#39;&#39;&#39;</span>
+        <span class="n">dg_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">()</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">dg_glay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSingleTitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">dg_glay</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">pv_name</span> <span class="ow">in</span> <span class="n">pv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">title</span> <span class="o">!=</span> <span class="s1">&#39;Gate Valve&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">group_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">dg_glay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dispayHiddenControls</span><span class="p">(</span>
+                            <span class="n">pv_name</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">getPVControl</span><span class="p">(</span><span class="n">pv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">),</span> <span class="n">index</span><span class="p">),</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">getPVConfig</span><span class="p">(</span><span class="n">pv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">),</span> <span class="n">index</span><span class="p">)),</span>
+                        <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dg_glay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dispayAllControls</span><span class="p">(</span>
+                            <span class="n">pv_name</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">getPVControl</span><span class="p">(</span><span class="n">pv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">),</span> <span class="n">index</span><span class="p">),</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">getPVConfig</span><span class="p">(</span><span class="n">pv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">),</span> <span class="n">index</span><span class="p">)),</span>
+                        <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dg_glay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">gateValve</span><span class="p">(</span><span class="n">pv_name</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">getPVConfig</span><span class="p">(</span><span class="n">pv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">),</span> <span class="n">index</span><span class="p">)),</span>
+                    <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateCount</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">group</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">dg_glay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">group</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayTempGroup">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayTempGroup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayTempGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_data</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display one temperature group&#39;&#39;&#39;</span>
+        <span class="n">dtg_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">dtg_glay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">()</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">dtg_glay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSingleTitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">dtg_glay</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">counter_prefix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pv_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">counter_name</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pv_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">pv_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">genStringTempPV</span><span class="p">(</span>
+                    <span class="n">pv_data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">counter_prefix</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">)</span>
+
+                <span class="n">dtg_glay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tempMonBox</span><span class="p">(</span><span class="n">pv_name</span><span class="p">),</span>
+                    <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateCount</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+
+        <span class="n">group</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">dtg_glay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">group</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayMpsGroups">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayMpsGroups">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayMpsGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display all the MPS groups&#39;&#39;&#39;</span>
+        <span class="n">mp_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">PV_MPS</span><span class="p">:</span>
+            <span class="n">pv_data</span> <span class="o">=</span> <span class="n">PV_MPS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">group_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">group_pos</span> <span class="o">=</span> <span class="n">GROUP_POS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">group_pos</span> <span class="o">=</span> <span class="n">GROUP_POSALL</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="n">mp_glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">displayGroup</span><span class="p">(</span><span class="n">pv_data</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">group_type</span><span class="p">),</span>
+                <span class="n">group_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">group_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">group_pos</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">group_pos</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">mp_glay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayTempGroups">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayTempGroups">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayTempGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display all the temperatures groups&#39;&#39;&#39;</span>
+        <span class="n">dt_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">PV_TEMP_MPS</span><span class="p">:</span>
+            <span class="n">pv_data</span> <span class="o">=</span> <span class="n">PV_TEMP_MPS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="n">group_pos</span> <span class="o">=</span> <span class="n">GROUP_POS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="n">dt_glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">displayTempGroup</span><span class="p">(</span><span class="n">pv_data</span><span class="p">,</span> <span class="n">group</span><span class="p">),</span>
+                <span class="n">group_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">group_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">group_pos</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">group_pos</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dt_glay</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayControlMPS">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayControlMPS">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayControlMPS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tab_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the desired tab widget &#39;&#39;&#39;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">if_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">tab_type</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">if_glay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayTempGroups</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">if_glay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">if_glay</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tab_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mps_glay</span> <span class="o">=</span> <span class="n">if_glay</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">changeWid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mps_glay</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayTabs">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayTabs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayTabs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display all the tabs &#39;&#39;&#39;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+        <span class="n">tab</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s2">&quot;LITab&quot;</span><span class="p">)</span>
+        <span class="n">tab</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayControlMPS</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;MPS Controls&quot;</span><span class="p">)</span>
+        <span class="n">tab</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayControlMPS</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;Temperature&quot;</span><span class="p">)</span>
+        <span class="n">tab</span><span class="o">.</span><span class="n">currentChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adjustSize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tab</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.changeWid">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.changeWid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">changeWid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clearLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_clicked</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayMpsGroups</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_clicked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayMpsGroups</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_clicked</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="MPSControl.displayHeader">
+<a class="viewcode-back" href="../../../siriushla.li_ap_mps.html#siriushla.li_ap_mps.main.MPSControl.displayHeader">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">displayHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the window header &#39;&#39;&#39;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">hd_hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">lbl_title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;&lt;h2&gt;Linac Machine Protection System&lt;/h2&gt;&quot;</span><span class="p">)</span>
+        <span class="n">lbl_title</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">hd_hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_title</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">btn_all</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Hide/Show All&quot;</span><span class="p">)</span>
+        <span class="n">btn_all</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">changeWid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mps_glay</span><span class="p">))</span>
+        <span class="n">hd_hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">hd_hlay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Display the tabs of the graphic interface &#39;&#39;&#39;</span>
+
+        <span class="n">if_glay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">if_glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayTabs</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">if_glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">displayHeader</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">if_glay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">if_glay</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

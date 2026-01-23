@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_radmon.main &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_radmon.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_radmon.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Rad Monitor.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_part</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">,</span> <span class="n">QTimer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span><span class="p">,</span> <span class="n">QPalette</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QCheckBox</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> \
+    <span class="n">QApplication</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPol</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QHBoxLayout</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.connection_inspector</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionInspector</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.envars</span><span class="w"> </span><span class="kn">import</span> <span class="n">VACA_PREFIX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.clientarch.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.epics</span><span class="w"> </span><span class="kn">import</span> <span class="n">PV</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusAlarmFrame</span><span class="p">,</span> <span class="n">SiriusTimePlot</span><span class="p">,</span> <span class="n">SiriusLabel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_appropriate_color</span>
+
+
+<div class="viewcode-block" id="RadTotDoseMonitor">
+<a class="viewcode-back" href="../../../siriushla.as_ap_radmon.html#siriushla.as_ap_radmon.main.RadTotDoseMonitor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RadTotDoseMonitor</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RAD Total Dose Rate Monitor.&quot;&quot;&quot;</span>
+
+    <span class="n">REF_TOT_DOSE</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># µSv/h</span>
+    <span class="n">SENSOR2LOC</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Thermo12&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 12 (SI-01, hall eixo 16)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ELSE&#39;</span><span class="p">:</span> <span class="s1">&#39;ELSE (SI-01, hall eixo 17)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo8&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 8 (SI-01, hall eixo 18)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo10&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 10 (SI-01, chicane 1)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Berthold&#39;</span><span class="p">:</span> <span class="s1">&#39;Berthold (corredor de serviço, eixo 19)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo9&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 9 (SI-02, hall eixo 20)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo13&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 13 (SI-06, hall eixo 31)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo7&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 7 (SI-08-IA-08, eixo 37)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo16&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 16 (SI-08, hall eixo 38)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo2&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 2 (SI-09-IA-09, eixo 40)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo1&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 1 (SI-10, hall eixo 43)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo15&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 15 (SI-12, hall eixo 50)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo14&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 14 (SI-14, hall eixo 55)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo4&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 4 (SI-14-IA-14, eixo 57)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo6&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 6 (SI-15, hall eixo 59)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo3&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 3 (SI-17, hall eixo 04)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo5&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 5 (SI-19, hall eixo 10)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Thermo11&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermo 11 (SI-20, hall eixo 14)&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">VACA_PREFIX</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+
+        <span class="c1"># define aux objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_curves</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cb_show</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pvs_labels</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_desc_labels</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="c1"># configure window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ASApp&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;RAD: Total Dose Monitor&#39;</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">get_appropriate_color</span><span class="p">(</span><span class="s1">&#39;AS&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.radiation&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">))</span>
+
+        <span class="c1"># define data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mon2loco</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locn2mon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mon2pos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SENSOR2LOC</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">mon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SENSOR2LOC</span><span class="p">:</span>
+            <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">pvname</span> <span class="o">+=</span> <span class="s1">&#39;RAD:&#39;</span> <span class="o">+</span> <span class="n">mon</span> <span class="o">+</span> <span class="s1">&#39;:Location-Cte.VAL$&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mon2loco</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="n">PV</span><span class="p">(</span><span class="n">pvname</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_location</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_locn2mon</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span> <span class="o">=</span> <span class="n">mon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locn</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locn2mon</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="n">_t0</span> <span class="o">=</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">_t0</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>  <span class="c1"># wait location to be read</span>
+            <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if not connected, use hardcoded locations</span>
+            <span class="k">for</span> <span class="n">mon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SENSOR2LOC</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">mon</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_update_location</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locn</span><span class="p">[</span><span class="n">mon</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">SENSOR2LOC</span><span class="p">[</span><span class="n">mon</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mon_order</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mon2pos</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+        <span class="n">cmap</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+            <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+            <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">xeval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SENSOR2LOC</span><span class="p">))</span>
+        <span class="n">reval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xeval</span><span class="p">,</span> <span class="n">cmap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">])</span><span class="o">*</span><span class="mi">255</span>
+        <span class="n">geval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xeval</span><span class="p">,</span> <span class="n">cmap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">])</span><span class="o">*</span><span class="mi">255</span>
+        <span class="n">beval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xeval</span><span class="p">,</span> <span class="n">cmap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">])</span><span class="o">*</span><span class="mi">255</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colors</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">reval</span><span class="p">,</span> <span class="n">geval</span><span class="p">,</span> <span class="n">beval</span><span class="p">)]</span>
+
+        <span class="c1"># define app font size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">font</span><span class="p">()</span>
+        <span class="n">font</span><span class="o">.</span><span class="n">setPointSize</span><span class="p">(</span><span class="mi">44</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">font</span><span class="p">)</span>
+
+        <span class="c1"># setup window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+        <span class="c1"># define focus policy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">StrongFocus</span><span class="p">)</span>
+
+        <span class="c1"># set initial size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">primaryScreen</span><span class="p">()</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">1920</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># timeplot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_plot</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Total Dose Rate (γ + n) [µSv/h]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_plot</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;QLabel{font-size: 52pt; font-weight: bold;}&#39;</span><span class="p">)</span>
+
+        <span class="n">timespan</span> <span class="o">=</span> <span class="mi">30</span><span class="o">*</span><span class="mi">60</span>  <span class="c1"># [s]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span> <span class="o">=</span> <span class="n">SiriusTimePlot</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">show_tooltip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">timeSpan</span> <span class="o">=</span> <span class="n">timespan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">bufferSize</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">autoRangeY</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">minYRange</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">showXGrid</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">showYGrid</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">maxRedrawRate</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setGrid</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setTextPen</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setGrid</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setTextPen</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Dose Rate [µSv/h]&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;timeplot&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#timeplot{min-width:12em; min-height: 10em;}&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">bufferReset</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fill_refline</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">timeSpanChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fill_refline</span><span class="p">)</span>
+        <span class="n">t_end</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">t_init</span> <span class="o">=</span> <span class="n">t_end</span> <span class="o">-</span> <span class="n">timespan</span>
+
+        <span class="n">widplot</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">widplot</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">Expanding</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
+        <span class="n">layplot</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">widplot</span><span class="p">)</span>
+        <span class="n">layplot</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">layplot</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">layplot</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title_plot</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">layplot</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># panel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_grid</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Integrated Dose in 4h [µSv]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_grid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;QLabel{font-size: 52pt; font-weight: bold;}&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_warn</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Restart</span><span class="se">\n</span><span class="s1">window&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_warn</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;color: red; border: 0.1em solid red;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_warn</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">laytitle</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">laytitle</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title_grid</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="n">laytitle</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_warn</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">widgrid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">widgrid</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pannel</span> <span class="o">=</span> <span class="n">widgrid</span>
+        <span class="n">laygrid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">widgrid</span><span class="p">)</span>
+        <span class="n">laygrid</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">laygrid</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">colnum</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">laygrid</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">laytitle</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">colnum</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mon</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mon_order</span><span class="p">):</span>
+            <span class="n">local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">pvname</span> <span class="o">+=</span> <span class="s1">&#39;RAD:&#39;</span> <span class="o">+</span> <span class="n">mon</span> <span class="o">+</span> <span class="s1">&#39;:TotalDoseRate&#39;</span>
+            <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="n">colnum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">%</span> <span class="n">colnum</span>
+
+            <span class="n">coloro</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> \
+                <span class="k">else</span> <span class="n">QColor</span><span class="p">(</span><span class="o">*</span><span class="n">color</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">addYChannel</span><span class="p">(</span>
+                <span class="n">pvname</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pvname</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">coloro</span><span class="p">,</span> <span class="n">lineWidth</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+            <span class="n">curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_curves</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="n">curve</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">fill_curve_with_archdata</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_curves</span><span class="p">[</span><span class="n">mon</span><span class="p">],</span> <span class="n">pvname</span><span class="p">,</span>
+                <span class="n">t_init</span><span class="o">=</span><span class="n">t_init</span><span class="o">.</span><span class="n">get_iso8601</span><span class="p">(),</span> <span class="n">t_end</span><span class="o">=</span><span class="n">t_end</span><span class="o">.</span><span class="n">get_iso8601</span><span class="p">())</span>
+
+            <span class="n">cbx</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">stateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">)</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+            <span class="n">pal</span> <span class="o">=</span> <span class="n">cbx</span><span class="o">.</span><span class="n">palette</span><span class="p">()</span>
+            <span class="n">pal</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">QPalette</span><span class="o">.</span><span class="n">Base</span><span class="p">,</span> <span class="n">coloro</span><span class="p">)</span>
+            <span class="n">pal</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">QPalette</span><span class="o">.</span><span class="n">Text</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">white</span><span class="p">)</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">setPalette</span><span class="p">(</span><span class="n">pal</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cb_show</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="n">cbx</span>
+
+            <span class="n">lbl</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span> <span class="o">+</span> <span class="s1">&#39;:Dose&#39;</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">alarmSensitiveBorder</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QLabel{font-size: 52pt;}&#39;</span><span class="p">)</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pvs_labels</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="n">lbl</span>
+
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">SiriusAlarmFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span> <span class="o">+</span> <span class="s1">&#39;:Dose&#39;</span><span class="p">)</span>
+            <span class="n">frame</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">cbx</span><span class="p">)</span>
+            <span class="n">frame</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+
+            <span class="n">desc</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">desc</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+            <span class="n">desc</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;QLabel{background-color:black; color:white;font-size:26pt;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_desc_labels</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span>
+
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;wid&#39;</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#wid{border: 1px solid black; &#39;</span>
+                <span class="s1">&#39;min-width: 7.5em; max-width: 7.5em;}&#39;</span><span class="p">)</span>
+            <span class="n">widlay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+            <span class="n">widlay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">widlay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">widlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">widlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+
+            <span class="n">laygrid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+
+        <span class="n">laygrid</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">laygrid</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">laygrid</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">addYChannel</span><span class="p">(</span>
+            <span class="s1">&#39;Reference&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">lineWidth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">lineStyle</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fill_refline</span><span class="p">()</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widplot</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widgrid</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SiriusLabel{</span>
+<span class="s2">                qproperty-alignment: AlignCenter; font-weight: bold;</span>
+<span class="s2">            }</span>
+<span class="s2">            QCheckBox::indicator {</span>
+<span class="s2">                width: 0.7em;</span>
+<span class="s2">                height: 0.7em;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_graph_ref</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">setInterval</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c1"># ---------- events ----------</span>
+
+<div class="viewcode-block" id="RadTotDoseMonitor.changeEvent">
+<a class="viewcode-back" href="../../../siriushla.as_ap_radmon.html#siriushla.as_ap_radmon.main.RadTotDoseMonitor.changeEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">changeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implement change event to get font size changes.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QEvent</span><span class="o">.</span><span class="n">FontChange</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pvs_labels</span><span class="p">:</span>
+            <span class="n">fontsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">font</span><span class="p">()</span><span class="o">.</span><span class="n">pointSize</span><span class="p">()</span>
+
+            <span class="c1"># title</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">title_plot</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;QLabel{font-size: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s1">&#39;pt; font-weight: bold;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">title_grid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;QLabel{font-size: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s1">&#39;pt; font-weight: bold;}&#39;</span><span class="p">)</span>
+
+            <span class="c1"># labels</span>
+            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pvs_labels</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                    <span class="s1">&#39;QLabel{font-size: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="s1">&#39;pt; min-width: 7em;}&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_desc_labels</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">desc</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                    <span class="s1">&#39;QLabel{background-color:black; color:white;&#39;</span>
+                    <span class="s1">&#39;font-size:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">-</span> <span class="mi">18</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;pt;}&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensurePolished</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RadTotDoseMonitor.contextMenuEvent">
+<a class="viewcode-back" href="../../../siriushla.as_ap_radmon.html#siriushla.as_ap_radmon.main.RadTotDoseMonitor.contextMenuEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contextMenuEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implement context menu to add auxiliary actions.&quot;&quot;&quot;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pannel</span><span class="o">.</span><span class="n">underMouse</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">show</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Show all curves&#39;</span><span class="p">)</span>
+        <span class="n">show</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_checkbox_state</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+        <span class="n">hide</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Hide all curves&#39;</span><span class="p">)</span>
+        <span class="n">hide</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_checkbox_state</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Show Connections...&#39;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_connections</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ---------- private methods ----------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fill_refline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">basecurve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">timebuffer</span> <span class="o">=</span> <span class="n">basecurve</span><span class="o">.</span><span class="n">data_buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">firstvalid</span> <span class="o">=</span> <span class="p">(</span><span class="n">timebuffer</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">timebuffer</span><span class="p">[</span><span class="n">firstvalid</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">timebuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span> <span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timebuffer</span> <span class="o">=</span> <span class="n">timebuffer</span><span class="p">[</span><span class="n">firstvalid</span><span class="p">:]</span>
+        <span class="n">valuebuffer</span> <span class="o">=</span> <span class="p">[</span><span class="n">RadTotDoseMonitor</span><span class="o">.</span><span class="n">REF_TOT_DOSE</span><span class="p">]</span><span class="o">*</span><span class="n">timebuffer</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeplot</span><span class="o">.</span><span class="n">fill_curve_buffer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refline</span><span class="p">,</span> <span class="n">timebuffer</span><span class="p">,</span> <span class="n">valuebuffer</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_graph_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refline</span><span class="o">.</span><span class="n">receiveNewValue</span><span class="p">(</span><span class="n">RadTotDoseMonitor</span><span class="o">.</span><span class="n">REF_TOT_DOSE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refline</span><span class="o">.</span><span class="n">redrawCurve</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show connections action.&quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">checked</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">ConnectionInspector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_checkbox_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cbx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_show</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;corredor&#39;</span><span class="p">,</span> <span class="s1">&#39;corr.&#39;</span><span class="p">)</span>  <span class="c1"># abbreviations</span>
+        <span class="n">mon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locn2mon</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lb_warn</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mon2locv</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">sec</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;corr.&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>\
+            <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;SI-(\d+)&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">axi</span> <span class="o">=</span> <span class="mf">18.5</span> <span class="k">if</span> <span class="s1">&#39;chicane 1&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>\
+            <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;eixo (\d+)&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mon2pos</span><span class="p">[</span><span class="n">mon</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="n">sec</span><span class="o">+</span><span class="n">axi</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

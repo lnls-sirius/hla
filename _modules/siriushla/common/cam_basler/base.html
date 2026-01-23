@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.common.cam_basler.base &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.common.cam_basler.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.common.cam_basler.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;SiriusScrnView widget.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span> <span class="k">as</span> <span class="n">_dcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> \
+    <span class="n">QToolTip</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">Property</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMImageView</span><span class="p">,</span> <span class="n">PyDMPushButton</span><span class="p">,</span> <span class="n">PyDMEnumComboBox</span><span class="p">,</span> \
+    <span class="n">PyDMLineEdit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.channel</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMChannel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMStateButton</span><span class="p">,</span> <span class="n">SiriusLedState</span><span class="p">,</span> <span class="n">SiriusLabel</span><span class="p">,</span> \
+    <span class="n">SiriusSpinbox</span>
+
+
+<div class="viewcode-block" id="SiriusImageView">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SiriusImageView</span><span class="p">(</span><span class="n">PyDMImageView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A PyDMImageView with methods to handle screens calibration grids.&quot;&quot;&quot;</span>
+
+    <span class="n">receivedData</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+    <span class="n">failToSaveGrid</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">image_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">offsetx_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offsety_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">maxwidth_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxheight_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">image_channel</span><span class="o">=</span><span class="n">image_channel</span><span class="p">,</span>
+            <span class="n">width_channel</span><span class="o">=</span><span class="n">width_channel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_image</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_maxdata</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_width</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_filterfactor</span> <span class="o">=</span> <span class="mf">0.25</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_removeborder</span> <span class="o">=</span> <span class="mi">150</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsetx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsety</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_maxwidth</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_maxheight</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_show_calibration_grid</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># Set live channels if requested on initialization</span>
+        <span class="k">if</span> <span class="n">offsetx_channel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ROIOffsetXChannel</span> <span class="o">=</span> <span class="n">offsetx_channel</span>
+        <span class="k">if</span> <span class="n">offsety_channel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ROIOffsetYChannel</span> <span class="o">=</span> <span class="n">offsety_channel</span>
+        <span class="k">if</span> <span class="n">maxwidth_channel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maxWidthChannel</span> <span class="o">=</span> <span class="n">maxwidth_channel</span>
+        <span class="k">if</span> <span class="n">maxheight_channel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maxHeightChannel</span> <span class="o">=</span> <span class="n">maxheight_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colorMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Jet</span>
+        <span class="c1"># connect sigMouseMoved</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">sigMouseMoved</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle_mouse_moved</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SiriusImageView.saveCalibrationGrid">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.saveCalibrationGrid">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">saveCalibrationGrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save current image as calibration_grid_image.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_waveform</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">image_maxwidth</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">image_maxheight</span><span class="p">):</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_waveform</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_orig</span> <span class="o">=</span> <span class="n">img</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_maxdata</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_calibration_grid_image</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">failToSaveGrid</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_calibration_grid_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">_dcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_orig</span><span class="p">)</span>
+        <span class="n">maxdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_maxdata</span>
+        <span class="n">border</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_removeborder</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">readingOrder</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ReadingOrder</span><span class="o">.</span><span class="n">Clike</span><span class="p">:</span>
+            <span class="n">roi</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_width</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">roi</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_width</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">border</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">roi</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">border</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">roi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">border</span><span class="p">),</span> <span class="n">maxdata</span><span class="p">)</span>
+            <span class="n">roi</span><span class="p">[:,</span> <span class="o">-</span><span class="n">border</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">roi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">border</span><span class="p">),</span> <span class="n">maxdata</span><span class="p">)</span>
+            <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">border</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">border</span><span class="p">,</span> <span class="n">roi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">maxdata</span><span class="p">)</span>
+            <span class="n">roi</span><span class="p">[</span><span class="o">-</span><span class="n">border</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">border</span><span class="p">,</span> <span class="n">roi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">maxdata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">roi</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_filterfactor</span><span class="o">*</span><span class="n">maxdata</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SiriusImageView.showCalibrationGrid">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.showCalibrationGrid">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">showCalibrationGrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show calibration_grid_image over the current image_waveform.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_show_calibration_grid</span> <span class="o">=</span> <span class="n">show</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibrationGrid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return Numpy array containing original grid.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_dcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_orig</span><span class="p">)</span>
+
+    <span class="nd">@calibrationGrid</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibrationGrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Receive a list &#39;data&#39; which elements are: [width, new_grid:].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_orig</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_maxdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_calibration_grid_image</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_grid_filterfactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Factor used to filter calibration grid.</span>
+
+<span class="sd">        Pixels with values smaller than filterfactor*img_maxdata</span>
+<span class="sd">        are set to zero.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Calibration Grid Filter Factor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_filterfactor</span><span class="o">*</span><span class="mi">100</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_grid_removeborder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Factor used to remove border of the calibration grid.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Number of Rows/Columns to be removed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_removeborder</span>
+
+<div class="viewcode-block" id="SiriusImageView.set_calibration_grid_filterfactor">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.set_calibration_grid_filterfactor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_calibration_grid_filterfactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set factor used to filter calibration grid.</span>
+
+<span class="sd">        Pixels with values smaller than filterfactor*img_maxdata</span>
+<span class="sd">        are set to zero.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            Calibration Grid Filter Factor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">/=</span> <span class="mi">100</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_filterfactor</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_filterfactor</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_calibration_grid_image</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SiriusImageView.set_calibration_grid_border2remove">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.set_calibration_grid_border2remove">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_calibration_grid_border2remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set factor used to remove border of the calibration grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            Number of Rows/Columns to be removed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_removeborder</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_calibration_grid_image</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SiriusImageView.process_image">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.process_image">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reimplement process_image method to add grid to image.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">receivedData</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+        <span class="n">image2process</span> <span class="o">=</span> <span class="n">_dcopy</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_calibration_grid</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adjust_calibration_grid</span><span class="p">(</span><span class="n">image2process</span><span class="p">)</span>
+                <span class="n">image2process</span><span class="p">[</span><span class="n">grid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_maxdata</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Grid dimentions do not match image dimentions!&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image2process</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_adjust_calibration_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_grid_image</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsety</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsety</span><span class="o">+</span><span class="n">height</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsetx</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsetx</span><span class="o">+</span><span class="n">width</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">grid</span>
+
+<div class="viewcode-block" id="SiriusImageView.roioffsetx_connection_state_changed">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.roioffsetx_connection_state_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roioffsetx_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetX Channel connection state changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsetx</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="SiriusImageView.roioffsety_connection_state_changed">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.roioffsety_connection_state_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roioffsety_connection_state_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetY Channel connection state changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            The new connection state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsety</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="SiriusImageView.image_roioffsetx_changed">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.image_roioffsetx_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_roioffsetx_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetX Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_offsetx : int</span>
+<span class="sd">            The new image ROI horizontal offset</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsetx</span> <span class="o">=</span> <span class="n">new_offset</span></div>
+
+
+<div class="viewcode-block" id="SiriusImageView.image_roioffsety_changed">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.image_roioffsety_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_roioffsety_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the ROIOffsetY Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_offsety : int</span>
+<span class="sd">            The new image ROI vertical offset</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_roi_offsety</span> <span class="o">=</span> <span class="n">new_offset</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_maxwidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return image maximum width.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_maxwidth</span>
+
+<div class="viewcode-block" id="SiriusImageView.image_maxwidth_changed">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.image_maxwidth_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_maxwidth_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_max</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the maxWidth Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_max : int</span>
+<span class="sd">            The new image max width</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_maxwidth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_max</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_maxheight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return image maximum height.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_maxheight</span>
+
+<div class="viewcode-block" id="SiriusImageView.image_maxheight_changed">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.SiriusImageView.image_maxheight_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_maxheight_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_max</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run when the maxHeight Channel value changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_max : int</span>
+<span class="sd">            The new image max height</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_maxheight</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_max</span><span class="p">)</span></div>
+
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetXChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI horizontal offset.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@ROIOffsetXChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetXChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI horizontal offset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roioffsetx_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_roioffsetx_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsetxchannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetYChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI vertical offset.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@ROIOffsetYChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ROIOffsetYChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image ROI vertical offset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">roioffsety_connection_state_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_roioffsety_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsetychannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maxWidthChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image maximum width.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@maxWidthChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maxWidthChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image maximum width.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_maxwidth_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxwidthchannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maxHeightChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image maximum height.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="nd">@maxHeightChannel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maxHeightChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the channel address in use for the image maximum height.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            Channel address</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># Disconnect old channel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Create and connect new channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_maxheight_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmSeverityChanged</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxheightchannel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_mouse_moved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="n">pos_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">mapSceneToView</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">, </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">pos_scene</span><span class="o">.</span><span class="n">x</span><span class="p">()),</span>
+                                <span class="nb">round</span><span class="p">(</span><span class="n">pos_scene</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
+        <span class="n">QToolTip</span><span class="o">.</span><span class="n">showText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">toPoint</span><span class="p">()),</span> <span class="n">txt</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">(),</span> <span class="mi">5000</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_propty_layout">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.base.create_propty_layout">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_propty_layout</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">propty</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+                         <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;hbox&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.10</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.29</span><span class="p">,</span>
+                         <span class="n">use_linedit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a layout that handles a property according to &#39;propty_type&#39;.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;hbox&#39;</span><span class="p">:</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;vbox&#39;</span><span class="p">:</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">propty_type</span> <span class="o">==</span> <span class="s1">&#39;sprb&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">use_linedit</span><span class="p">:</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">PyDMLineEdit</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;SP&#39;</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;le_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">sp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;SP&#39;</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;sb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">sp</span><span class="p">)</span>
+        <span class="n">sp</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">sp</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;RB&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmd</span><span class="p">:</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">propty_type</span> <span class="o">==</span> <span class="s1">&#39;enbldisabl&#39;</span><span class="p">:</span>
+        <span class="n">statebutton</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sel&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;bt_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">statebutton</span><span class="p">)</span>
+        <span class="n">statebutton</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">statebutton</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">statebutton</span><span class="p">)</span>
+        <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sts&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;led_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">led</span><span class="p">)</span>
+        <span class="n">led</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;min-width:1.29em; max-width:1.29em; &quot;</span>
+            <span class="s2">&quot;min-height:1.29em; max-height:1.29em;&quot;</span><span class="p">)</span>
+        <span class="n">led</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Minimum</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">propty_type</span> <span class="o">==</span> <span class="s1">&#39;offon&#39;</span><span class="p">:</span>
+        <span class="n">statebutton</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sel&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;bt_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">statebutton</span><span class="p">)</span>
+        <span class="n">statebutton</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">statebutton</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">statebutton</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sts&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmd</span><span class="p">:</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">propty_type</span> <span class="o">==</span> <span class="s1">&#39;enum&#39;</span><span class="p">:</span>
+        <span class="n">combobox</span> <span class="o">=</span> <span class="n">PyDMEnumComboBox</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sel&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;cb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">combobox</span><span class="p">)</span>
+        <span class="n">combobox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">combobox</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sts&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmd</span><span class="p">:</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">                max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">propty_type</span> <span class="o">==</span> <span class="s1">&#39;mon&#39;</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Mon&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">propty_type</span> <span class="o">==</span> <span class="s1">&#39;cte&#39;</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Cte&#39;</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            min-width:wvalem; max-width:wvalem; min-height:hvalem;</span>
+<span class="s2">            max-height:hvalem;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cmd</span><span class="p">:</span>
+        <span class="n">pb</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span>
+            <span class="n">pressValue</span><span class="o">=</span><span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;pressValue&#39;</span><span class="p">])</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;pb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">,</span> <span class="n">pb</span><span class="p">)</span>
+        <span class="n">pb</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;pb_&#39;</span><span class="o">+</span><span class="n">propty</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;icon&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">pb</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;icon&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;toolTip&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">pb</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;toolTip&#39;</span><span class="p">])</span>
+        <span class="n">pb</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">propty_name</span><span class="o">=</span><span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Cmd&#39;</span><span class="p">)</span>
+
+        <span class="n">_w</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;px&#39;</span> <span class="k">if</span> <span class="s1">&#39;width&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;em&#39;</span>
+        <span class="n">_h</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;px&#39;</span> <span class="k">if</span> <span class="s1">&#39;height&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;em&#39;</span>
+        <span class="n">stylesheet</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #pb_&quot;&quot;&quot;</span> <span class="o">+</span> <span class="n">propty</span> <span class="o">+</span> <span class="s2">&quot;&quot;&quot;{</span>
+<span class="s2">                min-width:wval; max-width:wval;</span>
+<span class="s2">                min-height:hval; max-height:hval;</span>
+<span class="s2">                iconsize;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;wval&#39;</span><span class="p">,</span> <span class="n">_w</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;hval&#39;</span><span class="p">,</span> <span class="n">_h</span><span class="p">)</span>
+        <span class="n">_is</span> <span class="o">=</span> <span class="s1">&#39;icon-size:&#39;</span><span class="o">+</span><span class="n">cmd</span><span class="p">[</span><span class="s1">&#39;icon-size&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;px;&#39;</span> \
+            <span class="k">if</span> <span class="s1">&#39;icon-size&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">stylesheet</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;iconsize;&#39;</span><span class="p">,</span> <span class="n">_is</span><span class="p">)</span>
+        <span class="n">pb</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="n">stylesheet</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span>
+
+    <span class="n">layout</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">layout</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

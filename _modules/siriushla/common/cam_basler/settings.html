@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.common.cam_basler.settings &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.common.cam_basler.settings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.common.cam_basler.settings</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> \
+    <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QPushButton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMPushButton</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla</span><span class="w"> </span><span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusLedAlert</span><span class="p">,</span> <span class="n">SiriusLabel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets.windows</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_window_from_widget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_propty_layout</span>
+
+
+<div class="viewcode-block" id="BaslerCamSettings">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.settings.BaslerCamSettings">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaslerCamSettings</span><span class="p">(</span><span class="n">QTabWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span> <span class="o">+</span> <span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_infoWidget</span><span class="p">(),</span> <span class="s1">&#39;Gen. Info&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_statusWidget</span><span class="p">(),</span> <span class="s1">&#39;Status&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_acquisitionWidget</span><span class="p">(),</span> <span class="s1">&#39;Acquisition&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_imgIntesityAndBGWidget</span><span class="p">(),</span> <span class="s1">&#39;Intensity and BG&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ROIWidget</span><span class="p">(),</span> <span class="s1">&#39;ROI&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;App{min-width: 31em; max-width: 31em;}&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_infoWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_DevID</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Device ID:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DevID</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DeviceID&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_DevID</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">label_DevVers</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Device Version:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DevVers</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DeviceVersion&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_DevVers</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">label_DevModelName</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Device Model Name:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DevModelName</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DeviceModelName&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_DevModelName</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">label_DevVendorName</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Device Vendor Name:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DevVendorName</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DeviceVendorName&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_DevVendorName</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">label_DevFirmVers</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Firmware Version:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DevFirmVers</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DeviceFirmwareVersion&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_DevFirmVers</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">label_SensorHeight</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Sensor Height [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_SensorHeight</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SensorHeight&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_SensorHeight</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">label_SensorWidth</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Sensor Width [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_SensorWidth</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SensorWidth&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;cte&#39;</span><span class="p">)</span>
+        <span class="n">hbox_SensorWidth</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DevID</span><span class="p">,</span> <span class="n">hbox_DevID</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DevVers</span><span class="p">,</span> <span class="n">hbox_DevVers</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DevModelName</span><span class="p">,</span> <span class="n">hbox_DevModelName</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DevVendorName</span><span class="p">,</span> <span class="n">hbox_DevVendorName</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DevFirmVers</span><span class="p">,</span> <span class="n">hbox_DevFirmVers</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_SensorHeight</span><span class="p">,</span> <span class="n">hbox_SensorHeight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_SensorWidth</span><span class="p">,</span> <span class="n">hbox_SensorWidth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_statusWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_Conn</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Connection:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_Conn</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Connection&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_Temp</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Temperature State:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_Temp</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Temp-Mon&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_Temp</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:7.1em; max-width:7.1em;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_Temp</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_TempState</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TempState-Mon&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_TempState</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:1.29em; max-width:1.29em;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_TempState</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TempState-Mon&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_TempState</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:2.5em; max-width:2.5em;&#39;</span><span class="p">)</span>
+        <span class="n">hbox_Temp</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hbox_Temp</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_Temp</span><span class="p">)</span>
+        <span class="n">hbox_Temp</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">led_TempState</span><span class="p">)</span>
+        <span class="n">hbox_Temp</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_TempState</span><span class="p">)</span>
+
+        <span class="n">label_LastErr</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Last Error:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_LastErr</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LastErr&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">,</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Clear Last Error&#39;</span><span class="p">,</span> <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;ClearLastErr&#39;</span><span class="p">})</span>
+
+        <span class="n">label_Reset</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Reset Camera:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_dtl</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.sync&#39;</span><span class="p">),</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Rst-Cmd&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_dtl</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_dtl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;#reset{min-width:25px; max-width:25px; icon-size:20px;}&quot;</span><span class="p">)</span>
+
+        <span class="n">label_PowerReset</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Power Reset: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_power_reset</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.sync&#39;</span><span class="p">),</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PoEReset-Cmd&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_power_reset</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;power_reset&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_power_reset</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;#power_reset{min-width:25px; max-width:25px; icon-size:20px;}&quot;</span><span class="p">)</span>
+        
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_Conn</span><span class="p">,</span> <span class="n">hbox_Conn</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_Temp</span><span class="p">,</span> <span class="n">hbox_Temp</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_LastErr</span><span class="p">,</span> <span class="n">hbox_LastErr</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_Reset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_dtl</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_PowerReset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_power_reset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_acquisitionWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_CamEnbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Acquire Enable Status:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_CamEnbl</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Enbl&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enbldisabl&#39;</span><span class="p">)</span>
+
+        <span class="n">label_FrameCnt</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Frame Count:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_FrameCnt</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FrameCnt&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_AcqMode</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Acquire Mode:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AcqMode</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AcqMode&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enum&#39;</span><span class="p">)</span>
+
+        <span class="n">label_AcqPeriod</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Acquire Period [s]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AcqPeriod</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AcqPeriod&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_AcqPeriodLowLim</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Acquire Period Low Limit [s]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AcqPeriodLowLim</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AcqPeriodLowLim&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ExpMode</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Exposure Mode:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ExpMode</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ExposureMode&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enum&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ExpTime</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Exposure Time [us]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ExpTime</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ExposureTime&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_Gain</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Gain [dB]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_Gain</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;icon&#39;</span><span class="p">:</span> <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.auto-fix&#39;</span><span class="p">),</span> <span class="s1">&#39;icon-size&#39;</span><span class="p">:</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;toolTip&#39;</span><span class="p">:</span> <span class="s1">&#39;Auto Gain&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;AutoGain&#39;</span><span class="p">})</span>
+
+        <span class="n">label_TransformType</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Transform Type:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_TransformType</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TransformType&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enum&#39;</span><span class="p">)</span>
+
+        <span class="n">label_BlackLevel</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Black Level [gray va]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_BlackLevel</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BlackLevel&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_DebouncerPeriod</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Debouncer Period [us]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DebouncerPeriod</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DebouncerPeriod&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_advanced</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Advanced&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">my_window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+            <span class="n">BaslerCamAcqAdvSettings</span><span class="p">,</span> <span class="n">is_main</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Basler Camera Advanced Acquisition Settings&#39;</span><span class="p">)</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">connect_window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb_advanced</span><span class="p">,</span> <span class="n">my_window</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">hbox_adv</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hbox_adv</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb_advanced</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_CamEnbl</span><span class="p">,</span> <span class="n">hbox_CamEnbl</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_FrameCnt</span><span class="p">,</span> <span class="n">hbox_FrameCnt</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AcqMode</span><span class="p">,</span> <span class="n">hbox_AcqMode</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AcqPeriod</span><span class="p">,</span> <span class="n">hbox_AcqPeriod</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AcqPeriodLowLim</span><span class="p">,</span> <span class="n">hbox_AcqPeriodLowLim</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ExpMode</span><span class="p">,</span> <span class="n">hbox_ExpMode</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ExpTime</span><span class="p">,</span> <span class="n">hbox_ExpTime</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_Gain</span><span class="p">,</span> <span class="n">hbox_Gain</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_BlackLevel</span><span class="p">,</span> <span class="n">hbox_BlackLevel</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DebouncerPeriod</span><span class="p">,</span> <span class="n">hbox_DebouncerPeriod</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_TransformType</span><span class="p">,</span> <span class="n">hbox_TransformType</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">hbox_adv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_imgIntesityAndBGWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_EnblAdjust</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Enable Scale and Offset Adjust:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_EnblAdjust</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;EnblOffsetScale&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enbldisabl&#39;</span><span class="p">)</span>
+
+        <span class="n">label_AutoAdjust</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Automatic Intensity Adjust:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AutoAdjust</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AutoOffsetScale&#39;</span><span class="p">,</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Auto Adjust&#39;</span><span class="p">,</span> <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;AutoOffsetScale&#39;</span><span class="p">})</span>
+
+        <span class="n">label_PixelScale</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Pixel Scale:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_PixelScale</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PixelScale&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">use_linedit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">label_PixelOffset</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Pixel Offset:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_PixelOffset</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PixelOffset&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">use_linedit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">label_EnblLowClip</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Enable Low Cliping:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_EnblLowClip</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;EnblLowClip&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enbldisabl&#39;</span><span class="p">)</span>
+
+        <span class="n">label_LowClip</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Minimum Intensity for Low Cliping:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_LowClip</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LowClip&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">use_linedit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">label_EnblHighClip</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Enable High Cliping:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_EnblHighClip</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;EnblHighClip&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enbldisabl&#39;</span><span class="p">)</span>
+
+        <span class="n">label_HighClip</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Maximum Intensity for High Cliping:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_HighClip</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;HighClip&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">use_linedit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">label_EnblBG</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Enable BG Subtraction:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_EnblBG</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;EnblBGSubtraction&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enbldisabl&#39;</span><span class="p">)</span>
+
+        <span class="n">label_SaveBG</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Save BG:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_SaveBG</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SaveBG&#39;</span><span class="p">,</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Save&#39;</span><span class="p">,</span> <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SaveBG&#39;</span><span class="p">})</span>
+
+        <span class="n">label_ValidBG</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Is valid BG?&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ValidBG</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ValidBG&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_EnblAdjust</span><span class="p">,</span> <span class="n">hbox_EnblAdjust</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AutoAdjust</span><span class="p">,</span> <span class="n">hbox_AutoAdjust</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_PixelScale</span><span class="p">,</span> <span class="n">hbox_PixelScale</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_PixelOffset</span><span class="p">,</span> <span class="n">hbox_PixelOffset</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_EnblLowClip</span><span class="p">,</span> <span class="n">hbox_EnblLowClip</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_LowClip</span><span class="p">,</span> <span class="n">hbox_LowClip</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_EnblHighClip</span><span class="p">,</span> <span class="n">hbox_EnblHighClip</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_HighClip</span><span class="p">,</span> <span class="n">hbox_HighClip</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_EnblBG</span><span class="p">,</span> <span class="n">hbox_EnblBG</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_SaveBG</span><span class="p">,</span> <span class="n">hbox_SaveBG</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ValidBG</span><span class="p">,</span> <span class="n">hbox_ValidBG</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ROIWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_MaxWidth</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Maximum Width [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_MaxWidth</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SensorWidth-Cte&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_MaxWidth</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;max-width:7.10em; max-height:1.29em;&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">label_MaxHeight</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Maximum Height [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_MaxHeight</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SensorHeight-Cte&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_MaxHeight</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;max-width:7.10em; max-height:1.29em;&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">label_ROIWidth</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Width [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ROIWidth</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AOIWidth&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ROIHeight</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Heigth [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ROIHeight</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AOIHeight&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ROIOffsetX</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Offset X [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ROIOffsetX</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AOIOffsetX&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ROIOffsetY</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Offset Y [pixels]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ROIOffsetY</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AOIOffsetY&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_AutoCenterX</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Auto Center X:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AutoCenterX</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AOIAutoCenterX&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;offon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_AutoCenterY</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Auto Center Y:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AutoCenterY</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AOIAutoCenterY&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;offon&#39;</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_MaxWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb_MaxWidth</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_MaxHeight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb_MaxHeight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ROIWidth</span><span class="p">,</span> <span class="n">hbox_ROIWidth</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ROIHeight</span><span class="p">,</span> <span class="n">hbox_ROIHeight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ROIOffsetX</span><span class="p">,</span> <span class="n">hbox_ROIOffsetX</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ROIOffsetY</span><span class="p">,</span> <span class="n">hbox_ROIOffsetY</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AutoCenterX</span><span class="p">,</span> <span class="n">hbox_AutoCenterX</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AutoCenterY</span><span class="p">,</span> <span class="n">hbox_AutoCenterY</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+
+<div class="viewcode-block" id="BaslerCamAcqAdvSettings">
+<a class="viewcode-back" href="../../../../siriushla.common.cam_basler.html#siriushla.common.cam_basler.settings.BaslerCamAcqAdvSettings">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaslerCamAcqAdvSettings</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span> <span class="o">+</span> <span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h3&gt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">+</span>
+                       <span class="s1">&#39; Advanced Acquisition Settings&lt;/h3&gt;&#39;</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-height:1.29em;&#39;</span><span class="p">)</span>
+
+        <span class="n">label_DataType</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Data Type:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_DataType</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DataType&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;enum&#39;</span><span class="p">)</span>
+
+        <span class="n">label_BwAssigned</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Band Width Assigned [bytes]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_BwAssigned</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BwAssigned&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_BwReserve</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Band Width Reserved [%]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_BwReserve</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BwReserve&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_BwReserveAccum</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Band Width Reserved Accum. [%]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_BwReserveAccum</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BwReserveAccum&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_CurrentThroughput</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Current Throughput [bytes/s]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_CurrentThroughput</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CurrentThroughput&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_MaxThroughput</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Maximum Throughput [bytes/s]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_MaxThroughput</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MaxThroughput&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_FrameMaxJitter</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Frame Max Jitter [8 ns]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_FrameMaxJitter</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FrameMaxJitter&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_PacketSize</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Packet Size [bytes]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_PacketSize</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PacketSize&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_PayloadSize</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Payload Size [bytes]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_PayloadSize</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PayloadSize&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_InterPacketDelay</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Inter Packet Delay [8 ns]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_InterPacketDelay</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;InterPacketDelay&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ReadoutTime</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Readout Time [us]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ReadoutTime</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ReadoutTime&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ResultFrameRate</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Result Frame Rate:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ResultFrameRate</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ResultFrameRate&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;mon&#39;</span><span class="p">)</span>
+
+        <span class="n">label_TransmDelay</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Inter Frame Delay [8 ns]:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_TransmDelay</span> <span class="o">=</span> <span class="n">create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TransmDelay&#39;</span><span class="p">,</span> <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_DataType</span><span class="p">,</span> <span class="n">hbox_DataType</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_BwAssigned</span><span class="p">,</span> <span class="n">hbox_BwAssigned</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_BwReserve</span><span class="p">,</span> <span class="n">hbox_BwReserve</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_BwReserveAccum</span><span class="p">,</span> <span class="n">hbox_BwReserveAccum</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_CurrentThroughput</span><span class="p">,</span> <span class="n">hbox_CurrentThroughput</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_MaxThroughput</span><span class="p">,</span> <span class="n">hbox_MaxThroughput</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_FrameMaxJitter</span><span class="p">,</span> <span class="n">hbox_FrameMaxJitter</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_PacketSize</span><span class="p">,</span> <span class="n">hbox_PacketSize</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_PayloadSize</span><span class="p">,</span> <span class="n">hbox_PayloadSize</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_InterPacketDelay</span><span class="p">,</span> <span class="n">hbox_InterPacketDelay</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ReadoutTime</span><span class="p">,</span> <span class="n">hbox_ReadoutTime</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ResultFrameRate</span><span class="p">,</span> <span class="n">hbox_ResultFrameRate</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_TransmDelay</span><span class="p">,</span> <span class="n">hbox_TransmDelay</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

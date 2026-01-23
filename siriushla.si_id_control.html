@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.si_id_control &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.tb_di_slits" href="siriushla.tb_di_slits.html" />
+    <link rel="prev" title="siriushla.si_di_scraps" href="siriushla.si_di_scraps.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.si_id_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.apu">siriushla.si_id_control.apu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUAlarmDetails"><code class="docutils literal notranslate"><span class="pre">APUAlarmDetails</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUControlWindow"><code class="docutils literal notranslate"><span class="pre">APUControlWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUHardLLDetails"><code class="docutils literal notranslate"><span class="pre">APUHardLLDetails</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUInterlockDetails"><code class="docutils literal notranslate"><span class="pre">APUInterlockDetails</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUSummaryBase"><code class="docutils literal notranslate"><span class="pre">APUSummaryBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.apu.APUSummaryBase.MODEL_WIDTHS"><code class="docutils literal notranslate"><span class="pre">APUSummaryBase.MODEL_WIDTHS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUSummaryHeader"><code class="docutils literal notranslate"><span class="pre">APUSummaryHeader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.apu.APUSummaryWidget"><code class="docutils literal notranslate"><span class="pre">APUSummaryWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.base">siriushla.si_id_control.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonControlWindow"><code class="docutils literal notranslate"><span class="pre">IDCommonControlWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonDialog"><code class="docutils literal notranslate"><span class="pre">IDCommonDialog</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase"><code class="docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase.MODEL_WIDTHS"><code class="docutils literal notranslate"><span class="pre">IDCommonSummaryBase.MODEL_WIDTHS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryHeader"><code class="docutils literal notranslate"><span class="pre">IDCommonSummaryHeader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget"><code class="docutils literal notranslate"><span class="pre">IDCommonSummaryWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget.disable_beamline_control"><code class="docutils literal notranslate"><span class="pre">IDCommonSummaryWidget.disable_beamline_control()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget.enable_beamline_control"><code class="docutils literal notranslate"><span class="pre">IDCommonSummaryWidget.enable_beamline_control()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.delta">siriushla.si_id_control.delta module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTAControlWindow"><code class="docutils literal notranslate"><span class="pre">DELTAControlWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils"><code class="docutils literal notranslate"><span class="pre">DELTAControlWindowUtils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils.AUX_CONTROL_PVS"><code class="docutils literal notranslate"><span class="pre">DELTAControlWindowUtils.AUX_CONTROL_PVS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils.MAIN_CONTROL_PVS"><code class="docutils literal notranslate"><span class="pre">DELTAControlWindowUtils.MAIN_CONTROL_PVS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils.STATUS_PVS"><code class="docutils literal notranslate"><span class="pre">DELTAControlWindowUtils.STATUS_PVS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTASummaryBase"><code class="docutils literal notranslate"><span class="pre">DELTASummaryBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTASummaryBase.MODEL_WIDTHS"><code class="docutils literal notranslate"><span class="pre">DELTASummaryBase.MODEL_WIDTHS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTASummaryHeader"><code class="docutils literal notranslate"><span class="pre">DELTASummaryHeader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.delta.DELTASummaryWidget"><code class="docutils literal notranslate"><span class="pre">DELTASummaryWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.epu">siriushla.si_id_control.epu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.epu.EPUControlWindow"><code class="docutils literal notranslate"><span class="pre">EPUControlWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.epu.EPUDriveDetails"><code class="docutils literal notranslate"><span class="pre">EPUDriveDetails</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.epu.EPUSummaryBase"><code class="docutils literal notranslate"><span class="pre">EPUSummaryBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.epu.EPUSummaryBase.MODEL_WIDTHS"><code class="docutils literal notranslate"><span class="pre">EPUSummaryBase.MODEL_WIDTHS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.epu.EPUSummaryHeader"><code class="docutils literal notranslate"><span class="pre">EPUSummaryHeader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.epu.EPUSummaryWidget"><code class="docutils literal notranslate"><span class="pre">EPUSummaryWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.id_control">siriushla.si_id_control.id_control module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.id_control.IDControl"><code class="docutils literal notranslate"><span class="pre">IDControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.id_control.IDControl.contextMenuEvent"><code class="docutils literal notranslate"><span class="pre">IDControl.contextMenuEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.id_control.IDControl.show_connections"><code class="docutils literal notranslate"><span class="pre">IDControl.show_connections()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.papu">siriushla.si_id_control.papu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.papu.PAPUControlWindow"><code class="docutils literal notranslate"><span class="pre">PAPUControlWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.papu.PAPUDetails"><code class="docutils literal notranslate"><span class="pre">PAPUDetails</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.papu.PAPUSummaryBase"><code class="docutils literal notranslate"><span class="pre">PAPUSummaryBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_id_control.papu.PAPUSummaryBase.MODEL_WIDTHS"><code class="docutils literal notranslate"><span class="pre">PAPUSummaryBase.MODEL_WIDTHS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.papu.PAPUSummaryHeader"><code class="docutils literal notranslate"><span class="pre">PAPUSummaryHeader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.papu.PAPUSummaryWidget"><code class="docutils literal notranslate"><span class="pre">PAPUSummaryWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control.util">siriushla.si_id_control.util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_id_control.util.get_id_icon"><code class="docutils literal notranslate"><span class="pre">get_id_icon()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_id_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.si_id_control</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.si_id_control.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-si-id-control">
+<h1>siriushla.si_id_control<a class="headerlink" href="#siriushla-si-id-control" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.si_id_control.apu">
+<span id="siriushla-si-id-control-apu-module"></span><h2>siriushla.si_id_control.apu module<a class="headerlink" href="#module-siriushla.si_id_control.apu" title="Link to this heading"></a></h2>
+<p>APU Control Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUAlarmDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUAlarmDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUAlarmDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUAlarmDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonDialog" title="siriushla.si_id_control.base.IDCommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonDialog</span></code></a></p>
+<p>APU Alarm Details Dialog.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUControlWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUControlWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUControlWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUControlWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonControlWindow" title="siriushla.si_id_control.base.IDCommonControlWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonControlWindow</span></code></a></p>
+<p>APU Control Window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUHardLLDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUHardLLDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUHardLLDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUHardLLDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonDialog" title="siriushla.si_id_control.base.IDCommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonDialog</span></code></a></p>
+<p>APU Hardware and LowLevel Details Dialog.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUInterlockDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUInterlockDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUInterlockDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUInterlockDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonDialog" title="siriushla.si_id_control.base.IDCommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonDialog</span></code></a></p>
+<p>APU Interlock Details Dialog.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUSummaryBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUSummaryBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUSummaryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUSummaryBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="siriushla.si_id_control.base.IDCommonSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a></p>
+<p>APU Summary Base Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUSummaryBase.MODEL_WIDTHS">
+<span class="sig-name descname"><span class="pre">MODEL_WIDTHS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(('Alarms',</span> <span class="pre">4),</span> <span class="pre">('Phase',</span> <span class="pre">6),</span> <span class="pre">('Phase</span> <span class="pre">Speed',</span> <span class="pre">6),</span> <span class="pre">('Start',</span> <span class="pre">4),</span> <span class="pre">('Stop',</span> <span class="pre">4))</span></em><a class="headerlink" href="#siriushla.si_id_control.apu.APUSummaryBase.MODEL_WIDTHS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUSummaryHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUSummaryHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUSummaryHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUSummaryHeader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryHeader" title="siriushla.si_id_control.base.IDCommonSummaryHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryHeader</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.apu.APUSummaryBase" title="siriushla.si_id_control.apu.APUSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">APUSummaryBase</span></code></a></p>
+<p>APU Summary Header.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.apu.APUSummaryWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.apu.</span></span><span class="sig-name descname"><span class="pre">APUSummaryWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/apu.html#APUSummaryWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.apu.APUSummaryWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget" title="siriushla.si_id_control.base.IDCommonSummaryWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryWidget</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.apu.APUSummaryBase" title="siriushla.si_id_control.apu.APUSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">APUSummaryBase</span></code></a></p>
+<p>APU Summary Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control.base">
+<span id="siriushla-si-id-control-base-module"></span><h2>siriushla.si_id_control.base module<a class="headerlink" href="#module-siriushla.si_id_control.base" title="Link to this heading"></a></h2>
+<p>ID Common classes module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonControlWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.base.</span></span><span class="sig-name descname"><span class="pre">IDCommonControlWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonControlWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonControlWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>ID Common Control Window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.base.</span></span><span class="sig-name descname"><span class="pre">IDCommonDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonDialog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>ID Common Auxiliary Dialog.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonSummaryBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.base.</span></span><span class="sig-name descname"><span class="pre">IDCommonSummaryBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonSummaryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>ID Common Summary Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonSummaryBase.MODEL_WIDTHS">
+<span class="sig-name descname"><span class="pre">MODEL_WIDTHS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonSummaryBase.MODEL_WIDTHS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonSummaryHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.base.</span></span><span class="sig-name descname"><span class="pre">IDCommonSummaryHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonSummaryHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonSummaryHeader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="siriushla.si_id_control.base.IDCommonSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a></p>
+<p>ID Common Summary Header.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonSummaryWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.base.</span></span><span class="sig-name descname"><span class="pre">IDCommonSummaryWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonSummaryWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonSummaryWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="siriushla.si_id_control.base.IDCommonSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a></p>
+<p>ID Common Summary Widget.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonSummaryWidget.disable_beamline_control">
+<span class="sig-name descname"><span class="pre">disable_beamline_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonSummaryWidget.disable_beamline_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonSummaryWidget.disable_beamline_control" title="Link to this definition"></a></dt>
+<dd><p>Disable beamline control.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_id_control.base.IDCommonSummaryWidget.enable_beamline_control">
+<span class="sig-name descname"><span class="pre">enable_beamline_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/base.html#IDCommonSummaryWidget.enable_beamline_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.base.IDCommonSummaryWidget.enable_beamline_control" title="Link to this definition"></a></dt>
+<dd><p>Enable beamline control.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control.delta">
+<span id="siriushla-si-id-control-delta-module"></span><h2>siriushla.si_id_control.delta module<a class="headerlink" href="#module-siriushla.si_id_control.delta" title="Link to this heading"></a></h2>
+<p>DELTA Control Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTAControlWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.delta.</span></span><span class="sig-name descname"><span class="pre">DELTAControlWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/delta.html#DELTAControlWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.delta.DELTAControlWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonControlWindow" title="siriushla.si_id_control.base.IDCommonControlWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonControlWindow</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils" title="siriushla.si_id_control.delta.DELTAControlWindowUtils"><code class="xref py py-class docutils literal notranslate"><span class="pre">DELTAControlWindowUtils</span></code></a></p>
+<p>DELTA Control Window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTAControlWindowUtils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.delta.</span></span><span class="sig-name descname"><span class="pre">DELTAControlWindowUtils</span></span><a class="reference internal" href="_modules/siriushla/si_id_control/delta.html#DELTAControlWindowUtils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTAControlWindowUtils.AUX_CONTROL_PVS">
+<span class="sig-name descname"><span class="pre">AUX_CONTROL_PVS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Acceleration':</span> <span class="pre">('KParamAcc-SP',</span> <span class="pre">'KParamAcc-RB',</span> <span class="pre">'PParamAcc-SP',</span> <span class="pre">'PParamAcc-RB'),</span> <span class="pre">'Header':</span> <span class="pre">('KParam',</span> <span class="pre">'PParam'),</span> <span class="pre">'Max.</span> <span class="pre">Acc.':</span> <span class="pre">{'RB':</span> <span class="pre">'MaxAcc-RB',</span> <span class="pre">'SP':</span> <span class="pre">'MaxAcc-SP'},</span> <span class="pre">'Max.</span> <span class="pre">Speed':</span> <span class="pre">{'RB':</span> <span class="pre">'MaxVelo-RB',</span> <span class="pre">'SP':</span> <span class="pre">'MaxVelo-SP'},</span> <span class="pre">'Start</span> <span class="pre">Parking':</span> <span class="pre">{'icon':</span> <span class="pre">'fa5s.parking',</span> <span class="pre">'pvname':</span> <span class="pre">'StartParking-Cmd'},</span> <span class="pre">'Tolerance':</span> <span class="pre">('PosTol-SP',</span> <span class="pre">'PosTol-RB',</span> <span class="pre">'PolTol-SP',</span> <span class="pre">'PolTol-RB')}</span></em><a class="headerlink" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils.AUX_CONTROL_PVS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTAControlWindowUtils.MAIN_CONTROL_PVS">
+<span class="sig-name descname"><span class="pre">MAIN_CONTROL_PVS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Abort':</span> <span class="pre">{'icon':</span> <span class="pre">'fa5s.stop',</span> <span class="pre">'pvname':</span> <span class="pre">'Abort-Cmd'},</span> <span class="pre">'Change</span> <span class="pre">KParam':</span> <span class="pre">{'icon':</span> <span class="pre">'fa5s.play',</span> <span class="pre">'pvname':</span> <span class="pre">'KParamChange-Cmd'},</span> <span class="pre">'Change</span> <span class="pre">PParam':</span> <span class="pre">{'icon':</span> <span class="pre">'fa5s.play',</span> <span class="pre">'pvname':</span> <span class="pre">'PParamChange-Cmd'},</span> <span class="pre">'Change</span> <span class="pre">Polarization':</span> <span class="pre">{'icon':</span> <span class="pre">'fa5s.play',</span> <span class="pre">'pvname':</span> <span class="pre">'PolChange-Cmd'},</span> <span class="pre">'KParam':</span> <span class="pre">{'Mon':</span> <span class="pre">'KParam-Mon',</span> <span class="pre">'RB':</span> <span class="pre">'KParam-RB',</span> <span class="pre">'SP':</span> <span class="pre">'KParam-SP'},</span> <span class="pre">'KParam</span> <span class="pre">Speed':</span> <span class="pre">{'RB':</span> <span class="pre">'KParamVelo-RB',</span> <span class="pre">'SP':</span> <span class="pre">'KParamVelo-SP'},</span> <span class="pre">'Motors</span> <span class="pre">Enabled':</span> <span class="pre">'MotorsEnbld-Mon',</span> <span class="pre">'Moving':</span> <span class="pre">'Moving-Mon',</span> <span class="pre">'PParam':</span> <span class="pre">{'Mon':</span> <span class="pre">'PParam-Mon',</span> <span class="pre">'RB':</span> <span class="pre">'PParam-RB',</span> <span class="pre">'SP':</span> <span class="pre">'PParam-SP'},</span> <span class="pre">'PParam</span> <span class="pre">Speed':</span> <span class="pre">{'RB':</span> <span class="pre">'PParamVelo-RB',</span> <span class="pre">'SP':</span> <span class="pre">'PParamVelo-SP'},</span> <span class="pre">'Polarization':</span> <span class="pre">{'Mon':</span> <span class="pre">'Pol-Mon',</span> <span class="pre">'RB':</span> <span class="pre">'Pol-Sts',</span> <span class="pre">'SP':</span> <span class="pre">'Pol-Sel'}}</span></em><a class="headerlink" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils.MAIN_CONTROL_PVS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTAControlWindowUtils.STATUS_PVS">
+<span class="sig-name descname"><span class="pre">STATUS_PVS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Alarms':</span> <span class="pre">('Alarm-Mon',</span> <span class="pre">'AlarmBits-Mon',</span> <span class="pre">'AlarmLabels-Cte'),</span> <span class="pre">'Interlock':</span> <span class="pre">('Intlk-Mon',</span> <span class="pre">'IntlkBits-Mon',</span> <span class="pre">'IntlkLabels-Cte'),</span> <span class="pre">'Is</span> <span class="pre">Operational':</span> <span class="pre">'IsOperational-Mon',</span> <span class="pre">'Logs':</span> <span class="pre">{'IOC</span> <span class="pre">Log':</span> <span class="pre">'Log-Mon',</span> <span class="pre">'Sequencer</span> <span class="pre">State</span> <span class="pre">Machine</span> <span class="pre">Log':</span> <span class="pre">'StateMachineLog-Mon'},</span> <span class="pre">'PLC</span> <span class="pre">State':</span> <span class="pre">'PLCState-Mon',</span> <span class="pre">'Sw':</span> <span class="pre">{'Killed':</span> <span class="pre">'KillSw-Mon',</span> <span class="pre">'Limit':</span> <span class="pre">'LimSw-Mon'}}</span></em><a class="headerlink" href="#siriushla.si_id_control.delta.DELTAControlWindowUtils.STATUS_PVS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTASummaryBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.delta.</span></span><span class="sig-name descname"><span class="pre">DELTASummaryBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/delta.html#DELTASummaryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.delta.DELTASummaryBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="siriushla.si_id_control.base.IDCommonSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a></p>
+<p>DELTA Summary Base Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTASummaryBase.MODEL_WIDTHS">
+<span class="sig-name descname"><span class="pre">MODEL_WIDTHS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(('Alarms',</span> <span class="pre">4),</span> <span class="pre">('Interlock',</span> <span class="pre">4),</span> <span class="pre">('KParam',</span> <span class="pre">6),</span> <span class="pre">('KParam</span> <span class="pre">Speed',</span> <span class="pre">6),</span> <span class="pre">('Start',</span> <span class="pre">4),</span> <span class="pre">('Stop',</span> <span class="pre">4))</span></em><a class="headerlink" href="#siriushla.si_id_control.delta.DELTASummaryBase.MODEL_WIDTHS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTASummaryHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.delta.</span></span><span class="sig-name descname"><span class="pre">DELTASummaryHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/delta.html#DELTASummaryHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.delta.DELTASummaryHeader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryHeader" title="siriushla.si_id_control.base.IDCommonSummaryHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryHeader</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.delta.DELTASummaryBase" title="siriushla.si_id_control.delta.DELTASummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DELTASummaryBase</span></code></a></p>
+<p>DELTA Summary Header.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.delta.DELTASummaryWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.delta.</span></span><span class="sig-name descname"><span class="pre">DELTASummaryWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/delta.html#DELTASummaryWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.delta.DELTASummaryWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget" title="siriushla.si_id_control.base.IDCommonSummaryWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryWidget</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.delta.DELTASummaryBase" title="siriushla.si_id_control.delta.DELTASummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DELTASummaryBase</span></code></a></p>
+<p>DELTA Summary Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control.epu">
+<span id="siriushla-si-id-control-epu-module"></span><h2>siriushla.si_id_control.epu module<a class="headerlink" href="#module-siriushla.si_id_control.epu" title="Link to this heading"></a></h2>
+<p>EPU Control Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.epu.EPUControlWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.epu.</span></span><span class="sig-name descname"><span class="pre">EPUControlWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/epu.html#EPUControlWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.epu.EPUControlWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonControlWindow" title="siriushla.si_id_control.base.IDCommonControlWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonControlWindow</span></code></a></p>
+<p>EPU Control Window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.epu.EPUDriveDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.epu.</span></span><span class="sig-name descname"><span class="pre">EPUDriveDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/epu.html#EPUDriveDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.epu.EPUDriveDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonDialog" title="siriushla.si_id_control.base.IDCommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonDialog</span></code></a></p>
+<p>EPU Drive Details.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.epu.EPUSummaryBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.epu.</span></span><span class="sig-name descname"><span class="pre">EPUSummaryBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/epu.html#EPUSummaryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.epu.EPUSummaryBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="siriushla.si_id_control.base.IDCommonSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a></p>
+<p>EPU Summary Base Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.epu.EPUSummaryBase.MODEL_WIDTHS">
+<span class="sig-name descname"><span class="pre">MODEL_WIDTHS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(('Status',</span> <span class="pre">4),</span> <span class="pre">('Gap',</span> <span class="pre">6),</span> <span class="pre">('Gap</span> <span class="pre">Speed',</span> <span class="pre">6),</span> <span class="pre">('Start</span> <span class="pre">Gap',</span> <span class="pre">4),</span> <span class="pre">('Stop</span> <span class="pre">Gap',</span> <span class="pre">4))</span></em><a class="headerlink" href="#siriushla.si_id_control.epu.EPUSummaryBase.MODEL_WIDTHS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.epu.EPUSummaryHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.epu.</span></span><span class="sig-name descname"><span class="pre">EPUSummaryHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/epu.html#EPUSummaryHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.epu.EPUSummaryHeader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryHeader" title="siriushla.si_id_control.base.IDCommonSummaryHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryHeader</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.epu.EPUSummaryBase" title="siriushla.si_id_control.epu.EPUSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EPUSummaryBase</span></code></a></p>
+<p>EPU Summary Header.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.epu.EPUSummaryWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.epu.</span></span><span class="sig-name descname"><span class="pre">EPUSummaryWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/epu.html#EPUSummaryWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.epu.EPUSummaryWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget" title="siriushla.si_id_control.base.IDCommonSummaryWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryWidget</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.epu.EPUSummaryBase" title="siriushla.si_id_control.epu.EPUSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EPUSummaryBase</span></code></a></p>
+<p>EPU Summary Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control.id_control">
+<span id="siriushla-si-id-control-id-control-module"></span><h2>siriushla.si_id_control.id_control module<a class="headerlink" href="#module-siriushla.si_id_control.id_control" title="Link to this heading"></a></h2>
+<p>ID Control Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.id_control.IDControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.id_control.</span></span><span class="sig-name descname"><span class="pre">IDControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/id_control.html#IDControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.id_control.IDControl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>ID Control Window.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_id_control.id_control.IDControl.contextMenuEvent">
+<span class="sig-name descname"><span class="pre">contextMenuEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/id_control.html#IDControl.contextMenuEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.id_control.IDControl.contextMenuEvent" title="Link to this definition"></a></dt>
+<dd><p>Show a custom context menu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_id_control.id_control.IDControl.show_connections">
+<span class="sig-name descname"><span class="pre">show_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checked</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/id_control.html#IDControl.show_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.id_control.IDControl.show_connections" title="Link to this definition"></a></dt>
+<dd><p>Show connections.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control.papu">
+<span id="siriushla-si-id-control-papu-module"></span><h2>siriushla.si_id_control.papu module<a class="headerlink" href="#module-siriushla.si_id_control.papu" title="Link to this heading"></a></h2>
+<p>PAPU Control Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.papu.PAPUControlWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.papu.</span></span><span class="sig-name descname"><span class="pre">PAPUControlWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/papu.html#PAPUControlWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.papu.PAPUControlWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonControlWindow" title="siriushla.si_id_control.base.IDCommonControlWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonControlWindow</span></code></a></p>
+<p>PAPU Control Window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.papu.PAPUDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.papu.</span></span><span class="sig-name descname"><span class="pre">PAPUDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/papu.html#PAPUDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.papu.PAPUDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonDialog" title="siriushla.si_id_control.base.IDCommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonDialog</span></code></a></p>
+<p>PAPU Details.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.papu.PAPUSummaryBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.papu.</span></span><span class="sig-name descname"><span class="pre">PAPUSummaryBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/papu.html#PAPUSummaryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.papu.PAPUSummaryBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryBase" title="siriushla.si_id_control.base.IDCommonSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryBase</span></code></a></p>
+<p>PAPU Summary Base Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_id_control.papu.PAPUSummaryBase.MODEL_WIDTHS">
+<span class="sig-name descname"><span class="pre">MODEL_WIDTHS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(('Status',</span> <span class="pre">4),</span> <span class="pre">('Phase',</span> <span class="pre">6),</span> <span class="pre">('Phase</span> <span class="pre">Speed',</span> <span class="pre">6),</span> <span class="pre">('Start</span> <span class="pre">Phase',</span> <span class="pre">4),</span> <span class="pre">('Stop</span> <span class="pre">Phase',</span> <span class="pre">4))</span></em><a class="headerlink" href="#siriushla.si_id_control.papu.PAPUSummaryBase.MODEL_WIDTHS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.papu.PAPUSummaryHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.papu.</span></span><span class="sig-name descname"><span class="pre">PAPUSummaryHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/papu.html#PAPUSummaryHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.papu.PAPUSummaryHeader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryHeader" title="siriushla.si_id_control.base.IDCommonSummaryHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryHeader</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.papu.PAPUSummaryBase" title="siriushla.si_id_control.papu.PAPUSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">PAPUSummaryBase</span></code></a></p>
+<p>PAPU Summary Header.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_id_control.papu.PAPUSummaryWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.papu.</span></span><span class="sig-name descname"><span class="pre">PAPUSummaryWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/papu.html#PAPUSummaryWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.papu.PAPUSummaryWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_id_control.base.IDCommonSummaryWidget" title="siriushla.si_id_control.base.IDCommonSummaryWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDCommonSummaryWidget</span></code></a>, <a class="reference internal" href="#siriushla.si_id_control.papu.PAPUSummaryBase" title="siriushla.si_id_control.papu.PAPUSummaryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">PAPUSummaryBase</span></code></a></p>
+<p>PAPU Summary Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control.util">
+<span id="siriushla-si-id-control-util-module"></span><h2>siriushla.si_id_control.util module<a class="headerlink" href="#module-siriushla.si_id_control.util" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.si_id_control.util.get_id_icon">
+<span class="sig-prename descclassname"><span class="pre">siriushla.si_id_control.util.</span></span><span class="sig-name descname"><span class="pre">get_id_icon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_id_control/util.html#get_id_icon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_id_control.util.get_id_icon" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-siriushla.si_id_control">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.si_id_control" title="Link to this heading"></a></h2>
+<p>ID controls.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.si_di_scraps.html" class="btn btn-neutral float-left" title="siriushla.si_di_scraps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.tb_di_slits.html" class="btn btn-neutral float-right" title="siriushla.tb_di_slits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

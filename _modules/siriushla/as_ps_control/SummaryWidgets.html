@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_control.SummaryWidgets &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_control.SummaryWidgets</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ps_control.SummaryWidgets</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Widget with general functions of DCLink Widgets.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> \
+    <span class="n">QLabel</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMPushButton</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.envars</span><span class="w"> </span><span class="kn">import</span> <span class="n">VACA_PREFIX</span> <span class="k">as</span> <span class="n">VACA_PREFIX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.pwrsupply.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">PS_LI_INTLK_THRS</span> <span class="k">as</span> <span class="n">_PS_LI_INTLK</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMStateButton</span><span class="p">,</span> <span class="n">SiriusLedState</span><span class="p">,</span> \
+    <span class="n">SiriusLedAlert</span><span class="p">,</span> <span class="n">PyDMSpinboxScrollbar</span><span class="p">,</span> <span class="n">PyDMLedMultiChannel</span><span class="p">,</span> \
+    <span class="n">SiriusEnumComboBox</span><span class="p">,</span> <span class="n">SiriusLabel</span><span class="p">,</span> <span class="n">SiriusSpinbox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.detail_widget.custom_widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">LISpectIntlkLed</span>
+
+
+<span class="n">Dipole</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PS-B.*$&quot;</span><span class="p">)</span>
+<span class="n">Quadrupole</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PS-Q.*$&quot;</span><span class="p">)</span>
+<span class="n">QuadrupoleSkew</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PS-QS.*$&quot;</span><span class="p">)</span>
+<span class="n">Sextupole</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PS-S.*$&quot;</span><span class="p">)</span>
+<span class="n">Corrector</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PS-(LCH|CH|CV|CC|FCH|FCV).*$&quot;</span><span class="p">)</span>
+<span class="n">FastCorrector</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^SI-.*:PS-(FCH|FCV).*$&quot;</span><span class="p">)</span>
+<span class="n">IsPulsed</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PU-.*$&quot;</span><span class="p">)</span>
+<span class="n">IsDCLink</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*:PS-DCLink.*$&quot;</span><span class="p">)</span>
+<span class="n">IsLinac</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^LI-.*$&quot;</span><span class="p">)</span>
+<span class="n">IsLinacSpect</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^LI-01:PS-Spect$&quot;</span><span class="p">)</span>
+<span class="n">HasTrim</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^SI-Fam:PS-Q.*$&quot;</span><span class="p">)</span>
+<span class="n">LIQuadHasNotStrength</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^LI-.*:PS-(QF1|QD1)$&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_analog_name">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.get_analog_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_analog_name</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+    <span class="n">psname</span> <span class="o">=</span> <span class="n">PVName</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+    <span class="n">psmodel</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+    <span class="n">pstype</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_pstype</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;dclink&#39;</span> <span class="ow">in</span> <span class="n">pstype</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">psmodel</span> <span class="o">==</span> <span class="s1">&#39;FBP_DCLink&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Voltage&#39;</span>
+        <span class="k">elif</span> <span class="n">psmodel</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;FAC_ACDC&#39;</span><span class="p">,</span> <span class="s1">&#39;FAC_2S_ACDC&#39;</span><span class="p">,</span> <span class="s1">&#39;FAC_2P4S_ACDC&#39;</span><span class="p">}:</span>
+            <span class="k">return</span> <span class="s1">&#39;CapacitorBankVoltage&#39;</span>
+        <span class="k">elif</span> <span class="n">psmodel</span> <span class="o">==</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Voltage&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;Undefined PS model </span><span class="si">{}</span><span class="s1"> setpoint PV name&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">psmodel</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Current&#39;</span>
+        <span class="k">elif</span> <span class="n">psname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Voltage&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;Undefined PS model </span><span class="si">{}</span><span class="s1"> setpoint PV name&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">psmodel</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="get_strength_name">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.get_strength_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_strength_name</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">Dipole</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Energy&quot;</span>
+    <span class="k">elif</span> <span class="n">Quadrupole</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;KL&quot;</span>
+    <span class="k">elif</span> <span class="n">Sextupole</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">IsLinac</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;SL&quot;</span>
+    <span class="k">elif</span> <span class="n">Corrector</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">IsLinac</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Kick&quot;</span>
+    <span class="k">elif</span> <span class="n">IsPulsed</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Kick&quot;</span>
+    <span class="k">elif</span> <span class="n">IsLinacSpect</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Kick&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="get_prop2width">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.get_prop2width">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_prop2width</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+    <span class="n">psmodel</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+    <span class="n">detail_wid</span> <span class="o">=</span> <span class="mf">8.5</span> <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">dev</span> <span class="o">!=</span> <span class="s1">&#39;DCLink&#39;</span> <span class="k">else</span> <span class="mi">3</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="n">detail_wid</span><span class="p">,</span>
+        <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;setpoint&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;readback&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+    <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;FOFB_PS&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;intlk&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">sec</span> <span class="o">!=</span> <span class="s1">&#39;LI&#39;</span> <span class="ow">and</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;alarm&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;LI&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;conn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;opmode&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="s1">&#39;reset&#39;</span><span class="p">:</span> <span class="mi">4</span>
+        <span class="p">})</span>
+        <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;FOFB_PS&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+                <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="s1">&#39;bbb&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+                    <span class="s1">&#39;udc&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+                    <span class="s1">&#39;ctrlmode&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s1">&#39;ctrlloop&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s1">&#39;wfmupdate&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s1">&#39;updparms&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;accgain&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="s1">&#39;accfreeze&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="s1">&#39;accclear&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="p">})</span>
+    <span class="k">if</span> <span class="n">get_strength_name</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;strength_sp&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s1">&#39;strength_rb&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s1">&#39;strength_mon&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psmodel</span> <span class="o">==</span> <span class="s1">&#39;FBP&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;idffmode&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;pulse&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">HasTrim</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;trim&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_prop2label">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.get_prop2label">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_prop2label</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+    <span class="n">psmodel</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+
+    <span class="n">analog</span> <span class="o">=</span> <span class="n">get_analog_name</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;CapacitorBank&#39;</span> <span class="ow">in</span> <span class="n">analog</span><span class="p">:</span>
+        <span class="n">analog</span> <span class="o">=</span> <span class="s1">&#39;Voltage&#39;</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Detail&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;PwrState&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;setpoint&#39;</span><span class="p">:</span> <span class="n">analog</span> <span class="o">+</span> <span class="s1">&#39;-SP&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;readback&#39;</span><span class="p">:</span> <span class="n">analog</span> <span class="o">+</span> <span class="s1">&#39;-RB&#39;</span><span class="p">})</span>
+    <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="n">analog</span> <span class="o">+</span> <span class="s1">&#39;-Mon&#39;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;FOFB_PS&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;intlk&#39;</span><span class="p">:</span> <span class="s1">&#39;Interlocks&#39;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">sec</span> <span class="o">!=</span> <span class="s1">&#39;LI&#39;</span> <span class="ow">and</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;alarm&#39;</span><span class="p">:</span> <span class="s1">&#39;Alarms&#39;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;LI&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;conn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Connected&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;opmode&#39;</span><span class="p">:</span> <span class="s1">&#39;OpMode&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;reset&#39;</span><span class="p">:</span> <span class="s1">&#39;Reset&#39;</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;FOFB_PS&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">psmodel</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+                <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="s1">&#39;bbb&#39;</span><span class="p">:</span> <span class="s1">&#39;Beagle Bone&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;udc&#39;</span><span class="p">:</span> <span class="s1">&#39;UDC&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;ctrlmode&#39;</span><span class="p">:</span> <span class="s1">&#39;Control Mode&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;ctrlloop&#39;</span><span class="p">:</span> <span class="s1">&#39;Control Loop&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;wfmupdate&#39;</span><span class="p">:</span> <span class="s1">&#39;Wfm Update&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;updparms&#39;</span><span class="p">:</span> <span class="s1">&#39;Upd.Params&#39;</span><span class="p">,</span>
+                <span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;accgain&#39;</span><span class="p">:</span> <span class="s1">&#39;Acc Gain&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;accfreeze&#39;</span><span class="p">:</span> <span class="s1">&#39;Acc Freeze&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;accclear&#39;</span><span class="p">:</span> <span class="s1">&#39;Acc Clear&#39;</span><span class="p">,</span>
+            <span class="p">})</span>
+    <span class="n">strength</span> <span class="o">=</span> <span class="n">get_strength_name</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">strength</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;strength_sp&#39;</span><span class="p">:</span> <span class="n">strength</span> <span class="o">+</span> <span class="s1">&#39;-SP&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;strength_rb&#39;</span><span class="p">:</span> <span class="n">strength</span> <span class="o">+</span> <span class="s1">&#39;-RB&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;strength_mon&#39;</span><span class="p">:</span> <span class="n">strength</span> <span class="o">+</span> <span class="s1">&#39;-Mon&#39;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psmodel</span> <span class="o">==</span> <span class="s1">&#39;FBP&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;idffmode&#39;</span><span class="p">:</span> <span class="s1">&#39;IDFFMode&#39;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">psname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span><span class="p">:</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;pulse&#39;</span><span class="p">:</span> <span class="s1">&#39;Pulse&#39;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">HasTrim</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">psname</span><span class="p">):</span>
+        <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;trim&#39;</span><span class="p">:</span> <span class="s1">&#39;Trim&#39;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="sort_propties">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.sort_propties">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sort_propties</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+    <span class="n">default_order</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;udc&#39;</span><span class="p">,</span> <span class="s1">&#39;opmode&#39;</span><span class="p">,</span> <span class="s1">&#39;ctrlmode&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;pulse&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;intlk&#39;</span><span class="p">,</span> <span class="s1">&#39;alarm&#39;</span><span class="p">,</span> <span class="s1">&#39;reset&#39;</span><span class="p">,</span> <span class="s1">&#39;conn&#39;</span><span class="p">,</span> <span class="s1">&#39;ctrlloop&#39;</span><span class="p">,</span> <span class="s1">&#39;wfmupdate&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;updparms&#39;</span><span class="p">,</span> <span class="s1">&#39;idffmode&#39;</span><span class="p">,</span> <span class="s1">&#39;accgain&#39;</span><span class="p">,</span> <span class="s1">&#39;accfreeze&#39;</span><span class="p">,</span> <span class="s1">&#39;accclear&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;setpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;readback&#39;</span><span class="p">,</span> <span class="s1">&#39;monitor&#39;</span><span class="p">,</span> <span class="s1">&#39;strength_sp&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;strength_rb&#39;</span><span class="p">,</span> <span class="s1">&#39;strength_mon&#39;</span><span class="p">,</span> <span class="s1">&#39;trim&#39;</span><span class="p">)</span>
+    <span class="n">idcs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="n">idcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">default_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">lbl</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idcs</span><span class="p">,</span> <span class="n">labels</span><span class="p">))]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">labels</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idcs</span><span class="p">,</span> <span class="n">labels</span><span class="o">.</span><span class="n">keys</span><span class="p">()))}</span></div>
+
+
+
+<div class="viewcode-block" id="SummaryWidget">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SummaryWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;General widget for controlling a power supply.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">visible_props</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build UI with dclink name.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">PVName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psmodel</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pstype</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_pstype</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">visible_props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filled_widgets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">VACA_PREFIX</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_analog_name</span> <span class="o">=</span> <span class="n">get_analog_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_strength_name</span> <span class="o">=</span> <span class="n">get_strength_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span> <span class="o">=</span> <span class="n">IsPulsed</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="o">=</span> <span class="n">IsLinac</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_li_has_not_strength</span> <span class="o">=</span> <span class="n">LIQuadHasNotStrength</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span> <span class="o">=</span> <span class="n">FastCorrector</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_dclink</span> <span class="o">=</span> <span class="n">IsDCLink</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psmodel</span> <span class="o">==</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pstype</span> <span class="o">==</span> <span class="s1">&#39;as-dclink-regatron-slave&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_fbp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psmodel</span> <span class="o">==</span> <span class="s1">&#39;FBP&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bbb_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_udc_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+            <span class="n">bbb_name</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_bbbname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+            <span class="n">bbb_ip</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_bbbname_2_bbbip</span><span class="p">(</span><span class="n">bbb_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bbb_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">bbb_name</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">bbb_ip</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_udc_name</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_udc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_opmode</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlmode</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span>\
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_pwrstate</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_intlk</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_alarms</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlloop</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span>\
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_parmupdt</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span>\
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_idffmode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fbp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_wfmupdt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_parmupdt</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_dclink</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_analsp</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_analrb</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_strength</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_strength_name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_li_has_not_strength</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_trim</span> <span class="o">=</span> <span class="n">HasTrim</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_pvs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_ui</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">devname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;PS name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bbbname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;BBB name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bbb_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">udcname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;UDC name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_udc_name</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setups widget UI.&quot;&quot;&quot;</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">detail_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail_wid</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detail_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bbb_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bbb_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;bbb&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;bbb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bbb_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbb_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_udc_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">udc_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;udc&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;udc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">udc_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">udc_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_opmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opmode_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;opmode&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;opmode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opmode_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opmode_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlmode_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ctrlmode&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;ctrlmode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlmode_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlmode_wid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;state&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_wid</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulse_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;pulse&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;pulse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulse_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_intlk</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;intlk&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;intlk&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_alarms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alarm_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;alarm&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;alarm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alarm_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alarm_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;conn&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;conn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;reset&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;reset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlloop</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;ctrlloop&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;ctrlloop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_wfmupdt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;wfmupdate&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;wfmupdate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_parmupdt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;updparms&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;updparms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">updparms_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updparms_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_idffmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;idffmode&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;idffmode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idffmode_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;accgain&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;accgain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accgain_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accgain_wid</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;accfreeze&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;accfreeze&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_wid</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">accclear_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;accclear&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;accclear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accclear_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accclear_wid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setpoint_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;setpoint&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;setpoint&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setpoint_wid</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setpoint_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_analrb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;readback&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;readback&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readback_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readback_wid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;monitor&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_wid</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_strength</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_sp_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;strength_sp&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;strength_sp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strength_sp_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strength_sp_wid</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;strength_rb&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;strength_rb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_wid</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;strength_mon&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;strength_mon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_wid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_trim</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trim_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_widget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;trim&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="p">[</span><span class="s1">&#39;trim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trim_wid</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trim_wid</span><span class="p">)</span>
+
+        <span class="n">_widths</span> <span class="o">=</span> <span class="n">get_prop2width</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">_widths</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;{min-width:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;em;&#39;</span>
+                <span class="s1">&#39;max-width:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;em;}&#39;</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            PyDMStateButton{</span>
+<span class="s2">                min-width: 2.5em; max-width: 2.5em;</span>
+<span class="s2">                min-height: 1.5em; max-height: 1.5em;</span>
+<span class="s2">            }</span>
+<span class="s2">            QLed{</span>
+<span class="s2">                min-width: 1.5em; max-width: 1.5em;</span>
+<span class="s2">                min-height: 1.5em; max-height: 1.5em;</span>
+<span class="s2">            }</span>
+<span class="s2">            QLabel{</span>
+<span class="s2">                min-height: 1.5em; max-height: 1.5em;</span>
+<span class="s2">                qproperty-alignment: AlignCenter;</span>
+<span class="s2">            }</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fillWidget</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_pvs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_opmode</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_opmode_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ModState-Mon&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_opmode_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;OpMode-Sts&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_opmode_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;OpMode-Sel&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_opmode_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;OpMode-Sts&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctrlmode_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CtrlMode-Mon&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_pwrstate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pwrstate_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PwrState-Sel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pwrstate_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PwrState-Sts&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Pulse-Sel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Pulse-Sts&#39;</span><span class="p">)</span>
+
+        <span class="c1"># interlock</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_intlk</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Intlk</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">-Mon&#39;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Intlk9-Mon&#39;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="s1">&#39;Sept&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                        <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Intlk8-Mon&#39;</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;StatusIntlk-Mon&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_generr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                        <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;GenIntlk-Mon&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_genwrn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                        <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;GenWarn-Mon&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_soft_intlk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IntlkSoft-Mon&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hard_intlk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IntlkHard-Mon&#39;</span><span class="p">)</span>
+
+        <span class="c1"># alarms</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_alarms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_alarm_amp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AlarmsAmp-Mon&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_alarm_amp_ltc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AlarmsAmpLtc-Mon&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_alarm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Alarms-Mon&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Connected-Mon&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span><span class="p">:</span>
+            <span class="n">propty</span> <span class="o">=</span> <span class="s1">&#39;AlarmsAmpLtcRst-Cmd&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span> <span class="k">else</span> <span class="s1">&#39;Reset-Cmd&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">propty</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlloop</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctrlloop_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CtrlLoop-Sel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctrlloop_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CtrlLoop-Sts&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_wfmupdt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wfmupdate_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;WfmUpdateAuto-Sel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wfmupdate_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;WfmUpdateAuto-Sts&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_parmupdt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updparms_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ParamUpdate-Cmd&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_idffmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffmode_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IDFFMode-Sel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idffmode_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IDFFMode-Sts&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_accgain_sp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FOFBAccGain-SP&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_accgain_rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FOFBAccGain-RB&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_accfreeze_sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FOFBAccFreeze-Sel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_accfreeze_sts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FOFBAccFreeze-Sts&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_accclear_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FOFBAccClear-Cmd&#39;</span><span class="p">)</span>
+
+        <span class="c1"># analog control</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analog_name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_analsp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_analog_sp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-SP&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_analrb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_analog_rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-RB&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_analog_mon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ModOutVolt-Mon&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_analog_mon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-Mon&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp</span><span class="p">))</span>
+
+        <span class="c1"># strength</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_strength</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strength_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_strength_sp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-SP&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_strength_rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-RB&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_strength_mon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixed_name</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-Mon&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">):</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span><span class="p">:</span>
+            <span class="n">lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">widget</span>
+
+<div class="viewcode-block" id="SummaryWidget.fillWidget">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.fillWidget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fillWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled_widgets</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;detail&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">detail_bt</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="o">.</span><span class="n">dev</span> <span class="o">==</span> <span class="s1">&#39;DCLink&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">detail_bt</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.list-ul&#39;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">detail_bt</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">detail_bt</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">detail_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detail_bt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;bbb&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bbb_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bbb_lb</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bbb_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bbb_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbb_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;udc&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_udc_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">udc_lb</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_udc_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">udc_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">udc_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;opmode&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_opmode</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;Voltage&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analog_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">opmode_cb</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opmode_sel</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">opmode_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opmode_cb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opmode_lb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opmode_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opmode_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opmode_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;ctrlmode&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlmode_lb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrlmode_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlmode_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlmode_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;state&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_pwrstate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pwrstate_sel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state_led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pwrstate_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;pulse&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_sel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulse_led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulse_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulse_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;intlk&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_intlk</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulsed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">intlk_led</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="p">{</span><span class="n">ch</span><span class="p">:</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span><span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intlk_led</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">IsLinacSpect</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devname</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">intlk_led</span> <span class="o">=</span> <span class="n">LISpectIntlkLed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">intlk_led</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="p">{</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_intlk</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">_PS_LI_INTLK</span><span class="p">,</span>
+                                          <span class="s1">&#39;comp&#39;</span><span class="p">:</span> <span class="s1">&#39;lt&#39;</span><span class="p">}})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intlk_led</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_regatron</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_reg_slave</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">generr_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generr</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">genwrn_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_genwrn</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generr_led</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">genwrn_led</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">soft_intlk_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_soft_intlk</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hard_intlk_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hard_intlk</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">soft_intlk_led</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">intlk_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hard_intlk_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;alarm&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_alarms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alarm_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alarm_amp</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alarmltc_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alarm_amp_ltc</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alarm_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alarm_led</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alarm_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alarmltc_led</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alarm_led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alarm</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alarm_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alarm_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;conn&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_linac</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn_led</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;reset&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_reset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.sync&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;reset_bt&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;ctrlloop&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_ctrlloop</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrlloop_sel</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_lb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrlloop_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;wfmupdate&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_wfmupdt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wfmupdate_sel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wfmupdate_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;updparms&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_parmupdt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_updparms_cmd</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.redo-alt&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;updparms_bt&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#updparms_bt{min-width:25px;max-width:25px;icon-size:20px;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;idffmode&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_idffmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffmode_sel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idffmode_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idffmode_led</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;accgain&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accgain_sp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_sp</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_sp</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accgain_rb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_rb</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_rb</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accgain_sp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accgain_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accgain_rb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;accfreeze&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accfreeze_sel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_lb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accfreeze_sts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;accclear&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_accclear_cmd</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.sync&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;clear_bt&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#clear_bt{min-width:25px; max-width:25px; icon-size:20px;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accclear_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;setpoint&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_analsp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setpoint</span> <span class="o">=</span> <span class="n">PyDMSpinboxScrollbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analog_sp</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setpoint</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setpoint</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setpoint_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setpoint</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;readback&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_analrb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analog_rb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">readback</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">readback</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readback</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;monitor&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analog_mon</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fofb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;strength_sp&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_strength</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_sp_le</span> <span class="o">=</span> <span class="n">PyDMSpinboxScrollbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strength_sp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_sp_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strength_sp_le</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;strength_rb&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_strength</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_lb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_strength_rb</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_lb</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strength_rb_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;strength_mon&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_strength</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_lb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_strength_mon</span><span class="p">,</span> <span class="n">keep_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_lb</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strength_mon_lb</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;trim&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_trim</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trim_bt</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.angle-right&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trim_wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trim_bt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filled_widgets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.get_detail_button">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.get_detail_button">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_detail_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return psname button.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail_bt</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.get_trim_button">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.get_trim_button">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_trim_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return trim button.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_trim</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trim_bt</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.set_opmode_slowref">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.set_opmode_slowref">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_opmode_slowref</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set power supply OpMode to SlowRef.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;opmode_cb&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opmode_cb</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opmode_cb</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="s1">&#39;SlowRef&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">opmode_cb</span><span class="o">.</span><span class="n">internal_combo_box_activated_int</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.turn_on">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.turn_on">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">turn_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn power supply on.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;state_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.turn_off">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.turn_off">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">turn_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn power supply off.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;state_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.ctrlloop_close">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.ctrlloop_close">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ctrlloop_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close control loop.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;ctrlloop_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.ctrlloop_open">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.ctrlloop_open">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ctrlloop_open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open control loop.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;ctrlloop_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.pulse_on">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.pulse_on">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pulse_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn power supply on.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;pulse_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.pulse_off">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.pulse_off">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pulse_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn power supply off.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;pulse_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pulse_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.wfmupdate_on">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.wfmupdate_on">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wfmupdate_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable WfmUpdateAuto.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;wfmupdate_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.wfmupdate_off">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.wfmupdate_off">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wfmupdate_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable WfmUpdateAuto.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;wfmupdate_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.reset">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.reset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset power supply.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;reset_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reset_bt</span><span class="o">.</span><span class="n">sendValue</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.update_params">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.update_params">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update power supply parameters.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;updparms_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updparms_bt</span><span class="o">.</span><span class="n">sendValue</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.idffmode_on">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.idffmode_on">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">idffmode_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn IDFFMode on.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;idffmode_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.idffmode_off">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.idffmode_off">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">idffmode_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn IDFFMode off.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;idffmode_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_bt</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.set_accfreeze_frozen">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.set_accfreeze_frozen">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_accfreeze_frozen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set power supply AccFreeze to frozen.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;accfreeze_cb&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="s1">&#39;frozen&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="o">.</span><span class="n">internal_combo_box_activated_int</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.set_accfreeze_unfrozen">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.set_accfreeze_unfrozen">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_accfreeze_unfrozen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set power supply AccFreeze to unfrozen.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;accfreeze_cb&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="s1">&#39;unfrozen&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">accfreeze_cb</span><span class="o">.</span><span class="n">internal_combo_box_activated_int</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SummaryWidget.acc_clear">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryWidget.acc_clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acc_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset power supply.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;accclear_bt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">accclear_bt</span><span class="o">.</span><span class="n">sendValue</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SummaryHeader">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryHeader">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SummaryHeader</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">visible_props</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build UI.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">PVName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span> <span class="o">=</span> <span class="n">get_prop2label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">visible_props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_ui</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_widths</span> <span class="o">=</span> <span class="n">get_prop2width</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span> <span class="ow">and</span> <span class="s1">&#39;DCLink&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+            <span class="n">hidden</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+            <span class="n">hidden</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;HiddenButton&#39;</span><span class="p">)</span>
+            <span class="n">hidden</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width: 10px; max-width: 10px;&#39;</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idt</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">idt</span><span class="p">)</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">_widths</span><span class="p">[</span><span class="n">idt</span><span class="p">]</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">)</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;font-weight: bold; qproperty-alignment: AlignCenter;&#39;</span>
+                <span class="s1">&#39;min-width: </span><span class="si">{0}</span><span class="s1">em; max-width: </span><span class="si">{0}</span><span class="s1">em;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="p">))</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">idt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SummaryHeader.update_visible_props">
+<a class="viewcode-back" href="../../../siriushla.as_ps_control.html#siriushla.as_ps_control.SummaryWidgets.SummaryHeader.update_visible_props">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_visible_props</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

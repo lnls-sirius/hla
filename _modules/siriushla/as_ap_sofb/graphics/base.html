@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_sofb.graphics.base &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_sofb.graphics.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_sofb.graphics.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Control the Orbit Graphic Displnay.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">_datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_part</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QCheckBox</span><span class="p">,</span> \
+    <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> \
+    <span class="n">QToolTip</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QDoubleSpinBox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QTimer</span><span class="p">,</span> <span class="n">QThread</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyqtgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">mkBrush</span><span class="p">,</span> <span class="n">mkPen</span><span class="p">,</span> <span class="n">InfiniteLine</span><span class="p">,</span> <span class="n">functions</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.sofb.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOFBFactory</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusConnectionSignal</span> <span class="k">as</span> <span class="n">_ConnSig</span><span class="p">,</span> \
+    <span class="n">SiriusWaveformPlot</span>
+
+
+<div class="viewcode-block" id="BaseWidget">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_DIR</span> <span class="o">=</span> <span class="s1">&#39;/home/sirius/shared/screens-iocs&#39;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">ctrls</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">is_orb</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">acc</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EXT</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">dorb&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Sirius Delta Orbit Files (*.</span><span class="si">{</span><span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">dorb)&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_names</span> <span class="o">=</span> <span class="n">names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">ctrls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">SOFBFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_rate</span> <span class="o">=</span> <span class="mf">2.1</span>  <span class="c1"># Hz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_DIR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="o">=</span> <span class="n">is_orb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="n">QThread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updater</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">:</span>
+            <span class="n">upd</span> <span class="o">=</span> <span class="n">UpdateGraph</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="n">is_orb</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+            <span class="n">upd</span><span class="o">.</span><span class="n">moveToThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">upd</span><span class="o">.</span><span class="n">update_graphic</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upd</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_signals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">chn_loopstate</span> <span class="o">=</span> <span class="n">_ConnSig</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LoopState-Sts&#39;</span><span class="p">))</span>
+
+        <span class="n">prefx</span><span class="p">,</span> <span class="n">prefy</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;BPMX&#39;</span><span class="p">,</span> <span class="s1">&#39;BPMY&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="p">(</span><span class="s1">&#39;CH&#39;</span><span class="p">,</span> <span class="s1">&#39;CV&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">prefx</span><span class="o">+</span><span class="s1">&#39;EnblList-RB&#39;</span><span class="p">)),</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">prefy</span><span class="o">+</span><span class="s1">&#39;EnblList-RB&#39;</span><span class="p">))}</span>
+        <span class="k">for</span> <span class="n">pln</span><span class="p">,</span> <span class="n">signal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">new_value_signal</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">upd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">:</span>
+                <span class="n">sig</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="n">upd</span><span class="o">.</span><span class="n">set_enbl_list</span><span class="p">,</span> <span class="n">pln</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs_set</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">prefx</span><span class="o">+</span><span class="s1">&#39;EnblList-SP&#39;</span><span class="p">)),</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">prefy</span><span class="o">+</span><span class="s1">&#39;EnblList-SP&#39;</span><span class="p">))}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">update_rate</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acc_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc_idx</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">isring</span>
+
+<div class="viewcode-block" id="BaseWidget.channels">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">chans</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">chans</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs_set</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">chans</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.setupui">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">vbl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="n">graphx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uigetgraph</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+        <span class="n">graphy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uigetgraph</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+        <span class="n">suf</span> <span class="o">=</span> <span class="s1">&#39;Orbit&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="s1">&#39;Correctors&#39;</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h2&gt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="s1">&#39; - Horizontal &#39;</span> <span class="o">+</span> <span class="n">suf</span> <span class="o">+</span> <span class="s1">&#39;&lt;/h2&gt;&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;min-height:1.5em; max-height:1.5em;&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_nameh</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hbl_nameh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_nameh</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_nameh</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graphx</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addSpacing</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h2&gt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="s1">&#39; - Vertical &#39;</span> <span class="o">+</span> <span class="n">suf</span> <span class="o">+</span> <span class="s1">&#39;&lt;/h2&gt;&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;min-height:1.5em; max-height:1.5em;&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_namev</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hbl_namev</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_namev</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_namev</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_namev</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Graphic Update Rate [Hz]:&#39;</span><span class="p">))</span>
+        <span class="n">updt_rate</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">updt_rate</span><span class="o">.</span><span class="n">setDecimals</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">updt_rate</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">updt_rate</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_rate</span><span class="p">)</span>
+        <span class="n">updt_rate</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">updt_rate</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_change_update_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_namev</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">updt_rate</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graphy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">graphx</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">graphy</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hbl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">):</span>
+            <span class="n">grpbx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uicreate_groupbox</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">grpbx</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;GroupBox&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">grpbx</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_change_update_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">maxRedrawRate</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">maxRedrawRate</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">setInterval</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># [ms]</span>
+
+<div class="viewcode-block" id="BaseWidget.uigetgraph">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uigetgraph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uigetgraph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">doubleclick</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_enable_list</span><span class="p">,</span> <span class="n">pln</span><span class="p">))</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span><span class="o">.</span><span class="n">sigMouseMoved</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_tooltip</span><span class="p">,</span> <span class="n">pln</span><span class="o">=</span><span class="n">pln</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span><span class="p">:</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;BPM &#39;</span>
+        <span class="k">elif</span> <span class="n">pln</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">):</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;CH &#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;CV &#39;</span>
+        <span class="n">xlabel</span> <span class="o">+=</span> <span class="s1">&#39;Position&#39;</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="s1">&#39;Orbit&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="s1">&#39;Kick Angle&#39;</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="s1">&#39;rad&#39;</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">lab</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">lab</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">pln</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">):</span>
+            <span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">y_channel</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span>
+                <span class="n">x_channel</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">lname</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_color</span><span class="p">(</span><span class="n">pln</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span>
+                <span class="n">redraw_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">lineStyle</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">lineWidth</span><span class="o">=</span><span class="mi">2</span> <span class="k">if</span> <span class="n">i</span> <span class="k">else</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+                <span class="n">symbolSize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+            <span class="n">pen</span> <span class="o">=</span> <span class="n">mkPen</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;lineWidth&#39;</span><span class="p">])</span>
+            <span class="n">pen</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">cpstd</span> <span class="o">=</span> <span class="n">InfiniteLine</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">pen</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ave_pstd</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">cpstd</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">cpstd</span><span class="p">)</span>
+            <span class="n">cmstd</span> <span class="o">=</span> <span class="n">InfiniteLine</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">pen</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ave_mstd</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">cmstd</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">cmstd</span><span class="p">)</span>
+            <span class="n">pen</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">cave</span> <span class="o">=</span> <span class="n">InfiniteLine</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">pen</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ave</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">cave</span><span class="o">.</span><span class="n">setValue</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">cave</span><span class="p">)</span>
+            <span class="n">cdta</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">data_sig</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_waveform</span><span class="p">,</span> <span class="n">cdta</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+            <span class="n">cdta</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="ow">not</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">cdta</span><span class="o">.</span><span class="n">curve</span><span class="o">.</span><span class="n">setZValue</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">cdta</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">setZValue</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">cur</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">((</span><span class="n">cpstd</span><span class="p">,</span> <span class="n">cmstd</span><span class="p">,</span> <span class="n">cave</span><span class="p">),</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">cur</span><span class="o">.</span><span class="n">setZValue</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span>
+                <span class="n">cur</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #</span><span class="si">{0}</span><span class="s2">{{</span>
+<span class="s2">                min-width:</span><span class="si">{1}</span><span class="s2">em;</span>
+<span class="s2">                min-height:</span><span class="si">{2}</span><span class="s2">em;</span>
+<span class="s2">            }}&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lab</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">pln</span><span class="p">,</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">graph</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.uicreate_groupbox">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_groupbox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uicreate_groupbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">grpbx</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">grpbx</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">grpbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="ow">not</span> <span class="n">idx</span><span class="p">)</span>
+        <span class="n">grpbx</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">)</span>
+        <span class="n">vbl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">grpbx</span><span class="p">)</span>
+        <span class="n">gdl</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">gdl</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">gdl</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span><span class="p">:</span>
+            <span class="n">lbl_orb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uicreate_label</span><span class="p">(</span><span class="s1">&#39;Show&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">lbl_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uicreate_label</span><span class="p">(</span><span class="s1">&#39;as diff to:&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">cbx_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uicreate_combobox</span><span class="p">(</span><span class="n">grpbx</span><span class="p">,</span> <span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="n">cbx_orb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uicreate_combobox</span><span class="p">(</span><span class="n">grpbx</span><span class="p">,</span> <span class="s1">&#39;val&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_orb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_ref</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cbx_orb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cbx_ref</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">pb_save</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">pb_save</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_difference</span><span class="p">,</span> <span class="n">idx</span><span class="p">))</span>
+            <span class="n">pb_save</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;butt&#39;</span><span class="p">)</span>
+            <span class="n">pb_save</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#butt {max-width: 40px; icon-size: 35px;}&#39;</span><span class="p">)</span>
+            <span class="n">pb_save</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5.save&#39;</span><span class="p">))</span>
+            <span class="n">pb_save</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Save diff to file&#39;</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pb_save</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="s1">&#39;rad&#39;</span>
+        <span class="k">for</span> <span class="n">pln</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">):</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+            <span class="n">vbl</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">cbx</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:s}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pln</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span> <span class="n">wid</span><span class="p">)</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">pln</span> <span class="o">+</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">)</span>
+            <span class="n">cbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cbx</span><span class="p">)</span>
+
+            <span class="n">lab_avg</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="s1">&#39;-100.00 mrad&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">ave</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">lab_avg</span><span class="o">.</span><span class="n">setFloat</span><span class="p">)</span>
+            <span class="n">lab_avg</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;min-width:4.5em;&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="n">lab_avg</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab_avg</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+                <span class="s2">&quot; &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;#177;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; &quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+            <span class="n">lab_std</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="s1">&#39;100.00 mrad&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">lab_std</span><span class="o">.</span><span class="n">setFloat</span><span class="p">)</span>
+            <span class="n">lab_std</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;min-width:4.5em;&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="n">lab_std</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab_std</span><span class="p">)</span>
+
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;(pp. &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+            <span class="n">lab_p2p</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="s1">&#39;100.00 mrad&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">p2p</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">lab_p2p</span><span class="o">.</span><span class="n">setFloat</span><span class="p">)</span>
+            <span class="n">lab_p2p</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;min-width:4.5em;&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="n">lab_p2p</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab_p2p</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">grpbx</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.uicreate_combobox">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_combobox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uicreate_combobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">orb_tp</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">combo</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ComboBox_&#39;</span> <span class="o">+</span> <span class="n">orb_tp</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+        <span class="n">sz_pol</span> <span class="o">=</span> <span class="n">QSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">)</span>
+        <span class="n">combo</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">sz_pol</span><span class="p">)</span>
+        <span class="n">combo</span><span class="o">.</span><span class="n">setMaxVisibleItems</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">combo</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">combo</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="s1">&#39;Zero&#39;</span><span class="p">)</span>
+        <span class="n">combo</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">some_changed</span><span class="p">,</span> <span class="n">orb_tp</span><span class="p">))</span>
+        <span class="n">combo</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">combo</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.uicreate_label">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_label">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uicreate_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lab</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">sz_pol</span> <span class="o">=</span> <span class="n">QSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Minimum</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">sz_pol</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;min-width:2.5em;&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignTrailing</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">label</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.connect_signals">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.connect_signals">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connect_signals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">)):</span>
+            <span class="n">grpbx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChild</span><span class="p">(</span><span class="n">QGroupBox</span><span class="p">,</span> <span class="s1">&#39;GroupBox&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">pln</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">):</span>
+                <span class="n">curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">items</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">InfiniteLine</span><span class="p">)]</span>
+                <span class="n">cbx</span> <span class="o">=</span> <span class="n">grpbx</span><span class="o">.</span><span class="n">findChild</span><span class="p">(</span><span class="n">QCheckBox</span><span class="p">,</span> <span class="n">pln</span> <span class="o">+</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">)</span>
+                <span class="n">grpbx</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">)</span>
+                <span class="n">grpbx</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">cbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">cbx</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">cor</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">*</span> <span class="mi">255</span>
+        <span class="n">cor</span> <span class="o">//=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">)</span>
+        <span class="n">cor</span> <span class="o">+=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="n">cor</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">pln</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span> <span class="k">else</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cor</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">pln</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">):</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;rad&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_nicknames</span>
+            <span class="n">posi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_pos</span>
+            <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span>
+        <span class="k">elif</span> <span class="n">pln</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">ch_nicknames</span>
+            <span class="n">posi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">ch_pos</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">cv_nicknames</span>
+            <span class="n">posi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">cv_pos</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">posx</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">isring</span><span class="p">:</span>
+            <span class="n">posx</span> <span class="o">=</span> <span class="n">posx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">circum</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">posi</span><span class="p">)</span><span class="o">-</span><span class="n">posx</span><span class="p">))</span>
+        <span class="n">posy</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
+
+        <span class="n">sca</span><span class="p">,</span> <span class="n">prf</span> <span class="o">=</span> <span class="n">functions</span><span class="o">.</span><span class="n">siScale</span><span class="p">(</span><span class="n">posy</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:s}</span><span class="s1">, y = </span><span class="si">{1:.3f}</span><span class="s1"> </span><span class="si">{2:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">names</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">sca</span><span class="o">*</span><span class="n">posy</span><span class="p">,</span> <span class="n">prf</span><span class="o">+</span><span class="n">unit</span><span class="p">)</span>
+        <span class="n">QToolTip</span><span class="o">.</span><span class="n">showText</span><span class="p">(</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">toPoint</span><span class="p">()),</span>
+            <span class="n">txt</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">geometry</span><span class="p">(),</span> <span class="mi">500</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_enable_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># do not write in enable list when loop is closed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chn_loopstate</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+        <span class="n">val</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">val</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs_set</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">send_value_signal</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_enable_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">curve</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># cor = (255, 255, 255)</span>
+        <span class="c1"># cor = (0, 200, 0)</span>
+        <span class="n">cor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">offbrs</span> <span class="o">=</span> <span class="n">mkBrush</span><span class="p">(</span><span class="o">*</span><span class="n">cor</span><span class="p">)</span>
+        <span class="n">offpen</span> <span class="o">=</span> <span class="n">mkPen</span><span class="p">(</span><span class="o">*</span><span class="n">cor</span><span class="p">)</span>
+        <span class="n">offsimb</span> <span class="o">=</span> <span class="s1">&#39;s&#39;</span>
+        <span class="n">simb</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span>
+        <span class="n">offsz</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">trcs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">curve</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_names</span><span class="p">)):</span>
+                <span class="n">trcs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trcs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span class="n">curve</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">trc</span> <span class="ow">in</span> <span class="n">trcs</span><span class="p">:</span>
+            <span class="n">cor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_color</span><span class="p">(</span><span class="n">pln</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">brs</span> <span class="o">=</span> <span class="n">mkBrush</span><span class="p">(</span><span class="n">cor</span><span class="p">)</span>
+            <span class="n">pen</span> <span class="o">=</span> <span class="n">mkPen</span><span class="p">(</span><span class="n">cor</span><span class="p">)</span>
+            <span class="n">brss</span><span class="p">,</span> <span class="n">pens</span><span class="p">,</span> <span class="n">simbs</span><span class="p">,</span> <span class="n">sizes</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">array</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+                    <span class="n">brss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">brs</span><span class="p">)</span>
+                    <span class="n">pens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pen</span><span class="p">)</span>
+                    <span class="n">simbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simb</span><span class="p">)</span>
+                    <span class="n">sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">brss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offbrs</span><span class="p">)</span>
+                    <span class="n">pens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offpen</span><span class="p">)</span>
+                    <span class="n">simbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offsimb</span><span class="p">)</span>
+                    <span class="n">sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offsz</span><span class="p">)</span>
+            <span class="n">trc</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;symbolBrush&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brss</span>
+            <span class="n">trc</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;symbolPen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pens</span>
+            <span class="c1"># trc.opts[&#39;symbol&#39;] = simbs  # pyqtgraph bug does not allow this</span>
+            <span class="n">trc</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;symbolSize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_waveform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curve</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">bpm_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_pos</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="ow">and</span> <span class="n">plane</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+            <span class="n">bpm_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">ch_pos</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="ow">and</span> <span class="n">plane</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+            <span class="n">bpm_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">cv_pos</span>
+        <span class="n">bpm_pos</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bpm_pos</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">enbl</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enbl_pvs</span><span class="p">[</span><span class="n">plane</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">enbl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">enbl</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">sz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">enbl</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_enable_list</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">enbl</span><span class="p">[:</span><span class="n">sz</span><span class="p">],</span> <span class="n">curve</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="n">nring</span> <span class="o">=</span> <span class="n">sz</span> <span class="o">//</span> <span class="n">bpm_pos</span><span class="o">.</span><span class="n">size</span>
+            <span class="k">if</span> <span class="n">nring</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">bpm_pos</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">bpm_pos</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">circum</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nring</span><span class="p">)]</span>
+                <span class="n">bpm_pos</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">bpm_pos</span><span class="p">)</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">receiveXWaveform</span><span class="p">(</span><span class="n">bpm_pos</span><span class="p">)</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">receiveYWaveform</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">sz</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">receiveXWaveform</span><span class="p">(</span><span class="n">bpm_pos</span><span class="p">)</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">receiveYWaveform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_difference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">updater</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">valx</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">refx</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">valy</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">refy</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">valx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">refx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">valy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">refy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">sz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">valx</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">refx</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">valy</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">refy</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">diffx</span> <span class="o">=</span> <span class="n">valx</span><span class="p">[:</span><span class="n">sz</span><span class="p">]</span> <span class="o">-</span> <span class="n">refx</span><span class="p">[:</span><span class="n">sz</span><span class="p">]</span>
+        <span class="n">diffy</span> <span class="o">=</span> <span class="n">valy</span><span class="p">[:</span><span class="n">sz</span><span class="p">]</span> <span class="o">-</span> <span class="n">refy</span><span class="p">[:</span><span class="n">sz</span><span class="p">]</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# This is an orbit variation, not a pure orbit. </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# &#39;</span> <span class="o">+</span> <span class="n">_datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">-%H:%M:%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# &#39;</span> <span class="o">+</span> <span class="s1">&#39;BPMX [um]         BPMY [um]             Name&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;Define a File Name to Save the Orbit&#39;</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">fname</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXT</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">diffx</span><span class="p">,</span> <span class="n">diffy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_names</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">_np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%+18.8e</span><span class="s1"> </span><span class="si">%+18.8e</span><span class="s1">      </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="UpdateGraph">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UpdateGraph</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Worker to update graphics.&quot;&quot;&quot;</span>
+    <span class="n">avex</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">stdx</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">p2px</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">ave_pstdx</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">ave_mstdx</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">data_sigx</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span>
+    <span class="n">ref_sigx</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span>
+    <span class="n">avey</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">stdy</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">p2py</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">ave_pstdy</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">ave_mstdy</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+    <span class="n">data_sigy</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span>
+    <span class="n">ref_sigy</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">([</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span>
+
+    <span class="n">UNIT</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># orbit is in um and strength in urad</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrls</span><span class="p">,</span> <span class="n">is_orb</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize object.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span> <span class="o">=</span> <span class="n">ctrls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">=</span> <span class="n">acc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">SOFBFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="o">=</span> <span class="n">is_orb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isvisible</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ctrls</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_text</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="s1">&#39;ref&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ave</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">avex</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">avey</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p2p</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2px</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2py</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdx</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdy</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ave_pstd</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ave_pstdx</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ave_pstdy</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ave_mstd</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ave_mstdx</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ave_mstdy</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_sig</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sigx</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sigy</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_ref_sig</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_sigx</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_sigy</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slots</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_vectors</span><span class="p">,</span> <span class="s1">&#39;val&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_vectors</span><span class="p">,</span> <span class="s1">&#39;val&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)},</span>
+            <span class="s1">&#39;ref&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_vectors</span><span class="p">,</span> <span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_vectors</span><span class="p">,</span> <span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)}}</span>
+        <span class="n">nbpms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">nr_bpms</span>
+        <span class="n">szx</span> <span class="o">=</span> <span class="n">nbpms</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">nr_ch</span>
+        <span class="n">szy</span> <span class="o">=</span> <span class="n">nbpms</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_orb</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">nr_cv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">szx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">szy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)},</span>
+            <span class="s1">&#39;ref&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">szx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">szy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enbl_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">szx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">szy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)}</span>
+        <span class="n">sig_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+        <span class="n">sig_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+        <span class="n">sig_x</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+        <span class="n">sig_y</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+        <span class="n">sig_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+        <span class="n">sig_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+        <span class="n">sig_x</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+        <span class="n">sig_y</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="UpdateGraph.some_changed">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.some_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">some_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orb_tp</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">|</span> <span class="p">{</span><span class="s1">&#39;Zero&#39;</span><span class="p">}):</span>
+            <span class="k">return</span>
+        <span class="n">slot_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">slot_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Zero&#39;</span><span class="p">:</span>
+            <span class="n">sig_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">]][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+            <span class="n">sig_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">]][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+            <span class="n">sig_x</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="n">slot_x</span><span class="p">)</span>
+            <span class="n">sig_y</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="n">slot_y</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_text</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Zero&#39;</span><span class="p">:</span>
+            <span class="n">sig_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">text</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+            <span class="n">sig_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">text</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span>
+            <span class="n">sig_x</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">slot_x</span><span class="p">)</span>
+            <span class="n">sig_y</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">slot_y</span><span class="p">)</span>
+            <span class="n">slot_y</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">text</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;getvalue&#39;</span><span class="p">]())</span>
+            <span class="n">slot_x</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">text</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;getvalue&#39;</span><span class="p">]())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">slot_x</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">slot_y</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UpdateGraph.set_visible">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_visible">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boo</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isvisible</span> <span class="o">=</span> <span class="n">boo</span></div>
+
+
+<div class="viewcode-block" id="UpdateGraph.set_enbl_list">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_enbl_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_enbl_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">enbls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enbl_list</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">enbls</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_vectors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orb_tp</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">orb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="n">orb_tp</span><span class="p">][</span><span class="n">pln</span><span class="p">]</span> <span class="o">=</span> <span class="n">orb</span>
+        <span class="k">if</span> <span class="n">orb_tp</span> <span class="o">==</span> <span class="s1">&#39;ref&#39;</span> <span class="ow">and</span> <span class="n">orb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw_ref_sig</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">orb</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UpdateGraph.update_graphic">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.update_graphic">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_graphic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvisible</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">plns</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">pln</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">pln</span><span class="p">,</span> <span class="p">)</span>
+        <span class="k">for</span> <span class="n">pln</span> <span class="ow">in</span> <span class="n">plns</span><span class="p">:</span>
+            <span class="n">orb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">][</span><span class="n">pln</span><span class="p">]</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="n">pln</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">orb</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ref</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="n">sz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">orb</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">ref</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">orb</span><span class="p">[:</span><span class="n">sz</span><span class="p">]</span> <span class="o">-</span> <span class="n">ref</span><span class="p">[:</span><span class="n">sz</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNIT</span>
+
+            <span class="n">enbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enbl_list</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">enbl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">enbl</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">diff</span><span class="p">[:</span><span class="n">sz</span><span class="p">][</span><span class="n">enbl</span><span class="p">[:</span><span class="n">sz</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">diff</span>
+            <span class="n">ave</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+            <span class="n">p2p</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">mask</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.0</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_sig</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ave</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ave</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">std</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p2p</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">p2p</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ave_pstd</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ave</span><span class="o">-</span><span class="n">std</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ave_mstd</span><span class="p">[</span><span class="n">pln</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">ave</span><span class="o">+</span><span class="n">std</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Label">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Label">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Label</span><span class="p">(</span><span class="n">QLabel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">FMT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.2f}</span><span class="s1">&#39;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="n">unit</span>
+
+<div class="viewcode-block" id="Label.setFloat">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Label.setFloat">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setFloat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">sc</span><span class="p">,</span> <span class="n">prf</span> <span class="o">=</span> <span class="n">functions</span><span class="o">.</span><span class="n">siScale</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">*=</span> <span class="n">sc</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FMT</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">prf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Graph">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Graph">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Graph</span><span class="p">(</span><span class="n">SiriusWaveformPlot</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">doubleclick</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#graph {min-height: 13em; min-width: 20em;}&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxRedrawRate</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mouseEnabledX</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setShowXGrid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setShowYGrid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setBackgroundColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setShowLegend</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAutoRangeX</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAutoRangeY</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinXRange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMaxXRange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAxisColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="n">tickTextOffset</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="n">tickTextOffset</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Graph.mouseDoubleClickEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Graph.mouseDoubleClickEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mouseDoubleClickEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">button</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">LeftButton</span><span class="p">:</span>
+            <span class="n">posx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">xData</span>
+            <span class="n">vb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">vb</span><span class="o">.</span><span class="n">mapSceneToView</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">posx</span><span class="o">-</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">()))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doubleclick</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="InfLine">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.InfLine">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InfLine</span><span class="p">(</span><span class="n">InfiniteLine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">*=</span> <span class="n">conv</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">conv</span>
+
+<div class="viewcode-block" id="InfLine.setValue">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.InfLine.setValue">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">value</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

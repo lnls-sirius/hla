@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.common.cam_basler &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.common.diff_ctrl" href="siriushla.common.diff_ctrl.html" />
+    <link rel="prev" title="siriushla.common.afc_acq_core" href="siriushla.common.afc_acq_core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.common.html">siriushla.common</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.common.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.afc_acq_core.html">siriushla.common.afc_acq_core</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">siriushla.common.cam_basler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.common.cam_basler.base">siriushla.common.cam_basler.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.common.cam_basler.settings">siriushla.common.cam_basler.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.common.cam_basler">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.diff_ctrl.html">siriushla.common.diff_ctrl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.epics.html">siriushla.common.epics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.common.html#module-siriushla.common">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.common.html">siriushla.common</a></li>
+      <li class="breadcrumb-item active">siriushla.common.cam_basler</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.common.cam_basler.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-common-cam-basler">
+<h1>siriushla.common.cam_basler<a class="headerlink" href="#siriushla-common-cam-basler" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.common.cam_basler.base">
+<span id="siriushla-common-cam-basler-base-module"></span><h2>siriushla.common.cam_basler.base module<a class="headerlink" href="#module-siriushla.common.cam_basler.base" title="Link to this heading"></a></h2>
+<p>SiriusScrnView widget.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.cam_basler.base.</span></span><span class="sig-name descname"><span class="pre">SiriusImageView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsetx_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsety_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxwidth_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxheight_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMImageView</span></code></p>
+<p>A PyDMImageView with methods to handle screens calibration grids.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.ROIOffsetXChannel">
+<span class="sig-name descname"><span class="pre">ROIOffsetXChannel</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.ROIOffsetXChannel" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>pyqtProperty(type, fget=None, fset=None, freset=None, fdel=None, doc=None,</dt><dd><p>designable=True, scriptable=True, stored=True, user=False,
+constant=False, final=False, notify=None,
+revision=0) -&gt; property attribute</p>
+</dd>
+</dl>
+<p>type is the type of the property.  It is either a type object or a string
+that is the name of a C++ type.
+freset is a function for resetting an attribute to its default value.
+designable sets the DESIGNABLE flag (the default is True for writable
+properties and False otherwise).
+scriptable sets the SCRIPTABLE flag.
+stored sets the STORED flag.
+user sets the USER flag.
+constant sets the CONSTANT flag.
+final sets the FINAL flag.
+notify is the NOTIFY signal.
+revision is the REVISION.
+The other parameters are the same as those required by the standard Python
+property type.  Properties defined using pyqtProperty behave as both Python
+and Qt properties.
+Decorators can be used to define new properties or to modify existing ones.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.ROIOffsetYChannel">
+<span class="sig-name descname"><span class="pre">ROIOffsetYChannel</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.ROIOffsetYChannel" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>pyqtProperty(type, fget=None, fset=None, freset=None, fdel=None, doc=None,</dt><dd><p>designable=True, scriptable=True, stored=True, user=False,
+constant=False, final=False, notify=None,
+revision=0) -&gt; property attribute</p>
+</dd>
+</dl>
+<p>type is the type of the property.  It is either a type object or a string
+that is the name of a C++ type.
+freset is a function for resetting an attribute to its default value.
+designable sets the DESIGNABLE flag (the default is True for writable
+properties and False otherwise).
+scriptable sets the SCRIPTABLE flag.
+stored sets the STORED flag.
+user sets the USER flag.
+constant sets the CONSTANT flag.
+final sets the FINAL flag.
+notify is the NOTIFY signal.
+revision is the REVISION.
+The other parameters are the same as those required by the standard Python
+property type.  Properties defined using pyqtProperty behave as both Python
+and Qt properties.
+Decorators can be used to define new properties or to modify existing ones.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.calibrationGrid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibrationGrid</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.calibrationGrid" title="Link to this definition"></a></dt>
+<dd><p>Return Numpy array containing original grid.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.calibration_grid_filterfactor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_grid_filterfactor</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.calibration_grid_filterfactor" title="Link to this definition"></a></dt>
+<dd><p>Factor used to filter calibration grid.</p>
+<p>Pixels with values smaller than filterfactor*img_maxdata
+are set to zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Calibration Grid Filter Factor</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.calibration_grid_removeborder">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_grid_removeborder</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.calibration_grid_removeborder" title="Link to this definition"></a></dt>
+<dd><p>Factor used to remove border of the calibration grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of Rows/Columns to be removed</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.failToSaveGrid">
+<span class="sig-name descname"><span class="pre">failToSaveGrid</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.failToSaveGrid" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.image_maxheight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_maxheight</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.image_maxheight" title="Link to this definition"></a></dt>
+<dd><p>Return image maximum height.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.image_maxheight_changed">
+<span class="sig-name descname"><span class="pre">image_maxheight_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.image_maxheight_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.image_maxheight_changed" title="Link to this definition"></a></dt>
+<dd><p>Run when the maxHeight Channel value changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_max</strong> (<em>int</em>) – The new image max height</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.image_maxwidth">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_maxwidth</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.image_maxwidth" title="Link to this definition"></a></dt>
+<dd><p>Return image maximum width.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.image_maxwidth_changed">
+<span class="sig-name descname"><span class="pre">image_maxwidth_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.image_maxwidth_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.image_maxwidth_changed" title="Link to this definition"></a></dt>
+<dd><p>Run when the maxWidth Channel value changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_max</strong> (<em>int</em>) – The new image max width</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.image_roioffsetx_changed">
+<span class="sig-name descname"><span class="pre">image_roioffsetx_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.image_roioffsetx_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.image_roioffsetx_changed" title="Link to this definition"></a></dt>
+<dd><p>Run when the ROIOffsetX Channel value changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_offsetx</strong> (<em>int</em>) – The new image ROI horizontal offset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.image_roioffsety_changed">
+<span class="sig-name descname"><span class="pre">image_roioffsety_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.image_roioffsety_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.image_roioffsety_changed" title="Link to this definition"></a></dt>
+<dd><p>Run when the ROIOffsetY Channel value changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_offsety</strong> (<em>int</em>) – The new image ROI vertical offset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.maxHeightChannel">
+<span class="sig-name descname"><span class="pre">maxHeightChannel</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.maxHeightChannel" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>pyqtProperty(type, fget=None, fset=None, freset=None, fdel=None, doc=None,</dt><dd><p>designable=True, scriptable=True, stored=True, user=False,
+constant=False, final=False, notify=None,
+revision=0) -&gt; property attribute</p>
+</dd>
+</dl>
+<p>type is the type of the property.  It is either a type object or a string
+that is the name of a C++ type.
+freset is a function for resetting an attribute to its default value.
+designable sets the DESIGNABLE flag (the default is True for writable
+properties and False otherwise).
+scriptable sets the SCRIPTABLE flag.
+stored sets the STORED flag.
+user sets the USER flag.
+constant sets the CONSTANT flag.
+final sets the FINAL flag.
+notify is the NOTIFY signal.
+revision is the REVISION.
+The other parameters are the same as those required by the standard Python
+property type.  Properties defined using pyqtProperty behave as both Python
+and Qt properties.
+Decorators can be used to define new properties or to modify existing ones.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.maxWidthChannel">
+<span class="sig-name descname"><span class="pre">maxWidthChannel</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.maxWidthChannel" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>pyqtProperty(type, fget=None, fset=None, freset=None, fdel=None, doc=None,</dt><dd><p>designable=True, scriptable=True, stored=True, user=False,
+constant=False, final=False, notify=None,
+revision=0) -&gt; property attribute</p>
+</dd>
+</dl>
+<p>type is the type of the property.  It is either a type object or a string
+that is the name of a C++ type.
+freset is a function for resetting an attribute to its default value.
+designable sets the DESIGNABLE flag (the default is True for writable
+properties and False otherwise).
+scriptable sets the SCRIPTABLE flag.
+stored sets the STORED flag.
+user sets the USER flag.
+constant sets the CONSTANT flag.
+final sets the FINAL flag.
+notify is the NOTIFY signal.
+revision is the REVISION.
+The other parameters are the same as those required by the standard Python
+property type.  Properties defined using pyqtProperty behave as both Python
+and Qt properties.
+Decorators can be used to define new properties or to modify existing ones.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.process_image">
+<span class="sig-name descname"><span class="pre">process_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.process_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.process_image" title="Link to this definition"></a></dt>
+<dd><p>Reimplement process_image method to add grid to image.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.receivedData">
+<span class="sig-name descname"><span class="pre">receivedData</span></span><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.receivedData" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.roioffsetx_connection_state_changed">
+<span class="sig-name descname"><span class="pre">roioffsetx_connection_state_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.roioffsetx_connection_state_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.roioffsetx_connection_state_changed" title="Link to this definition"></a></dt>
+<dd><p>Run when the ROIOffsetX Channel connection state changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>bool</em>) – The new connection state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.roioffsety_connection_state_changed">
+<span class="sig-name descname"><span class="pre">roioffsety_connection_state_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.roioffsety_connection_state_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.roioffsety_connection_state_changed" title="Link to this definition"></a></dt>
+<dd><p>Run when the ROIOffsetY Channel connection state changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>bool</em>) – The new connection state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.saveCalibrationGrid">
+<span class="sig-name descname"><span class="pre">saveCalibrationGrid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.saveCalibrationGrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.saveCalibrationGrid" title="Link to this definition"></a></dt>
+<dd><p>Save current image as calibration_grid_image.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.set_calibration_grid_border2remove">
+<span class="sig-name descname"><span class="pre">set_calibration_grid_border2remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.set_calibration_grid_border2remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.set_calibration_grid_border2remove" title="Link to this definition"></a></dt>
+<dd><p>Set factor used to remove border of the calibration grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – Number of Rows/Columns to be removed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.set_calibration_grid_filterfactor">
+<span class="sig-name descname"><span class="pre">set_calibration_grid_filterfactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.set_calibration_grid_filterfactor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.set_calibration_grid_filterfactor" title="Link to this definition"></a></dt>
+<dd><p>Set factor used to filter calibration grid.</p>
+<p>Pixels with values smaller than filterfactor*img_maxdata
+are set to zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – Calibration Grid Filter Factor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.SiriusImageView.showCalibrationGrid">
+<span class="sig-name descname"><span class="pre">showCalibrationGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#SiriusImageView.showCalibrationGrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.SiriusImageView.showCalibrationGrid" title="Link to this definition"></a></dt>
+<dd><p>Show calibration_grid_image over the current image_waveform.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.base.create_propty_layout">
+<span class="sig-prename descclassname"><span class="pre">siriushla.common.cam_basler.base.</span></span><span class="sig-name descname"><span class="pre">create_propty_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propty_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hbox'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.29</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_linedit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/base.html#create_propty_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.base.create_propty_layout" title="Link to this definition"></a></dt>
+<dd><p>Return a layout that handles a property according to ‘propty_type’.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.cam_basler.settings">
+<span id="siriushla-common-cam-basler-settings-module"></span><h2>siriushla.common.cam_basler.settings module<a class="headerlink" href="#module-siriushla.common.cam_basler.settings" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.settings.BaslerCamAcqAdvSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.cam_basler.settings.</span></span><span class="sig-name descname"><span class="pre">BaslerCamAcqAdvSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/settings.html#BaslerCamAcqAdvSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.settings.BaslerCamAcqAdvSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.cam_basler.settings.BaslerCamSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.cam_basler.settings.</span></span><span class="sig-name descname"><span class="pre">BaslerCamSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/cam_basler/settings.html#BaslerCamSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.cam_basler.settings.BaslerCamSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QTabWidget</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.cam_basler">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.common.cam_basler" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.common.afc_acq_core.html" class="btn btn-neutral float-left" title="siriushla.common.afc_acq_core" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.common.diff_ctrl.html" class="btn btn-neutral float-right" title="siriushla.common.diff_ctrl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

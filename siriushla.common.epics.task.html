@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.common.epics.task &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.common.epics.wrapper" href="siriushla.common.epics.wrapper.html" />
+    <link rel="prev" title="siriushla.common.epics" href="siriushla.common.epics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.common.html">siriushla.common</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.common.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.afc_acq_core.html">siriushla.common.afc_acq_core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.cam_basler.html">siriushla.common.cam_basler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.diff_ctrl.html">siriushla.common.diff_ctrl</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="siriushla.common.epics.html">siriushla.common.epics</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="siriushla.common.epics.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.common.epics.html#module-siriushla.common.epics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.common.html#module-siriushla.common">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.common.html">siriushla.common</a></li>
+          <li class="breadcrumb-item"><a href="siriushla.common.epics.html">siriushla.common.epics</a></li>
+      <li class="breadcrumb-item active">siriushla.common.epics.task</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.common.epics.task.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-common-epics-task">
+<h1>siriushla.common.epics.task<a class="headerlink" href="#siriushla-common-epics-task" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.common.epics.task.checker">
+<span id="siriushla-common-epics-task-checker-module"></span><h2>siriushla.common.epics.task.checker module<a class="headerlink" href="#module-siriushla.common.epics.task.checker" title="Link to this heading"></a></h2>
+<p>Epics Checker Task.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.checker.EpicsChecker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.epics.task.checker.</span></span><span class="sig-name descname"><span class="pre">EpicsChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_epics=&lt;class</span> <span class="pre">'siriushla.common.epics.wrapper.pyepics.PyEpicsWrapper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout=0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/checker.html#EpicsChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.checker.EpicsChecker" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.common.epics.task.task.EpicsTask" title="siriushla.common.epics.task.task.EpicsTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">EpicsTask</span></code></a></p>
+<p>Check if a set of PVs has the proper values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.checker.EpicsChecker.itemChecked">
+<span class="sig-name descname"><span class="pre">itemChecked</span></span><a class="headerlink" href="#siriushla.common.epics.task.checker.EpicsChecker.itemChecked" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.checker.EpicsChecker.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/checker.html#EpicsChecker.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.checker.EpicsChecker.run" title="Link to this definition"></a></dt>
+<dd><p>Thread execution.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.epics.task.connector">
+<span id="siriushla-common-epics-task-connector-module"></span><h2>siriushla.common.epics.task.connector module<a class="headerlink" href="#module-siriushla.common.epics.task.connector" title="Link to this heading"></a></h2>
+<p>Epics Connector.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.connector.EpicsConnector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.epics.task.connector.</span></span><span class="sig-name descname"><span class="pre">EpicsConnector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_epics=&lt;class</span> <span class="pre">'siriushla.common.epics.wrapper.pyepics.PyEpicsWrapper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/connector.html#EpicsConnector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.connector.EpicsConnector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.common.epics.task.task.EpicsTask" title="siriushla.common.epics.task.task.EpicsTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">EpicsTask</span></code></a></p>
+<p>Interface to execute some task.</p>
+<p>Allows a QThread to work with ProgressDialog widget.
+Implements:
+currentItem (Signal)
+itemDone (Signal)
+size (method)
+exit_task (method)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.connector.EpicsConnector.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/connector.html#EpicsConnector.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.connector.EpicsConnector.run" title="Link to this definition"></a></dt>
+<dd><p>Thread execution.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.epics.task.getter">
+<span id="siriushla-common-epics-task-getter-module"></span><h2>siriushla.common.epics.task.getter module<a class="headerlink" href="#module-siriushla.common.epics.task.getter" title="Link to this heading"></a></h2>
+<p>Epics Getter.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.getter.EpicsGetter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.epics.task.getter.</span></span><span class="sig-name descname"><span class="pre">EpicsGetter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defvals=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_epics=&lt;class</span> <span class="pre">'siriushla.common.epics.wrapper.pyepics.PyEpicsWrapper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout=0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/getter.html#EpicsGetter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.getter.EpicsGetter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.common.epics.task.task.EpicsTask" title="siriushla.common.epics.task.task.EpicsTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">EpicsTask</span></code></a></p>
+<p>Get value of a set of PVs.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.getter.EpicsGetter.itemNotRead">
+<span class="sig-name descname"><span class="pre">itemNotRead</span></span><a class="headerlink" href="#siriushla.common.epics.task.getter.EpicsGetter.itemNotRead" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.getter.EpicsGetter.itemRead">
+<span class="sig-name descname"><span class="pre">itemRead</span></span><a class="headerlink" href="#siriushla.common.epics.task.getter.EpicsGetter.itemRead" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.getter.EpicsGetter.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/getter.html#EpicsGetter.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.getter.EpicsGetter.run" title="Link to this definition"></a></dt>
+<dd><p>Thread execution.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.epics.task.setter">
+<span id="siriushla-common-epics-task-setter-module"></span><h2>siriushla.common.epics.task.setter module<a class="headerlink" href="#module-siriushla.common.epics.task.setter" title="Link to this heading"></a></h2>
+<p>Epics Setter.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.setter.EpicsSetter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.epics.task.setter.</span></span><span class="sig-name descname"><span class="pre">EpicsSetter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_epics=&lt;class</span> <span class="pre">'siriushla.common.epics.wrapper.pyepics.PyEpicsWrapper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout=0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/setter.html#EpicsSetter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.setter.EpicsSetter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.common.epics.task.task.EpicsTask" title="siriushla.common.epics.task.task.EpicsTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">EpicsTask</span></code></a></p>
+<p>Set the value of a set of PVs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.setter.EpicsSetter.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/setter.html#EpicsSetter.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.setter.EpicsSetter.run" title="Link to this definition"></a></dt>
+<dd><p>Thread execution.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.epics.task.task">
+<span id="siriushla-common-epics-task-task-module"></span><h2>siriushla.common.epics.task.task module<a class="headerlink" href="#module-siriushla.common.epics.task.task" title="Link to this heading"></a></h2>
+<p>EpicsTask interface.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.epics.task.task.</span></span><span class="sig-name descname"><span class="pre">EpicsTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_epics=&lt;class</span> <span class="pre">'siriushla.common.epics.wrapper.pyepics.PyEpicsWrapper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout=0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/task.html#EpicsTask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<p>Interface to execute some task.</p>
+<p>Allows a QThread to work with ProgressDialog widget.
+Implements:
+currentItem (Signal)
+itemDone (Signal)
+size (method)
+exit_task (method)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.PVs">
+<span class="sig-name descname"><span class="pre">PVs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.PVs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.completed">
+<span class="sig-name descname"><span class="pre">completed</span></span><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.completed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id7"><span class="problematic" id="id8">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.currentItem">
+<span class="sig-name descname"><span class="pre">currentItem</span></span><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.currentItem" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id9"><span class="problematic" id="id10">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.exit_task">
+<span class="sig-name descname"><span class="pre">exit_task</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/task.html#EpicsTask.exit_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.exit_task" title="Link to this definition"></a></dt>
+<dd><p>Set flag to exit thread.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.get_pv">
+<span class="sig-name descname"><span class="pre">get_pv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/task.html#EpicsTask.get_pv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.get_pv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.itemDone">
+<span class="sig-name descname"><span class="pre">itemDone</span></span><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.itemDone" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id11"><span class="problematic" id="id12">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.task.EpicsTask.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/task.html#EpicsTask.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.task.EpicsTask.size" title="Link to this definition"></a></dt>
+<dd><p>Task Size.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.epics.task.wait">
+<span id="siriushla-common-epics-task-wait-module"></span><h2>siriushla.common.epics.task.wait module<a class="headerlink" href="#module-siriushla.common.epics.task.wait" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.wait.EpicsWait">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.epics.task.wait.</span></span><span class="sig-name descname"><span class="pre">EpicsWait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/wait.html#EpicsWait"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.wait.EpicsWait" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.common.epics.task.task.EpicsTask" title="siriushla.common.epics.task.task.EpicsTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">EpicsTask</span></code></a></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.epics.task.wait.EpicsWait.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/epics/task/wait.html#EpicsWait.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.epics.task.wait.EpicsWait.run" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.epics.task">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.common.epics.task" title="Link to this heading"></a></h2>
+<p>Task module init.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.common.epics.html" class="btn btn-neutral float-left" title="siriushla.common.epics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.common.epics.wrapper.html" class="btn btn-neutral float-right" title="siriushla.common.epics.wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

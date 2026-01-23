@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_commands.tasks &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_commands.tasks</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ps_commands.tasks</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span> <span class="k">as</span> <span class="n">_dcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_time</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QThread</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">HLTimeSearch</span> <span class="k">as</span> <span class="n">_HLTimeSearch</span><span class="p">,</span> \
+    <span class="n">PSSearch</span> <span class="k">as</span> <span class="n">_PSSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">Const</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">Filter</span><span class="p">,</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.devices.pstesters</span><span class="w"> </span><span class="kn">import</span> \
+    <span class="n">TesterDCLink</span><span class="p">,</span> <span class="n">TesterDCLinkFBP</span><span class="p">,</span> <span class="n">TesterPS</span><span class="p">,</span> <span class="n">TesterPSLinac</span><span class="p">,</span> \
+    <span class="n">TesterPSFBP</span><span class="p">,</span> <span class="n">TesterPSFOFB</span><span class="p">,</span> <span class="n">TesterDCLinkRegatron</span><span class="p">,</span> <span class="n">DEFAULT_CAP_BANK_VOLT</span><span class="p">,</span> \
+    <span class="n">TesterPUKckr</span><span class="p">,</span> <span class="n">TesterPUSept</span><span class="p">,</span> <span class="n">Triggers</span>
+
+
+<span class="n">TIMEOUT_CHECK</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">TIMEOUT_SLEEP</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">TIMEOUT_CONN</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<div class="viewcode-block" id="BaseTask">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.BaseTask">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseTask</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base Task.&quot;&quot;&quot;</span>
+
+    <span class="n">_testers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">currentItem</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">itemDone</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+    <span class="n">completed</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="o">=</span> <span class="n">devices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span> <span class="o">=</span> <span class="n">is_test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BaseTask.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.BaseTask.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Task size.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.exit_task">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.BaseTask.exit_task">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exit_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set quit flag.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.run">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.BaseTask.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run task.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseTask.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.BaseTask.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Must be reimplemented in each class.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+            <span class="n">tester</span> <span class="o">=</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_testers</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tester</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">(</span><span class="n">TIMEOUT_CONN</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tester</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+            <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">TIMEOUT_CHECK</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check.&quot;&quot;&quot;</span>
+        <span class="n">need_check</span> <span class="o">=</span> <span class="n">_dcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">)</span>
+        <span class="n">_t0</span> <span class="o">=</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">_t0</span> <span class="o">&lt;</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dev</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">need_check</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">tester</span> <span class="o">=</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_testers</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">tester</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">(</span><span class="n">TIMEOUT_CONN</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tester</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                    <span class="n">need_check</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">need_check</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">TIMEOUT_SLEEP</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">need_check</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CreateTesters">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CreateTesters">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateTesters</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create Testers.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CreateTesters.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CreateTesters.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dev</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">BaseTask</span><span class="o">.</span><span class="n">_testers</span><span class="p">:</span>
+                <span class="n">devname</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">devname</span><span class="o">.</span><span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;LI&#39;</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterPSLinac</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">_PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;FOFB_PS&#39;</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterPSFOFB</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">_PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;FBP_DCLink&#39;</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterDCLinkFBP</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="s1">&#39;bo-dclink&#39;</span> <span class="ow">in</span> <span class="n">_PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_pstype</span><span class="p">(</span><span class="n">dev</span><span class="p">):</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterDCLink</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">_PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterDCLinkRegatron</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">_PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;FBP&#39;</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterPSFBP</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">devname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterPS</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">devname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span> <span class="ow">and</span> <span class="s1">&#39;Kckr&#39;</span> <span class="ow">in</span> <span class="n">devname</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterPUKckr</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">devname</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span> <span class="ow">and</span> <span class="s1">&#39;Sept&#39;</span> <span class="ow">in</span> <span class="n">devname</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+                    <span class="n">tester</span> <span class="o">=</span> <span class="n">TesterPUSept</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                        <span class="s1">&#39;There is no Tester defined to &#39;</span><span class="o">+</span><span class="n">dev</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">BaseTask</span><span class="o">.</span><span class="n">_testers</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span> <span class="o">=</span> <span class="n">tester</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                <span class="k">break</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckComm">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckComm">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckComm</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check communication status.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckComm.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckComm.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check communication status.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_comm&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckStatus">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckStatus">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckStatus</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check Status.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckStatus.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckStatus.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check status.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_status&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ResetIntlk">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.ResetIntlk">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResetIntlk</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset Interlocks.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ResetIntlk.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.ResetIntlk.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;reset&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Filter</span><span class="o">.</span><span class="n">process_filters</span><span class="p">(</span>
+                <span class="n">pvnames</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="s1">&#39;sub&#39;</span><span class="p">:</span> <span class="s1">&#39;Fam&#39;</span><span class="p">}):</span>
+            <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckIntlk">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckIntlk">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckIntlk</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check Interlocks.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckIntlk.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckIntlk.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check interlocks.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_intlk&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckIDFFMode">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckIDFFMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckIDFFMode</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check PS IDFFMode.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckIDFFMode.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckIDFFMode.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PS IDFFMode.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_idffmode&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetIDFFMode">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetIDFFMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetIDFFMode</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set PS IDFFMode.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetIDFFMode.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetIDFFMode.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PS IDFFMode.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_idffmode&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetOpMode">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetOpMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetOpMode</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set PS OpMode.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetOpMode.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetOpMode.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PS OpMode.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_opmode&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckOpMode">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckOpMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckOpMode</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check PS OpMode.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckOpMode.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckOpMode.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PS OpMode.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_opmode&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetPwrState">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetPwrState">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetPwrState</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set PS PwrState.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetPwrState.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetPwrState.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PS PwrState.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_pwrstate&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
+
+        <span class="c1"># NOTE: in turn regatrons off, wait for related PS to update readings</span>
+        <span class="n">regatrons_idcs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;1B&#39;</span><span class="p">,</span> <span class="s1">&#39;2A&#39;</span><span class="p">,</span> <span class="s1">&#39;2B&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;3B&#39;</span><span class="p">,</span> <span class="s1">&#39;4A&#39;</span><span class="p">,</span> <span class="s1">&#39;4B&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="s1">&#39;off&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">_PVName</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span><span class="o">.</span><span class="n">idx</span> <span class="ow">in</span> <span class="n">regatrons_idcs</span>
+                    <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">]):</span>
+                <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckPwrState">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckPwrState">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckPwrState</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check PS PwrState.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckPwrState.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckPwrState.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PS PwrState.&quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;SI-Fam:PS-B1B2-1&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="ow">or</span>
+                    <span class="s1">&#39;SI-Fam:PS-B1B2-2&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">):</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="s1">&#39;off&#39;</span><span class="p">:</span>
+            <span class="n">pstype2psnames</span> <span class="o">=</span> <span class="n">_PSSearch</span><span class="o">.</span><span class="n">get_pstype_2_psnames_dict</span><span class="p">()</span>
+            <span class="n">regatrons</span> <span class="o">=</span> <span class="n">pstype2psnames</span><span class="p">[</span><span class="s1">&#39;as-dclink-regatron-master&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">regatrons</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">):</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_pwrstate&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetPulse">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetPulse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetPulse</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set PU Pulse.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetPulse.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetPulse.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PU Pulse.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_pulse&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckPulse">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckPulse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckPulse</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check PU Pulse.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckPulse.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckPulse.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PU Pulse.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_pulse&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="n">TIMEOUT_CHECK</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckInitOk">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckInitOk">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckInitOk</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if PS initialized.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckInitOk.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckInitOk.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PS initialized.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_init_ok&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">TIMEOUT_CHECK</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetCtrlLoop">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetCtrlLoop">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetCtrlLoop</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set PS CtrlLoop.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetCtrlLoop.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetCtrlLoop.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PS CtrlLoop.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_ctrlloop&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckCtrlLoop">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckCtrlLoop">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckCtrlLoop</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check PS CtrlLoop.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckCtrlLoop.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckCtrlLoop.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PS CtrlLoop.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_ctrlloop&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetCapBankVolt">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetCapBankVolt">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetCapBankVolt</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set capacitor bank voltage.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetCapBankVolt.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetCapBankVolt.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set DCLink Capacitor Bank Voltage.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_capvolt&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckCapBankVolt">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckCapBankVolt">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckCapBankVolt</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check capacitor bank voltage.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckCapBankVolt.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckCapBankVolt.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check DCLink Capacitor Bank Voltage.&quot;&quot;&quot;</span>
+        <span class="n">psn</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">DEFAULT_CAP_BANK_VOLT</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;FBP_DCLink&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">psn</span><span class="p">):</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">TIMEOUT_CHECK</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="n">TIMEOUT_CHECK</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_capvolt&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetCurrent">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetCurrent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetCurrent</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set current value.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetCurrent.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetCurrent.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PS Current.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_current&#39;</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckCurrent">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckCurrent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckCurrent</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check current value.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckCurrent.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckCurrent.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PS Current.&quot;&quot;&quot;</span>
+        <span class="n">psn</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SI-Fam:PS-B1B2-1&#39;</span><span class="p">,</span> <span class="s1">&#39;SI-Fam:PS-B1B2-2&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">psn</span><span class="p">):</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="mf">4.1</span><span class="o">*</span><span class="n">TIMEOUT_CHECK</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="mf">2.1</span><span class="o">*</span><span class="n">TIMEOUT_CHECK</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_current&#39;</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                    <span class="n">test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span><span class="p">,</span>
+                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetVoltage">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetVoltage">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetVoltage</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set voltage value.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetVoltage.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetVoltage.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PU Voltage.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;set_voltage&#39;</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckVoltage">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckVoltage">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckVoltage</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check voltage value.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckVoltage.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckVoltage.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check PU Voltage.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;BO-48D:PU-EjeKckr&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">:</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">45</span>
+            <span class="k">elif</span> <span class="s1">&#39;SI-01SA:PU-InjNLKckr&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">:</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">35</span>
+            <span class="k">elif</span> <span class="s1">&#39;SI-01SA:PU-InjDpKckr&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">:</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">17</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;check_voltage&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                    <span class="n">test</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_test</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TriggerTask">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.TriggerTask">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TriggerTask</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base task to handle triggers.&quot;&quot;&quot;</span>
+
+    <span class="n">initial_triggers_state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">currentItem</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">itemDone</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+    <span class="n">completed</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restore_initial_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">dis</span><span class="o">=</span><span class="s1">&#39;PS&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dis</span> <span class="o">=</span> <span class="n">dis</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Mags&#39;</span><span class="p">}</span> <span class="k">if</span> <span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span> <span class="k">else</span> <span class="p">{</span><span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;.*(Kckr|Sept).*&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span> <span class="o">=</span> <span class="n">_HLTimeSearch</span><span class="o">.</span><span class="n">get_hl_triggers</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">filt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span> <span class="o">=</span> <span class="n">Triggers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">(</span><span class="n">TIMEOUT_CONN</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">trig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">trig</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TriggerTask</span><span class="o">.</span><span class="n">initial_triggers_state</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span><span class="o">.</span><span class="n">triggers</span><span class="p">[</span><span class="n">trig</span><span class="p">]</span><span class="o">.</span><span class="n">state</span>
+                <span class="n">TriggerTask</span><span class="o">.</span><span class="n">initial_triggers_state</span><span class="p">[</span><span class="n">trig</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">restore_initial_value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trig2val</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">TriggerTask</span><span class="o">.</span><span class="n">initial_triggers_state</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">Const</span><span class="o">.</span><span class="n">DsblEnbl</span><span class="o">.</span><span class="n">Enbl</span> <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span> <span class="k">else</span> <span class="n">Const</span><span class="o">.</span><span class="n">DsblEnbl</span><span class="o">.</span><span class="n">Dsbl</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trig2val</span> <span class="o">=</span> <span class="p">{</span><span class="n">trig</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">trig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="o">=</span> <span class="n">devices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trig2ctrl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_trigger_by_psname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="TriggerTask.size">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.TriggerTask.size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Task size.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TriggerTask.exit_task">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.TriggerTask.exit_task">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exit_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set quit flag.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TriggerTask.run">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.TriggerTask.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run task.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TriggerTask.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.TriggerTask.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to implement.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_trigger_by_psname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return triggers corresponding to devices.&quot;&quot;&quot;</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span>
+        <span class="n">triggers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">trig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">:</span>
+                <span class="n">channels_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">_HLTimeSearch</span><span class="o">.</span><span class="n">get_hl_trigger_channels</span><span class="p">(</span><span class="n">trig</span><span class="p">))</span>
+                <span class="n">dev_set</span> <span class="o">=</span> <span class="p">{</span><span class="n">ch</span><span class="o">.</span><span class="n">device_name</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels_set</span><span class="p">}</span>
+                <span class="k">if</span> <span class="n">devices</span> <span class="o">&amp;</span> <span class="n">dev_set</span><span class="p">:</span>
+                    <span class="n">triggers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">trig</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="n">trig</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">dis</span><span class="o">=</span><span class="s1">&#39;TI&#39;</span><span class="p">)</span>
+                <span class="n">triggers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">trig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">triggers</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">trig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trig2ctrl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">)</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span><span class="o">.</span><span class="n">triggers</span><span class="p">[</span><span class="n">trig</span><span class="p">]</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trig2val</span><span class="p">[</span><span class="n">trig</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">(</span><span class="n">TIMEOUT_CONN</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">need_check</span> <span class="o">=</span> <span class="n">_dcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_trig2ctrl</span><span class="p">)</span>
+        <span class="n">_t0</span> <span class="o">=</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">_t0</span> <span class="o">&lt;</span> <span class="n">TIMEOUT_CHECK</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">trig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trig2ctrl</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">trig</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">need_check</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span><span class="o">.</span><span class="n">triggers</span><span class="p">[</span><span class="n">trig</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trig2val</span><span class="p">[</span><span class="n">trig</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">wait_for_connection</span><span class="p">(</span><span class="n">TIMEOUT_CONN</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">conn</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">val</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                    <span class="n">need_check</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">trig</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">need_check</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">_time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">TIMEOUT_SLEEP</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">trig</span> <span class="ow">in</span> <span class="n">need_check</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentItem</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">itemDone</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trig</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SetTriggerState">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetTriggerState">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetTriggerState</span><span class="p">(</span><span class="n">TriggerTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set magnet trigger state.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetTriggerState.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.SetTriggerState.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckTriggerState">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckTriggerState">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckTriggerState</span><span class="p">(</span><span class="n">TriggerTask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check magnet trigger state.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CheckTriggerState.function">
+<a class="viewcode-back" href="../../../siriushla.as_ps_commands.html#siriushla.as_ps_commands.tasks.CheckTriggerState.function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

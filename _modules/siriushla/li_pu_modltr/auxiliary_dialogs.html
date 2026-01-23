@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.li_pu_modltr.auxiliary_dialogs &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.li_pu_modltr.auxiliary_dialogs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.li_pu_modltr.auxiliary_dialogs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Modulator auxiliary dialogs.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> \
+    <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QFrame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMPushButton</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.envars</span><span class="w"> </span><span class="kn">import</span> <span class="n">VACA_PREFIX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusDialog</span><span class="p">,</span> <span class="n">SiriusLedState</span>
+
+
+<div class="viewcode-block" id="ModIntlkDetailDialog">
+<a class="viewcode-back" href="../../../siriushla.li_pu_modltr.html#siriushla.li_pu_modltr.auxiliary_dialogs.ModIntlkDetailDialog">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModIntlkDetailDialog</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modulator Interlock Details.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">VACA_PREFIX</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Modulator Interlock Details&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;LIApp&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h2&gt;&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">device_name</span><span class="o">+</span><span class="s1">&#39;&lt;/h2&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setupModSignalWidget</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setupExtIntlkSignalWidget</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            QLed{</span>
+<span class="s2">                min-width: 1.29em; max-width: 1.29em;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupModSignalWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_modsig</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h3&gt;Modulator Signal&lt;/h3&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_modsig</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QLabel{min-height: 2em;}&#39;</span><span class="p">)</span>
+
+        <span class="n">gb_sig1</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gb_sig1</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 2px solid gray;</span>
+<span class="s2">                border-bottom: 1px solid gray;</span>
+<span class="s2">                border-left: 2px solid gray;</span>
+<span class="s2">                border-right: 2px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_sig1</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gb_sig1</span><span class="p">)</span>
+        <span class="n">signals</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;PFN_Cab_Temp&#39;</span><span class="p">,</span> <span class="s1">&#39;Tail_Clipper&#39;</span><span class="p">,</span> <span class="s1">&#39;EOLC1_Clipper&#39;</span><span class="p">,</span> <span class="s1">&#39;Thy_Fan&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;CPS_Clipper&#39;</span><span class="p">,</span> <span class="s1">&#39;EOLC2_Clipper&#39;</span><span class="p">,</span> <span class="s1">&#39;Thy_Temp&#39;</span><span class="p">,</span> <span class="s1">&#39;Door_Interlock&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Ground_Rod&#39;</span><span class="p">,</span> <span class="s1">&#39;PFN_Cab_Fan&#39;</span><span class="p">,</span> <span class="s1">&#39;Thy_Trig_G1&#39;</span><span class="p">,</span> <span class="s1">&#39;Thy_Trig_G2&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Discharge_switch&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">//</span> <span class="mi">3</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">%</span> <span class="mi">3</span>
+            <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="n">sig</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led</span><span class="o">.</span><span class="n">Red</span>
+            <span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+            <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led</span><span class="p">)</span>
+            <span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+            <span class="n">lay_sig1</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hbox</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+
+        <span class="n">led_kly_nd</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Kly_Heat_power&#39;</span><span class="p">)</span>
+        <span class="n">led_kly_nd</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_kly_nd</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_kly_nd</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Kly_Heat_power&#39;</span><span class="p">)</span>
+        <span class="n">hb_kly_nd</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_kly_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_kly_nd</span><span class="p">)</span>
+        <span class="n">hb_kly_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_kly_nd</span><span class="p">)</span>
+        <span class="n">led_kly_ov</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Kly_F_Over&#39;</span><span class="p">)</span>
+        <span class="n">led_kly_ov</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_kly_ov</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_kly_ov</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Kly_F_Over&#39;</span><span class="p">)</span>
+        <span class="n">hb_kly_ov</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_kly_ov</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_kly_ov</span><span class="p">)</span>
+        <span class="n">hb_kly_ov</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_kly_ov</span><span class="p">)</span>
+        <span class="n">led_kly_un</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Kly_F_Under&#39;</span><span class="p">)</span>
+        <span class="n">led_kly_un</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_kly_un</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_kly_un</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Kly_F_Under&#39;</span><span class="p">)</span>
+        <span class="n">hb_kly_un</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_kly_un</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_kly_un</span><span class="p">)</span>
+        <span class="n">hb_kly_un</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_kly_un</span><span class="p">)</span>
+        <span class="n">gb_sig2</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gb_sig2</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 1px solid gray;</span>
+<span class="s2">                border-bottom: 1px solid gray;</span>
+<span class="s2">                border-left: 2px solid gray;</span>
+<span class="s2">                border-right: 2px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_sig2</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gb_sig2</span><span class="p">)</span>
+        <span class="n">lay_sig2</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_kly_nd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig2</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_kly_ov</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig2</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_kly_un</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">led_thy_nd</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_Heat_power&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_nd</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_nd</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_nd</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_Heat_power&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_nd</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_nd</span><span class="p">)</span>
+        <span class="n">hb_thy_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_nd</span><span class="p">)</span>
+        <span class="n">led_thy_f</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_Filament_power&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_f</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_f</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_f</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_F_power&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_f</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_f</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_f</span><span class="p">)</span>
+        <span class="n">hb_thy_f</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_f</span><span class="p">)</span>
+        <span class="n">led_thy_fo</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_F_Over&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_fo</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_fo</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_fo</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_F_Over&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_fo</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_fo</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_fo</span><span class="p">)</span>
+        <span class="n">hb_thy_fo</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_fo</span><span class="p">)</span>
+        <span class="n">led_thy_fu</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_F_Under&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_fu</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_fu</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_fu</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_F_Under&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_fu</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_fu</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_fu</span><span class="p">)</span>
+        <span class="n">hb_thy_fu</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_fu</span><span class="p">)</span>
+        <span class="n">led_thy_h</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_H_power&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_h</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_h</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_h</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_H_power&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_h</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_h</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_h</span><span class="p">)</span>
+        <span class="n">hb_thy_h</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_h</span><span class="p">)</span>
+        <span class="n">led_thy_ho</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_H_Over&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_ho</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_ho</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_ho</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_H_Over&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_ho</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_ho</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_ho</span><span class="p">)</span>
+        <span class="n">hb_thy_ho</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_ho</span><span class="p">)</span>
+        <span class="n">led_thy_hu</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Thy_H_Under&#39;</span><span class="p">)</span>
+        <span class="n">led_thy_hu</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_thy_hu</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_thy_hu</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Thy_H_Under&#39;</span><span class="p">)</span>
+        <span class="n">hb_thy_hu</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_thy_hu</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_thy_hu</span><span class="p">)</span>
+        <span class="n">hb_thy_hu</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_thy_hu</span><span class="p">)</span>
+        <span class="n">gb_sig3</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gb_sig3</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 1px solid gray;</span>
+<span class="s2">                border-bottom: 1px solid gray;</span>
+<span class="s2">                border-left: 2px solid gray;</span>
+<span class="s2">                border-right: 2px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_sig3</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gb_sig3</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_nd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_f</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_fo</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_fu</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_h</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_ho</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay_sig3</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_thy_hu</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">led_bias_nd</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Bias_power&#39;</span><span class="p">)</span>
+        <span class="n">led_bias_nd</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_bias_nd</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_bias_nd</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Bias_power&#39;</span><span class="p">)</span>
+        <span class="n">hb_bias_nd</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_bias_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_bias_nd</span><span class="p">)</span>
+        <span class="n">hb_bias_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_bias_nd</span><span class="p">)</span>
+        <span class="n">led_bias_ov</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Bias_Over&#39;</span><span class="p">)</span>
+        <span class="n">led_bias_ov</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_bias_ov</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_bias_ov</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Bias_Over&#39;</span><span class="p">)</span>
+        <span class="n">hb_bias_ov</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_bias_ov</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_bias_ov</span><span class="p">)</span>
+        <span class="n">hb_bias_ov</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_bias_ov</span><span class="p">)</span>
+        <span class="n">led_bias_un</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Bias_Under&#39;</span><span class="p">)</span>
+        <span class="n">led_bias_un</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_bias_un</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_bias_un</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Bias_Under&#39;</span><span class="p">)</span>
+        <span class="n">hb_bias_un</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_bias_un</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_bias_un</span><span class="p">)</span>
+        <span class="n">hb_bias_un</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_bias_un</span><span class="p">)</span>
+        <span class="n">gb_sig4</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gb_sig4</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 1px solid gray;</span>
+<span class="s2">                border-bottom: 1px solid gray;</span>
+<span class="s2">                border-left: 2px solid gray;</span>
+<span class="s2">                border-right: 2px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_sig4</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gb_sig4</span><span class="p">)</span>
+        <span class="n">lay_sig4</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_bias_nd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig4</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_bias_ov</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig4</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_bias_un</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">led_cps_nd</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:CPS_ALL&#39;</span><span class="p">)</span>
+        <span class="n">led_cps_nd</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_cps_nd</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_cps_nd</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;CPS_ALL&#39;</span><span class="p">)</span>
+        <span class="n">hb_cps_nd</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_cps_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_cps_nd</span><span class="p">)</span>
+        <span class="n">hb_cps_nd</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_cps_nd</span><span class="p">)</span>
+        <span class="n">led_cpsflt</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:CPS_Fault&#39;</span><span class="p">)</span>
+        <span class="n">led_cpsflt</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_cpsflt</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_cpsflt</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;CPS_Fault&#39;</span><span class="p">)</span>
+        <span class="n">hb_cpsflt</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_cpsflt</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_cpsflt</span><span class="p">)</span>
+        <span class="n">hb_cpsflt</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_cpsflt</span><span class="p">)</span>
+        <span class="n">led_cpsilk</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:CPS_lock&#39;</span><span class="p">)</span>
+        <span class="n">led_cpsilk</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_cpsilk</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_cpsilk</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;CPS_Interlock&#39;</span><span class="p">)</span>
+        <span class="n">hb_cpsilk</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_cpsilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_cpsilk</span><span class="p">)</span>
+        <span class="n">hb_cpsilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_cpsilk</span><span class="p">)</span>
+        <span class="n">led_cpsmns</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:CPS_Mains&#39;</span><span class="p">)</span>
+        <span class="n">led_cpsmns</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_cpsmns</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_cpsmns</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;CPS_Mains&#39;</span><span class="p">)</span>
+        <span class="n">hb_cpsmns</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_cpsmns</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_cpsmns</span><span class="p">)</span>
+        <span class="n">hb_cpsmns</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_cpsmns</span><span class="p">)</span>
+        <span class="n">led_cpsonoff</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:CPS_ON_OFF&#39;</span><span class="p">)</span>
+        <span class="n">led_cpsonoff</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_cpsonoff</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_cpsonoff</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;CPS_ON_OFF&#39;</span><span class="p">)</span>
+        <span class="n">hb_cpsonoff</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_cpsonoff</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_cpsonoff</span><span class="p">)</span>
+        <span class="n">hb_cpsonoff</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_cpsonoff</span><span class="p">)</span>
+        <span class="n">led_cpsilkin</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:CPS_Interlock_Input&#39;</span><span class="p">)</span>
+        <span class="n">led_cpsilkin</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_cpsilkin</span><span class="o">.</span><span class="n">Red</span>
+        <span class="n">lbl_cpsilkin</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;CPS_Interlock_Input&#39;</span><span class="p">)</span>
+        <span class="n">hb_cpsilkin</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_cpsilkin</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_cpsilkin</span><span class="p">)</span>
+        <span class="n">hb_cpsilkin</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_cpsilkin</span><span class="p">)</span>
+        <span class="n">gb_sig5</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gb_sig5</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 1px solid gray;</span>
+<span class="s2">                border-bottom: 2px solid gray;</span>
+<span class="s2">                border-left: 2px solid gray;</span>
+<span class="s2">                border-right: 2px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_sig5</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gb_sig5</span><span class="p">)</span>
+        <span class="n">lay_sig5</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_cps_nd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig5</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_cpsflt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig5</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_cpsilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig5</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_cpsmns</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig5</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_cpsonoff</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_sig5</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hb_cpsilkin</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_modsig</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb_sig1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb_sig2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb_sig3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb_sig4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb_sig5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupExtIntlkSignalWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_extsig</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h3&gt;External Interlock Signal&lt;/h3&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_extsig</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QLabel{min-height: 2em;}&#39;</span><span class="p">)</span>
+
+        <span class="n">lbl_lvilk</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;LV_Interlock&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">led_lvilk</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:LV_Interlock&#39;</span><span class="p">)</span>
+        <span class="n">led_lvilk</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_lvilk</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_lv1</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;1.Ti_Pump_pow&#39;</span><span class="p">)</span>
+        <span class="n">led_lv1</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Ti_Pump_pow&#39;</span><span class="p">)</span>
+        <span class="n">led_lv1</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_lv1</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_lv2</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;2.&#39;</span><span class="p">)</span>
+        <span class="n">led_lv2</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:LV_reserved1&#39;</span><span class="p">)</span>
+        <span class="n">led_lv2</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_lv2</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_lv3</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;3.&#39;</span><span class="p">)</span>
+        <span class="n">led_lv3</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:LV_reserved2&#39;</span><span class="p">)</span>
+        <span class="n">led_lv3</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_lv3</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_lv4</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;4.&#39;</span><span class="p">)</span>
+        <span class="n">led_lv4</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:LV_reserved3&#39;</span><span class="p">)</span>
+        <span class="n">led_lv4</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_lv4</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">wid_lvilk</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid_lvilk</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 2px solid gray;</span>
+<span class="s2">                border-bottom: 2px solid gray;</span>
+<span class="s2">                border-left: 2px solid gray;</span>
+<span class="s2">                border-right: 1px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid_lvilk</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_lvilk</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_lvilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_lv1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_lv1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_lv2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_lv2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_lv3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_lv3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_lv4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_lvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_lv4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">lbl_hvilk</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;HV_Interlock&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">led_hvilk</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:HV_Interlock&#39;</span><span class="p">)</span>
+        <span class="n">led_hvilk</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hvilk</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_hv1</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;1.Oil_tank_w&#39;</span><span class="p">)</span>
+        <span class="n">led_hv1</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Oil_tank_w&#39;</span><span class="p">)</span>
+        <span class="n">led_hv1</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hv1</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_hv2</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;2.Collector_w&#39;</span><span class="p">)</span>
+        <span class="n">led_hv2</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Collector_w&#39;</span><span class="p">)</span>
+        <span class="n">led_hv2</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hv2</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_hv3</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;3.PPS&#39;</span><span class="p">)</span>
+        <span class="n">led_hv3</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:PPS&#39;</span><span class="p">)</span>
+        <span class="n">led_hv3</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hv3</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_hv4</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;4.Focus_pow&#39;</span><span class="p">)</span>
+        <span class="n">led_hv4</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Focus_pow&#39;</span><span class="p">)</span>
+        <span class="n">led_hv4</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hv4</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_hv5</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;5.&#39;</span><span class="p">)</span>
+        <span class="n">led_hv5</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:HV_reserved2&#39;</span><span class="p">)</span>
+        <span class="n">led_hv5</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hv5</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_hv6</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;6.&#39;</span><span class="p">)</span>
+        <span class="n">led_hv6</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:HV_reserved3&#39;</span><span class="p">)</span>
+        <span class="n">led_hv6</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_hv6</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">wid_hvilk</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid_hvilk</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 2px solid gray;</span>
+<span class="s2">                border-bottom: 2px solid gray;</span>
+<span class="s2">                border-left: 1px solid gray;</span>
+<span class="s2">                border-right: 1px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid_hvilk</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hvilk</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hvilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hv1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hv1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hv2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hv2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hv3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hv3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hv4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hv4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hv5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hv5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_hv6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_hvilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_hv6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">lbl_trilk</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;TR_Interlock&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">led_trilk</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:TR_Interlock&#39;</span><span class="p">)</span>
+        <span class="n">led_trilk</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_trilk</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr1</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;1.Waveguide_w&#39;</span><span class="p">)</span>
+        <span class="n">led_tr1</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Waveguide_w&#39;</span><span class="p">)</span>
+        <span class="n">led_tr1</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr1</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr2</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;2.&#39;</span><span class="p">)</span>
+        <span class="n">led_tr2</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:Wave_window_w&#39;</span><span class="p">)</span>
+        <span class="n">led_tr2</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr2</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr3</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;3.MPS&#39;</span><span class="p">)</span>
+        <span class="n">led_tr3</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:MPS&#39;</span><span class="p">)</span>
+        <span class="n">led_tr3</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr3</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr4</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;4.&#39;</span><span class="p">)</span>
+        <span class="n">led_tr4</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:TR_reserved2&#39;</span><span class="p">)</span>
+        <span class="n">led_tr4</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr4</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr5</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;5.&#39;</span><span class="p">)</span>
+        <span class="n">led_tr5</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:TR_reserved3&#39;</span><span class="p">)</span>
+        <span class="n">led_tr5</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr5</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr6</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;6.&#39;</span><span class="p">)</span>
+        <span class="n">led_tr6</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:TR_reserved4&#39;</span><span class="p">)</span>
+        <span class="n">led_tr6</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr6</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr7</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;7.&#39;</span><span class="p">)</span>
+        <span class="n">led_tr7</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:TR_reserved5&#39;</span><span class="p">)</span>
+        <span class="n">led_tr7</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr7</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">lbl_tr8</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;8.&#39;</span><span class="p">)</span>
+        <span class="n">led_tr8</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span><span class="o">+</span><span class="s1">&#39;:TR_reserved6&#39;</span><span class="p">)</span>
+        <span class="n">led_tr8</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led_tr8</span><span class="o">.</span><span class="n">Red</span>
+
+        <span class="n">wid_trilk</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid_trilk</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QFrame{</span>
+<span class="s2">                border-top: 2px solid gray;</span>
+<span class="s2">                border-bottom: 2px solid gray;</span>
+<span class="s2">                border-left: 1px solid gray;</span>
+<span class="s2">                border-right: 2px solid gray;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lay_trilk</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid_trilk</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_trilk</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_trilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_tr8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay_trilk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl_tr8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_extsig</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid_lvilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid_hvilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid_trilk</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+
+<div class="viewcode-block" id="ModEmerStopDialog">
+<a class="viewcode-back" href="../../../siriushla.li_pu_modltr.html#siriushla.li_pu_modltr.auxiliary_dialogs.ModEmerStopDialog">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModEmerStopDialog</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modulator Emergency Stop Window.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">VACA_PREFIX</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;LIApp&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">dev</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="s1">&#39; - Emergency Stop&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lb_desc</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h3&gt;Are you sure to Poweroff &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">dev</span><span class="o">+</span><span class="s1">&#39; &#39;</span> <span class="o">+</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="s1">&#39;?&lt;/h3&gt;&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_yes</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;YES&#39;</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mod_prefix</span> <span class="o">+</span> <span class="s1">&#39;:EMER_STOP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_yes</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_yes</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#yes{background-color:red;}&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_exit</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;EXIT&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_exit</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lb_desc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pb_yes</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pb_exit</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

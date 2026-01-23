@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_sofb.orbit_register &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_sofb.orbit_register</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_sofb.orbit_register</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Creates the Contextes Menus for the Register.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_part</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">_datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> \
+    <span class="n">QScrollArea</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> \
+    <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QLineEdit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QDoubleValidator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.sofb.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOFBFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.sofb.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">si_calculate_bump</span> <span class="k">as</span> <span class="n">_calculate_bump</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.clientconfigdb</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigDBClient</span><span class="p">,</span> <span class="n">ConfigDBException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_ap_configdb</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadConfigDialog</span><span class="p">,</span> <span class="n">SaveConfigDialog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusConnectionSignal</span> <span class="k">as</span> <span class="n">_ConnSig</span><span class="p">,</span> \
+    <span class="n">QDoubleSpinBoxPlus</span>
+
+
+<div class="viewcode-block" id="OrbitRegisters">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegisters">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrbitRegisters</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nr_registers</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OrbitRegisters</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nr_registers</span> <span class="o">=</span> <span class="n">nr_registers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">=</span> <span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;ref&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;RefOrbX-RB&#39;</span><span class="p">)),</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;RefOrbY-RB&#39;</span><span class="p">))],</span>
+            <span class="s1">&#39;bpm&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BPMOffsetX-Mon&#39;</span><span class="p">)),</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BPMOffsetY-Mon&#39;</span><span class="p">))],</span>
+            <span class="s1">&#39;mat&#39;</span><span class="p">:</span> <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;RespMat-RB&#39;</span><span class="p">)),</span>
+            <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;TB&#39;</span><span class="p">,</span> <span class="s1">&#39;TS&#39;</span><span class="p">,</span> <span class="s1">&#39;SI&#39;</span><span class="p">}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="p">[</span><span class="s1">&#39;sp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SPassOrbX-Mon&#39;</span><span class="p">)),</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SPassOrbY-Mon&#39;</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="s1">&#39;BO&#39;</span><span class="p">}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="p">[</span><span class="s1">&#39;mti&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnIdxOrbX-Mon&#39;</span><span class="p">)),</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnIdxOrbY-Mon&#39;</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="p">[</span><span class="s1">&#39;orb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SlowOrbX-Mon&#39;</span><span class="p">)),</span>
+                <span class="n">_ConnSig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SlowOrbY-Mon&#39;</span><span class="p">))]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+
+<div class="viewcode-block" id="OrbitRegisters.channels">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">chans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">chans</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chans</span></div>
+
+
+<div class="viewcode-block" id="OrbitRegisters.setupui">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">gdl</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gdl</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">scr_ar</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">scr_ar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">scr_ar</span><span class="o">.</span><span class="n">setSizeAdjustPolicy</span><span class="p">(</span><span class="n">QScrollArea</span><span class="o">.</span><span class="n">AdjustToContentsOnFirstShow</span><span class="p">)</span>
+        <span class="n">scr_ar</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">scr_ar_wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">scr_ar</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">scr_ar_wid</span><span class="p">)</span>
+        <span class="n">scr_ar_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;scr_ar_wid&#39;</span><span class="p">)</span>
+        <span class="n">scr_ar_wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #scr_ar_wid{</span>
+<span class="s2">                min-width:40em; min-height:10em;</span>
+<span class="s2">                background-color: transparent;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">scr_ar_wid</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">vbl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">vbl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">registers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nr_registers</span><span class="p">):</span>
+            <span class="n">reg</span> <span class="o">=</span> <span class="n">OrbitRegister</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">)</span>
+            <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OrbitRegisters.get_registers_control">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.get_registers_control">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_registers_control</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">ctrls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registers</span><span class="p">:</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">new_orbx_signal</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;getvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">getorbx</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;signal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">new_orby_signal</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="s1">&#39;getvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">getorby</span>
+        <span class="k">return</span> <span class="n">ctrls</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="OrbitRegister">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegister">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrbitRegister</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the Context Menu for the Registers.&quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_DIR</span> <span class="o">=</span> <span class="s1">&#39;/home/sirius/shared/screens-iocs&#39;</span>
+
+    <span class="n">MAX_BUMP_CURR</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># [mA]</span>
+
+    <span class="n">new_orbx_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+    <span class="n">new_orby_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+    <span class="n">new_string_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">orbits</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the Context Menu.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OrbitRegister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;orb&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">text</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EXT</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">orb&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">dorb&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Sirius Orbit Files (*.</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">);;&#39;</span> <span class="o">+</span>\
+            <span class="sa">f</span><span class="s1">&#39;Sirius Delta Orbit Files (*.</span><span class="si">{</span><span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">dorb)&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span> <span class="o">=</span> <span class="n">acc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_orbit&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">(</span><span class="n">config_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">SOFBFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">string_status</span> <span class="o">=</span> <span class="s1">&#39;Empty&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Register </span><span class="si">{0:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chn_curr</span> <span class="o">=</span> <span class="n">_ConnSig</span><span class="p">(</span>
+            <span class="n">_PVName</span><span class="p">(</span><span class="s1">&#39;SI-Glob:AP-CurrInfo:Current-Mon&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_ui</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span> <span class="o">=</span> <span class="n">orbits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_DIR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orbx</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">nr_bpms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orby</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">nr_bpms</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_string_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">string_status</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OrbitRegister.getorbx">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorbx">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getorbx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the horizontal orbit.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbx</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+    <span class="n">orbx</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">getorbx</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OrbitRegister.getorby">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorby">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getorby</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the Vertical orbit.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orby</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+    <span class="n">orby</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">getorby</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OrbitRegister.setup_ui">
+<a class="viewcode-back" href="../../../siriushla.as_ap_sofb.html#siriushla.as_ap_sofb.orbit_register.OrbitRegister.setup_ui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up Ui of Context Menu.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #</span><span class="si">{}</span><span class="s2">{{</span>
+<span class="s2">                min-width:11.29em;</span>
+<span class="s2">            }}&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objectName</span><span class="p">()))</span>
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">setAutoDefault</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+        <span class="n">sz_pol</span> <span class="o">=</span> <span class="n">QSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">)</span>
+        <span class="n">sz_pol</span><span class="o">.</span><span class="n">setHorizontalStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">lbl</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">sz_pol</span><span class="p">)</span>
+        <span class="n">lbl</span><span class="o">.</span><span class="n">setMouseTracking</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">lbl</span><span class="o">.</span><span class="n">setAcceptDrops</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">lbl</span><span class="o">.</span><span class="n">setTextInteractionFlags</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">TextEditorInteraction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_string_signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">lbl</span><span class="o">.</span><span class="n">setText</span><span class="p">)</span>
+
+        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">setContextMenuPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">CustomContextMenu</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">btn</span><span class="o">.</span><span class="n">showMenu</span><span class="p">)</span>
+
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Get From &amp;File&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.file-download-outline&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_load_orbit_from_file</span><span class="p">)</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Get From &amp;ServConf&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.cloud-download-outline&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_load_orbit_from_servconf</span><span class="p">)</span>
+        <span class="n">menu2</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s1">&#39;Get from &amp;IOC&#39;</span><span class="p">)</span>
+        <span class="n">menu2</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.download-network-outline&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+            <span class="n">act</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;SlowOrb&#39;</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.turtle&#39;</span><span class="p">))</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_register_orbit</span><span class="p">,</span> <span class="s1">&#39;orb&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">isring</span><span class="p">:</span>
+            <span class="n">act</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;MTurnOrb&#39;</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.alarm-multiple&#39;</span><span class="p">))</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_register_orbit</span><span class="p">,</span> <span class="s1">&#39;mti&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;BO&#39;</span><span class="p">:</span>
+            <span class="n">act</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;S&amp;PassOrb&#39;</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.clock-fast&#39;</span><span class="p">))</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_register_orbit</span><span class="p">,</span> <span class="s1">&#39;sp&#39;</span><span class="p">))</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;RefOrb&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_register_orbit</span><span class="p">,</span> <span class="s1">&#39;ref&#39;</span><span class="p">))</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;BPM Offsets&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.currency-sign&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_register_orbit</span><span class="p">,</span> <span class="s1">&#39;bpm&#39;</span><span class="p">))</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu2</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;RespMat&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.matrix&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_open_matrix_sel</span><span class="p">)</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;Edit Orbit&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.table-edit&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edit_orbit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+            <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Create &amp;Bump&#39;</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span>
+                <span class="s1">&#39;mdi.chart-bell-curve&#39;</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)))</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_create_bump</span><span class="p">)</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;Clear&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.delete-empty&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset_orbit</span><span class="p">)</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Save To File&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.file-upload-outline&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_orbit_to_file</span><span class="p">)</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Save To ServConf&#39;</span><span class="p">)</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.cloud-upload-outline&#39;</span><span class="p">))</span>
+        <span class="n">act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_orbit_to_servconf</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">zer</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_orbx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span><span class="s1">&#39;Empty&#39;</span><span class="p">,</span> <span class="n">zer</span><span class="p">,</span> <span class="n">zer</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="n">pvx</span><span class="p">,</span> <span class="n">pvy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pvx</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pvy</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span><span class="s1">&#39;Error: wrong specification.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pvx</span><span class="o">.</span><span class="n">connected</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pvy</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span>
+                <span class="s1">&#39;Error: PV </span><span class="si">{0:s}</span><span class="s1"> not connected.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pvx</span><span class="o">.</span><span class="n">address</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span>
+            <span class="s1">&#39;Orbit Registered.&#39;</span><span class="p">,</span> <span class="n">pvx</span><span class="o">.</span><span class="n">getvalue</span><span class="p">(),</span> <span class="n">pvy</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_open_matrix_sel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QVBoxLayout</span><span class="p">())</span>
+
+        <span class="n">cbbox</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">cbbox</span><span class="o">.</span><span class="n">setEditable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cbbox</span><span class="o">.</span><span class="n">setMaxVisibleItems</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">corrnames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">ch_names</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">cv_names</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="s1">&#39;BO&#39;</span><span class="p">}:</span>
+            <span class="n">corrnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;RF&#39;</span><span class="p">)</span>
+        <span class="n">cbbox</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">corrnames</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Choose the corrector:&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cbbox</span><span class="p">)</span>
+
+        <span class="n">ledit</span> <span class="o">=</span> <span class="n">QDoubleSpinBoxPlus</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">ledit</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">))</span>
+        <span class="n">ledit</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>
+        <span class="n">ledit</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Choose the Kick [urad]:&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ledit</span><span class="p">)</span>
+        <span class="n">ledit</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_accept_mat_sel</span><span class="p">,</span> <span class="n">ledit</span><span class="p">,</span> <span class="n">cbbox</span><span class="p">))</span>
+        <span class="n">cbbox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_accept_mat_sel</span><span class="p">,</span> <span class="n">ledit</span><span class="p">,</span> <span class="n">cbbox</span><span class="p">))</span>
+
+        <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">cancel</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">confirm</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Ok&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">cancel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">accept</span><span class="p">)</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_accept_mat_sel</span><span class="p">,</span> <span class="n">ledit</span><span class="p">,</span> <span class="n">cbbox</span><span class="p">))</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">setDefault</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cancel</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">confirm</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hlay</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">QDialog</span><span class="o">.</span><span class="n">Accepted</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_orbit</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_accept_mat_sel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ledit</span><span class="p">,</span> <span class="n">cbbox</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">cbbox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">cbbox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">kick</span> <span class="o">=</span> <span class="n">ledit</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">pvm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mat&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pvm</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pvm</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span>
+                <span class="s1">&#39;Error: PV </span><span class="si">{0:s}</span><span class="s1"> not connected.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pvm</span><span class="o">.</span><span class="n">address</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">pvm</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+        <span class="n">orbs</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">nr_corrs</span><span class="p">)[:,</span> <span class="n">idx</span><span class="p">]</span>
+        <span class="n">orbx</span> <span class="o">=</span> <span class="n">orbs</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">orbs</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">kick</span>
+        <span class="n">orby</span> <span class="o">=</span> <span class="n">orbs</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">orbs</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span> <span class="o">*</span> <span class="n">kick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span>
+            <span class="s1">&#39;RespMat: </span><span class="si">{0:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">corr</span><span class="p">),</span> <span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_edit_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">orbx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbx</span>
+        <span class="n">orby</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orby</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QVBoxLayout</span><span class="p">())</span>
+
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hbl</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;X = &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="n">multx</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">multx</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">multx</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;1.0&#39;</span><span class="p">)</span>
+        <span class="c1"># multx.setAlignment(Qt.AlignVCenter | Qt.AlignRight)</span>
+        <span class="n">multx</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">multx</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">multx</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;*X   +   &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="n">addx</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">addx</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">addx</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;0.0&#39;</span><span class="p">)</span>
+        <span class="n">addx</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">addx</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">addx</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39; [um]&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hbl</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Y = &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="n">multy</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">multy</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">multy</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;1.0&#39;</span><span class="p">)</span>
+        <span class="c1"># multy.setAlignment(Qt.AlignVCenter | Qt.AlignRight)</span>
+        <span class="n">multy</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">multy</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">multy</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;*Y   +   &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+        <span class="n">addy</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">addy</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">addy</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;0.0&#39;</span><span class="p">)</span>
+        <span class="n">addy</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">addy</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">addy</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39; [um]&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">))</span>
+
+        <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">cancel</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">confirm</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Ok&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">setDefault</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cancel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">accept</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cancel</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">confirm</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hlay</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">QDialog</span><span class="o">.</span><span class="n">Accepted</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">mltx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">multx</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">mlty</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">multy</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">plusx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">addx</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">plusy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">addy</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">orbx</span> <span class="o">=</span> <span class="n">mltx</span> <span class="o">*</span> <span class="n">orbx</span> <span class="o">+</span> <span class="n">plusx</span>
+        <span class="n">orby</span> <span class="o">=</span> <span class="n">mlty</span> <span class="o">*</span> <span class="n">orby</span> <span class="o">+</span> <span class="n">plusy</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;multx = </span><span class="si">{</span><span class="n">mltx</span><span class="si">:</span><span class="s1">5.1f</span><span class="si">}</span><span class="s1"> offx = </span><span class="si">{</span><span class="n">plusx</span><span class="si">:</span><span class="s1">7.1f</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;multy = </span><span class="si">{</span><span class="n">mlty</span><span class="si">:</span><span class="s1">5.1f</span><span class="si">}</span><span class="s1"> offy = </span><span class="si">{</span><span class="n">plusy</span><span class="si">:</span><span class="s1">7.1f</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_bump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chn_curr</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="n">curr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Warning&#39;</span><span class="p">,</span> <span class="s1">&#39;Could not read current value.&#39;</span><span class="p">,</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">curr</span> <span class="o">&gt;</span> <span class="n">OrbitRegister</span><span class="o">.</span><span class="n">MAX_BUMP_CURR</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Are you Sure?&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;Stored current is above </span><span class="si">{</span><span class="n">OrbitRegister</span><span class="o">.</span><span class="n">MAX_BUMP_CURR</span><span class="si">}</span><span class="s1">mA &#39;</span> <span class="o">+</span>
+                <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">curr</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">mA),</span><span class="se">\n</span><span class="s1">are you sure you want to continue?&#39;</span><span class="p">,</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Cancel</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ans</span> <span class="o">!=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+                <span class="k">return</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_add_entry</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+            <span class="n">cbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">cbox</span><span class="o">.</span><span class="n">itemText</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">):</span>
+                <span class="k">return</span>
+            <span class="n">win</span> <span class="o">=</span> <span class="n">LoadConfigDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">confname</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">win</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+                <span class="n">cbox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="n">cbox</span><span class="o">.</span><span class="n">insertItem</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">confname</span><span class="p">)</span>
+            <span class="n">cbox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">acc</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Base Orbit &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">orbcombo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">orbcombo</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">&#39;Register&#39;</span><span class="p">,</span> <span class="s1">&#39;ref_orb&#39;</span><span class="p">,</span> <span class="s1">&#39;bba_orb&#39;</span><span class="p">,</span> <span class="s1">&#39;other...&#39;</span><span class="p">])</span>
+        <span class="n">orbcombo</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">orbcombo</span><span class="o">.</span><span class="n">activated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_add_entry</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">orbcombo</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Section&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">sscombo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">ssnames</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">d</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)]</span>
+        <span class="n">sscombo</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">ssnames</span><span class="p">)</span>
+        <span class="n">sscombo</span><span class="o">.</span><span class="n">setMaxVisibleItems</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="n">sscombo</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QComboBox{combobox-popup: 0;}&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sscombo</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Subsection&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">sbcombo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SS&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;BC&#39;</span><span class="p">]</span>
+        <span class="n">sbcombo</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+        <span class="n">sbcombo</span><span class="o">.</span><span class="n">setMaxVisibleItems</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">sbcombo</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QComboBox{combobox-popup: 0;}&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sbcombo</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u03B8</span><span class="s1">&lt;sub&gt;x&lt;/sub&gt; [urad]&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">angx</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">angx</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">angx</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;0.0&#39;</span><span class="p">)</span>
+        <span class="n">angx</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">angx</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">angx</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;X [um] &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">posx</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">posx</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">posx</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;0.0&#39;</span><span class="p">)</span>
+        <span class="n">posx</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">posx</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">posx</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u03B8</span><span class="s1">&lt;sub&gt;y&lt;/sub&gt; [urad]&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">angy</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">angy</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">angy</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;0.0&#39;</span><span class="p">)</span>
+        <span class="n">angy</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">angy</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">angy</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Y [um] &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">posy</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">posy</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QDoubleValidator</span><span class="p">())</span>
+        <span class="n">posy</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;0.0&#39;</span><span class="p">)</span>
+        <span class="n">posy</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">posy</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;max-width:5em;&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">posy</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">cancel</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">confirm</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Ok&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">setDefault</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cancel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
+        <span class="n">confirm</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">accept</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cancel</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">confirm</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hlay</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">QDialog</span><span class="o">.</span><span class="n">Accepted</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="n">orbcombo</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="n">confname</span> <span class="o">=</span> <span class="n">orbcombo</span><span class="o">.</span><span class="n">itemText</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="p">:</span>
+            <span class="n">orbx</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orbx</span><span class="p">)</span>
+            <span class="n">orby</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orby</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="n">orbcombo</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">orbs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_config_value</span><span class="p">(</span><span class="n">confname</span><span class="p">)</span>
+            <span class="n">orbx</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbs</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+            <span class="n">orby</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbs</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+
+        <span class="n">agx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">angx</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">agy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">angy</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">psx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">posx</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">psy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">posy</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">sec</span> <span class="o">=</span> <span class="n">sscombo</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">sbcombo</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sub</span> <span class="o">==</span> <span class="s1">&#39;SS&#39;</span><span class="p">:</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="s1">&#39;SA&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">sub</span> <span class="o">=</span> <span class="s1">&#39;SB&#39;</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">sub</span> <span class="o">=</span> <span class="s1">&#39;SP&#39;</span>
+        <span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span> <span class="o">=</span> <span class="n">_calculate_bump</span><span class="p">(</span><span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span><span class="p">,</span> <span class="n">sec</span><span class="o">+</span><span class="n">sub</span><span class="p">,</span> <span class="n">agx</span><span class="p">,</span> <span class="n">agy</span><span class="p">,</span> <span class="n">psx</span><span class="p">,</span> <span class="n">psy</span><span class="p">)</span>
+
+        <span class="n">txt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Bump@</span><span class="si">{</span><span class="n">sec</span><span class="o">+</span><span class="n">sub</span><span class="si">}</span><span class="s1">; ref=</span><span class="si">{</span><span class="n">confname</span><span class="si">}</span><span class="s1">; &#39;</span>
+        <span class="n">txt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;ax=</span><span class="si">{</span><span class="n">agx</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> ay=</span><span class="si">{</span><span class="n">agy</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> dx=</span><span class="si">{</span><span class="n">psx</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> dy=</span><span class="si">{</span><span class="n">psy</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_orbit_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# &#39;</span> <span class="o">+</span> <span class="n">_datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">-%H:%M:%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# &#39;</span> <span class="o">+</span> <span class="s1">&#39;BPMX [um]         BPMY [um]             Name&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;Define a File Name to Save the Orbit&#39;</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span><span class="p">,</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">fname</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXT</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orby</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_names</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">_np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%+18.8e</span><span class="s1"> </span><span class="si">%+18.8e</span><span class="s1">      </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span><span class="s1">&#39;Orbit Saved: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orby</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_orbit_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;Select an Orbit File.&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span><span class="p">,</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span>
+        <span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span><span class="s1">&#39;Orbit Loaded: &#39;</span><span class="p">,</span> <span class="n">orbx</span><span class="p">,</span> <span class="n">orby</span><span class="p">,</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_orbit_from_servconf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">LoadConfigDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">win</span><span class="o">.</span><span class="n">configname</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_orbit</span><span class="p">)</span>
+        <span class="n">win</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confname</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_config_value</span><span class="p">(</span><span class="n">confname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_and_emit</span><span class="p">(</span>
+            <span class="s1">&#39;Orbit Loaded: &#39;</span><span class="o">+</span><span class="n">confname</span><span class="p">,</span>
+            <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]),</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_orbit_to_servconf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">SaveConfigDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">win</span><span class="o">.</span><span class="n">configname</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_orbit</span><span class="p">)</span>
+        <span class="n">win</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confname</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbx</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">orby</span><span class="o">.</span><span class="n">tolist</span><span class="p">()}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">insert_config</span><span class="p">(</span><span class="n">confname</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ConfigDBException</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Warning&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_and_emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">orbx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">orbx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">orby</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">string_status</span> <span class="o">=</span> <span class="n">string</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_string_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">string_status</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orbx</span> <span class="o">=</span> <span class="n">orbx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orby</span> <span class="o">=</span> <span class="n">orby</span>
+        <span class="n">pure_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span>
+        <span class="k">if</span> <span class="n">fname</span><span class="p">:</span>
+            <span class="n">path</span><span class="p">,</span> <span class="n">pure_name</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">string_status</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="n">pure_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">fname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_dir</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_orbx_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">orbx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_orby_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">orby</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_string_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">string_status</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

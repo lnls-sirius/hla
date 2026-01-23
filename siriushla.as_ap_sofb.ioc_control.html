@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_sofb.ioc_control &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_di_bpms" href="siriushla.as_di_bpms.html" />
+    <link rel="prev" title="siriushla.as_ap_sofb.graphics" href="siriushla.as_ap_sofb.graphics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.as_ap_sofb.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html">siriushla.as_ap_sofb.graphics</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">siriushla.as_ap_sofb.ioc_control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.base">siriushla.as_ap_sofb.ioc_control.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.drive_window">siriushla.as_ap_sofb.ioc_control.drive_window module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.kicks_config">siriushla.as_ap_sofb.ioc_control.kicks_config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.main">siriushla.as_ap_sofb.ioc_control.main module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.orbit_acquisition">siriushla.as_ap_sofb.ioc_control.orbit_acquisition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.respmat">siriushla.as_ap_sofb.ioc_control.respmat module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.respmat_enbllist">siriushla.as_ap_sofb.ioc_control.respmat_enbllist module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control.status">siriushla.as_ap_sofb.ioc_control.status module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.ioc_control">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb.main">siriushla.as_ap_sofb.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb.orbit_register">siriushla.as_ap_sofb.orbit_register module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_sofb.ioc_control</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ap_sofb.ioc_control.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ap-sofb-ioc-control">
+<h1>siriushla.as_ap_sofb.ioc_control<a class="headerlink" href="#siriushla-as-ap-sofb-ioc-control" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.base">
+<span id="siriushla-as-ap-sofb-ioc-control-base-module"></span><h2>siriushla.as_ap_sofb.ioc_control.base module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.base" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.base.</span></span><span class="sig-name descname"><span class="pre">BaseCombo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseCombo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QComboBox</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMPrimitiveWidget</span></code></p>
+<p>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.acc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.acc" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.acc_idx">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc_idx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.acc_idx" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseCombo.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.channels" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.configname">
+<span class="sig-name descname"><span class="pre">configname</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.configname" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.connect_signals">
+<span class="sig-name descname"><span class="pre">connect_signals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseCombo.connect_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.connect_signals" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.ioc_orbit_changed">
+<span class="sig-name descname"><span class="pre">ioc_orbit_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pln</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseCombo.ioc_orbit_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.ioc_orbit_changed" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.isring">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isring</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.isring" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseCombo.setup_ui">
+<span class="sig-name descname"><span class="pre">setup_ui</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">add_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseCombo.setup_ui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.setup_ui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.base.</span></span><span class="sig-name descname"><span class="pre">BaseObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseObject" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base object.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseObject.acc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseObject.acc" title="Link to this definition"></a></dt>
+<dd><p>Accelerator.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseObject.acc_idx">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc_idx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseObject.acc_idx" title="Link to this definition"></a></dt>
+<dd><p>Accelerator index.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseObject.isring">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isring</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseObject.isring" title="Link to this definition"></a></dt>
+<dd><p>Whether accelerator is a ring.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.base.</span></span><span class="sig-name descname"><span class="pre">BaseWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseObject" title="siriushla.as_ap_sofb.ioc_control.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Base widget.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair">
+<span class="sig-name descname"><span class="pre">create_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pvname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_vert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseWidget.create_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair_butled">
+<span class="sig-name descname"><span class="pre">create_pair_butled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pvname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_vert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseWidget.create_pair_butled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair_butled" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair_sel">
+<span class="sig-name descname"><span class="pre">create_pair_sel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pvname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_vert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/base.html#BaseWidget.create_pair_sel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair_sel" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.drive_window">
+<span id="siriushla-as-ap-sofb-ioc-control-drive-window-module"></span><h2>siriushla.as_ap_sofb.ioc_control.drive_window module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.drive_window" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.drive_window.DriveControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.drive_window.</span></span><span class="sig-name descname"><span class="pre">DriveControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/drive_window.html#DriveControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.drive_window.DriveControl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.drive_window.DriveControl.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/drive_window.html#DriveControl.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.drive_window.DriveControl.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.kicks_config">
+<span id="siriushla-as-ap-sofb-ioc-control-kicks-config-module"></span><h2>siriushla.as_ap_sofb.ioc_control.kicks_config module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.kicks_config" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.kicks_config.</span></span><span class="sig-name descname"><span class="pre">KicksConfigWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/kicks_config.html#KicksConfigWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.get_details_widget">
+<span class="sig-name descname"><span class="pre">get_details_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/kicks_config.html#KicksConfigWidget.get_details_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.get_details_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.get_status_widget">
+<span class="sig-name descname"><span class="pre">get_status_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/kicks_config.html#KicksConfigWidget.get_status_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.get_status_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/kicks_config.html#KicksConfigWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.main">
+<span id="siriushla-as-ap-sofb-ioc-control-main-module"></span><h2>siriushla.as_ap_sofb.ioc_control.main module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.main" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.PerformanceWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.main.</span></span><span class="sig-name descname"><span class="pre">PerformanceWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#PerformanceWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.PerformanceWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.RefControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.main.</span></span><span class="sig-name descname"><span class="pre">RefControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#RefControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.RefControl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseCombo" title="siriushla.as_ap_sofb.ioc_control.base.BaseCombo"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCombo</span></code></a></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.RefControl.setup_ui">
+<span class="sig-name descname"><span class="pre">setup_ui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#RefControl.setup_ui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.RefControl.setup_ui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.main.</span></span><span class="sig-name descname"><span class="pre">SOFBControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_auto_correction_widget">
+<span class="sig-name descname"><span class="pre">get_auto_correction_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.get_auto_correction_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_auto_correction_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_correction_widget">
+<span class="sig-name descname"><span class="pre">get_correction_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.get_correction_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_correction_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_fofb_widget">
+<span class="sig-name descname"><span class="pre">get_fofb_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.get_fofb_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_fofb_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_main_widget">
+<span class="sig-name descname"><span class="pre">get_main_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.get_main_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_main_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_manual_correction_widget">
+<span class="sig-name descname"><span class="pre">get_manual_correction_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.get_manual_correction_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_manual_correction_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_orbit_widget">
+<span class="sig-name descname"><span class="pre">get_orbit_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.get_orbit_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_orbit_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.main.SOFBControl.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/main.html#SOFBControl.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.orbit_acquisition">
+<span id="siriushla-as-ap-sofb-ioc-control-orbit-acquisition-module"></span><h2>siriushla.as_ap_sofb.ioc_control.orbit_acquisition module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.orbit_acquisition" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.orbit_acquisition.AcqControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.orbit_acquisition.</span></span><span class="sig-name descname"><span class="pre">AcqControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/orbit_acquisition.html#AcqControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.orbit_acquisition.AcqControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.orbit_acquisition.AcqControlWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/orbit_acquisition.html#AcqControlWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.orbit_acquisition.AcqControlWidget.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.respmat">
+<span id="siriushla-as-ap-sofb-ioc-control-respmat-module"></span><h2>siriushla.as_ap_sofb.ioc_control.respmat module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.respmat" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.respmat.</span></span><span class="sig-name descname"><span class="pre">RespMatWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.DEFAULT_DIR">
+<span class="sig-name descname"><span class="pre">DEFAULT_DIR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/home/runner'</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.DEFAULT_DIR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_main_widget">
+<span class="sig-name descname"><span class="pre">get_main_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget.get_main_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_main_widget" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_measurement_widget">
+<span class="sig-name descname"><span class="pre">get_measurement_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget.get_measurement_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_measurement_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_saveload_widget">
+<span class="sig-name descname"><span class="pre">get_saveload_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget.get_saveload_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_saveload_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_selection_lists_widget">
+<span class="sig-name descname"><span class="pre">get_selection_lists_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget.get_selection_lists_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_selection_lists_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_singular_values_widget">
+<span class="sig-name descname"><span class="pre">get_singular_values_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget.get_singular_values_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_singular_values_widget" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat.html#RespMatWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.respmat_enbllist">
+<span id="siriushla-as-ap-sofb-ioc-control-respmat-enbllist-module"></span><h2>siriushla.as_ap_sofb.ioc_control.respmat_enbllist module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.respmat_enbllist" title="Link to this heading"></a></h2>
+<p>Create the Selection Matrices for BPMs and Correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SelectionMatrix">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.respmat_enbllist.</span></span><span class="sig-name descname"><span class="pre">SelectionMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SelectionMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SelectionMatrix" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.respmat_enbllist.</span></span><span class="sig-name descname"><span class="pre">SingleSelMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseObject" title="siriushla.as_ap_sofb.ioc_control.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.selection_matrix.SelectionMatrixWidget" title="siriushla.widgets.selection_matrix.SelectionMatrixWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SelectionMatrixWidget</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMWidget</span></code></p>
+<p>Create the Selection Matrices for BPMs and Correctors.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.connection_changed">
+<span class="sig-name descname"><span class="pre">connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the connection state of the Channel is changed.
+This callback acts on the connection state to enable/disable the widget
+and also trigger the change on alarm severity to ALARM_DISCONNECTED.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connected</strong> (<em>int</em>) – When this value is 0 the channel is disconnected, 1 otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_headers">
+<span class="sig-name descname"><span class="pre">get_headers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.get_headers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_headers" title="Link to this definition"></a></dt>
+<dd><p>Should be implemented in class derivation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>top_headers</strong> (<em>tuple or list</em>) – A list of strings for top headers of the selection matrix widget.</p></li>
+<li><p><strong>side_headers</strong> (<em>tuple or list</em>) – A list of strings for side headers of the selection matrix widget.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_positions">
+<span class="sig-name descname"><span class="pre">get_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.get_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_positions" title="Link to this definition"></a></dt>
+<dd><p>Should be implemented in class derivation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>positions</strong> – A tuple or list of layout positions for each widget
+returned by get_widgets.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple or list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_widgets">
+<span class="sig-name descname"><span class="pre">get_widgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.get_widgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_widgets" title="Link to this definition"></a></dt>
+<dd><p>Should be implemented in class derivation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>widgets</strong> – A tuple or list of widgets to be put in matrix.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple or list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.send_value">
+<span class="sig-name descname"><span class="pre">send_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.send_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.send_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.sizeHint">
+<span class="sig-name descname"><span class="pre">sizeHint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.sizeHint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.sizeHint" title="Link to this definition"></a></dt>
+<dd><p>Return the base size of the widget.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/respmat_enbllist.html#SingleSelMatrix.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the Channel value is changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_val</strong> (<em>str</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>bool</em><em> or </em><em>np.ndarray</em>) – The new value from the channel. The type depends on the channel.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control.status">
+<span id="siriushla-as-ap-sofb-ioc-control-status-module"></span><h2>siriushla.as_ap_sofb.ioc_control.status module<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control.status" title="Link to this heading"></a></h2>
+<p>Define Controllers for the orbits displayed in the graphic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.status.StatusWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.ioc_control.status.</span></span><span class="sig-name descname"><span class="pre">StatusWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_orb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/status.html#StatusWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.status.StatusWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.ioc_control.base.BaseWidget" title="siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.status.StatusWidget.creategroupbox">
+<span class="sig-name descname"><span class="pre">creategroupbox</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/status.html#StatusWidget.creategroupbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.status.StatusWidget.creategroupbox" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.ioc_control.status.StatusWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/ioc_control/status.html#StatusWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.ioc_control.status.StatusWidget.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.ioc_control">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ap_sofb.ioc_control" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ap_sofb.graphics.html" class="btn btn-neutral float-left" title="siriushla.as_ap_sofb.graphics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_di_bpms.html" class="btn btn-neutral float-right" title="siriushla.as_di_bpms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

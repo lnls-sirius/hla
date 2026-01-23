@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_pu_control.ControlWindow &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_pu_control.ControlWindow</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_pu_control.ControlWindow</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Modulet that defines the window class that control pulsed mangets.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> \
+    <span class="n">QScrollArea</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.connection_inspector</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionInspector</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_appropriate_color</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusMainWindow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_ps_control.SummaryWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummaryWidget</span><span class="p">,</span> \
+    <span class="n">SummaryHeader</span><span class="p">,</span> <span class="n">sort_propties</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_window</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.DetailWindow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PUDetailWindow</span>
+
+
+<div class="viewcode-block" id="PUControlWindow">
+<a class="viewcode-back" href="../../../siriushla.as_pu_control.html#siriushla.as_pu_control.ControlWindow.PUControlWindow">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PUControlWindow</span><span class="p">(</span><span class="n">SiriusMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Window to control pulsed magnets.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">main_secs</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;TB&#39;</span><span class="p">,</span> <span class="s1">&#39;BO&#39;</span><span class="p">,</span> <span class="s1">&#39;TS&#39;</span><span class="p">,</span> <span class="s1">&#39;SI&#39;</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_main</span> <span class="o">=</span> <span class="n">is_main</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_main_secs</span> <span class="o">=</span> <span class="n">main_secs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">section</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; Pulsed Magnets Control Window&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;InjBO&#39;</span><span class="p">,</span> <span class="s1">&#39;EjeBO&#39;</span><span class="p">}:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">get_appropriate_color</span><span class="p">(</span><span class="s1">&#39;BO&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;BOApp&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;InjSI&#39;</span><span class="p">,</span> <span class="s1">&#39;PingSI&#39;</span><span class="p">}:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">get_appropriate_color</span><span class="p">(</span><span class="s1">&#39;SI&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;SIApp&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">get_appropriate_color</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">section</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.current-ac&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pu_widgets_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_ui</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">StrongFocus</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_actions</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_main</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scrollwidget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scrollwidget</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;scrollwid&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#main{min-width:64em; min-height:48em;}&#39;</span>
+                <span class="s1">&#39;#scrollwid{background-color: transparent;}&#39;</span><span class="p">)</span>
+            <span class="n">slay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollwidget</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollwidget</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main_secs</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;BO&#39;</span> <span class="k">if</span> <span class="s1">&#39;BO&#39;</span> <span class="ow">in</span> <span class="n">sec</span> <span class="k">else</span> <span class="s1">&#39;SI&#39;</span> <span class="k">if</span> <span class="s1">&#39;SI&#39;</span> <span class="ow">in</span> <span class="n">sec</span> <span class="k">else</span> <span class="n">sec</span>
+                <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+                <span class="n">gbox</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+                <span class="n">glay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+                <span class="n">glay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_make_sec_widget</span><span class="p">(</span><span class="n">sec</span><span class="p">))</span>
+                <span class="n">slay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connect_buttons</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_section</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_sec_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_section</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connect_buttons</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid </span><span class="se">\&#39;</span><span class="s1">section</span><span class="se">\&#39;</span><span class="s1"> argument!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_sec_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">):</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">sec</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;TB&#39;</span><span class="p">,</span> <span class="s1">&#39;BO&#39;</span><span class="p">,</span> <span class="s1">&#39;TS&#39;</span><span class="p">,</span> <span class="s1">&#39;SI&#39;</span><span class="p">}:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">({</span>
+                <span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="n">sec</span><span class="p">,</span> <span class="s1">&#39;dis&#39;</span><span class="p">:</span> <span class="s1">&#39;PU&#39;</span><span class="p">,</span> <span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;.*(Sept|Kckr|Ping)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;propty_name&#39;</span><span class="p">:</span> <span class="s1">&#39;(?!:CCoil).*&#39;</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;InjBO&#39;</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;(TB|BO)&#39;</span><span class="p">,</span> <span class="s1">&#39;dis&#39;</span><span class="p">:</span> <span class="s1">&#39;PU&#39;</span><span class="p">,</span> <span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Inj&#39;</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;EjeBO&#39;</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;(BO|TS)&#39;</span><span class="p">,</span> <span class="s1">&#39;dis&#39;</span><span class="p">:</span> <span class="s1">&#39;PU&#39;</span><span class="p">,</span> <span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Eje&#39;</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;InjSI&#39;</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">({</span>
+                <span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;(TS|SI)&#39;</span><span class="p">,</span> <span class="s1">&#39;dis&#39;</span><span class="p">:</span> <span class="s1">&#39;PU&#39;</span><span class="p">,</span> <span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Inj.*(Sept|Kckr)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;propty_name&#39;</span><span class="p">:</span> <span class="s1">&#39;(?!:CCoil).*&#39;</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;PingSI&#39;</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="s1">&#39;dis&#39;</span><span class="p">:</span> <span class="s1">&#39;PU&#39;</span><span class="p">,</span> <span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Ping&#39;</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;devices not defined for section </span><span class="si">{</span><span class="n">sec</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;reset&#39;</span><span class="p">,</span> <span class="s1">&#39;intlk&#39;</span><span class="p">,</span> <span class="s1">&#39;setpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;monitor&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;pulse&#39;</span><span class="p">,</span> <span class="s1">&#39;strength_sp&#39;</span><span class="p">,</span> <span class="s1">&#39;strength_mon&#39;</span><span class="p">])</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">SummaryHeader</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">visible_props</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">ma_widget</span> <span class="o">=</span> <span class="n">SummaryWidget</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">visible_props</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ma_widget</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pu_widgets_dict</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma_widget</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">widget</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_connect_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Connect buttons in the SummaryWidgets.&quot;&quot;&quot;</span>
+        <span class="n">widgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">SummaryWidget</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">widgets</span><span class="p">:</span>
+            <span class="n">devname</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">devname</span>
+            <span class="n">bt</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">get_detail_button</span><span class="p">()</span>
+            <span class="n">connect_window</span><span class="p">(</span><span class="n">bt</span><span class="p">,</span> <span class="n">PUDetailWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">devname</span><span class="o">=</span><span class="n">devname</span><span class="p">)</span>
+
+    <span class="c1"># Actions methods</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">centralWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Turn On&quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_pwrstate</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Turn Off&quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_pwrstate</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulse_on_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Pulse On&quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulse_on_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_pulse</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulse_off_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Pulse Off&quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulse_off_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_pulse</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Reset Interlocks&quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset_interlocks</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_voltage</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Set Voltage to 0.0&quot;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_voltage</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_voltage_zero</span><span class="p">)</span>
+
+    <span class="c1"># # Overloaded method</span>
+<div class="viewcode-block" id="PUControlWindow.contextMenuEvent">
+<a class="viewcode-back" href="../../../siriushla.as_pu_control.html#siriushla.as_pu_control.ControlWindow.PUControlWindow.contextMenuEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contextMenuEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a custom context menu.&quot;&quot;&quot;</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="s2">&quot;Actions&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_on_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_off_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_voltage</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Show Connections...&#39;</span><span class="p">)</span>
+        <span class="n">action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_connections</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">point</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PUControlWindow.show_connections">
+<a class="viewcode-back" href="../../../siriushla.as_pu_control.html#siriushla.as_pu_control.ControlWindow.PUControlWindow.show_connections">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">checked</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">ConnectionInspector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_pwrstate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute turn on/off actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pu_widgets_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">turn_on</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute turn pulse on/off actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pu_widgets_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">pulse_on</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">pulse_off</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_interlocks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset interlocks.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pu_widgets_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">widget</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_voltage_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set voltage to zero.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pu_widgets_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sp</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">setpoint</span><span class="o">.</span><span class="n">spinbox</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">value_changed</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.sirius_application</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusApplication</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">SiriusApplication</span><span class="p">()</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">PUControlWindow</span><span class="p">()</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

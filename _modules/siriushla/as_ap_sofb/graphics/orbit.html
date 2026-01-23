@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_sofb.graphics.orbit &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_sofb.graphics.orbit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_sofb.graphics.orbit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Control the Orbit Graphic Displnay.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_part</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyqtgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> \
+    <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QToolTip</span><span class="p">,</span> <span class="n">QGridLayout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.sofb.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOFBFactory</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">siriushla.util</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets.windows</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_window_from_widget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusSpectrogramView</span><span class="p">,</span> <span class="n">SiriusLabel</span><span class="p">,</span> \
+    <span class="n">SiriusConnectionSignal</span> <span class="k">as</span> <span class="n">_ConnSig</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseWidget</span><span class="p">,</span> <span class="n">Graph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.correctors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorrectorsWidget</span>
+
+
+<div class="viewcode-block" id="OrbitWidget">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrbitWidget</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ctrls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">SOFBFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctrls</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chans</span><span class="p">,</span> <span class="n">ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_default_ctrls</span><span class="p">(</span>
+                <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Line </span><span class="si">{0:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">ctrls</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+
+        <span class="n">txt1</span><span class="p">,</span> <span class="n">txt2</span> <span class="o">=</span> <span class="s1">&#39;IOC-SPassOrb&#39;</span><span class="p">,</span> <span class="s1">&#39;IOC-RefOrb&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+            <span class="n">txt1</span> <span class="o">=</span> <span class="s1">&#39;IOC-SlowOrb&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">==</span> <span class="s1">&#39;BO&#39;</span><span class="p">:</span>
+            <span class="n">txt1</span> <span class="o">=</span> <span class="s1">&#39;IOC-MTurnOrb&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">some_changed</span><span class="p">(</span><span class="s1">&#39;val&#39;</span><span class="p">,</span> <span class="n">txt1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">some_changed</span><span class="p">(</span><span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="n">txt2</span><span class="p">)</span>
+        <span class="n">cb1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChild</span><span class="p">(</span><span class="n">QComboBox</span><span class="p">,</span> <span class="s1">&#39;ComboBox_val0&#39;</span><span class="p">)</span>
+        <span class="n">cb2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChild</span><span class="p">(</span><span class="n">QComboBox</span><span class="p">,</span> <span class="s1">&#39;ComboBox_ref0&#39;</span><span class="p">)</span>
+        <span class="n">it1</span> <span class="o">=</span> <span class="n">cb1</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">txt1</span><span class="p">)</span>
+        <span class="n">it2</span> <span class="o">=</span> <span class="n">cb2</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">txt2</span><span class="p">)</span>
+        <span class="n">cb1</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">it1</span><span class="p">)</span>
+        <span class="n">cb2</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">it2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_buttons_for_images</span><span class="p">()</span>
+
+<div class="viewcode-block" id="OrbitWidget.add_buttons_for_images">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.add_buttons_for_images">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_buttons_for_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">grpbx</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Other Graphs&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">gdl</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">grpbx</span><span class="p">)</span>
+        <span class="n">gdl</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbl_nameh</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">grpbx</span><span class="p">)</span>
+
+        <span class="n">btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Corrs&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+        <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">Window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+            <span class="n">CorrectorsWidget</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="s1">&#39; - Correctors&#39;</span><span class="p">)</span>
+        <span class="n">_util</span><span class="o">.</span><span class="n">connect_window</span><span class="p">(</span>
+            <span class="n">btn</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isring</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;MTurn Orb&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">Window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+                <span class="n">MultiTurnWidget</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Multi Turn&#39;</span><span class="p">)</span>
+            <span class="n">_util</span><span class="o">.</span><span class="n">connect_window</span><span class="p">(</span>
+                <span class="n">btn</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">sigs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">updater</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">raw_ref_sig</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="n">csorb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="p">)</span>
+
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;MTurn Sum&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">Window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+                <span class="n">MultiTurnSumWidget</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Multi Turn Sum&#39;</span><span class="p">)</span>
+            <span class="n">_util</span><span class="o">.</span><span class="n">connect_window</span><span class="p">(</span>
+                <span class="n">btn</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+                <span class="n">csorb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">!=</span> <span class="s1">&#39;BO&#39;</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;SingPass Sum&#39;</span><span class="p">,</span> <span class="n">grpbx</span><span class="p">)</span>
+            <span class="n">gdl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">Window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+                <span class="n">SinglePassSumWidget</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Single Pass Sum&#39;</span><span class="p">)</span>
+            <span class="n">_util</span><span class="o">.</span><span class="n">connect_window</span><span class="p">(</span>
+                <span class="n">btn</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+                <span class="n">csorb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OrbitWidget.channels">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">chans</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">channels</span><span class="p">()</span>
+        <span class="n">chans</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chans</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chans</span></div>
+
+
+<div class="viewcode-block" id="OrbitWidget.get_default_ctrls">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.get_default_ctrls">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_ctrls</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="s1">&#39;SI&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">pvs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RefOrbX-RB&#39;</span><span class="p">,</span> <span class="s1">&#39;RefOrbY-RB&#39;</span><span class="p">]</span>
+        <span class="n">orbs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;IOC-RefOrb&#39;</span><span class="p">,</span> <span class="p">]</span>
+        <span class="k">if</span> <span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;BO&#39;</span><span class="p">:</span>
+            <span class="n">pvs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;SPassOrbX-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;SPassOrbY-Mon&#39;</span><span class="p">])</span>
+            <span class="n">orbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;IOC-SPassOrb&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+            <span class="n">pvs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;SlowOrbX-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;SlowOrbY-Mon&#39;</span><span class="p">])</span>
+            <span class="n">orbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;IOC-SlowOrb&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">acc</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="s1">&#39;BO&#39;</span><span class="p">}:</span>
+            <span class="n">pvs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;MTurnIdxOrbX-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;MTurnIdxOrbY-Mon&#39;</span><span class="p">])</span>
+            <span class="n">orbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;IOC-MTurnOrb&#39;</span><span class="p">)</span>
+
+        <span class="n">chans</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ConnSig</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="n">pv</span><span class="p">))</span>
+                 <span class="k">for</span> <span class="n">pv</span> <span class="ow">in</span> <span class="n">pvs</span><span class="p">]</span>
+        <span class="n">ctrls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">pvs</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">chans</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">orb</span> <span class="ow">in</span> <span class="n">orbs</span><span class="p">:</span>
+            <span class="n">pvi</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pvs</span><span class="p">)</span>
+            <span class="n">pvj</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pvs</span><span class="p">)</span>
+            <span class="n">ctrls</span><span class="p">[</span><span class="n">orb</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;signal&#39;</span><span class="p">:</span> <span class="n">pvi</span><span class="o">.</span><span class="n">new_value_signal</span><span class="p">,</span>
+                    <span class="s1">&#39;getvalue&#39;</span><span class="p">:</span> <span class="n">pvi</span><span class="o">.</span><span class="n">getvalue</span><span class="p">},</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;signal&#39;</span><span class="p">:</span> <span class="n">pvj</span><span class="o">.</span><span class="n">new_value_signal</span><span class="p">,</span>
+                    <span class="s1">&#39;getvalue&#39;</span><span class="p">:</span> <span class="n">pvj</span><span class="o">.</span><span class="n">getvalue</span><span class="p">}}</span>
+        <span class="k">return</span> <span class="n">chans</span><span class="p">,</span> <span class="n">ctrls</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MultiTurnWidget">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiTurnWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">csorb</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">csorb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">csorb</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span> <span class="o">=</span> <span class="n">sigs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun2setref</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setreforbits</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setreforbits</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)}</span>
+
+<div class="viewcode-block" id="MultiTurnWidget.showEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.showEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">showEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">pln</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">sig</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fun2setref</span><span class="p">[</span><span class="n">pln</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MultiTurnWidget.hideEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.hideEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hideEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">pln</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sig</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fun2setref</span><span class="p">[</span><span class="n">pln</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="MultiTurnWidget.setupui">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spectx</span> <span class="o">=</span> <span class="n">MultiTurnSumWidget</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+            <span class="n">orbtype</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">csorb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">specty</span> <span class="o">=</span> <span class="n">MultiTurnSumWidget</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+            <span class="n">orbtype</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">csorb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spectx</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addSpacing</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specty</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MultiTurnWidget.setreforbits">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setreforbits">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setreforbits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln</span><span class="p">,</span> <span class="n">orb</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pln</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spectx</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">setreforbit</span><span class="p">(</span><span class="n">orb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">specty</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">setreforbit</span><span class="p">(</span><span class="n">orb</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MultiTurnSumWidget">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiTurnSumWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">ratio_sum_avg</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">ratio_sum_std</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">orbtype</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">csorb</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span> <span class="o">=</span> <span class="n">orbtype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">csorb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiturnidx</span> <span class="o">=</span> <span class="n">_ConnSig</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnIdx-SP&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MultiTurnSumWidget.setupui">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">vbl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+            <span class="n">img_propty</span> <span class="o">=</span> <span class="s1">&#39;MTurnSum-Mon&#39;</span>
+            <span class="n">orb_propty</span> <span class="o">=</span> <span class="s1">&#39;MTurnIdxSum-Mon&#39;</span>
+            <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;count&#39;</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">):</span>
+            <span class="n">img_propty</span> <span class="o">=</span> <span class="s1">&#39;MTurnOrbX-Mon&#39;</span>
+            <span class="n">orb_propty</span> <span class="o">=</span> <span class="s1">&#39;MTurnIdxOrbX-Mon&#39;</span>
+            <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img_propty</span> <span class="o">=</span> <span class="s1">&#39;MTurnOrbY-Mon&#39;</span>
+            <span class="n">orb_propty</span> <span class="o">=</span> <span class="s1">&#39;MTurnIdxOrbY-Mon&#39;</span>
+            <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+        <span class="n">lbl_text</span> <span class="o">=</span> <span class="n">img_propty</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spect</span> <span class="o">=</span> <span class="n">Spectrogram</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+            <span class="n">image_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">img_propty</span><span class="p">),</span>
+            <span class="n">xaxis_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BPMPosS-Mon&#39;</span><span class="p">),</span>
+            <span class="n">yaxis_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnTime-Mon&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">new_data_sig</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_graph</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">normalizeData</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;BPM Position&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spect</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">label_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:&lt;8.1f}</span><span class="s1">&#39;</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">lbl_text</span> <span class="o">+</span> <span class="s1">&#39; Orbit&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;font-weight: bold;&quot;</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spect</span><span class="p">)</span>
+
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;Average &#39;</span> <span class="o">+</span> <span class="n">lbl_text</span> <span class="o">+</span> <span class="s1">&#39; vs Time&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;font-weight: bold;&quot;</span><span class="p">)</span>
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;  Eff [%] =&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+            <span class="n">ratio_avg</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;000.0&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="n">ratio_std</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;000.0&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ratio_avg</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;#177;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ratio_std</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ratio_sum_avg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">ratio_avg</span><span class="o">.</span><span class="n">setText</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ratio_sum_std</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">ratio_std</span><span class="o">.</span><span class="n">setText</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hbl</span><span class="p">)</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Avg &#39;</span> <span class="o">+</span> <span class="n">lbl_text</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">y_channel</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span>
+            <span class="n">x_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnTime-Mon&#39;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">redraw_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">lineStyle</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">lineWidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+            <span class="n">symbolSize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowLegend</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span><span class="o">.</span><span class="n">sigMouseMoved</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_tooltip_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_time</span> <span class="o">=</span> <span class="n">graph</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="n">lbl_text</span> <span class="o">+</span> <span class="s1">&#39; orbit at index:&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;font-weight: bold;&quot;</span><span class="p">)</span>
+        <span class="n">pdmlab</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="n">wid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnIdx-RB&#39;</span><span class="p">))</span>
+        <span class="n">pdmlab</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="n">pdmlab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:4em;&#39;</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QHBoxLayout</span><span class="p">())</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pdmlab</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;BPM Position&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">y_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">orb_propty</span><span class="p">),</span>
+            <span class="n">x_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BPMPosS-Mon&#39;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">redraw_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">lineStyle</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">lineWidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+            <span class="n">symbolSize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowLegend</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span><span class="o">.</span><span class="n">sigMouseMoved</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_tooltip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span></div>
+
+
+<div class="viewcode-block" id="MultiTurnSumWidget.mouseDoubleClickEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.mouseDoubleClickEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mouseDoubleClickEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">button</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">LeftButton</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_time</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">posx</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">getData</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">times</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">times</span><span class="o">-</span><span class="n">posx</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiturnidx</span><span class="o">.</span><span class="n">send_value_signal</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ind</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_nicknames</span>
+        <span class="n">posi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_pos</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;count&#39;</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">posx</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">isring</span><span class="p">:</span>
+            <span class="n">posx</span> <span class="o">=</span> <span class="n">posx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">circum</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">posi</span><span class="p">)</span><span class="o">-</span><span class="n">posx</span><span class="p">))</span>
+        <span class="n">posy</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
+
+        <span class="n">sca</span><span class="p">,</span> <span class="n">prf</span> <span class="o">=</span> <span class="n">functions</span><span class="o">.</span><span class="n">siScale</span><span class="p">(</span><span class="n">posy</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:s}</span><span class="s1">, y = </span><span class="si">{1:.3f}</span><span class="s1"> </span><span class="si">{2:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">names</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">sca</span><span class="o">*</span><span class="n">posy</span><span class="p">,</span> <span class="n">prf</span><span class="o">+</span><span class="n">unit</span><span class="p">)</span>
+        <span class="n">QToolTip</span><span class="o">.</span><span class="n">showText</span><span class="p">(</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">toPoint</span><span class="p">()),</span>
+            <span class="n">txt</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">geometry</span><span class="p">(),</span> <span class="mi">500</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_tooltip_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_time</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">posx</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">getData</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">times</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">times</span><span class="o">-</span><span class="n">posx</span><span class="p">))</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;index = </span><span class="si">{</span><span class="n">ind</span><span class="si">:</span><span class="s1">d</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">QToolTip</span><span class="o">.</span><span class="n">showText</span><span class="p">(</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">toPoint</span><span class="p">()),</span>
+            <span class="n">txt</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">geometry</span><span class="p">(),</span> <span class="mi">500</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultiTurnSumWidget.update_graph">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.update_graph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-6</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">datay</span> <span class="o">=</span> <span class="n">scale</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve</span><span class="o">.</span><span class="n">receiveYWaveform</span><span class="p">(</span><span class="n">datay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">datay</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">ratios</span> <span class="o">=</span> <span class="n">datay</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span><span class="o">/</span><span class="n">datay</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ratio_sum_avg</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ratios</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ratio_sum_std</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ratios</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Spectrogram">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Spectrogram</span><span class="p">(</span><span class="n">SiriusSpectrogramView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">new_data_sig</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reforb</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#graph {min-height: 15em; min-width: 20em;}&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiturnidx</span> <span class="o">=</span> <span class="n">_ConnSig</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;MTurnIdx-SP&#39;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Spectrogram.channels">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">chans</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">channels</span><span class="p">()</span>
+        <span class="n">chans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiturnidx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chans</span></div>
+
+
+<div class="viewcode-block" id="Spectrogram.setreforbit">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.setreforbit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setreforbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orb</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reforb</span> <span class="o">=</span> <span class="n">orb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needs_redraw</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Spectrogram.process_image">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.process_image">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reforb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reforb</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reforb</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_data_sig</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">img</span></div>
+
+
+<div class="viewcode-block" id="Spectrogram.mouseDoubleClickEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.mouseDoubleClickEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mouseDoubleClickEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">button</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">LeftButton</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">mapFromDevice</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_item</span><span class="o">.</span><span class="n">height</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">multiturnidx</span><span class="o">.</span><span class="n">send_value_signal</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SinglePassSumWidget">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SinglePassSumWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">csorb</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devpref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">csorb</span><span class="o">.</span><span class="n">acc</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span> <span class="o">=</span> <span class="n">csorb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SinglePassSumWidget.setupui">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">vbl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;SinglePass Sum BPMs&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;font-weight: bold;&quot;</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;BPM Position&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">y_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;SPassSum-Mon&#39;</span><span class="p">),</span>
+            <span class="n">x_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">devpref</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;BPMPosS-Mon&#39;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+            <span class="n">redraw_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">lineStyle</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">lineWidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+            <span class="n">symbolSize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span><span class="o">.</span><span class="n">sigMouseMoved</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_tooltip</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowLegend</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_nicknames</span>
+        <span class="n">posi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">bpm_pos</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;count&#39;</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">posx</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">isring</span><span class="p">:</span>
+            <span class="n">posx</span> <span class="o">=</span> <span class="n">posx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csorb</span><span class="o">.</span><span class="n">circum</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">posi</span><span class="p">)</span><span class="o">-</span><span class="n">posx</span><span class="p">))</span>
+        <span class="n">posy</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">scatter</span><span class="o">.</span><span class="n">mapFromScene</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
+
+        <span class="n">sca</span><span class="p">,</span> <span class="n">prf</span> <span class="o">=</span> <span class="n">functions</span><span class="o">.</span><span class="n">siScale</span><span class="p">(</span><span class="n">posy</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:s}</span><span class="s1">, y = </span><span class="si">{1:.3f}</span><span class="s1"> </span><span class="si">{2:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">names</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">sca</span><span class="o">*</span><span class="n">posy</span><span class="p">,</span> <span class="n">prf</span><span class="o">+</span><span class="n">unit</span><span class="p">)</span>
+        <span class="n">QToolTip</span><span class="o">.</span><span class="n">showText</span><span class="p">(</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">toPoint</span><span class="p">()),</span>
+            <span class="n">txt</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">geometry</span><span class="p">(),</span> <span class="mi">500</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

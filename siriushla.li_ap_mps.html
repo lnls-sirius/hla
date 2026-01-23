@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.li_ap_mps &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.li_di_bpms" href="siriushla.li_di_bpms.html" />
+    <link rel="prev" title="siriushla.common.epics.wrapper" href="siriushla.common.epics.wrapper.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.li_ap_mps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.li_ap_mps.bypass_btn">siriushla.li_ap_mps.bypass_btn module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.li_ap_mps.bypass_btn.BypassBtn"><code class="docutils literal notranslate"><span class="pre">BypassBtn</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.bypass_btn.BypassBtn.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">BypassBtn.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.bypass_btn.BypassBtn.value_changed"><code class="docutils literal notranslate"><span class="pre">BypassBtn.value_changed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.li_ap_mps.main">siriushla.li_ap_mps.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl"><code class="docutils literal notranslate"><span class="pre">MPSControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.changeWid"><code class="docutils literal notranslate"><span class="pre">MPSControl.changeWid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.clearLayout"><code class="docutils literal notranslate"><span class="pre">MPSControl.clearLayout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.controlBox"><code class="docutils literal notranslate"><span class="pre">MPSControl.controlBox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.controlHiddenBox"><code class="docutils literal notranslate"><span class="pre">MPSControl.controlHiddenBox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.controlWidget"><code class="docutils literal notranslate"><span class="pre">MPSControl.controlWidget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.countGen"><code class="docutils literal notranslate"><span class="pre">MPSControl.countGen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.countTemp"><code class="docutils literal notranslate"><span class="pre">MPSControl.countTemp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.countVA"><code class="docutils literal notranslate"><span class="pre">MPSControl.countVA()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.countWater"><code class="docutils literal notranslate"><span class="pre">MPSControl.countWater()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.dispayAllControls"><code class="docutils literal notranslate"><span class="pre">MPSControl.dispayAllControls()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.dispayHiddenControls"><code class="docutils literal notranslate"><span class="pre">MPSControl.dispayHiddenControls()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayControlMPS"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayControlMPS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayGroup"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayGroup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayHeader"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayHeader()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayMpsGroups"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayMpsGroups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayTabs"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayTabs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayTempGroup"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayTempGroup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.displayTempGroups"><code class="docutils literal notranslate"><span class="pre">MPSControl.displayTempGroups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.eventFilter"><code class="docutils literal notranslate"><span class="pre">MPSControl.eventFilter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.gateValve"><code class="docutils literal notranslate"><span class="pre">MPSControl.gateValve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.genStringTempPV"><code class="docutils literal notranslate"><span class="pre">MPSControl.genStringTempPV()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getCtrlWidget"><code class="docutils literal notranslate"><span class="pre">MPSControl.getCtrlWidget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getDeviceName"><code class="docutils literal notranslate"><span class="pre">MPSControl.getDeviceName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getPVConfig"><code class="docutils literal notranslate"><span class="pre">MPSControl.getPVConfig()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getPVControl"><code class="docutils literal notranslate"><span class="pre">MPSControl.getPVControl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getParamAll"><code class="docutils literal notranslate"><span class="pre">MPSControl.getParamAll()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getSingleTitle"><code class="docutils literal notranslate"><span class="pre">MPSControl.getSingleTitle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.getTempWidget"><code class="docutils literal notranslate"><span class="pre">MPSControl.getTempWidget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.setParamLabel"><code class="docutils literal notranslate"><span class="pre">MPSControl.setParamLabel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.setPvLbl"><code class="docutils literal notranslate"><span class="pre">MPSControl.setPvLbl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.setTempHeader"><code class="docutils literal notranslate"><span class="pre">MPSControl.setTempHeader()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.setTitleLabel"><code class="docutils literal notranslate"><span class="pre">MPSControl.setTitleLabel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.statusBox"><code class="docutils literal notranslate"><span class="pre">MPSControl.statusBox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.tempMonBox"><code class="docutils literal notranslate"><span class="pre">MPSControl.tempMonBox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.li_ap_mps.main.MPSControl.updateCount"><code class="docutils literal notranslate"><span class="pre">MPSControl.updateCount()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.li_ap_mps.monitor">siriushla.li_ap_mps.monitor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.li_ap_mps.monitor.MPSMonitor"><code class="docutils literal notranslate"><span class="pre">MPSMonitor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.li_ap_mps.util">siriushla.li_ap_mps.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.li_ap_mps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.li_ap_mps</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.li_ap_mps.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-li-ap-mps">
+<h1>siriushla.li_ap_mps<a class="headerlink" href="#siriushla-li-ap-mps" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.li_ap_mps.bypass_btn">
+<span id="siriushla-li-ap-mps-bypass-btn-module"></span><h2>siriushla.li_ap_mps.bypass_btn module<a class="headerlink" href="#module-siriushla.li_ap_mps.bypass_btn" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.bypass_btn.BypassBtn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.li_ap_mps.bypass_btn.</span></span><span class="sig-name descname"><span class="pre">BypassBtn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/bypass_btn.html#BypassBtn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.bypass_btn.BypassBtn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMPushButton</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.bypass_btn.BypassBtn.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.li_ap_mps.bypass_btn.BypassBtn.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.bypass_btn.BypassBtn.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/bypass_btn.html#BypassBtn.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.bypass_btn.BypassBtn.value_changed" title="Link to this definition"></a></dt>
+<dd><p>Redefine value_changed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.li_ap_mps.main">
+<span id="siriushla-li-ap-mps-main-module"></span><h2>siriushla.li_ap_mps.main module<a class="headerlink" href="#module-siriushla.li_ap_mps.main" title="Link to this heading"></a></h2>
+<p>Monitor Protection System Controller Interface</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.li_ap_mps.main.</span></span><span class="sig-name descname"><span class="pre">MPSControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Monitor Protection System Controller Interface</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.changeWid">
+<span class="sig-name descname"><span class="pre">changeWid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.changeWid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.changeWid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.clearLayout">
+<span class="sig-name descname"><span class="pre">clearLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lay</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.clearLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.clearLayout" title="Link to this definition"></a></dt>
+<dd><p>Erase the layout’s content</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.controlBox">
+<span class="sig-name descname"><span class="pre">controlBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wid_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.controlBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.controlBox" title="Link to this definition"></a></dt>
+<dd><p>Display the control features - Open control Box</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.controlHiddenBox">
+<span class="sig-name descname"><span class="pre">controlHiddenBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb_glay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.controlHiddenBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.controlHiddenBox" title="Link to this definition"></a></dt>
+<dd><p>Display the status of the PV - Hidden control Box</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.controlWidget">
+<span class="sig-name descname"><span class="pre">controlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.controlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.controlWidget" title="Link to this definition"></a></dt>
+<dd><p>Create the control widget with opening and closing functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.countGen">
+<span class="sig-name descname"><span class="pre">countGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.countGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.countGen" title="Link to this definition"></a></dt>
+<dd><p>Counter for water data positioning</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.countTemp">
+<span class="sig-name descname"><span class="pre">countTemp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.countTemp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.countTemp" title="Link to this definition"></a></dt>
+<dd><p>Counter for temperature data positioning</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.countVA">
+<span class="sig-name descname"><span class="pre">countVA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.countVA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.countVA" title="Link to this definition"></a></dt>
+<dd><p>Counter for vaccum data positioning</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.countWater">
+<span class="sig-name descname"><span class="pre">countWater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.countWater"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.countWater" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.dispayAllControls">
+<span class="sig-name descname"><span class="pre">dispayAllControls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.dispayAllControls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.dispayAllControls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.dispayHiddenControls">
+<span class="sig-name descname"><span class="pre">dispayHiddenControls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.dispayHiddenControls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.dispayHiddenControls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayControlMPS">
+<span class="sig-name descname"><span class="pre">displayControlMPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tab_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayControlMPS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayControlMPS" title="Link to this definition"></a></dt>
+<dd><p>Display the desired tab widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayGroup">
+<span class="sig-name descname"><span class="pre">displayGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayGroup" title="Link to this definition"></a></dt>
+<dd><p>Display one MPS group</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayHeader">
+<span class="sig-name descname"><span class="pre">displayHeader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayHeader" title="Link to this definition"></a></dt>
+<dd><p>Display the window header</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayMpsGroups">
+<span class="sig-name descname"><span class="pre">displayMpsGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayMpsGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayMpsGroups" title="Link to this definition"></a></dt>
+<dd><p>Display all the MPS groups</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayTabs">
+<span class="sig-name descname"><span class="pre">displayTabs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayTabs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayTabs" title="Link to this definition"></a></dt>
+<dd><p>Display all the tabs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayTempGroup">
+<span class="sig-name descname"><span class="pre">displayTempGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayTempGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayTempGroup" title="Link to this definition"></a></dt>
+<dd><p>Display one temperature group</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.displayTempGroups">
+<span class="sig-name descname"><span class="pre">displayTempGroups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.displayTempGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.displayTempGroups" title="Link to this definition"></a></dt>
+<dd><p>Display all the temperatures groups</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.eventFilter">
+<span class="sig-name descname"><span class="pre">eventFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_wid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.eventFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.eventFilter" title="Link to this definition"></a></dt>
+<dd><p>Hover listener with hover function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.gateValve">
+<span class="sig-name descname"><span class="pre">gateValve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.gateValve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.gateValve" title="Link to this definition"></a></dt>
+<dd><p>Display the gate valves widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.genStringTempPV">
+<span class="sig-name descname"><span class="pre">genStringTempPV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.genStringTempPV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.genStringTempPV" title="Link to this definition"></a></dt>
+<dd><p>Generate Temperature PV name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getCtrlWidget">
+<span class="sig-name descname"><span class="pre">getCtrlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrl_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getCtrlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getCtrlWidget" title="Link to this definition"></a></dt>
+<dd><p>Display the specific control widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getDeviceName">
+<span class="sig-name descname"><span class="pre">getDeviceName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getDeviceName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getDeviceName" title="Link to this definition"></a></dt>
+<dd><p>Set device name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getPVConfig">
+<span class="sig-name descname"><span class="pre">getPVConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getPVConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getPVConfig" title="Link to this definition"></a></dt>
+<dd><p>Get if the PV has configuration 1 or 0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getPVControl">
+<span class="sig-name descname"><span class="pre">getPVControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getPVControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getPVControl" title="Link to this definition"></a></dt>
+<dd><p>Get if the PV is a control or a status</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getParamAll">
+<span class="sig-name descname"><span class="pre">getParamAll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">has_title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wid_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getParamAll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getParamAll" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getSingleTitle">
+<span class="sig-name descname"><span class="pre">getSingleTitle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getSingleTitle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getSingleTitle" title="Link to this definition"></a></dt>
+<dd><p>Display a single Title</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.getTempWidget">
+<span class="sig-name descname"><span class="pre">getTempWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.getTempWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.getTempWidget" title="Link to this definition"></a></dt>
+<dd><p>Display the temperature label widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.setParamLabel">
+<span class="sig-name descname"><span class="pre">setParamLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.setParamLabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.setParamLabel" title="Link to this definition"></a></dt>
+<dd><p>Display Temperature parameters labels</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.setPvLbl">
+<span class="sig-name descname"><span class="pre">setPvLbl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.setPvLbl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.setPvLbl" title="Link to this definition"></a></dt>
+<dd><p>Display the water title label</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.setTempHeader">
+<span class="sig-name descname"><span class="pre">setTempHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.setTempHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.setTempHeader" title="Link to this definition"></a></dt>
+<dd><p>Display Temperature header labels</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.setTitleLabel">
+<span class="sig-name descname"><span class="pre">setTitleLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.setTitleLabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.setTitleLabel" title="Link to this definition"></a></dt>
+<dd><p>Display title labels</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.statusBox">
+<span class="sig-name descname"><span class="pre">statusBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.statusBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.statusBox" title="Link to this definition"></a></dt>
+<dd><p>Display the status widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.tempMonBox">
+<span class="sig-name descname"><span class="pre">tempMonBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.tempMonBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.tempMonBox" title="Link to this definition"></a></dt>
+<dd><p>Display the status features for the temperature monitor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.main.MPSControl.updateCount">
+<span class="sig-name descname"><span class="pre">updateCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/main.html#MPSControl.updateCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.main.MPSControl.updateCount" title="Link to this definition"></a></dt>
+<dd><p>Update counter for data positioning</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.li_ap_mps.monitor">
+<span id="siriushla-li-ap-mps-monitor-module"></span><h2>siriushla.li_ap_mps.monitor module<a class="headerlink" href="#module-siriushla.li_ap_mps.monitor" title="Link to this heading"></a></h2>
+<p>Control of EVG Timing Device.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.li_ap_mps.monitor.MPSMonitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.li_ap_mps.monitor.</span></span><span class="sig-name descname"><span class="pre">MPSMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/li_ap_mps/monitor.html#MPSMonitor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.li_ap_mps.monitor.MPSMonitor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.li_ap_mps.util">
+<span id="siriushla-li-ap-mps-util-module"></span><h2>siriushla.li_ap_mps.util module<a class="headerlink" href="#module-siriushla.li_ap_mps.util" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.li_ap_mps">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.li_ap_mps" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.common.epics.wrapper.html" class="btn btn-neutral float-left" title="siriushla.common.epics.wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.li_di_bpms.html" class="btn btn-neutral float-right" title="siriushla.li_di_bpms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
