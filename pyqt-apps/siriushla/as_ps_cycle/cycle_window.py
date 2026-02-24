@@ -45,7 +45,7 @@ class CycleWindow(SiriusMainWindow):
         # Data structs
         self._psnames = Filter.process_filters(
             get_psnames(isadv=self._is_adv_mode),
-            filters={'sub': '((?!SB).)*'})
+            filters={'sub': '((?!SB|SA|SP).)*'})
         self._timing = Timing()
         self._ps2cycle = list()
         self._ps_ready = list()
