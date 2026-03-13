@@ -1,11 +1,10 @@
 """Custom widgets."""
 
 import numpy as np
-
-from qtpy.QtCore import Qt, Slot
-
 from pydm.widgets import PyDMLineEdit
 from pydm.widgets.waveformplot import WaveformCurveItem
+from qtpy.QtCore import Slot
+from siriuspy.search import IDSearch
 
 from ..as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
@@ -28,20 +27,27 @@ class ConfigLineEdit(PyDMLineEdit):
 
 class SectionedWaveformCurveItem(WaveformCurveItem):
 
-    GAP_MIN = 0  # [mm]
-    GAP_MAX = 24  # [mm]
-
-    def __init__(self, section, **kwargs):
+    def __init__(self, idname, section, **kwargs):
+        """Sectioned waveform curve item."""
         super().__init__(**kwargs)
         self.section = section
 
+        # NOTE: Up to now FF tables in beaglebones
+        # interpolate from zero to maximum gap (kparam),
+        # instead of using the actual gap values.
+        param = IDSearch.conv_idname_2_parameters(idname)
+        self.kparam_min = 0  # [mm]
+        self.kparam_max = param.KPARAM_MAX
+
     @Slot(np.ndarray)
     def receiveYWaveform(self, new_waveform):
-        size = len(new_waveform)/4
-        min = int(size*self.section)
-        max = int(size*(self.section+1))
-        ydata = new_waveform[min:max]
+        size = len(new_waveform) / 4
+        mini = int(size * self.section)
+        maxi = int(size * (self.section + 1))
+        ydata = new_waveform[mini:maxi]
         npts = len(ydata)
-        xdata = self.GAP_MIN + (self.GAP_MAX - self.GAP_MIN) * np.arange(0, npts) / (npts - 1)
+        kmin, kmax = self.kparam_min, self.kparam_max
+        grid = np.arange(0, npts) / (npts - 1)
+        xdata = kmin + (kmax - kmin) * grid
         super().receiveXWaveform(xdata)
         super().receiveYWaveform(ydata)

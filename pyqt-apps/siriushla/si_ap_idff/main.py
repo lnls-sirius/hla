@@ -171,7 +171,7 @@ class IDFFWindow(SiriusMainWindow):
             graph.showXGrid = True
             graph.showYGrid = True
             graph.showLegend = True
-            graph.setLabel('bottom', text='Index')
+            graph.setLabel('bottom', text='KParam [mm]')
             graph.setLabel('left', text='Current [A]')
             graph.setBackgroundColor(QColor(255, 255, 255))
             self._addNewTableCurve(graph, name, idx)
@@ -219,6 +219,7 @@ class IDFFWindow(SiriusMainWindow):
             color_sp, color_rb = 'green', 'darkGreen'
 
         curve_sp = SectionedWaveformCurveItem(
+            idname=self.idname,
             section=section,
             y_addr=self.dev_pref.substitute(propty='Table-SP'),
             name="SP",
@@ -229,6 +230,7 @@ class IDFFWindow(SiriusMainWindow):
         curve_sp.data_changed.connect(plt.set_needs_redraw)
 
         curve_rb = SectionedWaveformCurveItem(
+            idname=self.idname,
             section=section,
             y_addr=self.dev_pref.substitute(propty='Table-RB'),
             name="RB",
