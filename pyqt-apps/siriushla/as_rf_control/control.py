@@ -1481,11 +1481,11 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             self.tempcirc_graph.addYChannel(
                 y_channel=self.prefix+self.chs['TL Sts']['A']['Circulator Temp. In']['label'],
-                name='CTIn', color='magenta',
+                name='A', color='magenta',
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.tempcirc_graph.addYChannel(
-                y_channel=self.prefix+self.chs['TL Sts']['A']['label']['Circulator Temp. Out'],
-                name='CTOut', color='darkRed',
+                y_channel=self.prefix+self.chs['TL Sts']['B']['Circulator Temp. In']['label'],
+                name='B', color='darkRed',
                 lineStyle=Qt.SolidLine, lineWidth=1)
         else:
             self.tempcirc_graph.addYChannel(
