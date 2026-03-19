@@ -27,7 +27,7 @@ class TempVariationDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        self.title = 'Temperature Variation Details'
+        self.title = 'CM Temp Details'
         self.title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(self.title)
         if self.section == 'SI':

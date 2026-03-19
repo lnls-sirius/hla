@@ -3,7 +3,7 @@
 from functools import partial as _part
 
 import qtawesome as qta
-from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit, channel
+from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
@@ -960,7 +960,7 @@ class RFMainControl(SiriusMainWindow):
                 'Cal Eq', 'cal-eq', systems[i], buttons)
             if self.section == "SI":
                 self._addDetailButton(
-                    'Temp Variation', 'temp-variations', systems[i], buttons)
+                    'CM Temp', 'temp-variations', systems[i], buttons)
                 gbox = QGroupBox(f'System {systems[i]}', self)
                 gbox_lay = QGridLayout()
                 gbox_lay.setHorizontalSpacing(9)
@@ -1578,20 +1578,19 @@ class RFMainControl(SiriusMainWindow):
 
                 graph.addYChannel(
                     y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'],
-                    name=f'Temp_{systems[i]}', color='red', lineStyle=Qt.SolidLine, lineWidth=1)
+                    name=f'Temp_{systems[i]}', color='red',
+                    lineStyle=Qt.SolidLine, lineWidth=1)
 
                 pv_lim = self.prefix+self.chs['RF Area'][f'{systems[i]}'][lim]
-                lim_line = InfiniteLine(
-                    pos=0, angle=0, pen=pen)
-                graph.addItem(lim_line)
-                self.ref_line[lim] = lim_line
 
-                ch_lim = channel.PyDMChannel(
-                    address=pv_lim,
-                    value_slot=lambda val, l=lim: self._getUpperLim(l, val)
+                self.lim_line = InfiniteLine(angle=0, pen=pen)
+                graph.addItem(self.lim_line)
+                self.ref_line[lim] = self.lim_line
+
+                ch_lim = SiriusConnectionSignal(pv_lim)
+                ch_lim.new_value_signal[float].connect(
+                    lambda val, l=lim: self._getUpperLim(l, val)
                 )
-
-                ch_lim.connect()
                 self.ref_channel[lim] = ch_lim
 
                 graph.setLabel('left', '°C')
