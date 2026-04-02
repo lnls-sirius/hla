@@ -4,7 +4,7 @@ import os as _os
 from qtpy.QtGui import QMovie
 from qtpy.QtCore import Qt, Slot, QSize
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QGroupBox, QGridLayout, \
-    QLabel, QAction, QMenu
+    QLabel, QAction, QMenu, QScrollArea
 from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
@@ -16,6 +16,7 @@ from .apu import APUSummaryHeader, APUSummaryWidget
 from .delta import DELTASummaryHeader, DELTASummaryWidget
 from .ivu import IVUSummaryHeader, IVUSummaryWidget
 from .vpu import VPUSummaryHeader, VPUSummaryWidget
+from .ue import UESummaryHeader, UESummaryWidget
 from .util import get_id_icon
 
 
@@ -39,7 +40,8 @@ class IDControl(SiriusMainWindow):
 
         label = QLabel('<h3>ID Control Window</h3>',
                        self, alignment=Qt.AlignCenter)
-        label.setStyleSheet('QLabel{min-height: 3em; max-height: 3em;}')
+        label.setStyleSheet(
+            'QLabel{min-height: 3em; max-height: 3em; min-width: 75em;}')
 
         self.label_mov1 = QLabel(self)
         self.label_mov1.setVisible(False)
@@ -67,14 +69,32 @@ class IDControl(SiriusMainWindow):
         self._gbox_vpu = QGroupBox('VPU', self)
         self._gbox_vpu.setLayout(self._setupVPULayout())
 
+        self._gbox_ue = QGroupBox('UE', self)
+        self._gbox_ue.setLayout(self._setupUELayout())
+
+        scarea = QScrollArea(self)
+        scarea.setStyleSheet(
+            '.QScrollArea{min-width: 30em;}')
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+        scr_ar_wid = QWidget()
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        laysa = QVBoxLayout(scr_ar_wid)
+        laysa.setContentsMargins(0, 0, 0, 0)
+        laysa.addWidget(self._gbox_apu)
+        laysa.addWidget(self._gbox_delta)
+        laysa.addWidget(self._gbox_ivu)
+        laysa.addWidget(self._gbox_vpu)
+        laysa.addWidget(self._gbox_ue)
+        scarea.setWidget(scr_ar_wid)
+
         lay = QGridLayout(cwid)
         lay.addWidget(self.label_mov1, 0, 0)
         lay.addWidget(label, 0, 1)
         lay.addWidget(self.label_mov2, 0, 2)
-        lay.addWidget(self._gbox_apu, 1, 0, 1, 3)
-        lay.addWidget(self._gbox_delta, 2, 0, 1, 3)
-        lay.addWidget(self._gbox_ivu, 3, 0, 1, 3)
-        lay.addWidget(self._gbox_vpu, 4, 0, 1, 3)
+        lay.addWidget(scarea, 1, 0, 1, 3)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 15)
         lay.setColumnStretch(2, 1)
@@ -88,7 +108,6 @@ class IDControl(SiriusMainWindow):
 
         idlist = [
             'SI-09SA:ID-APU22',
-            'SI-11SP:ID-APU58',
             'SI-17SA:ID-APU22',
             'SI-20SB:ID-APU22',
         ]
@@ -126,8 +145,8 @@ class IDControl(SiriusMainWindow):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
 
-        self._delta_header = IVUSummaryHeader(self)
-        lay.addWidget(self._delta_header)
+        self._ivu_header = IVUSummaryHeader(self)
+        lay.addWidget(self._ivu_header)
 
         idlist = ['SI-08SB:ID-IVU18', 'SI-14SB:ID-IVU18']
         for idname in idlist:
@@ -145,14 +164,33 @@ class IDControl(SiriusMainWindow):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
 
-        self._delta_header = VPUSummaryHeader(self)
-        lay.addWidget(self._delta_header)
+        self._vpu_header = VPUSummaryHeader(self)
+        lay.addWidget(self._vpu_header)
 
         idlist = ['SI-06SB:ID-VPU29', 'SI-07SP:ID-VPU29']
         for idname in idlist:
             vpu_wid = VPUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(vpu_wid)
             self._id_widgets.append(vpu_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
+
+        return lay
+
+    def _setupUELayout(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+
+        self._ue_header = UESummaryHeader(self)
+        lay.addWidget(self._ue_header)
+
+        idlist = ['SI-11SP:ID-UE44', ]
+        for idname in idlist:
+            ue_wid = UESummaryWidget(self, self._prefix, idname)
+            lay.addWidget(ue_wid)
+            self._id_widgets.append(ue_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
                 prefix=self._prefix, propty='Moving-Mon'))
             ch_mov.new_value_signal[int].connect(self._handle_moving_vis)

@@ -6,4 +6,5 @@ from .delta import DELTAControlWindow
 # from .papu import PAPUControlWindow
 from .ivu import IVUControlWindow
 from .vpu import VPUControlWindow
+from .ue import UEControlWindow
 from .id_control import IDControl

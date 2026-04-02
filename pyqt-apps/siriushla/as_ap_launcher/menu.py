@@ -468,7 +468,7 @@ def get_object(ismenubar=True, parent=None):
                 'SI-08SB:ID-IVU18',
                 'SI-09SA:ID-APU22',
                 'SI-10SB:ID-DELTA52',
-                'SI-11SP:ID-APU58',
+                'SI-11SP:ID-UE44',
                 'SI-14SB:ID-IVU18',
                 'SI-17SA:ID-APU22',
                 'SI-20SB:ID-APU22',
@@ -479,10 +479,10 @@ def get_object(ismenubar=True, parent=None):
                 text = '{0} - {1} ({2})'.format(
                     idname.dev, idname.sub, beamline) \
                     if LEVEL2A == QAction else beamline
-                APU = LEVEL2A(text, menu)
+                ID_DEV = LEVEL2A(text, menu)
                 self.connect_newprocess(
-                    APU, ['sirius-hla-si-id-control.py', '-dev', idname])
-                self.add_object_to_level1(menu, APU)
+                    ID_DEV, ['sirius-hla-si-id-control.py', '-dev', idname])
+                self.add_object_to_level1(menu, ID_DEV)
 
             return menu
 

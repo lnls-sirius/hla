@@ -175,3 +175,22 @@ class UEControlWindow(IDCommonControlWindow):
         "Scan Done": "ScanDone-Mon",
         "Scan Mode": "ScanMode-Sel"
     }
+
+
+class UESummaryBase(IDCommonSummaryBase):
+    """UE Summary Base Widget."""
+
+    MODEL_WIDTHS = (
+        ('KParam', 6),
+        ('KParam Speed', 6),
+        ('Start', 4),
+        ('Stop', 4),
+    )
+
+
+class UESummaryHeader(IDCommonSummaryHeader, UESummaryBase):
+    """UE Summary Header."""
+
+
+class UESummaryWidget(IDCommonSummaryWidget, UESummaryBase):
+    """UE Summary Widget."""
