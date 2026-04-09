@@ -39,17 +39,6 @@ class UEControlWindow(IDCommonControlWindow):
             "Mon": "KParam-Mon",
             "RB": "KParam-RB"
         },
-        # "KParam Speed": {
-        #     "SP": "KParamVelo-SP",
-        #     "RB": "KParamVelo-RB",
-        #     "Mon": "KParamVelo-Mon"
-        # },
-        # "KParam Min Pos": {
-        #     "Cte": "KParamMinPos-Cte"
-        # },
-        # "KParam Max Pos": {
-        #     "Cte": "KParamMaxPos-Cte"
-        # },
         "Change KParam": {
             "Cmd": "KParamChange-Cmd",
             "icon": "fa5s.play"
@@ -59,17 +48,6 @@ class UEControlWindow(IDCommonControlWindow):
             "Mon": "PParam-Mon",
             "RB": "PParam-RB"
         },
-        # "PParam Speed": {
-        #     "SP": "PParamVelo-SP",
-        #     "RB": "PParamVelo-RB",
-        #     "Mon": "PParamVelo-Mon"
-        # },
-        # "PParam Min Pos": {
-        #     "Cte": "PParamMinPos-Cte"
-        # },
-        # "PParam Max Pos": {
-        #     "Cte": "PParamMaxPos-Cte"
-        # },
         "Change PParam": {
             "Cmd": "PParamChange-Cmd",
             "icon": "fa5s.play"
@@ -79,23 +57,6 @@ class UEControlWindow(IDCommonControlWindow):
             "Mon": "CParam-Mon",
             "RB": "CParam-RB"
         },
-        # "CParam Speed": {
-        #     "SP": "CParamVelo-SP",
-        #     "RB": "CParamVelo-RB",
-        #     "Mon": "CParamVelo-Mon"
-        # },
-        # "CParam Min Pos": {
-        #     "Cte": "CParamMinPos-Cte"
-        # },
-        # "CParam Max Pos": {
-        #     "Cte": "CParamMaxPos-Cte"
-        # },
-        # "CParam State NC": {
-        #     "Mon": "CParamStateNC-Mon"
-        # },
-        # "CParam Error NC": {
-        #     "Mon": "CParamErrorNC-Mon"
-        # },
         "Change CParam": {
             "Cmd": "CParamChange-Cmd",
             "icon": "fa5s.play"
@@ -108,40 +69,6 @@ class UEControlWindow(IDCommonControlWindow):
         "Offset Speed": {
             "Mon": "OffsetVelo-Mon"
         },
-        # "Offset Min Pos": "OffsetMinPos-Cte",
-        # "Offset Max Pos": "OffsetMaxPos-Cte",
-        # "Offset NC State": "OffsetStateNC-Mon",
-        # "Offset NC Error": "OffsetErrorNC-Mon",
-        # "Servos Positions": {
-        #     "Top Right": "TIPos-Mon",
-        #     "Top Left": "TOPos-Mon",
-        #     "Bottom Right": "BIPos-Mon",
-        #     "Bottom Left": "BOPos-Mon"
-        # },
-        # "Servos IO Status": {
-        #     "Top Outside": "TOStatusIO-Mon",
-        #     "Top Inside": "TIStatusIO-Mon",
-        #     "Bot Outside": "BOStatusIO-Mon",
-        #     "Bot Inside": "BIStatusIO-Mon"
-        # },
-        # "Servos NC Status": {
-        #     "Top Outside": "TOStateNC-Mon",
-        #     "Top Inside": "TIStateNC-Mon",
-        #     "Bot Outside": "BOStateNC-Mon",
-        #     "Bot Inside": "BIStateNC-Mon"
-        # },
-        # "Servos Error NC": {
-        #     "Top Outside": "TOErrorNC-Mon",
-        #     "Top Inside": "TIErrorNC-Mon",
-        #     "Bot Outside": "BOErrorNC-Mon",
-        #     "Bot Inside": "BIErrorNC-Mon"
-        # },
-        # "KShift NC State": "KShiftStateNC-Mon",
-        # "KShift NC Error": "KShiftErrorNC-Mon",
-        # "PShift NC State": "PShiftStateNC-Mon",
-        # "PShift NC Error": "PShiftErrorNC-Mon",
-        # "CParam NC State": "CParamStateNC-Mon",
-        # "CParam NC Error": "CParamErrorNC-Mon",
         "Speed Setpoint": {
             "SP": "Velo-SP",
             "Mon": "Velo-Mon",
@@ -152,14 +79,14 @@ class UEControlWindow(IDCommonControlWindow):
             "Mon": "Acc-Mon",
             "RB": "Acc-RB"
         },
-        "Moving": {
-            "StateMon": "Moving-Mon"
-        },
         "Pol": {
             "SP": "Pol-Sel",
             "Mon": "Pol-Mon",
             "RB": "Pol-RB"
         },
+        "Moving": {
+            "StateMon": "Moving-Mon"
+        }
     }
 
     SCANS_PVS = {
@@ -496,6 +423,7 @@ class UEControlWindow(IDCommonControlWindow):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(scangroup, 0, 0)
         lay.addWidget(auxgbox, 1, 0)
+
         return group
 
     def _ffSettingsWidget(self):
