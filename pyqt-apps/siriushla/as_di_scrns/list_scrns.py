@@ -9,9 +9,6 @@ from siriushla import util
 
 def get_scrn_list(sec):
     if sec == 'TB':
-        # NOTE: TB-04:DI-Scrn was removed during the March 2026 shutdown
-        # as part of septum-related modifications to mitigate
-        # secondary current loops induced by its pulsed field.
         return ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
                 'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
                 'TB-03:DI-Scrn']
