@@ -32,7 +32,10 @@ class ControlWidgetFactory:
         raise AttributeError("{} not defined for {}".format(device, section))
 
     @staticmethod
-    def factory(parent, section, device, subsection=None, orientation=0):
+    def factory(
+            parent, section, device, subsection=None, orientation=0,
+            idffsubgroup=None
+        ):
         if section == "LI":
             if device == "spectrometer":
                 return LISpectControlWidget(
@@ -122,7 +125,7 @@ class ControlWidgetFactory:
             elif device == "corrector-idff":
                 return IDFFCorrectorControlWidget(
                     subsection=subsection, orientation=orientation,
-                    parent=parent)
+                    parent=parent, idffsubgroup=idffsubgroup)
             elif device == "skew-quadrupole":
                 return SISkewQuadControlWidget(
                     subsection=subsection, orientation=orientation,

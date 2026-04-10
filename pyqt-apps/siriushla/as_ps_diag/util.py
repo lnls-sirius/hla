@@ -26,8 +26,8 @@ sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                 'S': {'sec': 'SI', 'sub': '.*', 'dev': 'S.*'},
                 'CV': {'sec': 'SI', 'sub': '.*(M|C).*', 'dev': 'CV.*'},
                 'CH': {'sec': 'SI', 'sub': '.*(M|C).*', 'dev': 'CH.*'},
-                'ID-CH/CV/QS/CC': {'sec': 'SI', 'sub': '.*S(A|B|P)',
-                                'dev': '(LCH|CH|CV|CC|QS)'},
+                'ID-FF Correctors': {'sec': 'SI', 'sub': '.*S(A|B|P)',
+                                     'dev': '(LCH|LCV|CH|CV|CC|QS)'},
                 'FFCH/FFCV': {'sec': 'SI', 'dev': 'FFC.*'},
                 'Trims': {'sec': 'SI', 'sub': '[0-2][0-9].*',
                           'dev': 'Q(F|D|[1-4]).*'},
@@ -89,10 +89,10 @@ SEC2LABEL2SECPOS = {
     'SI': {
         'B': (0, 1, 1, 1),
         'PM': (0, 2, 1, 1),
-        'FFCH/FFCV': (0, 3, 1, 1),
-        'Q': (0, 4, 1, 1),
-        'S': (0, 5, 1, 1),
-        'ID-CH/CV/QS/CC': (0, 7, 1, 2),
+        'Q': (0, 3, 1, 1),
+        'S': (0, 4, 1, 1),
+        'ID-FF Correctors': (0, 5, 1, 2),
+        'FFCH/FFCV': (0, 7, 1, 1),
         'QS': (1, 1, 1, 2),
         'CH': (1, 3, 1, 1),
         'CV': (1, 4, 1, 1),
@@ -117,15 +117,15 @@ def get_col2dev_count(sec, label):
     if 'Trims' in label:
         return 14
     if 'FFC' in label:
-        return 4
+        return 2
     if 'ID' in label:
-        return 8
+        return 13
     if 'FC' in label:
         return 4
     if label == 'S':
-        return 11
+        return 7
     if label == 'Q':
-        return 10 if sec != 'SI' else 6
+        return 10 if sec != 'SI' else 5
     if label == 'Slnd':
         return 21
     return 10

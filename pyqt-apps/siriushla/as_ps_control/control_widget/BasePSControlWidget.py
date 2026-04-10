@@ -237,7 +237,10 @@ class BasePSControlWidget(QWidget):
     HORIZONTAL = 0
     VERTICAL = 1
 
-    def __init__(self, subsection=None, orientation=0, parent=None):
+    def __init__(
+            self, subsection=None, idffsubgroup=None, orientation=0,
+            parent=None,
+        ):
         """Class constructor.
 
         Parameters:
@@ -246,11 +249,18 @@ class BasePSControlWidget(QWidget):
         orientation
             Default to HORIZONTAL. Define how the different groups
             (defined in subclasses) will be laid out.
+        idffsubgroup
+            Default to None. To be used in filters defined in subclass.
         """
         super(BasePSControlWidget, self).__init__(parent)
         self._orientation = orientation
         self._subsection = subsection
-        self._dev_list = PSSearch.get_psnames(self._getFilter(subsection))
+        self._idffsubgroup = idffsubgroup
+        filtargs = [subsection]
+        if idffsubgroup:
+            filtargs.append(idffsubgroup)
+        filt = self._getFilter(*filtargs)
+        self._dev_list = PSSearch.get_psnames(filt)
         dev0 = PVName(self._dev_list[0])
         if dev0.sec == 'LI':
             if dev0.dev == 'Slnd':
