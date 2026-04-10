@@ -6,9 +6,11 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.util import connect_newprocess, connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    SiriusLedState, SiriusLineEdit, SiriusEnumComboBox
+    SiriusLedState, SiriusLineEdit, SiriusEnumComboBox, \
+    PyDMStateButton
 from ..widgets.dialog import StatusDetailDialog
 
 from .base import IDCommonControlWindow, IDCommonDialog, \
@@ -427,10 +429,35 @@ class UEControlWindow(IDCommonControlWindow):
         return group
 
     def _ffSettingsWidget(self):
-        but = QPushButton('Feedforward Settings', self)
-        connect_newprocess(
-            but, ['sirius-hla-si-ap-idff.py', self._device])
-        return but
+        group = QGroupBox('Feedforward Settings')
+        lay = QGridLayout(group)
+
+        hlay = QHBoxLayout()
+        lb_glob = QLabel(
+            "Global Loop State:", alignment=Qt.AlignRight | Qt.AlignVCenter
+        )
+        idff_pref = _PVName(f"SI-{self.dev_pref.sub}:BS-IDFF")
+        self.bt_idffglob = PyDMStateButton(
+            self, init_channel=idff_pref.substitute(propty="LoopState-Sel")
+        )
+        self.led_idffglob = SiriusLedState(
+            self, init_channel=idff_pref.substitute(propty="LoopState-Sts")
+        )
+        hlay.addStretch()
+        hlay.addWidget(lb_glob)
+        hlay.addWidget(self.bt_idffglob)
+        hlay.addWidget(self.led_idffglob)
+        hlay.addStretch()
+        lay.addLayout(hlay, 0, 0, 1, 3)
+
+        for col, idffgroup in enumerate(["CHCV", "QS", "LC"]):
+            but = QPushButton(f'{idffgroup}', self)
+            connect_newprocess(
+                but, ['sirius-hla-si-ap-idff.py', self._device,
+                '-g', idffgroup]
+            )
+            lay.addWidget(but, 1, col)
+        return group
 
     def _createCmdBtns(self, pv_info, lay, row):
         btn = PyDMPushButton(self, label='', icon=qta.icon(pv_info["icon"]))
