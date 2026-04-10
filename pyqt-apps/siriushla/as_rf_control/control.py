@@ -958,8 +958,9 @@ class RFMainControl(SiriusMainWindow):
                 'Cal Sys', 'cal-sys', systems[i], buttons)
             self._addDetailButton(
                 'Cal Eq', 'cal-eq', systems[i], buttons)
-
-            if self.section == 'SI':
+            if self.section == "SI":
+                self._addDetailButton(
+                    'CM Temp', 'temp-variations', systems[i], buttons)
                 gbox = QGroupBox(f'System {systems[i]}', self)
                 gbox_lay = QGridLayout()
                 gbox_lay.setHorizontalSpacing(9)
@@ -994,13 +995,13 @@ class RFMainControl(SiriusMainWindow):
 
     def _handle_rmptab_visibility(self, unit_type):
         for pos in ['Top', 'Bottom']:
-            for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
+            for pv_id in ['CavPwr', 'PowFwd', 'PowRev', 'SSAFwd', 'SSARev']:
                 self.ramp_chn_wid[unit_type][pos][pv_id].setVisible(True)
         cur_unit = 'mV'
         if unit_type == 'mV':
             cur_unit = 'W'
         for pos in ['Top', 'Bottom']:
-            for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
+            for pv_id in ['CavPwr', 'PowFwd', 'PowRev', 'SSAFwd', 'SSARev']:
                 self.ramp_chn_wid[cur_unit][pos][pv_id].setVisible(False)
 
     def _rampMonLayout(self):
@@ -1056,9 +1057,6 @@ class RFMainControl(SiriusMainWindow):
         self.cb_ramp.addItems(["W", "mV"])
         self.cb_ramp.currentTextChanged.connect(self._handle_rmptab_visibility)
 
-        self.lb_c3phsbot = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:Cell3BotPhs-Mon')
-        self.lb_c3phsbot.showUnits = True
         self.lb_cavvgapbot = SiriusLabel(
             self, self.prefix+'BO-05D:RF-P5Cav:Cell3BotVGap-Mon')
         self.lb_cavvgapbot.showUnits = True
@@ -1080,9 +1078,6 @@ class RFMainControl(SiriusMainWindow):
                     if unit_type == 'mV':
                         wid_dict[pv_id].setVisible(False)
 
-        self.lb_c3phstop = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:Cell3TopPhs-Mon')
-        self.lb_c3phstop.showUnits = True
         self.lb_cavvgaptop = SiriusLabel(
             self, self.prefix+'BO-05D:RF-P5Cav:Cell3TopVGap-Mon')
         self.lb_cavvgaptop.showUnits = True
@@ -1098,23 +1093,23 @@ class RFMainControl(SiriusMainWindow):
             '<h4>Power Fwd.</h4>', self, alignment=Qt.AlignCenter), 3, 0)
         lay.addWidget(QLabel(
             '<h4>Power Rev.</h4>', self, alignment=Qt.AlignCenter), 4, 0)
+        lay.addWidget(QLabel(
+            '<h4>SSA Fwd.</h4>', self, alignment=Qt.AlignCenter), 5, 0)
+        lay.addWidget(QLabel(
+            '<h4>SSA Rev.</h4>', self, alignment=Qt.AlignCenter), 6, 0)
         lay.addItem(
-            QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Ignored), 5, 0)
+            QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Ignored), 7, 0)
         lay.addWidget(QLabel(
-            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 6, 0)
-        lay.addWidget(QLabel(
-            '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignCenter), 7, 0)
+            '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignCenter), 8, 0)
 
         lay.addWidget(self.cb_ramp, 1, 0)
-        lay.addWidget(self.lb_c3phsbot, 6, 1)
-        lay.addWidget(self.lb_cavvgapbot, 7, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(self.lb_c3phstop, 6, 2)
-        lay.addWidget(self.lb_cavvgaptop, 7, 2, alignment=Qt.AlignCenter)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
-        lay.addWidget(self.ramp_graph, 9, 0, 1, 3)
-        lay.addLayout(hbox_rb, 10, 0, 1, 3)
+        lay.addWidget(self.lb_cavvgapbot, 8, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self.lb_cavvgaptop, 8, 2, alignment=Qt.AlignCenter)
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 9, 0)
+        lay.addWidget(self.ramp_graph, 10, 0, 1, 3)
+        lay.addLayout(hbox_rb, 11, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0)
+            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 12, 0)
         return lay
 
     def _powerMeterLayout(self):
@@ -1163,18 +1158,24 @@ class RFMainControl(SiriusMainWindow):
             wch, dbch, mvch = dic['W'], dic['dBm'], dic['mV']
             color = dic['color']
             row = idx+1
-            if idx > 3 and idx < 8:
-                column = 3
-                row = idx-3
-            elif idx >= 8:
-                column = 0
-                if idx == 8:
-                    lay_vals.addItem(QSpacerItem(
-                        0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
-                elif idx > 11:
+            if self.section == 'SI':
+                if idx > 4 and idx < 10:
+                    column = 3
+                    row = idx-4
+                elif idx >= 10:
+                    column = 0
+                    if idx == 8:
+                        lay_vals.addItem(QSpacerItem(
+                            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+                    elif idx > 14:
+                        column = 3
+                        row = idx-4
+                    row += 1
+            elif self.section == 'BO':
+                if idx > 5 and idx < 8:
                     column = 3
                     row = idx-3
-                row += 1
+            row += 1
 
             # Table
             cbx = QCheckBox(self)
@@ -1260,15 +1261,8 @@ class RFMainControl(SiriusMainWindow):
             cmd = f'{cmd} -d rf-inputs'.split(" ")
             connect_newprocess(pb_rfinp, cmd, is_window=True, parent=self)
 
-            lb_cavphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-            self.lb_cavphs = SiriusLabel(
-                self, self.prefix+'BO-05D:RF-P5Cav:Cell3Phs-Mon')
-            self.lb_cavphs.showUnits = True
-
             lay_vals.addWidget(pb_rfinp, 0, 0, alignment=Qt.AlignCenter)
             lay_vals.addWidget(lb_rfinp, 0, 1)
-            lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
-            lay_vals.addWidget(self.lb_cavphs, 5, 2)
         else:
             for name in data:
                 self.curves[name+' W'].setVisible('Coup' in name)
@@ -1481,16 +1475,17 @@ class RFMainControl(SiriusMainWindow):
         self.tempcirc_graph.backgroundColor = QColor(255, 255, 255)
         self.tempcirc_graph.showXGrid = True
         self.tempcirc_graph.showYGrid = True
+        self.tempcirc_graph.showLegend = True
         self.tempcirc_graph.timeSpan = 1800
         self.tempcirc_graph.maxRedrawRate = 1
         if self.section == 'SI':
             self.tempcirc_graph.addYChannel(
                 y_channel=self.prefix+self.chs['TL Sts']['A']['Circulator Temp. In']['label'],
-                name='CTIn', color='magenta',
+                name='A', color='magenta',
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.tempcirc_graph.addYChannel(
-                y_channel=self.prefix+self.chs['TL Sts']['A']['label']['Circulator Temp. Out'],
-                name='CTOut', color='darkRed',
+                y_channel=self.prefix+self.chs['TL Sts']['B']['Circulator Temp. In']['label'],
+                name='B', color='darkRed',
                 lineStyle=Qt.SolidLine, lineWidth=1)
         else:
             self.tempcirc_graph.addYChannel(
@@ -1538,6 +1533,9 @@ class RFMainControl(SiriusMainWindow):
 
             row_t = 0
 
+            self.ref_line = {}
+            self.ref_channel = {}
+
             for i in range(len(systems)):
                 lay_grid_temp = QGridLayout()
                 lb_temp_area_sys = QLabel(f'<h3> • {systems[i]} </h3>', self)
@@ -1564,6 +1562,8 @@ class RFMainControl(SiriusMainWindow):
 
                 lay_rfarea.addLayout(lay_grid_temp)
 
+                pen = mkPen(color='k', width=2, style=Qt.DashLine)
+
                 graph = SiriusTimePlot(self)
                 graph.setObjectName(f'system_temp_{systems[i]}_graph')
                 graph.autoRangeX = True
@@ -1573,9 +1573,26 @@ class RFMainControl(SiriusMainWindow):
                 graph.showYGrid = True
                 graph.timeSpan = 1800
                 graph.maxRedrawRate = 2
+
+                lim = 'Upper A' if systems[i] == "A" else 'Upper B'
+
                 graph.addYChannel(
                     y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'],
-                    name=f'Temp_{systems[i]}', color='red', lineStyle=Qt.SolidLine, lineWidth=1)
+                    name=f'Temp_{systems[i]}', color='red',
+                    lineStyle=Qt.SolidLine, lineWidth=1)
+
+                pv_lim = self.prefix+self.chs['RF Area'][f'{systems[i]}'][lim]
+
+                self.lim_line = InfiniteLine(angle=0, pen=pen)
+                graph.addItem(self.lim_line)
+                self.ref_line[lim] = self.lim_line
+
+                ch_lim = SiriusConnectionSignal(pv_lim)
+                ch_lim.new_value_signal[float].connect(
+                    lambda val, l=lim: self._getUpperLim(l, val)
+                )
+                self.ref_channel[lim] = ch_lim
+
                 graph.setLabel('left', '°C')
                 lay_rfarea.addWidget(graph)
                 lay_rfarea.addItem(QSpacerItem(
@@ -1654,6 +1671,10 @@ class RFMainControl(SiriusMainWindow):
         line.setFrameShadow(QFrame.Sunken)
         return line
 
+    def _getUpperLim(self, lim, value):
+        if value is not None:
+            self.ref_line[lim].setPos(float(value))
+
     def vacuum_widget(self):
         self.vacuum_wid = QWidget()
         lay_vacuum = QVBoxLayout(self.vacuum_wid)
@@ -1677,11 +1698,23 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.backgroundColor = QColor(255, 255, 255)
         self.vacuum_graph.showXGrid = True
         self.vacuum_graph.showYGrid = True
+        self.vacuum_graph.showLegend = True
         self.vacuum_graph.timeSpan = 1800
         self.vacuum_graph.maxRedrawRate = 1
-        self.vacuum_graph.addYChannel(
-            y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cells'],
-            name='Vacuum', color='black', lineStyle=Qt.SolidLine, lineWidth=1)
+        if self.section == "BO":
+            self.vacuum_graph.addYChannel(
+                y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cells'],
+                name='Vacuum', color='black', lineStyle=Qt.SolidLine, lineWidth=1)
+        else:
+            cav_pv = ['POB', 'Taper']
+            systems = ['A', 'B']
+            for sys in systems:
+                for cav in cav_pv:
+                    self.vacuum_graph.addYChannel(
+                        y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cav Pressure'][sys][cav][0],
+                        name=self.prefix+self.chs['Cav Sts']['Vac']['Cav Pressure'][sys][cav][0][21:26],
+                        color=self.prefix+self.chs['Cav Sts']['Vac']['Cav Pressure'][sys][cav][1],
+                        lineStyle=Qt.SolidLine, lineWidth=1)
         self.vacuum_graph.setLabel('left', '')
         lay_vacuum.addWidget(self.vacuum_graph)
         return self.vacuum_wid

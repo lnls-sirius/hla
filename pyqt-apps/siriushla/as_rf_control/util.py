@@ -362,6 +362,18 @@ SEC_2_CHANNELS = {
                 'mV': 'BO-05D:RF-P5Cav:RevAmp-Mon',
                 'color': 'red',
             },
+            'SSA Forward': {
+                'W': 'RA-ToBO:RF-SSAmpTower:FwdOutPwrW-Mon',
+                'dBm': 'RA-ToBO:RF-SSAmpTower:FwdOutPwrdBm-Mon',
+                'mV': 'RA-ToBO:RF-SSAmpTower:FwdOutAmp-Mon',
+                'color': 'brown',
+            },
+            'SSA Reverse': {
+                'W': 'RA-ToBO:RF-SSAmpTower:RevOutPwrW-Mon',
+                'dBm': 'RA-ToBO:RF-SSAmpTower:RevOutPwrdBm-Mon',
+                'mV': 'RA-ToBO:RF-SSAmpTower:RevOutAmp-Mon',
+                'color': 'purple',
+            },
         },
         'CavVGap': 'BO-05D:RF-P5Cav:Cell3VGap-Mon',
         'TempMon': {
@@ -380,24 +392,32 @@ SEC_2_CHANNELS = {
                 'Bottom': {
                     'CavPwr': 'BO-05D:RF-P5Cav:Cell3BotPwrW-Mon',
                     'PowFwd': 'BO-05D:RF-P5Cav:FwdBotPwrW-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:RevBotPwrW-Mon'
+                    'PowRev': 'BO-05D:RF-P5Cav:RevBotPwrW-Mon',
+                    'SSAFwd': 'RA-ToBO:RF-SSAmpTower:FwdBotPwrW-Mon',
+                    'SSARev': 'RA-ToBO:RF-SSAmpTower:RevBotPwrW-Mon',
                 },
                 'Top': {
                     'CavPwr': 'BO-05D:RF-P5Cav:Cell3TopPwrW-Mon',
                     'PowFwd': 'BO-05D:RF-P5Cav:FwdTopPwrW-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:RevTopPwrW-Mon'
+                    'PowRev': 'BO-05D:RF-P5Cav:RevTopPwrW-Mon',
+                    'SSAFwd': 'RA-ToBO:RF-SSAmpTower:FwdTopPwrW-Mon',
+                    'SSARev': 'RA-ToBO:RF-SSAmpTower:RevTopPwrW-Mon',
                 }
             },
             'mV': {
                 'Bottom': {
                     'CavPwr': 'BO-05D:RF-P5Cav:Cell3BotAmp-Mon',
                     'PowFwd': 'BO-05D:RF-P5Cav:FwdBotAmp-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:RevBotAmp-Mon'
+                    'PowRev': 'BO-05D:RF-P5Cav:RevBotAmp-Mon',
+                    'SSAFwd': 'RA-ToBO:RF-SSAmpTower:FwdBotAmp-Mon',
+                    'SSARev': 'RA-ToBO:RF-SSAmpTower:RevBotAmp-Mon',
                 },
                 'Top': {
                     'CavPwr': 'BO-05D:RF-P5Cav:Cell3TopAmp-Mon',
                     'PowFwd': 'BO-05D:RF-P5Cav:FwdTopAmp-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:RevTopAmp-Mon'
+                    'PowRev': 'BO-05D:RF-P5Cav:RevTopAmp-Mon',
+                    'SSAFwd': 'RA-ToBO:RF-SSAmpTower:FwdTopAmp-Mon',
+                    'SSARev': 'RA-ToBO:RF-SSAmpTower:RevTopAmp-Mon',
                 }
             }
         },
@@ -1729,7 +1749,17 @@ SEC_2_CHANNELS = {
                 'Cond': 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon',
                 'Cells ok': 'SI-03SP:RF-P7Cav:Pressure-Mon',
                 'Coupler ok': 'SI-03SP:RF-P7Cav:CoupPressure-Mon',
-            }
+                'Cav Pressure': {
+                    'A': {
+                        'POB': ['SI-03SP:RF-CryoMod-1:BP101_CCG_POBPressure-Mon', 'black'],
+                        'Taper': ['SI-03SP:RF-CryoMod-1:BP103_CCG_TaperPressure-Mon', 'green']
+                    },
+                    'B': {
+                        'POB': ['SI-03SP:RF-CryoMod-2:BP201_CCG_POBPressure-Mon', 'darkRed'],
+                        'Taper': ['SI-03SP:RF-CryoMod-2:BP203_CCG_TaperPressure-Mon', 'chocolate']
+                    },
+                },
+            },
         },
         'Cryo Sts': {
             'A': {
@@ -1916,11 +1946,13 @@ SEC_2_CHANNELS = {
                 'Geral': 'RA-RaSIA02:RF-THSensor:TempUp-Mon',
                 'Temp': 'RA-RaSIA02:RF-THSensor:Temp-Mon',
                 'Humidity': 'RA-RaSIA02:RF-THSensor:Humidity-Mon',
+                'Upper A': 'RA-RaSIA02:RF-THSensor:TempUpperLimit-Cte'
             },
             'B': {
                 'Geral': 'RA-RaSIB02:RF-THSensor:TempUp-Mon',
                 'Temp': 'RA-RaSIB02:RF-THSensor:Temp-Mon',
                 'Humidity': 'RA-RaSIB02:RF-THSensor:Humidity-Mon',
+                'Upper B': 'RA-RaSIB02:RF-THSensor:TempUpperLimit-Cte'
             },
         },
         'SSA': {
@@ -2350,6 +2382,12 @@ SEC_2_CHANNELS = {
                 'W': 'RA-ToSIA02:RF-SSAmpTower:RevOutPwrW-Mon',
                 'color': 'darkGreen'
             },
+            'A - Fwd Load': {
+                'mV': 'RA-TL:RF-Load-SIA:FwdInAmp-Mon',
+                'dBm': 'RA-TL:RF-Load-SIA:FwdInPwrdBm-Mon',
+                'W': 'RA-TL:RF-Load-SIA:FwdInPwrW-Mon',
+                'color': 'yellow'
+            },
             'A - Cav': {
                 'mV': 'SI-03SP:RF-SRFCav-A:Amp-Mon',
                 'dBm': 'SI-03SP:RF-SRFCav-A:PwrdBm-Mon',
@@ -2368,11 +2406,17 @@ SEC_2_CHANNELS = {
                 'W': 'SI-03SP:RF-SRFCav-A:RevPwrW-Mon',
                 'color': 'darkBlue'
             },
-            'A - Fwd Load': {
-                'mV': 'RA-TL:RF-Load-SIA:FwdInAmp-Mon',
-                'dBm': 'RA-TL:RF-Load-SIA:FwdInPwrdBm-Mon',
-                'W': 'RA-TL:RF-Load-SIA:FwdInPwrW-Mon',
-                'color': 'yellow'
+            'A - FwdInCirc': {
+                'mV': 'RA-TL:RF-Circulator-SIA:FwdInAmp-Mon',
+                'dBm': 'RA-TL:RF-Circulator-SIA:FwdInPwrdBm-Mon',
+                'W': 'RA-TL:RF-Circulator-SIA:FwdInPwrW-Mon',
+                'color': 'green'
+            },
+            'A - RevInCirc': {
+                'mV': 'RA-TL:RF-Circulator-SIA:RevInAmp-Mon',
+                'dBm': 'RA-TL:RF-Circulator-SIA:RevInPwrdBm-Mon',
+                'W': 'RA-TL:RF-Circulator-SIA:RevInPwrW-Mon',
+                'color': 'brown'
             },
             'B - Fwd SSA 3': {
                 'mV': 'RA-ToSIB03:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2398,6 +2442,12 @@ SEC_2_CHANNELS = {
                 'W': 'RA-ToSIB04:RF-SSAmpTower:RevOutPwrW-Mon',
                 'color': 'chocolate'
             },
+            'B - Fwd Load': {
+                'mV': 'RA-TL:RF-Load-SIB:FwdInAmp-Mon',
+                'dBm': 'RA-TL:RF-Load-SIB:FwdInPwrdBm-Mon',
+                'W': 'RA-TL:RF-Load-SIB:FwdInPwrW-Mon',
+                'color': 'darkSlateGrey'
+            },
             'B - Cav': {
                 'mV': 'SI-03SP:RF-SRFCav-B:Amp-Mon',
                 'dBm': 'SI-03SP:RF-SRFCav-B:PwrdBm-Mon',
@@ -2416,11 +2466,17 @@ SEC_2_CHANNELS = {
                 'W': 'SI-03SP:RF-SRFCav-B:RevPwrW-Mon',
                 'color': 'saddlebrown'
             },
-            'B - Fwd Load': {
-                'mV': 'RA-TL:RF-Load-SIB:FwdInAmp-Mon',
-                'dBm': 'RA-TL:RF-Load-SIB:FwdInPwrdBm-Mon',
-                'W': 'RA-TL:RF-Load-SIB:FwdInPwrW-Mon',
-                'color': 'darkSlateGrey'
+            'B - FwdInCirc': {
+                'mV': 'RA-TL:RF-Circulator-SIB:FwdInAmp-Mon',
+                'dBm': 'RA-TL:RF-Circulator-SIB:FwdInPwrdBm-Mon',
+                'W': 'RA-TL:RF-Circulator-SIB:FwdInPwrW-Mon',
+                'color': 'gray'
+            },
+            'B - RevInCirc': {
+                'mV': 'RA-TL:RF-Circulator-SIB:RevInAmp-Mon',
+                'dBm': 'RA-TL:RF-Circulator-SIB:RevInPwrdBm-Mon',
+                'W': 'RA-TL:RF-Circulator-SIB:RevInPwrW-Mon',
+                'color': 'darkOrange'
             },
         },
         'CavVGap': {
@@ -4920,6 +4976,58 @@ SEC_2_CHANNELS = {
                 'r/Q': 'SI-03SP:RF-SRFCav-B:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-B:Q0-Cte'
             }
+        },
+        'TempVariations': {
+            'A': {
+                'Temp': {
+                    'BT110': {
+                        'TempRate': ['SI-03SP:RF-CryoMod-1:BT110_HeVesselHeaterTempRate-Mon', 'magenta'],
+                        'Max': 'SI-03SP:RF-CryoMod-1:BT110_HeVesselHeaterTempMaxRate-Mon',
+                        'Min': 'SI-03SP:RF-CryoMod-1:BT110_HeVesselHeaterTempMinRate-Mon'
+                    },
+                    'BT111': {
+                        'TempRate': ['SI-03SP:RF-CryoMod-1:BT111_CavBotTempRate-Mon', 'darkRed'],
+                        'Max': 'SI-03SP:RF-CryoMod-1:BT111_CavBotTempMaxRate-Mon',
+                        'Min': 'SI-03SP:RF-CryoMod-1:BT111_CavBotTempMinRate-Mon'
+                    },
+                    'BT112': {
+                        'TempRate': ['SI-03SP:RF-CryoMod-1:BT112_CavTopTempRate-Mon', 'blue'],
+                        'Max': 'SI-03SP:RF-CryoMod-1:BT112_CavTopTempMaxRate-Mon',
+                        'Min': 'SI-03SP:RF-CryoMod-1:BT112_CavTopTempMinRate-Mon'
+                    },
+                },
+                'Delta A': {
+                    'Diff': 'SI-03SP:RF-CryoMod-1:CavTopBotTempDiff-Mon',
+                    'Max': 'SI-03SP:RF-CryoMod-1:CavTopBotTempMaxDiff-Mon',
+                    'Min': 'SI-03SP:RF-CryoMod-1:CavTopBotTempMinDiff-Mon'
+                },
+                'Interval A': 'SI-03SP:RF-CryoMod-1:CavTempRateTimeInterval-SP'
+            },
+            'B': {
+                'Temp': {
+                    'BT210': {
+                        'TempRate': ['SI-03SP:RF-CryoMod-2:BT210_HeVesselHeaterTempRate-Mon', 'magenta'],
+                        'Max': 'SI-03SP:RF-CryoMod-2:BT210_HeVesselHeaterTempMaxRate-Mon',
+                        'Min': 'SI-03SP:RF-CryoMod-2:BT210_HeVesselHeaterTempMinRate-Mon'
+                    },
+                    'BT211': {
+                        'TempRate': ['SI-03SP:RF-CryoMod-2:BT211_CavBotTempRate-Mon', 'darkRed'],
+                        'Max': 'SI-03SP:RF-CryoMod-2:BT211_CavBotTempMaxRate-Mon',
+                        'Min': 'SI-03SP:RF-CryoMod-2:BT211_CavBotTempMinRate-Mon'
+                    },
+                    'BT212': {
+                        'TempRate': ['SI-03SP:RF-CryoMod-2:BT212_CavTopTempRate-Mon', 'blue'],
+                        'Max': 'SI-03SP:RF-CryoMod-2:BT212_CavTopTempMaxRate-Mon',
+                        'Min': 'SI-03SP:RF-CryoMod-2:BT212_CavTopTempMinRate-Mon'
+                    },
+                },
+                'Delta B': {
+                    'Diff': 'SI-03SP:RF-CryoMod-2:CavTopBotTempDiff-Mon',
+                    'Max': 'SI-03SP:RF-CryoMod-2:CavTopBotTempMaxDiff-Mon',
+                    'Min': 'SI-03SP:RF-CryoMod-2:CavTopBotTempMinDiff-Mon'
+                },
+                'Interval B': 'SI-03SP:RF-CryoMod-2:CavTempRateTimeInterval-SP'
+            },
         },
         'ACPanel': {
             'A': {

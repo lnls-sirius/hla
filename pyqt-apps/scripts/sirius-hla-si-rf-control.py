@@ -7,7 +7,8 @@ import sys
 
 from siriushla.as_rf_control.advanced_details import ADCDACDetails, \
     AutoStartDetails, CalEqDetails, CalSysDetails, HardwareDetails, \
-    LoopsDetails, RampsDetails, RFInputsDetails, TuningDetails
+    LoopsDetails, RampsDetails, RFInputsDetails, TuningDetails, \
+    TempVariationDetails
 from siriushla.as_rf_control.control import RFMainControl
 from siriushla.as_rf_control.details import CavityStatusDetails, FDLDetails, \
     LLRFInterlockDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
@@ -39,6 +40,7 @@ specific_system_windows = {
     'rf-inputs': RFInputsDetails,
     'tuning': TuningDetails,
     'fdl': FDLDetails,
+    'temp-variations': TempVariationDetails
 }
 
 general_windows = {
