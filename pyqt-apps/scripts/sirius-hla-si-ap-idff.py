@@ -15,9 +15,14 @@ parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 parser.add_argument("idname", type=str, help="ID name.")
+parser.add_argument(
+    '-g', "--idffgroup", type=str, default=None,
+    help="Power supplies subgroup controlled by IDFF instance.")
 args = parser.parse_args()
 
 app = SiriusApplication()
 app.open_window(
-    IDFFWindow, parent=None, prefix=args.prefix, idname=args.idname)
+    IDFFWindow, parent=None, prefix=args.prefix,
+    idname=args.idname, idffgroup=args.idffgroup,
+)
 _sys.exit(app.exec_())

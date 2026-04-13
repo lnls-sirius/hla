@@ -39,25 +39,34 @@ class IDFFWindow(SiriusMainWindow):
     #    so as to provide the same PVs as the low level ioc (particularly
     #    "IDPos-Mon")
 
-    def __init__(self, parent=None, prefix='', idname=''):
+    def __init__(self, parent=None, prefix='', idname='', idffgroup=''):
         """Initialize."""
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
         self.idname = _PVName(idname)
-        self._is_llidff = self.idname.dev.startswith(("IVU", "SIMUL", "VPU"))
-        if self._is_llidff and self.idname.dev.startswith(("IVU", "SIMUL")):
+        self._is_llidff = self.idname.dev.startswith(
+            ("IVU", "SIMUL", "VPU", "UE44", )
+        )
+        if self.idname.dev.startswith(("IVU", "SIMUL")):
             self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CHCV")
-        elif self._is_llidff and self.idname.dev.startswith("VPU"):
+        elif self.idname.dev.startswith("VPU"):
             self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CC")
+        elif self.idname.dev.startswith("UE44"):
+            if not idffgroup:
+                raise ValueError('idffgroup input need to be defined for UE44')
+            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-{idffgroup}")
         else:
             self._idffname = _PVName(f"SI-{self.idname.sub}:AP-IDFF")
-        self.dev_pref = _PVName(self._idffname + ':')
-        # self._idffname = IDFFConst(idname).idffname
+        self.dev_pref = _PVName(self._idffname)
         self._idffdev = self._create_idffdev()
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
-        self.device = _PVName(self._idffname)
+        dis = "BS" if self._is_llidff else "AP"
+        self._idffnickname = _PVName(f"SI-{self.idname.sub}:{dis}-IDFF")
+        self._idffgroup = idffgroup
+        if idffgroup:
+            self._idffnickname = self._idffnickname.substitute(idx=idffgroup)
         self.setObjectName('IDApp')
-        self.setWindowTitle(self.device)
+        self.setWindowTitle(self._idffnickname)
         self.setWindowIcon(get_idff_icon())
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
@@ -74,6 +83,8 @@ class IDFFWindow(SiriusMainWindow):
             corrs += self._idffdev.ctrldev.IDFF_CH_LABELS
             corrs += self._idffdev.ctrldev.IDFF_CV_LABELS
             corrs += self._idffdev.ctrldev.IDFF_CC_LABELS
+            corrs += self._idffdev.ctrldev.IDFF_LC_LABELS
+            corrs += self._idffdev.ctrldev.IDFF_QS_LABELS
             lay.addWidget(self._llStatusWidget(), 1, 0, 1, 1)
             lay.addWidget(self._llSettingsWidget(corrs), 2, 0, 3, 1)
         else:
@@ -288,7 +299,7 @@ class IDFFWindow(SiriusMainWindow):
             'Calc. values:', self, alignment=Qt.AlignRight)
         glay_calccorr = QGridLayout()
         glay_calccorr.addWidget(ld_calccorr, 0, 0)
-        corr_fams = ['CH', 'CV', 'QS', 'LCH', 'QD1', 'QF', 'QD2', 'CC']
+        corr_fams = ['CH', 'CV', 'QS', 'LCH', 'LCV', 'QD1', 'QF', 'QD2', 'CC']
         for ridx, corr in enumerate(corr_fams):
             if corr == 'CH' and not chnames:
                 continue
@@ -296,7 +307,7 @@ class IDFFWindow(SiriusMainWindow):
                 continue
             if corr == 'QS' and not qsnames:
                 continue
-            if corr == 'LCH' and not lcnames:
+            if corr in ('LCH', 'LCV') and not lcnames:
                 continue
             if corr in ('QD1', 'QF', 'QD2') and not qnnames:
                 continue
@@ -495,9 +506,19 @@ class IDFFWindow(SiriusMainWindow):
         return gbox
 
     def _corrsMonitorWidget(self):
+        idffsubgroup = None
+        if self._idffgroup:
+            idffsubgroup = (
+                "(CH|CV)" if self._idffgroup == "CHCV" else
+                "LC(H|V)" if self._idffgroup == "LC" else
+                "QS" if self._idffgroup == "QS" else
+                None
+            )
         widget = ControlWidgetFactory.factory(
             self, section='SI', device='corrector-idff',
-            subsection=self.device.sub, orientation=Qt.Vertical)
+            subsection=self._idffnickname.sub,
+            idffsubgroup=idffsubgroup,
+            orientation=Qt.Vertical)
         for wid in widget.get_summary_widgets():
             detail_bt = wid.get_detail_button()
             psname = detail_bt.text()
