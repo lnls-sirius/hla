@@ -137,16 +137,6 @@ class UEControlWindow(IDCommonControlWindow):
                 raise NotImplementedError
             row += 1
 
-        self._lb_start = QLabel(
-            'Start Movement', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self._pb_start = PyDMPushButton(
-            self, label='', icon=qta.icon("fa5s.play"))
-        self._pb_start.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
-        self._pb_start.pressValue = 120
-        self._pb_start.setObjectName("Start")
-        self._pb_start.setStyleSheet(
-            '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
-
         self._lb_abort = QLabel(
             'Abort', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self._pb_abort = PyDMPushButton(
@@ -167,12 +157,10 @@ class UEControlWindow(IDCommonControlWindow):
         self._pb_reset.setStyleSheet(
             '#Reset{min-width:30px; max-width:30px; icon-size:25px;}')
 
-        lay.addWidget(self._lb_start, row, 0)
-        lay.addWidget(self._pb_start, row, 1)
-        lay.addWidget(self._lb_abort, row+1, 0)
-        lay.addWidget(self._pb_abort, row+1, 1)
-        lay.addWidget(self._lb_reset, row+2, 0)
-        lay.addWidget(self._pb_reset, row+2, 1)
+        lay.addWidget(self._lb_abort, row, 0)
+        lay.addWidget(self._pb_abort, row, 1)
+        lay.addWidget(self._lb_reset, row+1, 0)
+        lay.addWidget(self._pb_reset, row+1, 1)
 
         return group
 
