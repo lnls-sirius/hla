@@ -502,6 +502,7 @@ class UEDetails(IDCommonDialog):
         ld_ncerror = QLabel('<h4>NC Error', self)
         ld_status = QLabel('<h4>StatusIO</h4>', self)
         ld_temp = QLabel('<h4>Temperature</h4>', self)
+        ld_torque = QLabel('<h4>Torque</h4>', self)
 
         gbox = QGroupBox('Status Details', self)
         glay = QGridLayout(gbox)
@@ -512,6 +513,7 @@ class UEDetails(IDCommonDialog):
         glay.addWidget(ld_ncerror, 5, 0)
         glay.addWidget(ld_status, 6, 0)
         glay.addWidget(ld_temp, 7, 0)
+        glay.addWidget(ld_torque, 8, 0)
 
         details = [
             "KParam",
@@ -597,9 +599,13 @@ class UEDetails(IDCommonDialog):
 
                 pvname = self.dev_pref.substitute(propty=f'{title}Temp-Mon')
                 lb_temp = SiriusLabel(self, pvname)
+
+                pvname = self.dev_pref.substitute(propty=f'{title}Torque-Mon')
+                lb_torque = SiriusLabel(self, pvname)
             else:
                 wid_stsio = QLabel("-", self)
                 lb_temp = QLabel("-", self)
+                lb_torque = QLabel("-", self)
 
             glay.addWidget(ld_dtl, 0, col)
             glay.addWidget(lb_pos, 1, col)
@@ -609,6 +615,7 @@ class UEDetails(IDCommonDialog):
             glay.addWidget(lb_ncerror, 5, col)
             glay.addWidget(wid_stsio, 6, col)
             glay.addWidget(lb_temp, 7, col)
+            glay.addWidget(lb_torque, 8, col)
 
         gbox.setStyleSheet(
             'QLabel{qproperty-alignment: AlignCenter; max-width: 12em;}')
