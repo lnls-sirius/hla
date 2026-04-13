@@ -181,119 +181,70 @@ class UEControlWindow(IDCommonControlWindow):
         lay.addWidget(self._pb_dtls, row, 0, 1, 2)
         row += 1
 
-        axis_status_labels = {
-            'TOStatusIO-Mon': [
-                'Min SW limit reached',
-                'Max SW limit reached',
-                'Min limit switch activated',
-                'Max limit switch activated',
-                'Min kill switch activated',
-                'Max kill switch activated',
-                'Pneumatic brake released',
-                'Pneumatic brake locked',
-                'Pneumatic brake Worn',
-                'Linear encoder fault',
-                'Driver channel fault'
-            ],
-            'TIStatusIO-Mon': [
-                'Min SW limit reached',
-                'Max SW limit reached',
-                'Min limit switch activated',
-                'Max limit switch activated',
-                'Min kill switch activated',
-                'Max kill switch activated',
-                'Pneumatic brake released',
-                'Pneumatic brake locked',
-                'Pneumatic brake Worn',
-                'Linear encoder fault',
-                'Driver channel fault'
-            ],
-            'BOStatusIO-Mon': [
-                'Min SW limit reached',
-                'Max SW limit reached',
-                'Min limit switch activated',
-                'Max limit switch activated',
-                'Min kill switch activated',
-                'Max kill switch activated',
-                'Pneumatic brake released',
-                'Pneumatic brake locked',
-                'Pneumatic brake Worn',
-                'Linear encoder fault',
-                'Driver channel fault'
-            ],
-            'BIStatusIO-Mon': [
-                'Min SW limit reached',
-                'Max SW limit reached',
-                'Min limit switch activated',
-                'Max limit switch activated',
-                'Min kill switch activated',
-                'Max kill switch activated',
-                'Pneumatic brake released',
-                'Pneumatic brake locked',
-                'Pneumatic brake Worn',
-                'Linear encoder fault',
-                'Driver channel fault'
-            ]
-        }
-
-        servos_lay = QGridLayout()
-        servos_row = 0
-
-        for status, labels in axis_status_labels.items():
-            pvname = self.dev_pref.substitute(propty=status)
-            servo_lbl = status.split('-')[0]
-            lbl = QLabel(
-                servo_lbl, self,
-                alignment=Qt.AlignRight | Qt.AlignVCenter)
-            read_sts = SiriusLedAlert(self, pvname)
-            pbt = QPushButton('', self)
-            pbt.setIcon(qta.icon('fa5s.ellipsis-v'))
-            pbt.setObjectName('sts')
-            pbt.setStyleSheet(
-                '#sts{min-width:18px; max-width:18px; icon-size:20px;}')
-            connect_window(
-                pbt, StatusDetailDialog, pvname=pvname, parent=self,
-                labels=labels, section="ID", title=f'{servo_lbl} Detailed Status')
-            servos_lay.addWidget(lbl, servos_row, 0)
-            servos_lay.addWidget(read_sts, servos_row, 1, alignment=Qt.AlignRight)
-            servos_lay.addWidget(pbt, servos_row, 2, alignment=Qt.AlignLeft)
-            servos_row += 1
-        lay.addLayout(servos_lay, 1, 0, 1, 2, alignment=Qt.AlignHCenter)
+        propty = 'Alarm-Mon'
+        alarm_labels = [
+            'Error',
+            'Power Off',
+            'Software limit disabled',
+            'Hardware limit disabled',
+            'Kill switches enabled',
+            'Emergency stop button',
+            'One or more SW limit reached',
+            'One or more HW limit reached',
+            'One or more kill SW reached',
+        ]
+        pvname = self.dev_pref.substitute(propty=propty)
+        lbl_alarm = QLabel(
+            'Alarm', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        led_alarm = SiriusLedAlert(self, pvname)
+        pbt_alarm = QPushButton('', self)
+        pbt_alarm.setIcon(qta.icon('fa5s.ellipsis-v'))
+        pbt_alarm.setObjectName('sts')
+        pbt_alarm.setStyleSheet(
+            '#sts{min-width:18px; max-width:18px; icon-size:20px;}')
+        connect_window(
+            pbt_alarm, StatusDetailDialog, pvname=pvname, parent=self,
+            labels=alarm_labels, section="ID", title=f'Alarm Details',
+        )
+        alarm_lay = QHBoxLayout()
+        alarm_lay.addStretch()
+        alarm_lay.addWidget(lbl_alarm)
+        alarm_lay.addWidget(led_alarm)
+        alarm_lay.addWidget(pbt_alarm)
+        alarm_lay.addStretch()
+        lay.addLayout(alarm_lay, row, 0, 1, 2)
         row += 1
 
-        status2labels = {
-            'DeviceStatus-Mon': [
-                'Error',
-                'Power Off',
-                'Software limit enabled',
-                'Hardware limit enabled',
-                'Kill switches enabled',
-                'Control enabled',
-                'Moving',
-                'Emergency stop button',
-                'One or more SW limit reached',
-                'One or more HW limit reached',
-                'One or more kill SW reached'
-            ]
-        }
-
-        for dev_sts, label in status2labels.items():
-            pvname = self.dev_pref.substitute(propty=dev_sts)
-            dev_lay = QGridLayout()
-            dev_title = QLabel(f'<h4>{dev_sts}</h4>',
-                               self, alignment=Qt.AlignCenter)
-            dev_lay.addWidget(dev_title, 0, 0, alignment=Qt.AlignCenter)
-            for idx, lbl in enumerate(label):
-                sts_lbl = QLabel(lbl)
-                irow = idx + 1
-                read_sts = SiriusLedAlert(self, pvname, bit=idx)
-                if lbl == "Error":
-                    read_sts.onColor = SiriusLedState.Red
-                else:
-                    read_sts.onColor = SiriusLedState.Yellow
-                dev_lay.addWidget(read_sts, irow, 0)
-                dev_lay.addWidget(sts_lbl, irow, 1)
-        lay.addLayout(dev_lay, row, 0)
+        propty = 'DeviceStatus-Mon'
+        devsts_labels = [
+            'Error',
+            'Power Off',
+            'Software limit disabled',
+            'Hardware limit disabled',
+            'Kill switches enabled',
+            'Control enabled',
+            'Moving',
+            'Emergency stop button',
+            'One or more SW limit reached',
+            'One or more HW limit reached',
+            'One or more kill SW reached',
+        ]
+        pvname = self.dev_pref.substitute(propty=propty)
+        dev_lay = QGridLayout()
+        dev_title = QLabel(f'<h4>{propty}</h4>',
+                            self, alignment=Qt.AlignCenter)
+        dev_lay.addWidget(dev_title, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        for idx, lbl in enumerate(devsts_labels):
+            sts_lbl = QLabel(lbl)
+            irow = idx + 1
+            read_sts = SiriusLedState(self, pvname, bit=idx)
+            if lbl not in ['Control enabled', 'Moving']:
+                read_sts.onColor = SiriusLedState.Red
+            else:
+                read_sts.onColor = SiriusLedState.Yellow
+            dev_lay.addWidget(read_sts, irow, 0)
+            dev_lay.addWidget(sts_lbl, irow, 1)
+        lay.addLayout(dev_lay, row, 0, 1, 2)
 
         return gbox
 
@@ -480,7 +431,7 @@ class UESummaryBase(IDCommonSummaryBase):
     """UE Summary Base Widget."""
 
     MODEL_WIDTHS = (
-        ('Device Status', 4),
+        ('Alarms', 4),
         ('KParam', 6),
         ('Speed', 6),
         ('Start', 4),
@@ -497,9 +448,9 @@ class UESummaryWidget(IDCommonSummaryWidget, UESummaryBase):
 
     def _get_widgets(self, prop):
         wids, orientation = super()._get_widgets(prop)
-        if prop == 'Device Status':
+        if prop == 'Alarms':
             led = SiriusLedAlert(
-                self, self.dev_pref.substitute(propty='DeviceStatus-Mon'))
+                self, self.dev_pref.substitute(propty='Alarm-Mon'))
             wids.append(led)
         elif prop == 'KParam':
             spb = SiriusSpinbox(
@@ -611,14 +562,43 @@ class UEDetails(IDCommonDialog):
                 lb_ncerror = QLabel("-", self)
 
             if title in ["TI", "TO", "BI", "BO"]:
-                pvname = self.dev_pref.substitute(
-                    propty=f'{title}StatusIO-Mon')
-                lb_status = SiriusLabel(self, pvname)
-                pvname = self.dev_pref.substitute(
-                    propty=f'{title}Temp-Mon')
+                propty = f'{title}StatusIO-Mon'
+                pvname = self.dev_pref.substitute(propty=propty)
+                wid_stsio = QWidget()
+                status_labels = [
+                    'Min SW limit reached',
+                    'Max SW limit reached',
+                    'Min limit switch activated',
+                    'Max limit switch activated',
+                    'Min kill switch activated',
+                    'Max kill switch activated',
+                    'Pneumatic brake released',
+                    'Pneumatic brake locked',
+                    'Pneumatic brake Worn',
+                    'Linear encoder fault',
+                    'Driver channel fault'
+                ]
+                pbt_stsio = QPushButton('', self)
+                pbt_stsio.setIcon(qta.icon('fa5s.ellipsis-v'))
+                pbt_stsio.setObjectName('sts')
+                pbt_stsio.setStyleSheet(
+                    '#sts{min-width:18px; max-width:18px; icon-size:20px;}')
+                connect_window(
+                    pbt_stsio, StatusDetailDialog, pvname=pvname, parent=self,
+                    labels=status_labels, section="ID", title=propty,
+                    on_color=SiriusLedAlert.Yellow,
+                    off_color=SiriusLedAlert.DarkGreen,
+                )
+                lb_stsio = SiriusLabel(self, pvname)
+                lay_stsio = QHBoxLayout(wid_stsio)
+                lay_stsio.setContentsMargins(0, 0, 0, 0)
+                lay_stsio.addWidget(lb_stsio, alignment=Qt.AlignRight)
+                lay_stsio.addWidget(pbt_stsio, alignment=Qt.AlignLeft)
+
+                pvname = self.dev_pref.substitute(propty=f'{title}Temp-Mon')
                 lb_temp = SiriusLabel(self, pvname)
             else:
-                lb_status = QLabel("-", self)
+                wid_stsio = QLabel("-", self)
                 lb_temp = QLabel("-", self)
 
             glay.addWidget(ld_dtl, 0, col)
@@ -627,7 +607,7 @@ class UEDetails(IDCommonDialog):
             glay.addWidget(lb_posmax, 3, col)
             glay.addWidget(lb_ncstate, 4, col)
             glay.addWidget(lb_ncerror, 5, col)
-            glay.addWidget(lb_status, 6, col)
+            glay.addWidget(wid_stsio, 6, col)
             glay.addWidget(lb_temp, 7, col)
 
         gbox.setStyleSheet(
