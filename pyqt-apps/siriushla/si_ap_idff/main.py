@@ -545,5 +545,5 @@ class IDFFWindow(SiriusMainWindow):
             self._idffdev.rampup_corr_currents(
                 nrpts=50, time_interval=10, dry_run=False)
         else:
-            # NOTE: lauunch a popup warning window...
+            # NOTE: launch a popup warning window...
             pass

@@ -11,7 +11,7 @@ def get_scrn_list(sec):
     if sec == 'TB':
         return ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
                 'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
-                'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
+                'TB-03:DI-Scrn']
     elif sec == 'BO':
         return ['BO-01D:DI-Scrn-1', 'BO-01D:DI-Scrn-2',
                 'BO-02U:DI-Scrn']
