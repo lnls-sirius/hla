@@ -21,17 +21,14 @@ class UEControlWindow(IDCommonControlWindow):
     """UE Control Window."""
 
     OPERATION_PVS = {
+        "Is Remote": {
+            "StateMon": "IsRemote-Mon"
+        },
         "Power Off": {
             "StateMon": "PowerOff-Mon"
         },
         "Kill Override": {
             "StateMon": "KillOverride-Mon"
-        },
-        "Is Remote": {
-            "StateMon": "IsRemote-Mon"
-        },
-        "Device Status": {
-            "StateMon": "DeviceStatus-Mon"
         },
     }
 
