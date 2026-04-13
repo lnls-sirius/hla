@@ -10,3 +10,4 @@ from .ramps import RampsDetails
 from .rf_inputs import RFInputsDetails
 from .ssa_currents import SSACurrentsDetails
 from .tuning import TuningDetails
+from .temp_variations import TempVariationDetails

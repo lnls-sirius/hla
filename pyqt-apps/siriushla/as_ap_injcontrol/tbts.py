@@ -141,7 +141,6 @@ class TLControlWindow(BaseWindow):
                 ('TB-02:DI-Scrn-1', ('TB-01:PS-CH-2', ), ('TB-01:PS-CV-2', )),
                 ('TB-02:DI-Scrn-2', ('TB-02:PS-CH-1', ), ('TB-02:PS-CV-1', )),
                 ('TB-03:DI-Scrn', ('TB-02:PS-CH-2', ), ('TB-02:PS-CV-2', )),
-                ('TB-04:DI-Scrn', ('TB-04:PS-CH-1', ), ('TB-04:PS-CV-1', ))
             )
         elif self.tl == 'ts':
             devices = (
