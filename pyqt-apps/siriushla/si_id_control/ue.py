@@ -68,20 +68,18 @@ class UEControlWindow(IDCommonControlWindow):
         "Offset Speed": {
             "Mon": "OffsetVelo-Mon"
         },
-        "Speed Setpoint": {
+        "Speed": {
             "SP": "Velo-SP",
-            "Mon": "Velo-Mon",
             "RB": "Velo-RB"
         },
-        "Acc. Setpoint": {
+        "Acc.": {
             "SP": "Acc-SP",
-            "Mon": "Acc-Mon",
             "RB": "Acc-RB"
         },
         "Pol": {
             "SP": "Pol-Sel",
             "Mon": "Pol-Mon",
-            "RB": "Pol-RB"
+            "RB": "Pol-Sts"
         },
         "Moving": {
             "StateMon": "Moving-Mon"
