@@ -56,22 +56,34 @@ class UEControlWindow(IDCommonControlWindow):
         "Offset Speed": {
             "Mon": "OffsetVelo-Mon"
         },
-        "Speed": {
-            "SP": "Velo-SP",
-            "RB": "Velo-RB"
-        },
-        "Acc.": {
-            "SP": "Acc-SP",
-            "RB": "Acc-RB"
-        },
-        "Pol": {
+        "Polarization": {
             "SP": "Pol-Sel",
             "Mon": "Pol-Mon",
             "RB": "Pol-Sts"
         },
+        "Change Polarization": {
+            "Cmd": "PolChange-Cmd",
+            "icon": "fa5s.play"
+        },
+        "Movement Speed": {
+            "SP": "Velo-SP",
+            "RB": "Velo-RB"
+        },
+        "Movement Acceleration": {
+            "SP": "Acc-SP",
+            "RB": "Acc-RB"
+        },
         "Moving": {
             "StateMon": "Moving-Mon"
-        }
+        },
+        "Abort": {
+            "Cmd": "Abort-Cmd",
+            "icon": "fa5s.stop",
+        },
+        "Reset": {
+            "Cmd": "Reset-Cmd",
+            "icon": "fa5s.sync",
+        },
     }
 
     SCANS_PVS = {
@@ -124,43 +136,6 @@ class UEControlWindow(IDCommonControlWindow):
             else:
                 raise NotImplementedError
             row += 1
-
-        self._lb_pol = QLabel(
-            'Change Polarization', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self._pb_pol = PyDMPushButton(
-            self, label='', icon=qta.icon('fa5s.play'))
-        self._pb_pol.channel = self.dev_pref.substitute(propty='PolChange-Cmd')
-        self._pb_pol.pressValue = 1
-        self._pb_pol.setObjectName('Change_Polarization')
-        self._pb_pol.setStyleSheet(
-            '#Change_Polarization{min-width:30px; max-width:30px; icon-size:25px;}')
-
-        self._lb_abort = QLabel(
-            'Abort', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self._pb_abort = PyDMPushButton(
-            self, label='', icon=qta.icon("fa5s.stop"))
-        self._pb_abort.channel = self.dev_pref.substitute(propty='Abort-Cmd')
-        self._pb_abort.pressValue = 1
-        self._pb_abort.setObjectName("Stop")
-        self._pb_abort.setStyleSheet(
-            '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
-
-        self._lb_reset = QLabel(
-            'Reset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self._pb_reset = PyDMPushButton(
-            self, label='', icon=qta.icon('fa5s.sync'))
-        self._pb_reset.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
-        self._pb_reset.pressValue = 100  # Reset
-        self._pb_reset.setObjectName('Reset')
-        self._pb_reset.setStyleSheet(
-            '#Reset{min-width:30px; max-width:30px; icon-size:25px;}')
-
-        lay.addWidget(self._lb_pol, row, 0)
-        lay.addWidget(self._pb_pol, row, 1)
-        lay.addWidget(self._lb_abort, row+1, 0)
-        lay.addWidget(self._pb_abort, row+1, 1)
-        lay.addWidget(self._lb_reset, row+2, 0)
-        lay.addWidget(self._pb_reset, row+2, 1)
 
         return group
 
