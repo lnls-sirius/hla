@@ -2,8 +2,7 @@
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
-    QPushButton, QHBoxLayout, QGridLayout, \
-    QSizePolicy
+    QPushButton, QHBoxLayout, QGridLayout, QVBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -167,11 +166,8 @@ class UEControlWindow(IDCommonControlWindow):
 
     def _statusWidget(self):
         gbox = QGroupBox("Status")
-        gbox.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        lay = QGridLayout(gbox)
-        lay.setVerticalSpacing(15)
-        row = 0
+        lay = QVBoxLayout(gbox)
+        lay.addStretch()
 
         self._pb_dtls = QPushButton(
             "Servo Motors and General Status Details", self)
@@ -179,8 +175,8 @@ class UEControlWindow(IDCommonControlWindow):
         connect_window(
             self._pb_dtls, UEDetails, self,
             prefix=self._prefix, device=self._device)
-        lay.addWidget(self._pb_dtls, row, 0, 1, 2)
-        row += 1
+        lay.addWidget(self._pb_dtls)
+        lay.addStretch()
 
         propty = 'Alarm-Mon'
         alarm_labels = [
@@ -213,8 +209,7 @@ class UEControlWindow(IDCommonControlWindow):
         alarm_lay.addWidget(led_alarm)
         alarm_lay.addWidget(pbt_alarm)
         alarm_lay.addStretch()
-        lay.addLayout(alarm_lay, row, 0, 1, 2)
-        row += 1
+        lay.addLayout(alarm_lay)
 
         warning_opr_lay = QGridLayout()
         propty_pwr = 'PowerOff-Mon'
@@ -231,8 +226,8 @@ class UEControlWindow(IDCommonControlWindow):
         warning_opr_lay.addWidget(ko_lbl, 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         warning_opr_lay.addWidget(ko_led, 1, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
 
-        lay.addLayout(warning_opr_lay, row, 0, 1, 2)
-        row += 1
+        lay.addLayout(warning_opr_lay)
+        lay.addStretch()
 
         propty = 'DeviceStatus-Mon'
         devsts_labels = [
@@ -263,16 +258,14 @@ class UEControlWindow(IDCommonControlWindow):
                 read_sts.onColor = SiriusLedState.Yellow
             dev_lay.addWidget(read_sts, irow, 0)
             dev_lay.addWidget(sts_lbl, irow, 1)
-        lay.addLayout(dev_lay, row, 0, 1, 2)
+        lay.addLayout(dev_lay)
+        lay.addStretch()
 
         return gbox
 
     def _ctrlModeWidget(self):
         gbox = QGroupBox("Operation Status")
-        gbox.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         lay = QGridLayout(gbox)
-        lay.setVerticalSpacing(15)
 
         propty_ir = 'IsRemote-Mon'
         pvname_ir = self.dev_pref.substitute(propty=propty_ir)
