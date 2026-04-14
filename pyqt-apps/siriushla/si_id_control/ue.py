@@ -2,7 +2,8 @@
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
-    QPushButton, QHBoxLayout, QGridLayout, QSizePolicy
+    QPushButton, QHBoxLayout, QGridLayout, \
+    QSizePolicy
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -19,18 +20,6 @@ from .base import IDCommonControlWindow, IDCommonDialog, \
 
 class UEControlWindow(IDCommonControlWindow):
     """UE Control Window."""
-
-    OPERATION_PVS = {
-        "Is Remote": {
-            "StateMon": "IsRemote-Mon"
-        },
-        "Power Off": {
-            "StateMon": "PowerOff-Mon"
-        },
-        "Kill Override": {
-            "StateMon": "KillOverride-Mon"
-        },
-    }
 
     MAIN_CONTROL_PVS = {
         "KParam": {
@@ -137,6 +126,16 @@ class UEControlWindow(IDCommonControlWindow):
                 raise NotImplementedError
             row += 1
 
+        self._lb_pol = QLabel(
+            'Change Polarization', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self._pb_pol = PyDMPushButton(
+            self, label='', icon=qta.icon('fa5s.play'))
+        self._pb_pol.channel = self.dev_pref.substitute(propty='PolChange-Cmd')
+        self._pb_pol.pressValue = 1
+        self._pb_pol.setObjectName('Change_Polarization')
+        self._pb_pol.setStyleSheet(
+            '#Change_Polarization{min-width:30px; max-width:30px; icon-size:25px;}')
+
         self._lb_abort = QLabel(
             'Abort', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self._pb_abort = PyDMPushButton(
@@ -157,10 +156,12 @@ class UEControlWindow(IDCommonControlWindow):
         self._pb_reset.setStyleSheet(
             '#Reset{min-width:30px; max-width:30px; icon-size:25px;}')
 
-        lay.addWidget(self._lb_abort, row, 0)
-        lay.addWidget(self._pb_abort, row, 1)
-        lay.addWidget(self._lb_reset, row+1, 0)
-        lay.addWidget(self._pb_reset, row+1, 1)
+        lay.addWidget(self._lb_pol, row, 0)
+        lay.addWidget(self._pb_pol, row, 1)
+        lay.addWidget(self._lb_abort, row+1, 0)
+        lay.addWidget(self._pb_abort, row+1, 1)
+        lay.addWidget(self._lb_reset, row+2, 0)
+        lay.addWidget(self._pb_reset, row+2, 1)
 
         return group
 
@@ -215,6 +216,24 @@ class UEControlWindow(IDCommonControlWindow):
         lay.addLayout(alarm_lay, row, 0, 1, 2)
         row += 1
 
+        warning_opr_lay = QGridLayout()
+        propty_pwr = 'PowerOff-Mon'
+        pvname_pwr = self.dev_pref.substitute(propty=propty_pwr)
+        pwr_lbl = QLabel("Power Off")
+        pwr_led = SiriusLedAlert(self, pvname_pwr)
+        warning_opr_lay.addWidget(pwr_lbl, 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        warning_opr_lay.addWidget(pwr_led, 0, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+
+        propty_ko = 'KillOverride-Mon'
+        pvname_ko = self.dev_pref.substitute(propty=propty_ko)
+        ko_led = SiriusLedAlert(self, pvname_ko)
+        ko_lbl = QLabel("Kill Override")
+        warning_opr_lay.addWidget(ko_lbl, 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        warning_opr_lay.addWidget(ko_led, 1, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+
+        lay.addLayout(warning_opr_lay, row, 0, 1, 2)
+        row += 1
+
         propty = 'DeviceStatus-Mon'
         devsts_labels = [
             'Error',
@@ -254,24 +273,14 @@ class UEControlWindow(IDCommonControlWindow):
             QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         lay = QGridLayout(gbox)
         lay.setVerticalSpacing(15)
-        row = 0
 
-        for title, pv_info in self.OPERATION_PVS.items():
-            label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            label.setFixedWidth(150)
-            lay.addWidget(label, row, 0)
-
-            if isinstance(pv_info, dict):
-                if "Cmd" in pv_info:
-                    self._createCmdBtns(pv_info, lay, row)
-                elif "StateMon" in pv_info:
-                    self._createLedState(pv_info, lay, row)
-                else:
-                    self._createParam(pv_info, lay, row)
-            else:
-                raise NotImplementedError
-            row += 1
+        propty_ir = 'IsRemote-Mon'
+        pvname_ir = self.dev_pref.substitute(propty=propty_ir)
+        ir_lbl = QLabel("Is Remote")
+        ir_led = SiriusLedState(self, pvname_ir)
+        ir_led.offColor = SiriusLedState.Red
+        lay.addWidget(ir_lbl, 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lay.addWidget(ir_led, 0, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
 
         return gbox
 
