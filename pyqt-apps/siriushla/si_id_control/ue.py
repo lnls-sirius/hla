@@ -335,7 +335,7 @@ class UEControlWindow(IDCommonControlWindow):
         lay = QGridLayout(group)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(scangroup, 0, 0)
-        lay.addWidget(auxgbox, 1, 0)
+        lay.addWidget(auxgbox, 0, 1)
 
         return group
 
@@ -359,7 +359,7 @@ class UEControlWindow(IDCommonControlWindow):
         hlay.addWidget(self.bt_idffglob)
         hlay.addWidget(self.led_idffglob)
         hlay.addStretch()
-        lay.addLayout(hlay, 0, 0, 1, 3)
+        lay.addLayout(hlay, 0, 0)
 
         for col, idffgroup in enumerate(["CHCV", "QS", "LC"]):
             but = QPushButton(f'{idffgroup}', self)
@@ -367,7 +367,13 @@ class UEControlWindow(IDCommonControlWindow):
                 but, ['sirius-hla-si-ap-idff.py', self._device,
                 '-g', idffgroup]
             )
-            lay.addWidget(but, 1, col)
+            lay.addWidget(but, 0, col+1)
+
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(1, 1)
+        lay.setColumnStretch(2, 1)
+        lay.setColumnStretch(3, 1)
+
         return group
 
     def _createCmdBtns(self, pv_info, lay, row):
