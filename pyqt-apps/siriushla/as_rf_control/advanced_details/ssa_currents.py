@@ -170,7 +170,7 @@ class SSACurrentsDetails(SiriusDialog):
                 pv_b_1 = self._substitute_macros(
                     self.prefix+chs_dict['Curr'], hs_num, 'B', i, 1)
                 pv_b_2 = self._substitute_macros(
-                    self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
+                    self.prefix+chs_dict['Curr'], hs_num, 'B', i, 2)
                 if i == 1:
                     self.curr_pvs[hs_num] = [pv_a_1, pv_a_2, pv_b_1, pv_b_2]
                 else:
@@ -210,7 +210,6 @@ class SSACurrentsDetails(SiriusDialog):
                 lb_b_2.setStyleSheet("""
                     background: #349ae3;
                     """)
-
 
                 if row_label == 'left':
                     lay.addWidget(QLabel(
