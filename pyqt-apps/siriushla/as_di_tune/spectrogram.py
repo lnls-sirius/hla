@@ -1,3 +1,8 @@
+"""."""
+
+import logging
+import time as _time
+
 import numpy as np
 
 from qtpy.QtGui import QPalette, QColor
@@ -8,6 +13,7 @@ import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import SiriusSpectrogramView, QSpinBoxPlus
+from siriushla.widgets import SiriusConnectionSignal
 
 
 class BOTuneSpectrogram(SiriusSpectrogramView):
@@ -35,6 +41,12 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         roioffy_channel = self.device.substitute(propty='ROIOffYConv-RB')
         roiwidth_channel = self.device.substitute(propty='ROIWidthConv-RB')
         roiheight_channel = self.device.substitute(propty='ROIHeightConv-RB')
+        self.frame_count_sig = SiriusConnectionSignal(
+            image_channel.substitute(propty='FrameCount-Mon')
+        )
+        self.timing_count_sig = SiriusConnectionSignal(
+            'BO-Glob:TI-TuneProc:NrPulses-RB'
+        )
         super().__init__(parent=parent,
                          image_channel=image_channel,
                          xaxis_channel=xaxis_channel,
@@ -44,6 +56,8 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
                          roiwidth_channel=roiwidth_channel,
                          roiheight_channel=roiheight_channel,
                          background=background)
+        self.redraw_on_xaxis_change = False
+        self.redraw_on_yaxis_change = False
         self.normalizeData = True
         self.ROIColor = QColor('cyan')
         self.format_tooltip = '{0:.3f}, {1:.3f}'
@@ -63,6 +77,9 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
     def process_image(self, image):
         """Process data."""
+        # Wait some time so frame counts can update:
+        _time.sleep(0.2)
+
         # Flip data in X axis
         image = np.flip(image, 0)
 
@@ -80,12 +97,21 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             image = aux
 
         # Manage buffer
-        self.buffer.append(image)
-        if len(self.buffer) > self.nravgs:
-            self.buffer.pop(0)
+        fr_cnt = int(self.frame_count_sig.value or 0)
+        tim_cnt = int(self.timing_count_sig.value or 1)
+        if fr_cnt == tim_cnt:
+            self.buffer.append(image)
+            if len(self.buffer) > self.nravgs:
+                self.buffer.pop(0)
+        else:
+            logging.debug(
+                'Not all acquisition were made. Ignoring current spectrogram'
+            )
         self.buffer_curr_size.emit(str(len(self.buffer)))
 
         # Perform average
+        if not self.buffer:
+            return image
         image = np.mean(self.buffer, axis=0)
 
         # update last data
