@@ -129,7 +129,7 @@ class IDFFWindow(SiriusMainWindow):
             self, self.dev_pref.substitute(propty='TablePointer-Mon'))
 
         lbl_alarm = QLabel('Alarm: ', self)
-        self.alarm_led = SiriusLedState(
+        self.alarm_led = SiriusLedAlert(
             self, self.dev_pref.substitute(propty='Alarms-Mon'))
 
         alarm_details = QPushButton('', self)

@@ -16,7 +16,10 @@ class StatusDetailDialog(SiriusDialog):
 
     def __init__(
             self, pvname='', labels=None, pvname_labels='',
-            section='', parent=None, title=''):
+            section='', parent=None, title='',
+            on_color=SiriusLedAlert.Red,
+            off_color=SiriusLedAlert.LightGreen,
+        ):
         super().__init__(parent)
         try:
             self.pvname = SiriusPVName(pvname)
@@ -28,6 +31,8 @@ class StatusDetailDialog(SiriusDialog):
         self.setObjectName(self.section+'App')
         self.labels = list() if labels is None else labels
         self.title = title
+        self.on_color = on_color
+        self.off_color = off_color
         if not labels:
             labels_pv = pvname_labels or pvname.replace('-Mon', 'Labels-Cte')
             ch = SiriusConnectionSignal(labels_pv)
@@ -55,6 +60,8 @@ class StatusDetailDialog(SiriusDialog):
     def _fillLabels(self):
         for idx, desc in enumerate(self.labels):
             led = SiriusLedAlert(self, self.pvname, bit=idx)
+            led.onColor = self.on_color
+            led.offColor = self.off_color
             lbl = QLabel(desc, self)
             self.layout().addWidget(led, idx+1, 0)
             self.layout().addWidget(lbl, idx+1, 1)
