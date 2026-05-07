@@ -538,8 +538,6 @@ class IDFFWindow(SiriusMainWindow):
         # PVNames to initialize depend whether a soft or hard IDFF
         if issubclass(idffclass, IDFFCtrlSoft):
             props2init_ctrl += ('ConfigName-RB',)
-        else:
-            props2init_ctrl += ('Table-RB',)
         props2init_corrs = ('Current-Mon', 'Current-SP',)
         idffdev = IDFF(
             self._idffname,
