@@ -84,7 +84,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         image = np.flip(image, 0)
 
         # Truncate image
-        if self.nravgs > 1 and len(self.buffer) >= 1:
+        if self.nravgs > 1 and self.buffer:
             last_buff_shape = self.buffer[-1].shape
             image_shape = image.shape
             aux = np.zeros(last_buff_shape)
@@ -137,15 +137,18 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
     def setBufferSize(self, new_size):
         """Set number of averages, or, buffer size."""
-        if new_size >= 1:
-            self.nravgs = new_size
-            while len(self.buffer) > self.nravgs:
-                self.buffer.pop(0)
-            self.buffer_size_changed.emit(self.nravgs)
+        if new_size < 1:
+            return
+        self.nravgs = new_size
+        del self.buffer[:-new_size]
+        self.buffer_size_changed.emit(self.nravgs)
+        self.buffer_curr_size.emit(str(len(self.buffer)))
 
     def resetBuffer(self):
         """Reset buffer."""
         self.buffer = list()
+        self.buffer_size_changed.emit(self.nravgs)
+        self.buffer_curr_size.emit(str(len(self.buffer)))
 
     def getDataIndex(self):
         """Return index of the spectrogram to send in new_data signal."""
@@ -153,7 +156,10 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
     def setIndex2Send(self, new_idx):
         """Set index of the spectrogram to send in new_data signal."""
-        max_idx = self.buffer[-1].shape[0] - 1
+        if self.last_data is None:
+            return
+
+        max_idx = self.last_data.shape[0] - 1
         if new_idx > max_idx:
             self._idx2send = max_idx
         else:
