@@ -115,13 +115,12 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.buffer_curr_size.emit(str(len(self.buffer)))
 
         # Perform average
-        if not self.buffer:
-            return image
-        image = np.mean(self.buffer, axis=0)
+        if self.buffer:
+            image = np.mean(self.buffer, axis=0)
 
         # update last data
         self.last_data = image
-        last_data_size = self.last_data.shape[0]-1
+        last_data_size = image.shape[0]-1
         self.buffer_data_size.emit(last_data_size)
         if not self._idx2send > last_data_size:
             # Emit spectrum data
