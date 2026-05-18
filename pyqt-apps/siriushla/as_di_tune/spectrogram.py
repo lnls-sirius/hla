@@ -47,6 +47,8 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.timing_count_sig = SiriusConnectionSignal(
             'BO-Glob:TI-TuneProc:NrPulses-RB'
         )
+
+        self.needs_update_buffer = False
         super().__init__(parent=parent,
                          image_channel=image_channel,
                          xaxis_channel=xaxis_channel,
@@ -73,6 +75,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             return
         spec_size = self._image_height*self._image_width
         self.image_waveform = new_image[:spec_size]
+        self.needs_update_buffer = True
         self.needs_redraw = True
 
     def process_image(self, image):
@@ -100,9 +103,11 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         fr_cnt = int(self.frame_count_sig.value or 0)
         tim_cnt = int(self.timing_count_sig.value or 1)
         if fr_cnt == tim_cnt:
-            self.buffer.append(image)
-            if len(self.buffer) > self.nravgs:
-                self.buffer.pop(0)
+            if self.needs_update_buffer:
+                self.buffer.append(image)
+                if len(self.buffer) > self.nravgs:
+                    self.buffer.pop(0)
+                self.needs_update_buffer = False
         else:
             logging.debug(
                 'Not all acquisition were made. Ignoring current spectrogram'
@@ -149,6 +154,9 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.buffer = list()
         self.buffer_size_changed.emit(self.nravgs)
         self.buffer_curr_size.emit(str(len(self.buffer)))
+        self.image_waveform *= 0
+        self.needs_update_buffer = False
+        self.needs_redraw = True
 
     def getDataIndex(self):
         """Return index of the spectrogram to send in new_data signal."""
