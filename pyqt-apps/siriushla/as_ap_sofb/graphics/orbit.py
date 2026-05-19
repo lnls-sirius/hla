@@ -336,7 +336,7 @@ class MultiTurnSumWidget(QWidget):
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.circum
+            posx = posx % self._csorb.acc.length
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -466,7 +466,7 @@ class SinglePassSumWidget(QWidget):
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.circum
+            posx = posx % self._csorb.acc.length
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 

@@ -328,7 +328,7 @@ class BaseWidget(QWidget):
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.circum
+            posx = posx % self._csorb.acc.length
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -399,8 +399,8 @@ class BaseWidget(QWidget):
             self._update_enable_list(plane, enbl[:sz], curve, idx)
             nring = sz // bpm_pos.size
             if nring > 1:
-                bpm_pos = [
-                    bpm_pos + i*self._csorb.circum for i in range(nring)]
+                length = self._csorb.acc.length
+                bpm_pos = [bpm_pos + i*length for i in range(nring)]
                 bpm_pos = _np.hstack(bpm_pos)
             curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data[:sz])

@@ -87,7 +87,7 @@ class ShowMatrixWidget(QWidget):
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.circum
+            posx = posx % self._csorb.acc.length
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -111,8 +111,9 @@ class ShowMatrixWidget(QWidget):
 
     def _update_horizontal(self, _):
         val = 1
+        length = self._csorb.acc.length
         bpm_pos = _np.array(self._csorb.bpm_pos)
-        bpm_pos = [bpm_pos + i*self._csorb.circum for i in range(2*val)]
+        bpm_pos = [bpm_pos + i*length for i in range(2*val)]
         bpm_pos = _np.hstack(bpm_pos)
         for i in range(self._csorb.nr_corrs):
             cur = self.graph.curveAtIndex(i)
@@ -126,7 +127,8 @@ class ShowMatrixWidget(QWidget):
             if i == val:
                 dic = {'style': 1, 'width': 3, 'color': '000'}
             pen = mkPen(**dic)
-            line = InfLine(pos=i*self._csorb.circum+bpm_pos[0]/2, pen=pen)
+            length = self._csorb.acc.length
+            line = InfLine(pos=i*length+bpm_pos[0]/2, pen=pen)
             self._inflines.append(line)
             self.graph.addItem(line)
 
