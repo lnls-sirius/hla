@@ -1,3 +1,8 @@
+"""."""
+
+import logging
+import time as _time
+
 import numpy as np
 
 from qtpy.QtGui import QPalette, QColor
@@ -8,6 +13,7 @@ import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import SiriusSpectrogramView, QSpinBoxPlus
+from siriushla.widgets import SiriusConnectionSignal
 
 
 class BOTuneSpectrogram(SiriusSpectrogramView):
@@ -35,6 +41,14 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         roioffy_channel = self.device.substitute(propty='ROIOffYConv-RB')
         roiwidth_channel = self.device.substitute(propty='ROIWidthConv-RB')
         roiheight_channel = self.device.substitute(propty='ROIHeightConv-RB')
+        self.frame_count_sig = SiriusConnectionSignal(
+            image_channel.substitute(propty='FrameCount-Mon')
+        )
+        self.timing_count_sig = SiriusConnectionSignal(
+            'BO-Glob:TI-TuneProc:NrPulses-RB'
+        )
+
+        self.needs_update_buffer = False
         super().__init__(parent=parent,
                          image_channel=image_channel,
                          xaxis_channel=xaxis_channel,
@@ -44,6 +58,8 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
                          roiwidth_channel=roiwidth_channel,
                          roiheight_channel=roiheight_channel,
                          background=background)
+        self.redraw_on_xaxis_change = False
+        self.redraw_on_yaxis_change = False
         self.normalizeData = True
         self.ROIColor = QColor('cyan')
         self.format_tooltip = '{0:.3f}, {1:.3f}'
@@ -59,15 +75,19 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             return
         spec_size = self._image_height*self._image_width
         self.image_waveform = new_image[:spec_size]
+        self.needs_update_buffer = True
         self.needs_redraw = True
 
     def process_image(self, image):
         """Process data."""
+        # Wait some time so frame counts can update:
+        _time.sleep(0.2)
+
         # Flip data in X axis
         image = np.flip(image, 0)
 
         # Truncate image
-        if self.nravgs > 1 and len(self.buffer) >= 1:
+        if self.nravgs > 1 and self.buffer:
             last_buff_shape = self.buffer[-1].shape
             image_shape = image.shape
             aux = np.zeros(last_buff_shape)
@@ -80,17 +100,27 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             image = aux
 
         # Manage buffer
-        self.buffer.append(image)
-        if len(self.buffer) > self.nravgs:
-            self.buffer.pop(0)
+        fr_cnt = int(self.frame_count_sig.value or 0)
+        tim_cnt = int(self.timing_count_sig.value or 1)
+        if fr_cnt == tim_cnt:
+            if self.needs_update_buffer:
+                self.buffer.append(image)
+                if len(self.buffer) > self.nravgs:
+                    self.buffer.pop(0)
+                self.needs_update_buffer = False
+        else:
+            logging.debug(
+                'Not all acquisition were made. Ignoring current spectrogram'
+            )
         self.buffer_curr_size.emit(str(len(self.buffer)))
 
         # Perform average
-        image = np.mean(self.buffer, axis=0)
+        if self.buffer:
+            image = np.mean(self.buffer, axis=0)
 
         # update last data
         self.last_data = image
-        last_data_size = self.last_data.shape[0]-1
+        last_data_size = image.shape[0]-1
         self.buffer_data_size.emit(last_data_size)
         if not self._idx2send > last_data_size:
             # Emit spectrum data
@@ -111,15 +141,21 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
     def setBufferSize(self, new_size):
         """Set number of averages, or, buffer size."""
-        if new_size >= 1:
-            self.nravgs = new_size
-            while len(self.buffer) > self.nravgs:
-                self.buffer.pop(0)
-            self.buffer_size_changed.emit(self.nravgs)
+        if new_size < 1:
+            return
+        self.nravgs = new_size
+        del self.buffer[:-new_size]
+        self.buffer_size_changed.emit(self.nravgs)
+        self.buffer_curr_size.emit(str(len(self.buffer)))
 
     def resetBuffer(self):
         """Reset buffer."""
         self.buffer = list()
+        self.buffer_size_changed.emit(self.nravgs)
+        self.buffer_curr_size.emit(str(len(self.buffer)))
+        self.image_waveform *= 0
+        self.needs_update_buffer = False
+        self.needs_redraw = True
 
     def getDataIndex(self):
         """Return index of the spectrogram to send in new_data signal."""
@@ -127,7 +163,10 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
     def setIndex2Send(self, new_idx):
         """Set index of the spectrogram to send in new_data signal."""
-        max_idx = self.buffer[-1].shape[0] - 1
+        if self.last_data is None:
+            return
+
+        max_idx = self.last_data.shape[0] - 1
         if new_idx > max_idx:
             self._idx2send = max_idx
         else:

@@ -344,6 +344,8 @@ class SiriusSpectrogramView(
 
         # Setup the redraw timer.
         self.needs_redraw = False
+        self.redraw_on_xaxis_change = True
+        self.redraw_on_yaxis_change = True
         self.redraw_timer = QTimer(self)
         self.redraw_timer.timeout.connect(self.redrawImage)
         self._redraw_rate = 30
@@ -604,11 +606,11 @@ class SiriusSpectrogramView(
             return
         logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
         self.image_waveform = new_image
-        self.needs_redraw = True
         if not self._image_height and self._image_width:
             self._image_height = new_image.size/self._image_width
         elif not self._image_width and self._image_height:
             self._image_width = new_image.size/self._image_height
+        self.needs_redraw = True
 
     @Slot(np.ndarray)
     @Slot(float)
@@ -630,7 +632,7 @@ class SiriusSpectrogramView(
             self._image_width = new_array.size
         else:
             self._image_height = new_array.size
-        self.needs_redraw = True
+        self.needs_redraw = self.redraw_on_xaxis_change
 
     @Slot(np.ndarray)
     @Slot(float)
@@ -652,7 +654,7 @@ class SiriusSpectrogramView(
             self._image_width = new_array.size
         else:
             self._image_height = new_array.size
-        self.needs_redraw = True
+        self.needs_redraw = self.redraw_on_yaxis_change
 
     @Slot(int)
     def roioffsetx_value_changed(self, new_offset):
