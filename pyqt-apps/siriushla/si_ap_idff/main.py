@@ -45,29 +45,24 @@ class IDFFWindow(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
         self.idname = _PVName(idname)
-        self._is_llidff = self.idname.dev.startswith(
-            ("IVU", "SIMUL", "VPU", "UE44", )
-        )
-        if self.idname.dev.startswith(("IVU", "SIMUL")):
-            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CHCV")
-        elif self.idname.dev.startswith("VPU"):
-            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CC")
-        elif self.idname.dev.startswith("UE44"):
+        self.idffnames = list(IDSearch.conv_idname_2_idffdevs(self.idname))
+        if len(self.idffnames) > 1:
             if not idffgroup:
-                raise ValueError('idffgroup input need to be defined for UE44')
-            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-{idffgroup}")
+                raise ValueError('idffgroup input need to be defined')
+            for name in self.idffnames:
+                if name.endswith(idffgroup):
+                    self._idffname = name
+        elif len(self.idffnames) == 1:
+            self._idffname = self.idffnames[0]
         else:
-            self._idffname = _PVName(f"SI-{self.idname.sub}:AP-IDFF")
+            raise ValueError(f'no IDFF defined for {self.idname}')
         self.dev_pref = _PVName(self._idffname)
+        self._is_llidff = self.dev_pref.dis == 'BS'
         self._idffdev = self._create_idffdev()
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
-        dis = "BS" if self._is_llidff else "AP"
-        self._idffnickname = _PVName(f"SI-{self.idname.sub}:{dis}-IDFF")
         self._idffgroup = idffgroup
-        if idffgroup:
-            self._idffnickname = self._idffnickname.substitute(idx=idffgroup)
         self.setObjectName('IDApp')
-        self.setWindowTitle(self._idffnickname)
+        self.setWindowTitle(self._idffname)
         self.setWindowIcon(get_idff_icon())
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
@@ -498,7 +493,7 @@ class IDFFWindow(SiriusMainWindow):
             )
         widget = ControlWidgetFactory.factory(
             self, section='SI', device='corrector-idff',
-            subsection=self._idffnickname.sub,
+            subsection=self.dev_pref.sub,
             idffsubgroup=idffsubgroup,
             orientation=Qt.Vertical)
         for wid in widget.get_summary_widgets():
@@ -515,7 +510,7 @@ class IDFFWindow(SiriusMainWindow):
         return gbox
 
     def _create_idffdev(self):
-        idffclass = IDFFCtrl.get_idffclass(self._idffname)
+        idffclass = IDFFCtrl.get_idffclass(self.dev_pref)
         props2init_ctrl = ('LoopState-Sts', )
         # PVNames to initialize depend whether a soft or hard IDFF
         if issubclass(idffclass, IDFFCtrlSoft):

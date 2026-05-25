@@ -88,7 +88,7 @@ class IVUControlWindowUtils():
             "Mon": "Step_Mode"
         }
     }
-    
+
     AUXILIARY_PVS = {
         "Max Speed": {
             "SP": "KParamMaxVelo-SP",
@@ -256,6 +256,7 @@ class IVUSummaryBase(IDCommonSummaryBase):
         ('KParam Speed', 6),
         ('Start', 4),
         ('Stop', 4),
+        ('IDFF Status', 6),
     )
 
 

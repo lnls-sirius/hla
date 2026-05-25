@@ -130,14 +130,21 @@ class IDCommonSummaryBase(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('IDApp')
+        model_headers = list()
+        idff_headers = list()
+        for title, width in self.MODEL_WIDTHS:
+            if 'IDFF' in title:
+                idff_headers.append((title, width))
+            else:
+                model_headers.append((title, width))
         self.prop2width = (
             ('Beamline', 9),
             ('Device', 9),
-        ) + self.MODEL_WIDTHS + (
+        ) + tuple(model_headers) + (
             ('Moving', 4),
             ('BeamLine Enable', 6),
             ('Beamline Control', 4),
-        )
+        ) + tuple(idff_headers)
 
 
 class IDCommonSummaryHeader(IDCommonSummaryBase):
@@ -170,6 +177,7 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
         self._device = _PVName(device)
         self._beamline = IDSearch.conv_idname_2_beamline(self._device)
         self.dev_pref = self._device.substitute(prefix=prefix)
+        self._idffnames = list(IDSearch.conv_idname_2_idffdevs(self._device))
         self._setupUi()
 
     def _get_widgets(self, prop):
@@ -200,6 +208,16 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
             led = SiriusLedState(
                 self, self.dev_pref.substitute(propty='BeamLineCtrl-Mon'))
             wids.append(led)
+        elif prop == 'IDFF Status':
+            leds = QWidget()
+            lay = QHBoxLayout(leds)
+            lay.setContentsMargins(0, 0, 0, 0)
+            for name in self._idffnames:
+                led = SiriusLedState(
+                    self, _PVName(name).substitute(propty='LoopState-Sts'))
+                led.shape = led.Square
+                lay.addWidget(led)
+            wids.append(leds)
         return wids, orientation
 
     def _setupUi(self):
