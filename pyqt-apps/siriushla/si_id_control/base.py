@@ -216,6 +216,7 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
                 led = SiriusLedState(
                     self, _PVName(name).substitute(propty='LoopState-Sts'))
                 led.shape = led.Square
+                led.offColor = led.Red
                 lay.addWidget(led)
             wids.append(leds)
         return wids, orientation
