@@ -18,7 +18,7 @@ from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
 from siriushla.widgets import PyDMLed, SiriusConnectionSignal, QSpinBoxPlus, \
-    SiriusLabel
+    SiriusLabel, SiriusPushButton
 from siriushla.common.cam_basler import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout
@@ -99,13 +99,14 @@ class SiriusScrnView(QWidget):
             QSzPlcy.Expanding, QSzPlcy.Expanding)
         self.calibrationgrid_widget.layout().setAlignment(Qt.AlignHCenter)
         self.tab = QTabWidget(self)
+        self.tab.setObjectName(self.scrn_prefix.sec+'Tab')
         self.tab.setStyleSheet("""
             QTabWidget::pane {
                 border-left: 2px solid gray;
                 border-bottom: 2px solid gray;
                 border-right: 2px solid gray;
             }""")
-        self.tab.addTab(self.settings_widget, 'Camera Settings')
+        self.tab.addTab(self.settings_widget, 'Settings')
         self.tab.addTab(self.calibrationgrid_widget, 'Calibration')
 
         self.statistics_groupBox = QGroupBox('Statistics', self)
@@ -261,6 +262,7 @@ class SiriusScrnView(QWidget):
         return lay
 
     def _settingsLayout(self):
+        # camera settings
         label_CamEnbl = QLabel('Enable: ', self)
         hbox_CamEnbl = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamEnbl',
@@ -314,14 +316,58 @@ class SiriusScrnView(QWidget):
         hbox_aux.addWidget(self.pb_dtl, alignment=Qt.AlignLeft)
         hbox_aux.addWidget(self.pb_details, alignment=Qt.AlignRight)
 
-        lay = QFormLayout()
-        lay.setFormAlignment(Qt.AlignCenter)
-        lay.addRow(label_CamEnbl, hbox_CamEnbl)
-        lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
-        lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
-        lay.addRow(label_CamGain, hbox_CamGain)
-        lay.addRow(label_AutoGain, self.pb_autogain)
-        lay.addRow(label_Reset, hbox_aux)
+        camwid = QWidget()
+        camlay = QFormLayout(camwid)
+        camlay.setFormAlignment(Qt.AlignCenter)
+        camlay.addRow(label_CamEnbl, hbox_CamEnbl)
+        camlay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
+        camlay.addRow(label_CamExposureTime, hbox_CamExposureTime)
+        camlay.addRow(label_CamGain, hbox_CamGain)
+        camlay.addRow(label_AutoGain, self.pb_autogain)
+        camlay.addRow(label_Reset, hbox_aux)
+
+        # motor settings
+        label_motorabspos = QLabel('Absolute Pos.\nReadback:', self)
+        hbox_motorabspos = _create_propty_layout(
+            parent=self, prefix=self.scrn_prefix.substitute(dev='ScrnCtrl'),
+            propty='AbsPos-RB', width=8.0, propty_type='rb', show_units=True)
+
+        label_motorencpos = QLabel('Encoder Pos.:', self)
+        hbox_motorencpos = _create_propty_layout(
+            parent=self, prefix=self.scrn_prefix.substitute(dev='ScrnCtrl'),
+            propty='EncPos', width=8.0, propty_type='mon', show_units=True)
+
+        label_motorhomecmd = QLabel('Do homing:', self)
+        self.pb_motorhomecmd = SiriusPushButton(
+            label='', icon=qta.icon('fa5s.home'),
+            parent=self, pressValue=1, releaseValue=0,
+            init_channel=self.scrn_prefix.substitute(propty='Home-Cmd'))
+        self.pb_motorhomecmd.setObjectName('homing')
+        self.pb_motorhomecmd.setStyleSheet(
+            "#homing{min-width:25px; max-width:25px; icon-size:20px;}")
+
+        label_motorhomests = QLabel('Homing Status:', self)
+        hbox_motorhomests = _create_propty_layout(
+            parent=self, prefix=self.scrn_prefix, propty='HomeDone',
+            width=5.0, propty_type='mon')
+
+        motorwid = QWidget()
+        motorlay = QFormLayout(motorwid)
+        motorlay.setFormAlignment(Qt.AlignCenter)
+        motorlay.addRow(label_motorabspos, hbox_motorabspos)
+        motorlay.addRow(label_motorencpos, hbox_motorencpos)
+        motorlay.addRow(label_motorhomecmd, self.pb_motorhomecmd)
+        motorlay.addRow(label_motorhomests, hbox_motorhomests)
+
+        # global lay
+        self.settings_tab = QTabWidget(self)
+        self.settings_tab.setObjectName(self.scrn_prefix.sec+'Tab')
+        self.settings_tab.addTab(camwid, 'Camera')
+        self.settings_tab.addTab(motorwid, 'Motor')
+
+        lay = QHBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.settings_tab)
         return lay
 
     def _statisticsLayout(self):

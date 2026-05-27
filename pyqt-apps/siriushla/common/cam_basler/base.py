@@ -450,13 +450,14 @@ class SiriusImageView(PyDMImageView):
 
 def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                          layout='hbox', width=7.10, height=1.29,
-                         use_linedit=False):
+                         use_linedit=False, show_units=None):
     """Return a layout that handles a property according to 'propty_type'."""
     if layout == 'hbox':
         layout = QHBoxLayout()
     elif layout == 'vbox':
         layout = QVBoxLayout()
 
+    label = None
     if propty_type == 'sprb':
         if use_linedit:
             sp = PyDMLineEdit(parent, prefix.substitute(
@@ -559,6 +560,20 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             'hval', str(height)))
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
+    elif propty_type == 'rb':
+        label = SiriusLabel(parent, prefix.substitute(
+            propty_name=propty))
+        setattr(parent, 'lb_'+propty, label)
+        label.setStyleSheet("""
+            min-width:wvalem; max-width:wvalem; min-height:hvalem;
+            max-height:hvalem;""".replace('wval', str(width)).replace(
+            'hval', str(height)))
+        label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label)
+
+    if label is not None:
+        if show_units:
+            label.showUnits = show_units
 
     if cmd:
         pb = PyDMPushButton(
