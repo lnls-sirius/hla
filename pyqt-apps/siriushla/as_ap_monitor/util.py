@@ -1,5 +1,6 @@
 """Util module."""
 
+from siriuspy.diagsys.rfdiag.csdev import Const as RFDiagConst
 from siriushla.as_ps_diag.util import \
     get_label2devices as get_pslabel2devices, \
     SEC2LABEL2SECPOS
@@ -13,9 +14,9 @@ def get_label2devices(sec):
         data['RF'] = ['LI-01:RF-SHB', 'LI-01:RF-Kly-1', 'LI-01:RF-Kly-2']
         data['PU'] = ['LI-01:PU-Modltr-1', 'LI-01:PU-Modltr-2']
     elif sec == 'BO':
-        data['RF'] = ['BO-05D:RF-P5Cav', ]
+        data['RF'] = [RFDiagConst.BO_DEV, ]
     elif sec == 'SI':
-        data['RF'] = ['SI-02SB:RF-P7Cav', ]
+        data['RF'] = [RFDiagConst.SIA_DEV, RFDiagConst.SIB_DEV]
 
     return data
 
