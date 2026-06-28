@@ -59,7 +59,7 @@ class _BbBModalAnalysis(QWidget):
             lineStyle=Qt.SolidLine)
         gp_spec.add_marker(
             name='Marker',
-            xchannel=self.prop_pref+'MD_PEAKFREQ',
+            xchannel=self.prop_pref+'MD_FREQ',
             ychannel=self.prop_pref+'MD_PEAK',
             color=QColor('red'), symbol='o')
 
@@ -100,9 +100,9 @@ class _BbBModalAnalysis(QWidget):
 
         # Markers
         ld_rng = QLabel('Range (kHz)', self, alignment=Qt.AlignCenter)
-        le_low = PyDMLineEdit(self, self.prop_pref+'MD_SP_LOW')
-        le_high = PyDMLineEdit(self, self.prop_pref+'MD_SP_HIGH')
-        cb_mode = PyDMEnumComboBox(self, self.prop_pref+'MD_SP_SEARCH')
+        le_low = PyDMLineEdit(self, self.prop_pref+'MD_LOW')
+        le_high = PyDMLineEdit(self, self.prop_pref+'MD_HIGH')
+        cb_mode = PyDMEnumComboBox(self, self.prop_pref+'MD_MODE')
 
         ld_mnum = QLabel('Mode #', self, alignment=Qt.AlignRight)
         lb_mnum = SiriusLabel(self, self.prop_pref+'MD_MAXMODE')
@@ -114,11 +114,11 @@ class _BbBModalAnalysis(QWidget):
         lb_peak = SiriusLabel(self, self.prop_pref+'MD_PEAK')
 
         ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignRight)
-        lb_pfrq = SiriusLabel(self, self.prop_pref+'MD_PEAKFREQ')
+        lb_pfrq = SiriusLabel(self, self.prop_pref+'MD_FREQ')
         lb_pfrq.showUnits = True
 
         ld_tune = QLabel('Tune', self, alignment=Qt.AlignRight)
-        lb_tune = SiriusLabel(self, self.prop_pref+'MD_PEAKTUNE')
+        lb_tune = SiriusLabel(self, self.prop_pref+'MD_TUNE')
 
         gb_mark = QGroupBox('Marker', self)
         lay_mark = QGridLayout(gb_mark)
@@ -360,13 +360,13 @@ class _BbBAcqBase(QWidget):
             lineStyle=Qt.SolidLine)
         gp_avgspe.add_marker(
             name='Marker 1',
-            xchannel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ1',
-            ychannel=self.dev_pref+':'+self.TYPE+'_PEAK1',
+            xchannel=self.dev_pref+':'+self.TYPE+'_M1_FREQ',
+            ychannel=self.dev_pref+':'+self.TYPE+'_M1_PEAK',
             color=QColor('red'), symbol='o')
         gp_avgspe.add_marker(
             name='Marker 2',
-            xchannel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ2',
-            ychannel=self.dev_pref+':'+self.TYPE+'_PEAK2',
+            xchannel=self.dev_pref+':'+self.TYPE+'_M2_FREQ',
+            ychannel=self.dev_pref+':'+self.TYPE+'_M2_PEAK',
             color=QColor('magenta'), symbol='s')
 
         lay_graph = QGridLayout()
@@ -433,25 +433,25 @@ class _BbBAcqBase(QWidget):
         ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignCenter)
         ld_tune = QLabel('Tune', self, alignment=Qt.AlignCenter)
 
-        le_low1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_LOW1')
-        le_high1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_HIGH1')
+        le_low1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_M1_LOW')
+        le_high1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_M1_HIGH')
         cb_mode1 = PyDMEnumComboBox(
-            self, self.dev_pref+':'+self.TYPE+'_SP_SEARCH1')
-        lb_peak1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK1')
+            self, self.dev_pref+':'+self.TYPE+'_M1_MODE')
+        lb_peak1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M1_PEAK')
         lb_peak1.showUnits = True
-        lb_pfrq1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ1')
+        lb_pfrq1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M1_FREQ')
         lb_pfrq1.showUnits = True
-        lb_tune1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE1')
+        lb_tune1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M1_TUNE')
 
-        le_low2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_LOW2')
-        le_high2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_HIGH2')
+        le_low2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_M2_LOW')
+        le_high2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_M2_HIGH')
         cb_mode2 = PyDMEnumComboBox(
-            self, self.dev_pref+':'+self.TYPE+'_SP_SEARCH2')
-        lb_peak2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK2')
+            self, self.dev_pref+':'+self.TYPE+'_M2_MODE')
+        lb_peak2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M2_PEAK')
         lb_peak2.showUnits = True
-        lb_pfrq2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ2')
+        lb_pfrq2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M2_FREQ')
         lb_pfrq2.showUnits = True
-        lb_tune2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE2')
+        lb_tune2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M2_TUNE')
 
         gbox_mark = QGroupBox('Markers', self)
         lay_mark = QGridLayout(gbox_mark)
@@ -710,8 +710,8 @@ class BbBAcqSB(QWidget):
             xchannel=self.dev_pref+':SB_FREQ',
             color=QColor('blue'), lineStyle=Qt.SolidLine)
         gp_mag.add_marker(
-            self.dev_pref+':SB_PEAKFREQ1',
-            self.dev_pref+':SB_PEAK1',
+            self.dev_pref+':SB_M1_FREQ',
+            self.dev_pref+':SB_M1_PEAK',
             name='Mag', color=QColor('magenta'), symbol='o')
 
         gp_phs = WfmGraph(self)
@@ -723,8 +723,8 @@ class BbBAcqSB(QWidget):
             xchannel=self.dev_pref+':SB_FREQ',
             color=QColor('blue'), lineStyle=Qt.SolidLine)
         gp_phs.add_marker(
-            self.dev_pref+':SB_PEAKFREQ1',
-            self.dev_pref+':SB_PHASE1',
+            self.dev_pref+':SB_M1_FREQ',
+            self.dev_pref+':SB_M1_PHASE',
             name='Phs', color=QColor('magenta'), symbol='o')
 
         ld_tfenbl = QLabel('Transfer Function Enable', self)
@@ -799,26 +799,26 @@ class BbBAcqSB(QWidget):
 
         # Marker
         ld_mkspan = QLabel('Span (kHz)', self, alignment=Qt.AlignCenter)
-        le_mklow = PyDMLineEdit(self, self.dev_pref+':SB_SP_LOW1')
-        le_mkhigh = PyDMLineEdit(self, self.dev_pref+':SB_SP_HIGH1')
+        le_mklow = PyDMLineEdit(self, self.dev_pref+':SB_M1_LOW')
+        le_mkhigh = PyDMLineEdit(self, self.dev_pref+':SB_M1_HIGH')
 
         ld_mkmode = QLabel('Mode', self, alignment=Qt.AlignCenter)
-        cb_mkmode = PyDMEnumComboBox(self, self.dev_pref+':SB_SP_SEARCH1')
+        cb_mkmode = PyDMEnumComboBox(self, self.dev_pref+':SB_M1_MODE')
 
         ld_mkfreq = QLabel('Frequency', self, alignment=Qt.AlignCenter)
-        lb_mkfreq = SiriusLabel(self, self.dev_pref+':SB_PEAKFREQ1')
+        lb_mkfreq = SiriusLabel(self, self.dev_pref+':SB_M1_FREQ')
         lb_mkfreq.showUnits = True
 
         ld_mktune = QLabel('Tune', self, alignment=Qt.AlignCenter)
-        lb_mktune = SiriusLabel(self, self.dev_pref+':SB_PEAKTUNE1')
+        lb_mktune = SiriusLabel(self, self.dev_pref+':SB_M1_TUNE')
         lb_mktune.showUnits = True
 
         ld_mkmag = QLabel('Magnitude', self, alignment=Qt.AlignCenter)
-        lb_mkmag = SiriusLabel(self, self.dev_pref+':SB_PEAK1')
+        lb_mkmag = SiriusLabel(self, self.dev_pref+':SB_M1_PEAK')
         lb_mkmag.showUnits = True
 
         ld_mkphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-        lb_mkphs = SiriusLabel(self, self.dev_pref+':SB_PHASE1')
+        lb_mkphs = SiriusLabel(self, self.dev_pref+':SB_M1_PHASE')
         lb_mkphs.showUnits = True
 
         lay = QGridLayout()
