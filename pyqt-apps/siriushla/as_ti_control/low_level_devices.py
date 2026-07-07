@@ -574,8 +574,22 @@ class EVG(BaseWidget):
         dialog.setWindowIcon(self.windowIcon())
         lay = QVBoxLayout(dialog)
 
-        gbox_tim = QGroupBox('Timestamp', self)
-        lay.addWidget(gbox_tim)
+        tstamptab = QTabWidget(self)
+
+        gbox_tim = QGroupBox()
+        tstamptab.addTab(gbox_tim, 'Timestamp')
+
+        props = {
+            'name', 'state', 'event', 'evtcnt', 'evtcntrst'}
+        obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
+        obj_names = [self.device.substitute(propty=o) for o in obj_names]
+        self.otps_wid = EVGOTPList(
+            name=None, parent=self, prefix=self.prefix,
+            props=props, obj_names=obj_names)
+        self.otps_wid.setObjectName('otps_wid')
+        tstamptab.addTab(self.otps_wid, 'OTP')
+
+        lay.addWidget(tstamptab)
 
         lb = QLabel('<b>Get UTC</b>')
         pvname = self.get_pvname('GetUTC-Cmd')
@@ -1415,6 +1429,14 @@ class FOUT(BaseWidget):
         gb = self._create_small_group('', info_wid, (lb, rb))
         info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
 
+        but_opt = QPushButton('OTP', self)
+        but_opt.setToolTip('Open Internal Triggers (OTP) Details')
+        but_opt.setObjectName('but')
+        but_opt.setDefault(False)
+        but_opt.setAutoDefault(False)
+        but_opt.clicked.connect(self._open_otp_dialog)
+        info_lay.addWidget(but_opt, 0, 3, alignment=Qt.AlignCenter)
+
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
         sp = SiriusPushButton(
@@ -1461,6 +1483,31 @@ class FOUT(BaseWidget):
             self.downconn_wind.show()
         else:
             self.downconn_wind.showNormal()
+
+    def _create_otp_dialog(self):
+        dialog = SiriusDialog()
+        dialog.setObjectName('ASApp')
+        dialog.setWindowTitle(self.device + ' OTP')
+        dialog.setWindowIcon(self.windowIcon())
+
+        lay = QVBoxLayout(dialog)
+        props = {
+            'name', 'state', 'event', 'evtcnt', 'evtcntrst'}
+        obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
+        obj_names = [self.device.substitute(propty=o) for o in obj_names]
+        otps_wid = FOUTOTPList(
+            name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
+            props=props, obj_names=obj_names)
+        otps_wid.setObjectName('otps_wid')
+        lay.addWidget(otps_wid)
+        return dialog
+
+    def _open_otp_dialog(self):
+        if not hasattr(self, 'otps_wid'):
+            self.otps_wid = self._create_otp_dialog()
+            self.otps_wid.show()
+        else:
+            self.otps_wid.showNormal()
 
 
 # ###################### Event Receivers ######################
@@ -2583,6 +2630,10 @@ class LLTriggerList(BaseList):
                 devt = EVR
             elif devt == 'EVE':
                 devt = EVE
+            elif devt == 'EVG':
+                devt = EVG
+            elif devt == 'FOUT':
+                devt = FOUT
             else:
                 devt = AFC
             sp = QPushButton(outlb.device_name, self)
@@ -2752,6 +2803,22 @@ class AFCOUTList(LLTriggerList):
         'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
         'pulses', 'delayraw', 'delay', 'dir', 'evtcnt', 'evtcntrst',
         'log', 'hl_trigger')
+
+
+class EVGOTPList(LLTriggerList):
+    """Template for control of Timing devices Internal Triggers."""
+
+    _ALL_PROPS = (
+        'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
+        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'log', 'hl_trigger')
+
+
+class FOUTOTPList(LLTriggerList):
+    """Template for control of Timing devices Internal Triggers."""
+
+    _ALL_PROPS = (
+        'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
+        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'log', 'hl_trigger')
 
 
 # ###################### Digital Inputs ######################
