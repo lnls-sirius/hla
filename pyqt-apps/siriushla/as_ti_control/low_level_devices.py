@@ -678,7 +678,13 @@ class EVG(BaseWidget):
             '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
 
         ld_logrst = QLabel('<b>Reset Log</b>', self)
-        self.sb_logrst = PyDMStateButton(self, self.get_pvname('rstlog'))
+        self.pb_logrst = SiriusPushButton(self,
+                                          init_channel=self.get_pvname('rstlog'),
+                                          pressValue=1, releaseValue=0)
+        self.pb_logrst.setIcon(qta.icon('mdi.restart'))
+        self.pb_logrst.setObjectName('rstbt')
+        self.pb_logrst.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
             '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
@@ -2278,7 +2284,13 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
 
         ld_logrst = QLabel('<b>Reset Log</b>', self)
-        self.sb_logrst = PyDMStateButton(self, self.get_pvname('rstlog'))
+        self.pb_logrst = SiriusPushButton(self,
+                                          init_channel=self.get_pvname('rstlog'),
+                                          pressValue=1, releaseValue=0)
+        self.pb_logrst.setIcon(qta.icon('mdi.restart'))
+        self.pb_logrst.setObjectName('rstbt')
+        self.pb_logrst.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
             '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
