@@ -1203,10 +1203,8 @@ class EventList(BaseList):
             pvname = device.substitute(propty=device.propty+'DelayRaw-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'description':
-            pvname = device.substitute(propty=device.propty+'Desc-SP')
-            sp = PyDMLineEdit(self, init_channel=pvname)
-            pvname = device.substitute(propty=device.propty+'Desc-RB')
-            rb = SiriusLabel(self, init_channel=pvname)
+            pvname = device.substitute(propty=device.propty+'Desc-Cte')
+            sp = SiriusLabel(self, init_channel=pvname)
         elif prop == 'code':
             pvname = device.substitute(propty=device.propty+'Code-Mon')
             sp = SiriusLabel(self, init_channel=pvname)
@@ -1224,14 +1222,16 @@ class ClockList(BaseList):
         'frequency': 4.8,
         'mux_div': 6,
         'mux_enbl': 4.8,
+        'description': 9.7,
         }
     _LABELS = {
         'name': 'Name',
         'frequency': 'Freq. [Hz]',
         'mux_div': 'Mux Divisor',
         'mux_enbl': 'Enabled',
+        'description': 'Description',
         }
-    _ALL_PROPS = ('name', 'mux_enbl', 'frequency', 'mux_div')
+    _ALL_PROPS = ('name', 'mux_enbl', 'frequency', 'mux_div', 'description')
 
     def __init__(self, name=None, parent=None, prefix='',
                  props=set(), obj_names=list(), has_search=False):
@@ -1243,6 +1243,7 @@ class ClockList(BaseList):
         self.setObjectName('ASApp')
 
     def _createObjs(self, device, prop):
+        sp = rb = None
         if prop == 'frequency':
             pvname = device.substitute(propty=device.propty+'Freq-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
@@ -1252,9 +1253,8 @@ class ClockList(BaseList):
             pvname = device.substitute(propty=device.propty+'Freq-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'name':
-            rb = QLabel(device.propty, self)
-            rb.setAlignment(Qt.AlignCenter)
-            return (rb, )
+            sp = QLabel(device.propty, self)
+            sp.setAlignment(Qt.AlignCenter)
         elif prop == 'mux_enbl':
             pvname = device.substitute(propty=device.propty+'MuxEnbl-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
@@ -1265,7 +1265,12 @@ class ClockList(BaseList):
             sp = SiriusSpinbox(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'MuxDiv-RB')
             rb = SiriusLabel(self, init_channel=pvname)
-        return sp, rb
+        elif prop == 'description':
+            pvname = device.substitute(propty=device.propty+'Desc-Cte')
+            sp = SiriusLabel(self, init_channel=pvname)
+        if rb is None:
+            return (sp, )
+        return (sp, rb)
 
 
 # ###################### Event Distributors ######################
