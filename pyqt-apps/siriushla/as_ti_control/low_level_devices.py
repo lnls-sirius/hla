@@ -793,6 +793,15 @@ class EVG(BaseWidget):
         gb_bufevt = self._create_small_group(
             '', gbox_buf, (ld_bufevt, self.tb_bufevt))
 
+        # sync tables vertical scroll
+        tables = [self.tb_bufutc, self.tb_bufsub, self.tb_bufevt]
+        for source in tables:
+            for target in tables:
+                if source is not target:
+                    source.verticalScrollBar().valueChanged.connect(
+                        target.verticalScrollBar().setValue
+                    )
+
         lay_logbuf = QGridLayout(gbox_buf)
         lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
         lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
@@ -2384,6 +2393,15 @@ class _EVR_EVE(BaseWidget):
         self.tb_bufevt = self._create_logbuffer_table('EVENTbuffer')
         gb_bufevt = self._create_small_group(
             '', gbox_buf, (ld_bufevt, self.tb_bufevt))
+
+        # sync tables vertical scroll
+        tables = [self.tb_bufutc, self.tb_bufsub, self.tb_bufevt]
+        for source in tables:
+            for target in tables:
+                if source is not target:
+                    source.verticalScrollBar().valueChanged.connect(
+                        target.verticalScrollBar().setValue
+                    )
 
         lay_logbuf = QGridLayout(gbox_buf)
         lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
