@@ -574,8 +574,26 @@ class EVG(BaseWidget):
         dialog.setWindowIcon(self.windowIcon())
         lay = QVBoxLayout(dialog)
 
+        timestamp_wid = QWidget(self)
+        lay_v = QVBoxLayout(timestamp_wid)
+
+        tstamptab = QTabWidget(self)
+        tstamptab.setObjectName('ASTab')
+        lay.addWidget(tstamptab)
+
+        # OTP
+        props = {
+            'name', 'state', 'event', 'evtcnt', 'evtcntrst'}
+        obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
+        obj_names = [self.device.substitute(propty=o) for o in obj_names]
+        self.otps_wid = EVGOTPList(
+            name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
+            props=props, obj_names=obj_names)
+        self.otps_wid.setObjectName('otps_wid')
+
+        # Timestamp
         gbox_tim = QGroupBox('Timestamp', self)
-        lay.addWidget(gbox_tim)
+        lay_v.addWidget(gbox_tim)
 
         lb = QLabel('<b>Get UTC</b>')
         pvname = self.get_pvname('GetUTC-Cmd')
@@ -631,7 +649,7 @@ class EVG(BaseWidget):
 
         # Timestamp Log enable
         gbox_enbl = QGroupBox('Timestamp Log Enable', self)
-        lay.addWidget(gbox_enbl)
+        lay_v.addWidget(gbox_enbl)
 
         lay_enbl = QGridLayout(gbox_enbl)
         lay_enbl.setHorizontalSpacing(15)
@@ -655,7 +673,7 @@ class EVG(BaseWidget):
 
         # Timestamp Log
         gbox_log = QGroupBox('Timestamp Log', self)
-        lay.addWidget(gbox_log)
+        lay_v.addWidget(gbox_log)
 
         ld_logstp = QLabel('<b>Stop Log</b>', self)
         self.sb_logstp = PyDMStateButton(self, self.get_pvname('stoplog'))
@@ -664,21 +682,16 @@ class EVG(BaseWidget):
             '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
 
         ld_logrst = QLabel('<b>Reset Log</b>', self)
-        self.sb_logrst = PyDMStateButton(self, self.get_pvname('rstlog'))
+        self.pb_logrst = SiriusPushButton(self,
+                                          init_channel=self.get_pvname('rstlog'),
+                                          pressValue=1, releaseValue=0)
+        self.pb_logrst.setIcon(qta.icon('fa5s.sync'))
+        self.pb_logrst.setObjectName('rstbt')
+        self.pb_logrst.setStyleSheet(
+            '#rstbt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
-            '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
-
-        ld_logpul = QLabel('<b>Pull</b>', self)
-        self.bt_logpul = SiriusPushButton(
-            parent=self, init_channel=self.get_pvname('pull'),
-            pressValue=1, releaseValue=0)  # ?
-        self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
-        self.bt_logpul.setObjectName('bt')
-        self.bt_logpul.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        gb_logpul = self._create_small_group(
-            '', gbox_log, (ld_logpul, self.bt_logpul))
+            '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
 
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
         self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
@@ -720,15 +733,14 @@ class EVG(BaseWidget):
         lay_log = QGridLayout(gbox_log)
         lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logpul, 0, 2, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 0, 3, 2, 1, alignment=Qt.AlignCenter)
+        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignTop)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
-        lay.addWidget(gbox_buf)
+        lay_v.addWidget(gbox_buf)
 
         ld_bufcnt = QLabel('<b>Log Count</b>', self)
         self.lb_bufcnt = SiriusLabel(self, self.get_pvname('LOGSOFTCNT'))
@@ -747,25 +759,43 @@ class EVG(BaseWidget):
         gb_bufrst = self._create_small_group(
             '', gbox_buf, (ld_bufrst, self.bt_bufrst))
 
+        ld_enbstp = QLabel('<b>Enable Log Buffer</b>', self)
+        pvname_enbstp_sel = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sel')
+        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
+        pvname_enbstp_sts = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sts')
+        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        gb_enbstp = self._create_small_group(
+            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
+
         ld_bufutc = QLabel('<b>UTC buffer</b>', self)
         fmt = "%d/%m/%y %H:%M:%S"
-        func = _np.vectorize(
-            lambda tstp: _datetime.fromtimestamp(tstp).strftime(fmt)
-            if tstp != 0
-            else 0
-        )  # from timestamp to datetime format
+
+        # from timestamp to datetime format
+        def format_timestamp(tstp):
+            if tstp == 0:
+                return 0
+            return _datetime.fromtimestamp(tstp).strftime(fmt)
+
         self.tb_bufutc = self._create_logbuffer_table(
-            prop='UTCbuffer', transform=func
+            prop='UTCbuffer', transform=format_timestamp
         )
         gb_bufutc = self._create_small_group(
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
         rffreq = _PV("RF-Gen:GeneralFreq-RB").value
-        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)
+
         # from EVG clock to seconds
+        def format_time(clk):
+            value = clk * 4 / rffreq * 1e6
+            return f"{value:,.3f}".replace(",", " ") + " µs"
+
         self.tb_bufsub = self._create_logbuffer_table(
-            prop='SUBSECbuffer', transform=func)
+            prop="SUBSECbuffer",
+            transform=format_time,
+        )
         gb_bufsub = self._create_small_group(
             '', gbox_buf, (ld_bufsub, self.tb_bufsub))
 
@@ -774,12 +804,25 @@ class EVG(BaseWidget):
         gb_bufevt = self._create_small_group(
             '', gbox_buf, (ld_bufevt, self.tb_bufevt))
 
+        # sync tables vertical scroll
+        tables = [self.tb_bufutc, self.tb_bufsub, self.tb_bufevt]
+        for source in tables:
+            for target in tables:
+                if source is not target:
+                    source.verticalScrollBar().valueChanged.connect(
+                        target.verticalScrollBar().setValue
+                    )
+
         lay_logbuf = QGridLayout(gbox_buf)
-        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
-        lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
+        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 2)
+        lay_logbuf.addWidget(gb_bufrst, 0, 2, 1, 2)
+        lay_logbuf.addWidget(gb_enbstp, 0, 4, 1, 2)
         lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
         lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
         lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
+
+        tstamptab.addTab(timestamp_wid, 'Timestamp')
+        tstamptab.addTab(self.otps_wid, 'OTP')
 
         return dialog
 
@@ -1175,10 +1218,8 @@ class EventList(BaseList):
             pvname = device.substitute(propty=device.propty+'DelayRaw-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'description':
-            pvname = device.substitute(propty=device.propty+'Desc-SP')
-            sp = PyDMLineEdit(self, init_channel=pvname)
-            pvname = device.substitute(propty=device.propty+'Desc-RB')
-            rb = SiriusLabel(self, init_channel=pvname)
+            pvname = device.substitute(propty=device.propty+'Desc-Cte')
+            sp = SiriusLabel(self, init_channel=pvname)
         elif prop == 'code':
             pvname = device.substitute(propty=device.propty+'Code-Mon')
             sp = SiriusLabel(self, init_channel=pvname)
@@ -1196,14 +1237,16 @@ class ClockList(BaseList):
         'frequency': 4.8,
         'mux_div': 6,
         'mux_enbl': 4.8,
+        'description': 9.7,
         }
     _LABELS = {
         'name': 'Name',
         'frequency': 'Freq. [Hz]',
         'mux_div': 'Mux Divisor',
         'mux_enbl': 'Enabled',
+        'description': 'Description',
         }
-    _ALL_PROPS = ('name', 'mux_enbl', 'frequency', 'mux_div')
+    _ALL_PROPS = ('name', 'mux_enbl', 'frequency', 'mux_div', 'description')
 
     def __init__(self, name=None, parent=None, prefix='',
                  props=set(), obj_names=list(), has_search=False):
@@ -1215,6 +1258,7 @@ class ClockList(BaseList):
         self.setObjectName('ASApp')
 
     def _createObjs(self, device, prop):
+        sp = rb = None
         if prop == 'frequency':
             pvname = device.substitute(propty=device.propty+'Freq-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
@@ -1224,9 +1268,8 @@ class ClockList(BaseList):
             pvname = device.substitute(propty=device.propty+'Freq-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'name':
-            rb = QLabel(device.propty, self)
-            rb.setAlignment(Qt.AlignCenter)
-            return (rb, )
+            sp = QLabel(device.propty, self)
+            sp.setAlignment(Qt.AlignCenter)
         elif prop == 'mux_enbl':
             pvname = device.substitute(propty=device.propty+'MuxEnbl-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
@@ -1237,7 +1280,12 @@ class ClockList(BaseList):
             sp = SiriusSpinbox(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'MuxDiv-RB')
             rb = SiriusLabel(self, init_channel=pvname)
-        return sp, rb
+        elif prop == 'description':
+            pvname = device.substitute(propty=device.propty+'Desc-Cte')
+            sp = SiriusLabel(self, init_channel=pvname)
+        if rb is None:
+            return (sp, )
+        return (sp, rb)
 
 
 # ###################### Event Distributors ######################
@@ -1415,6 +1463,19 @@ class FOUT(BaseWidget):
         gb = self._create_small_group('', info_wid, (lb, rb))
         info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
 
+        but_otp = QPushButton(self)
+        but_otp.setToolTip('Open OTP Window')
+        but_otp.setIcon(qta.icon('fa5s.ellipsis-v'))
+        but_otp.setObjectName('but')
+        but_otp.setDefault(False)
+        but_otp.setAutoDefault(False)
+        but_otp.setStyleSheet(
+            '#but{min-width:15px; max-width:15px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
+        but_otp.clicked.connect(self._open_otp_dialog)
+        info_lay.addWidget(but_otp, 0, 3, alignment=Qt.AlignTop)
+
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
         sp = SiriusPushButton(
@@ -1461,6 +1522,31 @@ class FOUT(BaseWidget):
             self.downconn_wind.show()
         else:
             self.downconn_wind.showNormal()
+
+    def _create_otp_dialog(self):
+        dialog = SiriusDialog()
+        dialog.setObjectName('ASApp')
+        dialog.setWindowTitle(self.device + ' OTP')
+        dialog.setWindowIcon(self.windowIcon())
+
+        lay = QVBoxLayout(dialog)
+        props = {
+            'name', 'state', 'event', 'evtcnt', 'evtcntrst'}
+        obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
+        obj_names = [self.device.substitute(propty=o) for o in obj_names]
+        otps_wid = FOUTOTPList(
+            name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
+            props=props, obj_names=obj_names)
+        otps_wid.setObjectName('otps_wid')
+        lay.addWidget(otps_wid)
+        return dialog
+
+    def _open_otp_dialog(self):
+        if not hasattr(self, 'otps_wid'):
+            self.otps_wid = self._create_otp_dialog()
+            self.otps_wid.show()
+        else:
+            self.otps_wid.showNormal()
 
 
 # ###################### Event Receivers ######################
@@ -2231,21 +2317,16 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
 
         ld_logrst = QLabel('<b>Reset Log</b>', self)
-        self.sb_logrst = PyDMStateButton(self, self.get_pvname('rstlog'))
+        self.pb_logrst = SiriusPushButton(self,
+                                          init_channel=self.get_pvname('rstlog'),
+                                          pressValue=1, releaseValue=0)
+        self.pb_logrst.setIcon(qta.icon('fa5s.sync'))
+        self.pb_logrst.setObjectName('rstbt')
+        self.pb_logrst.setStyleSheet(
+            '#rstbt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
-            '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
-
-        ld_logpul = QLabel('<b>Pull</b>', self)
-        self.bt_logpul = SiriusPushButton(
-            parent=self, init_channel=self.get_pvname('pull'),
-            pressValue=1, releaseValue=0)  # ?
-        self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
-        self.bt_logpul.setObjectName('bt')
-        self.bt_logpul.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        gb_logpul = self._create_small_group(
-            '', gbox_log, (ld_logpul, self.bt_logpul))
+            '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
 
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
         self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
@@ -2287,11 +2368,10 @@ class _EVR_EVE(BaseWidget):
         lay_log = QGridLayout(gbox_log)
         lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logpul, 0, 2, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 0, 3, 2, 1, alignment=Qt.AlignCenter)
+        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignTop)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
@@ -2313,13 +2393,43 @@ class _EVR_EVE(BaseWidget):
         gb_bufrst = self._create_small_group(
             '', gbox_buf, (ld_bufrst, self.bt_bufrst))
 
+        ld_enbstp = QLabel('<b>Enable Log Buffer</b>', self)
+        pvname_enbstp_sel = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sel')
+        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
+        pvname_enbstp_sts = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sts')
+        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        gb_enbstp = self._create_small_group(
+            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
+
         ld_bufutc = QLabel('<b>UTC buffer</b>', self)
-        self.tb_bufutc = self._create_logbuffer_table('UTCbuffer')
+        fmt = "%d/%m/%y %H:%M:%S"
+
+        # from timestamp to datetime format
+        def format_timestamp(tstp):
+            if tstp == 0:
+                return 0
+            return _datetime.fromtimestamp(tstp).strftime(fmt)
+
+        self.tb_bufutc = self._create_logbuffer_table(
+            prop='UTCbuffer', transform=format_timestamp
+        )
         gb_bufutc = self._create_small_group(
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
-        self.tb_bufsub = self._create_logbuffer_table('SUBSECbuffer')
+        rffreq = _PV("RF-Gen:GeneralFreq-RB").value
+
+        # from EVG clock to seconds
+        def format_time(clk):
+            value = clk * 4 / rffreq * 1e6
+            return f"{value:,.3f}".replace(",", " ") + " µs"
+
+        self.tb_bufsub = self._create_logbuffer_table(
+            prop="SUBSECbuffer",
+            transform=format_time,
+        )
         gb_bufsub = self._create_small_group(
             '', gbox_buf, (ld_bufsub, self.tb_bufsub))
 
@@ -2328,9 +2438,19 @@ class _EVR_EVE(BaseWidget):
         gb_bufevt = self._create_small_group(
             '', gbox_buf, (ld_bufevt, self.tb_bufevt))
 
+        # sync tables vertical scroll
+        tables = [self.tb_bufutc, self.tb_bufsub, self.tb_bufevt]
+        for source in tables:
+            for target in tables:
+                if source is not target:
+                    source.verticalScrollBar().valueChanged.connect(
+                        target.verticalScrollBar().setValue
+                    )
+
         lay_logbuf = QGridLayout(gbox_buf)
-        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
-        lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
+        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 2)
+        lay_logbuf.addWidget(gb_bufrst, 0, 2, 1, 2)
+        lay_logbuf.addWidget(gb_enbstp, 0, 4, 1, 2)
         lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
         lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
         lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
@@ -2583,6 +2703,10 @@ class LLTriggerList(BaseList):
                 devt = EVR
             elif devt == 'EVE':
                 devt = EVE
+            elif devt == 'EVG':
+                devt = EVG
+            elif devt == 'FOUT':
+                devt = FOUT
             else:
                 devt = AFC
             sp = QPushButton(outlb.device_name, self)
@@ -2752,6 +2876,22 @@ class AFCOUTList(LLTriggerList):
         'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
         'pulses', 'delayraw', 'delay', 'dir', 'evtcnt', 'evtcntrst',
         'log', 'hl_trigger')
+
+
+class EVGOTPList(LLTriggerList):
+    """Template for control of Timing devices Internal Triggers."""
+
+    _ALL_PROPS = (
+        'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
+        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'log', 'hl_trigger')
+
+
+class FOUTOTPList(LLTriggerList):
+    """Template for control of Timing devices Internal Triggers."""
+
+    _ALL_PROPS = (
+        'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
+        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'log', 'hl_trigger')
 
 
 # ###################### Digital Inputs ######################

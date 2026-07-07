@@ -11,7 +11,9 @@ class SiriusWaveformTable(PyDMWaveformTable):
     def __init__(self, parent=None, init_channel=None, transform=None):
         """."""
         super().__init__(parent, init_channel)
-        self.transform = transform
+        self.transform = (
+            _np.vectorize(transform) if transform is not None else None
+            )
 
     def value_changed(self, new_waveform):
         """
