@@ -2,10 +2,11 @@
 
 from time import strftime, localtime
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal, QObject, QThread
 from qtpy.QtWidgets import QLabel, QGridLayout, QSizePolicy as QSzPlcy, \
     QWidget, QGroupBox, QHBoxLayout, QVBoxLayout, QPushButton, QSpacerItem, \
-    QRadioButton, QButtonGroup, QStackedWidget
+    QRadioButton, QButtonGroup, QStackedWidget, QSpinBox, QDoubleSpinBox, \
+    QMessageBox
 from qtpy.QtGui import QColor
 
 import qtawesome as qta
@@ -44,29 +45,24 @@ class IDFFWindow(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
         self.idname = _PVName(idname)
-        self._is_llidff = self.idname.dev.startswith(
-            ("IVU", "SIMUL", "VPU", "UE44", )
-        )
-        if self.idname.dev.startswith(("IVU", "SIMUL")):
-            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CHCV")
-        elif self.idname.dev.startswith("VPU"):
-            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CC")
-        elif self.idname.dev.startswith("UE44"):
+        self.idffnames = list(IDSearch.conv_idname_2_idffdevs(self.idname))
+        if len(self.idffnames) > 1:
             if not idffgroup:
-                raise ValueError('idffgroup input need to be defined for UE44')
-            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-{idffgroup}")
+                raise ValueError('idffgroup input need to be defined')
+            for name in self.idffnames:
+                if name.endswith(idffgroup):
+                    self._idffname = name
+        elif len(self.idffnames) == 1:
+            self._idffname = self.idffnames[0]
         else:
-            self._idffname = _PVName(f"SI-{self.idname.sub}:AP-IDFF")
+            raise ValueError(f'no IDFF defined for {self.idname}')
         self.dev_pref = _PVName(self._idffname)
+        self._is_llidff = self.dev_pref.dis == 'BS'
         self._idffdev = self._create_idffdev()
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
-        dis = "BS" if self._is_llidff else "AP"
-        self._idffnickname = _PVName(f"SI-{self.idname.sub}:{dis}-IDFF")
         self._idffgroup = idffgroup
-        if idffgroup:
-            self._idffnickname = self._idffnickname.substitute(idx=idffgroup)
         self.setObjectName('IDApp')
-        self.setWindowTitle(self._idffnickname)
+        self.setWindowTitle(self._idffname)
         self.setWindowIcon(get_idff_icon())
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
@@ -160,6 +156,7 @@ class IDFFWindow(SiriusMainWindow):
         self.timestamp_mon.new_value_signal[float].connect(
             self._format_timestamp_label)
 
+        # graph
         buttonGroupWid = QWidget()
         vlay = QVBoxLayout(buttonGroupWid)
         self.button_group = QButtonGroup(buttonGroupWid)
@@ -189,17 +186,8 @@ class IDFFWindow(SiriusMainWindow):
             self.stack.addWidget(graph)
             self.plot_dict[name] = graph
 
-        self.lb_rampcorr = QLabel('Ramp Corr: ', self)
-        self.btn_rampcorr = QPushButton('', self)
-        self.btn_rampcorr.clicked.connect(
-            lambda: self._ramp_corr())
-        self.btn_rampcorr.setIcon(qta.icon(
-            'mdi.escalator', scale_factor=1.5
-        ))
-        self.btn_rampcorr.setToolTip('Ramp correctors to correct values')
-        self.btn_rampcorr.setObjectName('rmpbtn')
-        self.btn_rampcorr.setStyleSheet(
-            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+        # ramp
+        self.rampcorr_wid = self._setupRampCorrWidget()
 
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
@@ -216,8 +204,7 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.timestamp, 5, 1, 1, 2)
         lay.addWidget(buttonGroupWid, 6, 0)
         lay.addWidget(self.stack, 6, 1, 1, 2)
-        lay.addWidget(self.lb_rampcorr, 7, 0)
-        lay.addWidget(self.btn_rampcorr, 7, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.rampcorr_wid, 7, 0, 1, 3)
 
         return gbox
 
@@ -276,17 +263,6 @@ class IDFFWindow(SiriusMainWindow):
         self.lb_loopfreq = SiriusLabel(
             self, self.dev_pref.substitute(propty='LoopFreq-RB'))
 
-        self.lb_rampcorr = QLabel('Ramp Corr: ', self)
-        self.btn_rampcorr = QPushButton('', self)
-        self.btn_rampcorr.clicked.connect(
-            lambda: self._ramp_corr())
-        self.btn_rampcorr.setIcon(qta.icon(
-            'mdi.escalator', scale_factor=1.5
-        ))
-        self.btn_rampcorr.setToolTip('Ramp correctors to correct values')
-        self.btn_rampcorr.setObjectName('rmpbtn')
-        self.btn_rampcorr.setStyleSheet(
-            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
 
         chnames = IDSearch.conv_idname_2_idff_chnames(self.idname)
         cvnames = IDSearch.conv_idname_2_idff_cvnames(self.idname)
@@ -331,6 +307,8 @@ class IDFFWindow(SiriusMainWindow):
                 lbl.showUnits = True
                 glay_calccorr.addWidget(lbl, row, col)
 
+        # ramp
+        self.rampcorr_wid = self._setupRampCorrWidget()
 
         gbox = QGroupBox('Settings', self)
         lay = QGridLayout(gbox)
@@ -422,8 +400,7 @@ class IDFFWindow(SiriusMainWindow):
 
         lay.addLayout(glay_calccorr, row, 0, 1, 3)
         row += 1
-        lay.addWidget(self.lb_rampcorr, row, 0, alignment=Qt.AlignHCenter)
-        lay.addWidget(self.btn_rampcorr, row, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.rampcorr_wid, row, 0, 1, 3, alignment=Qt.AlignHCenter)
 
         return gbox
 
@@ -516,7 +493,7 @@ class IDFFWindow(SiriusMainWindow):
             )
         widget = ControlWidgetFactory.factory(
             self, section='SI', device='corrector-idff',
-            subsection=self._idffnickname.sub,
+            subsection=self.dev_pref.sub,
             idffsubgroup=idffsubgroup,
             orientation=Qt.Vertical)
         for wid in widget.get_summary_widgets():
@@ -533,7 +510,7 @@ class IDFFWindow(SiriusMainWindow):
         return gbox
 
     def _create_idffdev(self):
-        idffclass = IDFFCtrl.get_idffclass(self._idffname)
+        idffclass = IDFFCtrl.get_idffclass(self.dev_pref)
         props2init_ctrl = ('LoopState-Sts', )
         # PVNames to initialize depend whether a soft or hard IDFF
         if issubclass(idffclass, IDFFCtrlSoft):
@@ -546,23 +523,138 @@ class IDFFWindow(SiriusMainWindow):
         )
         return idffdev
 
+    def _setupRampCorrWidget(self):
+        self.ld_rampcorr = QLabel(
+            '<h4>Ramp Correctors<h4>', self,
+            alignment=Qt.AlignLeft | Qt.AlignBottom
+        )
+        self.ld_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.btn_rampcorr = QPushButton('', self)
+        self.btn_rampcorr.clicked.connect(
+            lambda: self._ramp_corr())
+        self.btn_rampcorr.setIcon(qta.icon(
+            'mdi.escalator', scale_factor=1.5
+        ))
+        self.btn_rampcorr.setToolTip('Ramp correctors to correct values')
+        self.btn_rampcorr.setObjectName('rmpbtn')
+        self.btn_rampcorr.setStyleSheet(
+            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+
+        self.ramp_initial_icon = self.btn_rampcorr.icon()
+        self.ld_rampnrpts = QLabel(
+            "Nr. Points:", self, alignment=Qt.AlignRight
+        )
+        self.sb_rampnrpts = QSpinBox()
+        self.sb_rampnrpts.setRange(1, 10000)
+        self.sb_rampnrpts.setValue(50)
+
+        self.ld_rampintvl = QLabel(
+            "Time Interval [s]:", self, alignment=Qt.AlignRight
+        )
+        self.sb_rampintvl = QDoubleSpinBox()
+        self.sb_rampintvl.setRange(0.1, 1000.0)
+        self.sb_rampintvl.setDecimals(2)
+        self.sb_rampintvl.setValue(10.0)
+
+        wid = QWidget()
+        wid.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Maximum)
+        lay = QGridLayout(wid)
+        lay.addWidget(self.ld_rampcorr, 0, 0, 1, 2)
+        lay.addWidget(self.ld_rampnrpts, 1, 0)
+        lay.addWidget(self.sb_rampnrpts, 1, 1)
+        lay.addWidget(self.ld_rampintvl, 2, 0)
+        lay.addWidget(self.sb_rampintvl, 2, 1)
+        lay.addWidget(
+            self.btn_rampcorr, 3, 0, 1, 2, alignment=Qt.AlignHCenter
+        )
+        return wid
+
     def _ramp_corr(self):
-        # NOTE:
-        # 1 - implement this ramp as a separate thread
-        # 2 - add a time icon to indicate when this therad is running
-        # 3 - add 'nrpts' and 'time_interval' parameters as edit widgets
-        devctrl = self._idffdev.ctrldev
-        if not devctrl.loopstate:
-            # if softidff first must guarantee a config is loaded
-            # from clientconfig
-            is_soft = isinstance(devctrl, IDFFCtrlSoft)
-            if is_soft:
-                configname = devctrl.configname
-                if configname != self._idffdev.idffconfig.name:
-                    self._idffdev.load_config(configname)
-            # run correctors' ramp
-            self._idffdev.rampup_corr_currents(
-                nrpts=50, time_interval=10, dry_run=False)
+        nrpts = self.sb_rampnrpts.value()
+        time_interval = self.sb_rampintvl.value()
+
+        self.thread = QThread()
+        self.worker = RampCorrWorker(
+            self._idffdev, nrpts, time_interval
+        )
+
+        self.worker.moveToThread(self.thread)
+
+        self.thread.started.connect(self.worker.run)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        self.worker.error.connect(self._handle_ramp_error)
+        self.worker.finished.connect(self._ramp_finished)
+
+        self.thread.start()
+
+        self._set_ramp_running(True)
+
+    def _set_ramp_running(self, running: bool):
+        self.btn_rampcorr.setEnabled(not running)
+        self.sb_rampnrpts.setEnabled(not running)
+        self.sb_rampintvl.setEnabled(not running)
+
+        if running:
+            icon = qta.icon('fa5s.spinner', animation=qta.Spin(self))
         else:
-            # NOTE: launch a popup warning window...
-            pass
+            icon = self.ramp_initial_icon
+        self.btn_rampcorr.setIcon(icon)
+
+    def _handle_ramp_error(self, msg):
+        self._set_ramp_running(False)
+
+        if hasattr(self, "_error_popup") and self._error_popup.isVisible():
+            return
+
+        self._error_popup = QMessageBox(self)
+        self._error_popup.setIcon(QMessageBox.Critical)
+        self._error_popup.setWindowTitle("Erro na rampa")
+        self._error_popup.setText("Não foi possível executar a rampa de corretoras.")
+        self._error_popup.setInformativeText(msg)
+        self._error_popup.setStandardButtons(QMessageBox.Ok)
+
+        self._error_popup.show()
+
+    def _ramp_finished(self):
+        self._set_ramp_running(False)
+
+
+class RampCorrWorker(QObject):
+    finished = Signal()
+    error = Signal(str)
+
+    def __init__(self, idffdev, nrpts, time_interval):
+        super().__init__()
+        self._idffdev = idffdev
+        self._nrpts = nrpts
+        self._time_interval = time_interval
+
+    def run(self):
+        try:
+            devctrl = self._idffdev.ctrldev
+            if not devctrl.loopstate:
+                # if softidff first must guarantee a config is loaded
+                # from clientconfig
+                is_soft = isinstance(devctrl, IDFFCtrlSoft)
+                if is_soft:
+                    configname = devctrl.configname
+                    if configname != self._idffdev.idffconfig.name:
+                        self._idffdev.load_config(configname)
+                # run correctors' ramp
+                self._idffdev.rampup_corr_currents(
+                    nrpts=self._nrpts,
+                    time_interval=self._time_interval,
+                    dry_run=False
+                )
+            else:
+                self.error.emit("Loop is running. Cannot ramp.")
+
+        except Exception as e:
+            self.error.emit(str(e))
+
+        finally:
+            self.finished.emit()

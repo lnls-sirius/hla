@@ -397,6 +397,7 @@ class VPUSummaryBase(IDCommonSummaryBase):
         ('Speed', 6),
         ('Start', 4),
         ('Stop', 4),
+        ('IDFF Status', 6),
     )
 
 
