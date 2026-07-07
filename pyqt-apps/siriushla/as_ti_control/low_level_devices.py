@@ -574,22 +574,26 @@ class EVG(BaseWidget):
         dialog.setWindowIcon(self.windowIcon())
         lay = QVBoxLayout(dialog)
 
+        timestamp_wid = QWidget(self)
+        lay_v = QVBoxLayout(timestamp_wid)
+
         tstamptab = QTabWidget(self)
+        tstamptab.setObjectName('ASTab')
+        lay.addWidget(tstamptab)
 
-        gbox_tim = QGroupBox()
-        tstamptab.addTab(gbox_tim, 'Timestamp')
-
+        # OTP
         props = {
             'name', 'state', 'event', 'evtcnt', 'evtcntrst'}
         obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.otps_wid = EVGOTPList(
-            name=None, parent=self, prefix=self.prefix,
+            name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
             props=props, obj_names=obj_names)
         self.otps_wid.setObjectName('otps_wid')
-        tstamptab.addTab(self.otps_wid, 'OTP')
 
-        lay.addWidget(tstamptab)
+        # Timestamp
+        gbox_tim = QGroupBox('Timestamp', self)
+        lay_v.addWidget(gbox_tim)
 
         lb = QLabel('<b>Get UTC</b>')
         pvname = self.get_pvname('GetUTC-Cmd')
@@ -645,7 +649,7 @@ class EVG(BaseWidget):
 
         # Timestamp Log enable
         gbox_enbl = QGroupBox('Timestamp Log Enable', self)
-        lay.addWidget(gbox_enbl)
+        lay_v.addWidget(gbox_enbl)
 
         lay_enbl = QGridLayout(gbox_enbl)
         lay_enbl.setHorizontalSpacing(15)
@@ -669,7 +673,7 @@ class EVG(BaseWidget):
 
         # Timestamp Log
         gbox_log = QGroupBox('Timestamp Log', self)
-        lay.addWidget(gbox_log)
+        lay_v.addWidget(gbox_log)
 
         ld_logstp = QLabel('<b>Stop Log</b>', self)
         self.sb_logstp = PyDMStateButton(self, self.get_pvname('stoplog'))
@@ -681,10 +685,10 @@ class EVG(BaseWidget):
         self.pb_logrst = SiriusPushButton(self,
                                           init_channel=self.get_pvname('rstlog'),
                                           pressValue=1, releaseValue=0)
-        self.pb_logrst.setIcon(qta.icon('mdi.restart'))
+        self.pb_logrst.setIcon(qta.icon('fa5s.sync'))
         self.pb_logrst.setObjectName('rstbt')
         self.pb_logrst.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+            '#rstbt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
             '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
@@ -747,7 +751,7 @@ class EVG(BaseWidget):
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
-        lay.addWidget(gbox_buf)
+        lay_v.addWidget(gbox_buf)
 
         ld_bufcnt = QLabel('<b>Log Count</b>', self)
         self.lb_bufcnt = SiriusLabel(self, self.get_pvname('LOGSOFTCNT'))
@@ -808,6 +812,9 @@ class EVG(BaseWidget):
         lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
         lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
         lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
+
+        tstamptab.addTab(timestamp_wid, 'Timestamp')
+        tstamptab.addTab(self.otps_wid, 'OTP')
 
         return dialog
 
@@ -1448,13 +1455,18 @@ class FOUT(BaseWidget):
         gb = self._create_small_group('', info_wid, (lb, rb))
         info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
 
-        but_opt = QPushButton('OTP', self)
-        but_opt.setToolTip('Open Internal Triggers (OTP) Details')
-        but_opt.setObjectName('but')
-        but_opt.setDefault(False)
-        but_opt.setAutoDefault(False)
-        but_opt.clicked.connect(self._open_otp_dialog)
-        info_lay.addWidget(but_opt, 0, 3, alignment=Qt.AlignCenter)
+        but_otp = QPushButton(self)
+        but_otp.setToolTip('Open OTP Window')
+        but_otp.setIcon(qta.icon('fa5s.ellipsis-v'))
+        but_otp.setObjectName('but')
+        but_otp.setDefault(False)
+        but_otp.setAutoDefault(False)
+        but_otp.setStyleSheet(
+            '#but{min-width:15px; max-width:15px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
+        but_otp.clicked.connect(self._open_otp_dialog)
+        info_lay.addWidget(but_otp, 0, 3, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
@@ -2300,10 +2312,10 @@ class _EVR_EVE(BaseWidget):
         self.pb_logrst = SiriusPushButton(self,
                                           init_channel=self.get_pvname('rstlog'),
                                           pressValue=1, releaseValue=0)
-        self.pb_logrst.setIcon(qta.icon('mdi.restart'))
+        self.pb_logrst.setIcon(qta.icon('fa5s.sync'))
         self.pb_logrst.setObjectName('rstbt')
         self.pb_logrst.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+            '#rstbt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
             '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
