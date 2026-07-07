@@ -693,16 +693,6 @@ class EVG(BaseWidget):
         gb_logrst = self._create_small_group(
             '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
 
-        ld_enbstp = QLabel('<b>Enable Log</b>', self)
-        pvname_enbstp_sel = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sel')
-        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
-        pvname_enbstp_sts = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sts')
-        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
-        gb_enbstp = self._create_small_group(
-            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
-
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
         self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
         self.lb_logcnt.showUnits = True
@@ -743,11 +733,10 @@ class EVG(BaseWidget):
         lay_log = QGridLayout(gbox_log)
         lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_enbstp, 0, 2, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 0, 3, 2, 1, alignment=Qt.AlignCenter)
+        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignTop)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
@@ -770,25 +759,43 @@ class EVG(BaseWidget):
         gb_bufrst = self._create_small_group(
             '', gbox_buf, (ld_bufrst, self.bt_bufrst))
 
+        ld_enbstp = QLabel('<b>Enable Log Buffer</b>', self)
+        pvname_enbstp_sel = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sel')
+        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
+        pvname_enbstp_sts = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sts')
+        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        gb_enbstp = self._create_small_group(
+            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
+
         ld_bufutc = QLabel('<b>UTC buffer</b>', self)
         fmt = "%d/%m/%y %H:%M:%S"
-        func = _np.vectorize(
-            lambda tstp: _datetime.fromtimestamp(tstp).strftime(fmt)
-            if tstp != 0
-            else 0
-        )  # from timestamp to datetime format
+
+        # from timestamp to datetime format
+        def format_timestamp(tstp):
+            if tstp == 0:
+                return 0
+            return _datetime.fromtimestamp(tstp).strftime(fmt)
+
         self.tb_bufutc = self._create_logbuffer_table(
-            prop='UTCbuffer', transform=func
+            prop='UTCbuffer', transform=format_timestamp
         )
         gb_bufutc = self._create_small_group(
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
         rffreq = _PV("RF-Gen:GeneralFreq-RB").value
-        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)
+
         # from EVG clock to seconds
+        def format_time(clk):
+            value = clk * 4 / rffreq * 1e6
+            return f"{value:,.3f}".replace(",", " ") + " µs"
+
         self.tb_bufsub = self._create_logbuffer_table(
-            prop='SUBSECbuffer', transform=func)
+            prop="SUBSECbuffer",
+            transform=format_time,
+        )
         gb_bufsub = self._create_small_group(
             '', gbox_buf, (ld_bufsub, self.tb_bufsub))
 
@@ -807,8 +814,9 @@ class EVG(BaseWidget):
                     )
 
         lay_logbuf = QGridLayout(gbox_buf)
-        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
-        lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
+        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 2)
+        lay_logbuf.addWidget(gb_bufrst, 0, 2, 1, 2)
+        lay_logbuf.addWidget(gb_enbstp, 0, 4, 1, 2)
         lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
         lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
         lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
@@ -2320,16 +2328,6 @@ class _EVR_EVE(BaseWidget):
         gb_logrst = self._create_small_group(
             '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
 
-        ld_enbstp = QLabel('<b>Enable Log</b>', self)
-        pvname_enbstp_sel = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sel')
-        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
-        pvname_enbstp_sts = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sts')
-        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
-        gb_enbstp = self._create_small_group(
-            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
-
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
         self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
         self.lb_logcnt.showUnits = True
@@ -2370,11 +2368,10 @@ class _EVR_EVE(BaseWidget):
         lay_log = QGridLayout(gbox_log)
         lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_enbstp, 0, 2, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 0, 3, 2, 1, alignment=Qt.AlignCenter)
+        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignTop)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
@@ -2396,13 +2393,43 @@ class _EVR_EVE(BaseWidget):
         gb_bufrst = self._create_small_group(
             '', gbox_buf, (ld_bufrst, self.bt_bufrst))
 
+        ld_enbstp = QLabel('<b>Enable Log Buffer</b>', self)
+        pvname_enbstp_sel = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sel')
+        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
+        pvname_enbstp_sts = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sts')
+        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        gb_enbstp = self._create_small_group(
+            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
+
         ld_bufutc = QLabel('<b>UTC buffer</b>', self)
-        self.tb_bufutc = self._create_logbuffer_table('UTCbuffer')
+        fmt = "%d/%m/%y %H:%M:%S"
+
+        # from timestamp to datetime format
+        def format_timestamp(tstp):
+            if tstp == 0:
+                return 0
+            return _datetime.fromtimestamp(tstp).strftime(fmt)
+
+        self.tb_bufutc = self._create_logbuffer_table(
+            prop='UTCbuffer', transform=format_timestamp
+        )
         gb_bufutc = self._create_small_group(
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
-        self.tb_bufsub = self._create_logbuffer_table('SUBSECbuffer')
+        rffreq = _PV("RF-Gen:GeneralFreq-RB").value
+
+        # from EVG clock to seconds
+        def format_time(clk):
+            value = clk * 4 / rffreq * 1e6
+            return f"{value:,.3f}".replace(",", " ") + " µs"
+
+        self.tb_bufsub = self._create_logbuffer_table(
+            prop="SUBSECbuffer",
+            transform=format_time,
+        )
         gb_bufsub = self._create_small_group(
             '', gbox_buf, (ld_bufsub, self.tb_bufsub))
 
@@ -2421,8 +2448,9 @@ class _EVR_EVE(BaseWidget):
                     )
 
         lay_logbuf = QGridLayout(gbox_buf)
-        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
-        lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
+        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 2)
+        lay_logbuf.addWidget(gb_bufrst, 0, 2, 1, 2)
+        lay_logbuf.addWidget(gb_enbstp, 0, 4, 1, 2)
         lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
         lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
         lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
