@@ -687,18 +687,17 @@ class EVG(BaseWidget):
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
-            '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
+            '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
 
-        ld_logpul = QLabel('<b>Pull</b>', self)
-        self.bt_logpul = SiriusPushButton(
-            parent=self, init_channel=self.get_pvname('pull'),
-            pressValue=1, releaseValue=0)  # ?
-        self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
-        self.bt_logpul.setObjectName('bt')
-        self.bt_logpul.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        gb_logpul = self._create_small_group(
-            '', gbox_log, (ld_logpul, self.bt_logpul))
+        ld_enbstp = QLabel('<b>Enable Log</b>', self)
+        pvname_enbstp_sel = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sel')
+        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
+        pvname_enbstp_sts = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sts')
+        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        gb_enbstp = self._create_small_group(
+            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
 
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
         self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
@@ -740,7 +739,7 @@ class EVG(BaseWidget):
         lay_log = QGridLayout(gbox_log)
         lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logpul, 0, 2, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_enbstp, 0, 2, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
@@ -2293,18 +2292,17 @@ class _EVR_EVE(BaseWidget):
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
         gb_logrst = self._create_small_group(
-            '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
+            '', gbox_log, (ld_logrst, self.pb_logrst, self.led_logrst))
 
-        ld_logpul = QLabel('<b>Pull</b>', self)
-        self.bt_logpul = SiriusPushButton(
-            parent=self, init_channel=self.get_pvname('pull'),
-            pressValue=1, releaseValue=0)  # ?
-        self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
-        self.bt_logpul.setObjectName('bt')
-        self.bt_logpul.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        gb_logpul = self._create_small_group(
-            '', gbox_log, (ld_logpul, self.bt_logpul))
+        ld_enbstp = QLabel('<b>Enable Log</b>', self)
+        pvname_enbstp_sel = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sel')
+        self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
+        pvname_enbstp_sts = self.device.substitute(
+            propty=self.device.propty+'StopSoftLog-Sts')
+        self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        gb_enbstp = self._create_small_group(
+            '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
 
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
         self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
@@ -2346,7 +2344,7 @@ class _EVR_EVE(BaseWidget):
         lay_log = QGridLayout(gbox_log)
         lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logpul, 0, 2, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_enbstp, 0, 2, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
