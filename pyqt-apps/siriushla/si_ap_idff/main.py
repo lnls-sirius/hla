@@ -61,6 +61,7 @@ class IDFFWindow(SiriusMainWindow):
         self._idffdev = self._create_idffdev()
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
         self._idffgroup = idffgroup
+        self._is_rampup = None
         self.setObjectName('IDApp')
         self.setWindowTitle(self._idffname)
         self.setWindowIcon(get_idff_icon())
@@ -536,7 +537,6 @@ class IDFFWindow(SiriusMainWindow):
         self.btn_rampupcorr.setIcon(qta.icon(
             'mdi.escalator', scale_factor=1.5
         ))
-
         self.btn_rampupcorr.setToolTip('Ramp correctors to correct values')
         self.btn_rampupcorr.setObjectName('rmpupbtn')
         self.btn_rampupcorr.setStyleSheet(
@@ -548,13 +548,13 @@ class IDFFWindow(SiriusMainWindow):
         self.btn_rampdowncorr.setIcon(qta.icon(
             'mdi.escalator-down', scale_factor=1.5
         ))
-
         self.btn_rampdowncorr.setToolTip('Ramp correctors to zero values')
         self.btn_rampdowncorr.setObjectName('rmpdownbtn')
         self.btn_rampdowncorr.setStyleSheet(
             '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        self.ramp_initial_icon = self.btn_rampupcorr.icon()
+        self.rampup_initial_icon = self.btn_rampupcorr.icon()
+        self.rampdown_initial_icon = self.btn_rampdowncorr.icon()
 
         self.lb_rampnrpts = QLabel(
             "Nr. Points:", self, alignment=Qt.AlignRight
@@ -563,7 +563,7 @@ class IDFFWindow(SiriusMainWindow):
         self.sb_rampnrpts.setRange(1, 10000)
         self.sb_rampnrpts.setValue(50)
 
-        self.ld_rampintvl = QLabel(
+        self.lb_rampintvl = QLabel(
             "Time Interval [s]:", self, alignment=Qt.AlignRight
         )
         self.sb_rampintvl = QDoubleSpinBox()
@@ -571,10 +571,10 @@ class IDFFWindow(SiriusMainWindow):
         self.sb_rampintvl.setDecimals(2)
         self.sb_rampintvl.setValue(10.0)
 
-        self.ld_rampupcorr = QLabel(
+        self.lb_rampupcorr = QLabel(
             "Ramp-up:", self, alignment=Qt.AlignRight
         )
-        self.ld_rampdowncorr = QLabel(
+        self.lb_rampdowncorr = QLabel(
             "Ramp-down:", self, alignment=Qt.AlignRight
         )
 
@@ -584,11 +584,11 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rampcorr, 0, 0, 1, 2)
         lay.addWidget(self.lb_rampnrpts, 1, 0)
         lay.addWidget(self.sb_rampnrpts, 1, 1)
-        lay.addWidget(self.ld_rampintvl, 2, 0)
+        lay.addWidget(self.lb_rampintvl, 2, 0)
         lay.addWidget(self.sb_rampintvl, 2, 1)
-        lay.addWidget(self.ld_rampupcorr, 3, 0)
+        lay.addWidget(self.lb_rampupcorr, 3, 0)
         lay.addWidget(self.btn_rampupcorr, 3, 1, alignment=Qt.AlignHCenter)
-        lay.addWidget(self.ld_rampdowncorr, 4, 0)
+        lay.addWidget(self.lb_rampdowncorr, 4, 0)
         lay.addWidget(self.btn_rampdowncorr, 4, 1, alignment=Qt.AlignHCenter)
         # lay.addWidget(
         #     self.btn_rampcorr, 3, 0, 1, 2, alignment=Qt.AlignHCenter
@@ -597,9 +597,10 @@ class IDFFWindow(SiriusMainWindow):
 
     def _ramp_corr(self, is_rampup):
 
-        if not self.sb_rampnrpts.isEnabled:
+        if self._is_rampup is not None:
             return
 
+        self._is_rampup = is_rampup
         nrpts = self.sb_rampnrpts.value()
         time_interval = self.sb_rampintvl.value()
 
@@ -629,11 +630,16 @@ class IDFFWindow(SiriusMainWindow):
         self.sb_rampnrpts.setEnabled(not running)
         self.sb_rampintvl.setEnabled(not running)
 
+        button = \
+            self.btn_rampupcorr if self._is_rampup else self.btn_rampdowncorr
+
         if running:
             icon = qta.icon('fa5s.spinner', animation=qta.Spin(self))
         else:
-            icon = self.ramp_initial_icon
-        self.btn_rampupcorr.setIcon(icon)
+            icon = self.rampup_initial_icon \
+                if self._is_rampup else self.rampdown_initial_icon
+
+        button.setIcon(icon)
 
     def _handle_ramp_error(self, msg):
         self._set_ramp_running(False)
@@ -652,6 +658,7 @@ class IDFFWindow(SiriusMainWindow):
 
     def _ramp_finished(self):
         self._set_ramp_running(False)
+        self._is_rampup = None  # indicates ramp is not running
 
 
 class RampCorrWorker(QObject):
