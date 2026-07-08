@@ -2,7 +2,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QPushButton, QVBoxLayout, QSpacerItem, QSizePolicy as QSzPly, \
-    QHBoxLayout
+    QHBoxLayout, QTabWidget
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 
@@ -12,7 +12,7 @@ from siriuspy.opticscorr.csdev import Const as _Const
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusSpinbox, \
-    PyDMStateButton, SiriusLabel
+    PyDMStateButton, SiriusLabel, SiriusLedState
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from .details import CorrParamsDetailWindow as _CorrParamsDetailWindow
 from .custom_widgets import StatusLed as _StatusLed, \
@@ -76,16 +76,16 @@ class OpticsCorrWindow(SiriusMainWindow):
             self.pb_updref = PyDMPushButton(
                 self, label='Update Reference', pressValue=1,
                 init_channel=self.ioc_prefix.substitute(propty='SetNewRefKL-Cmd'))
-            self.pb_updref.setStyleSheet('min-height:2.4em; max-height:2.4em;')
-            lay_optics.addWidget(self.pb_updref, 0, 0, 1, 2)
-            lay_optics.addWidget(self.gb_optprm, 1, 0)
-
             if self.acc == 'SI':
+                self.pb_updref.setStyleSheet('min-height:2.4em; max-height:2.4em; margin-top:1em;')
                 self.gb_digmon = QGroupBox('Tune Monitor', self)
                 self.gb_digmon.setLayout(self._setupDigMonLayout())
-                lay_optics.addWidget(self.gb_digmon, 1, 1)
-                lay_optics.setColumnStretch(0, 3)
-                lay_optics.setColumnStretch(1, 1)
+                self.gb_corr = QGroupBox('Correction', self)
+                self.gb_corr.setLayout(self._setupCorrectionLayout())
+            else:
+                self.pb_updref.setStyleSheet('min-height:2.4em; max-height:2.4em;')
+                lay_optics.addWidget(self.pb_updref, 0, 0, 1, 2)
+                lay_optics.addWidget(self.gb_optprm, 1, 0)
         else:
             lay_optics.addWidget(self.gb_optprm, 0, 0)
 
@@ -99,20 +99,29 @@ class OpticsCorrWindow(SiriusMainWindow):
         cwt = QWidget()
         self.setCentralWidget(cwt)
         if self.acc == 'SI':
-            vlay1 = QVBoxLayout()
-            vlay1.setAlignment(Qt.AlignTop)
-            vlay1.addWidget(self.wid_optics)
-            vlay1.addWidget(self.gb_fams)
+            def vbox(*ws):
+                _lay = QVBoxLayout()
+                _lay.setAlignment(Qt.AlignTop)
+                for w in ws:
+                    _lay.addWidget(w)
+                return _lay
             lay = QGridLayout(cwt)
-            lay.addWidget(label, 0, 0, 1, 2)
-            lay.addLayout(vlay1, 1, 0, alignment=Qt.AlignTop)
-            lay.addWidget(self.gb_iocctrl, 1, 1)
-            lay.addWidget(self.gb_status, 2, 0, 1, 2)
+            if self.param == 'tune':
+                lay.addWidget(label, 0, 0, 1, 3)
+                lay.addLayout(vbox(self.gb_status, self.gb_fams), 1, 0)
+                lay.addWidget(self.gb_iocctrl, 1, 1)
+                lay.addLayout(vbox(self.gb_digmon, self.gb_corr), 1, 2)
+                lay.setColumnStretch(2, 1)
+            else:
+                lay.addWidget(label, 0, 0, 1, 2)
+                lay.addLayout(vbox(self.wid_optics, self.gb_fams), 1, 0)
+                lay.addWidget(self.gb_iocctrl, 1, 1)
+                lay.addWidget(self.gb_status, 2, 0, 1, 2)
+                lay.setRowStretch(2, 5)
             lay.setColumnStretch(0, 1)
             lay.setColumnStretch(1, 1)
             lay.setRowStretch(0, 1)
             lay.setRowStretch(1, 15)
-            lay.setRowStretch(2, 5)
         else:
             lay = QVBoxLayout(cwt)
             lay.addWidget(label)
@@ -163,6 +172,7 @@ class OpticsCorrWindow(SiriusMainWindow):
                 propty='ApplyDelta-Cmd'))
 
         lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self.lb_sp, 0, 1)
         lay.addWidget(self.lb_rb, 0, 2)
         lay.addWidget(self.lb_x, 1, 0)
@@ -240,6 +250,94 @@ class OpticsCorrWindow(SiriusMainWindow):
         lay.addWidget(self.lb_tuney, 1, 1)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 5)
+        return lay
+
+    def _setupCorrectionLayout(self):
+
+        lay = QVBoxLayout()
+
+        hbl = QHBoxLayout()
+        lbl = QLabel('Auto Correction State:', self.gb_corr)
+
+        wid = QWidget(self.gb_corr)
+
+        widlay = QHBoxLayout(wid)
+        spsw = PyDMStateButton(wid, 'Glob:Test:LoopState-Sel')
+        rdbl = SiriusLedState(wid, 'Glob:Test:LoopState-Sts')
+        widlay.addWidget(spsw)
+        widlay.addWidget(rdbl)
+
+        hbl.addWidget(lbl)
+        hbl.addWidget(wid)
+        lay.addLayout(hbl)
+
+        corr_tab = QTabWidget()
+        corr_tab.setObjectName(self.acc+'Tab')
+        lay.addWidget(corr_tab)
+
+        # Loop ################################################################
+        self.wid_atcr = QWidget()
+        lay_atcr = QVBoxLayout(self.wid_atcr)
+        lay_atcr.setAlignment(Qt.AlignTop)
+
+        lay_atcr.addWidget(QLabel('<h4>General</h4>', self.wid_atcr))
+
+        freqbar = QHBoxLayout()
+        freqbar.setContentsMargins(0, 0, 0, 0)
+        freqpvn = 'Glob:Test:LoopFreq'
+        freqbar.addWidget(QLabel('Frequency [Hz]', self.wid_atcr))
+        freqbar.addWidget(SiriusSpinbox(self.wid_atcr, freqpvn+'-SP'))
+        freqrb = SiriusLabel(self.wid_atcr, freqpvn+'-RB')
+        freqrb.setAlignment(Qt.AlignCenter)
+        freqbar.addWidget(freqrb)
+        lay_atcr.addLayout(freqbar)
+
+        aplfacbar = QHBoxLayout()
+        aplfacbar.setContentsMargins(0, 0, 0, 0)
+        aplfacpvn = 'Glob:Test:LoopApplyFactor'
+        aplfacbar.addWidget(QLabel('Apply Factor', self.wid_atcr))
+        aplfacbar.addWidget(SiriusSpinbox(self.wid_atcr, aplfacpvn+'-SP'))
+        aplfacrb = SiriusLabel(self.wid_atcr, aplfacpvn+'-RB')
+        aplfacrb.setAlignment(Qt.AlignCenter)
+        aplfacbar.addWidget(aplfacrb)
+        lay_atcr.addLayout(aplfacbar)
+
+        lay_atcr.addWidget(QLabel('<h4>PID</h4>', self.wid_atcr))
+
+        hpl = QGridLayout()
+        _qtal = Qt.AlignCenter
+        hpl.addWidget(
+            QLabel('<h4>Kp</h4>', self.wid_atcr, alignment=_qtal), 0, 1
+        )
+        hpl.addWidget(
+            QLabel('<h4>Ki</h4>', self.wid_atcr, alignment=_qtal), 0, 2
+        )
+        hpl.addWidget(
+            QLabel('<h4>Kd</h4>', self.wid_atcr, alignment=_qtal), 0, 3
+        )
+        hpl.addWidget(
+            QLabel('<h4>X</h4>', self.wid_atcr, alignment=_qtal), 1, 0
+        )
+        hpl.addWidget(
+            QLabel('<h4>Y</h4>', self.wid_atcr, alignment=_qtal), 2, 0
+        )
+        pvn = 'Glob:Test:LoopPID'
+        for i, k in enumerate(('Kp', 'Ki', 'Kd'), 1):
+            hpl.addWidget(SiriusSpinbox(self.wid_atcr, pvn+'X'+k+'-SP'), 1, i)
+            hpl.addWidget(SiriusSpinbox(self.wid_atcr, pvn+'Y'+k+'-SP'), 2, i)
+        for j in range(4):
+            hpl.setColumnStretch(j, 1 if j == 0 else 5)
+        lay_atcr.addLayout(hpl)
+        corr_tab.addTab(self.wid_atcr, 'Loop')
+
+        # Manual ##############################################################
+        self.wid_optics = QWidget()
+        lay_optics = QGridLayout(self.wid_optics)
+        lay_optics.setContentsMargins(0, 0, 0, 0)
+        lay_optics.addWidget(self.pb_updref, 0, 0, 1, 2)
+        lay_optics.addWidget(self.gb_optprm, 1, 0)
+        corr_tab.addTab(self.wid_optics, 'Manual')
+
         return lay
 
     def _setupFamiliesLayout(self):
