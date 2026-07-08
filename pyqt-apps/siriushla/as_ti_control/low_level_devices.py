@@ -1168,7 +1168,7 @@ class EventList(BaseList):
 
     _MIN_WIDs = {
         'ext_trig': 4, 'mode': 6.6, 'delay_type': 4.2, 'delay': 5.2,
-        'delayraw': 5.2, 'description': 9.7, 'code': 3.2, 'name': 4.8,
+        'delayraw': 5.2, 'description': 7, 'code': 3.2, 'name': 4.8,
         }
     _LABELS = {
         'ext_trig': 'Trig.', 'mode': 'Mode', 'description': 'Description',
@@ -1222,6 +1222,7 @@ class EventList(BaseList):
         elif prop == 'description':
             pvname = device.substitute(propty=device.propty+'Desc-Cte')
             sp = SiriusLabel(self, init_channel=pvname)
+            sp.setAlignment(Qt.AlignCenter)
         elif prop == 'code':
             pvname = device.substitute(propty=device.propty+'Code-Mon')
             sp = SiriusLabel(self, init_channel=pvname)
@@ -1239,7 +1240,7 @@ class ClockList(BaseList):
         'frequency': 4.8,
         'mux_div': 6,
         'mux_enbl': 4.8,
-        'description': 9.7,
+        'description': 7,
         }
     _LABELS = {
         'name': 'Name',
@@ -1285,6 +1286,7 @@ class ClockList(BaseList):
         elif prop == 'description':
             pvname = device.substitute(propty=device.propty+'Desc-Cte')
             sp = SiriusLabel(self, init_channel=pvname)
+            sp.setAlignment(Qt.AlignCenter)
         if rb is None:
             return (sp, )
         return (sp, rb)
