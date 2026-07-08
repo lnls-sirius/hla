@@ -678,6 +678,7 @@ class EVG(BaseWidget):
         ld_logen = QLabel('<b>Enable Log</b>', self)
         self.sb_logen = PyDMStateButton(self, self.get_pvname('EnableLog-Sel'))
         self.led_logen = SiriusLedState(self, self.get_pvname('EnableLog-Sts'))
+        self.led_logen.offColor = self.led_logen.Red
         gb_logen = self._create_small_group(
             '', gbox_log, (ld_logen, self.sb_logen, self.led_logen))
 
@@ -766,6 +767,7 @@ class EVG(BaseWidget):
         pvname_enbstp_sts = self.device.substitute(
             propty=self.device.propty+'EnableLogBuff-Sts')
         self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        self.led_enbstp.offColor = self.led_enbstp.Red
         gb_enbstp = self._create_small_group(
             '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
 
@@ -2313,6 +2315,7 @@ class _EVR_EVE(BaseWidget):
         ld_logen = QLabel('<b>Enable Log</b>', self)
         self.sb_logen = PyDMStateButton(self, self.get_pvname('EnableLog-Sel'))
         self.led_logen = SiriusLedState(self, self.get_pvname('EnableLog-Sts'))
+        self.led_logen.offColor = self.led_logen.Red
         gb_logen = self._create_small_group(
             '', gbox_log, (ld_logen, self.sb_logen, self.led_logen))
 
@@ -2400,6 +2403,7 @@ class _EVR_EVE(BaseWidget):
         pvname_enbstp_sts = self.device.substitute(
             propty=self.device.propty+'EnableLogBuff-Sts')
         self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        self.led_enbstp.offColor = self.led_enbstp.Red
         gb_enbstp = self._create_small_group(
             '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
 
