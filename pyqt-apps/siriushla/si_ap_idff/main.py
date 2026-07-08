@@ -524,11 +524,11 @@ class IDFFWindow(SiriusMainWindow):
         return idffdev
 
     def _setupRampCorrWidget(self):
-        self.ld_rampcorr = QLabel(
+        self.lb_rampcorr = QLabel(
             '<h4>Ramp Correctors<h4>', self,
             alignment=Qt.AlignLeft | Qt.AlignBottom
         )
-        self.ld_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.lb_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 
         self.btn_rampupcorr = QPushButton('', self)
         self.btn_rampupcorr.clicked.connect(
@@ -556,7 +556,7 @@ class IDFFWindow(SiriusMainWindow):
 
         self.ramp_initial_icon = self.btn_rampupcorr.icon()
 
-        self.ld_rampnrpts = QLabel(
+        self.lb_rampnrpts = QLabel(
             "Nr. Points:", self, alignment=Qt.AlignRight
         )
         self.sb_rampnrpts = QSpinBox()
@@ -581,8 +581,8 @@ class IDFFWindow(SiriusMainWindow):
         wid = QWidget()
         wid.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Maximum)
         lay = QGridLayout(wid)
-        lay.addWidget(self.ld_rampcorr, 0, 0, 1, 2)
-        lay.addWidget(self.ld_rampnrpts, 1, 0)
+        lay.addWidget(self.lb_rampcorr, 0, 0, 1, 2)
+        lay.addWidget(self.lb_rampnrpts, 1, 0)
         lay.addWidget(self.sb_rampnrpts, 1, 1)
         lay.addWidget(self.ld_rampintvl, 2, 0)
         lay.addWidget(self.sb_rampintvl, 2, 1)
