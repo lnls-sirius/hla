@@ -540,7 +540,7 @@ class IDFFWindow(SiriusMainWindow):
         self.btn_rampupcorr.setToolTip('Ramp correctors to correct values')
         self.btn_rampupcorr.setObjectName('rmpupbtn')
         self.btn_rampupcorr.setStyleSheet(
-            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+            '#rmpbtnup{min-width:25px; max-width:25px; icon-size:20px;}')
 
         self.btn_rampdowncorr = QPushButton('', self)
         self.btn_rampdowncorr.clicked.connect(
@@ -551,7 +551,7 @@ class IDFFWindow(SiriusMainWindow):
         self.btn_rampdowncorr.setToolTip('Ramp correctors to zero values')
         self.btn_rampdowncorr.setObjectName('rmpdownbtn')
         self.btn_rampdowncorr.setStyleSheet(
-            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+            '#rmpbtndown{min-width:25px; max-width:25px; icon-size:20px;}')
 
         self.rampup_initial_icon = self.btn_rampupcorr.icon()
         self.rampdown_initial_icon = self.btn_rampdowncorr.icon()
