@@ -529,18 +529,33 @@ class IDFFWindow(SiriusMainWindow):
             alignment=Qt.AlignLeft | Qt.AlignBottom
         )
         self.ld_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.btn_rampcorr = QPushButton('', self)
-        self.btn_rampcorr.clicked.connect(
-            lambda: self._ramp_corr())
-        self.btn_rampcorr.setIcon(qta.icon(
+
+        self.btn_rampupcorr = QPushButton('', self)
+        self.btn_rampupcorr.clicked.connect(
+            lambda: self._ramp_corr(is_rampup=True))
+        self.btn_rampupcorr.setIcon(qta.icon(
             'mdi.escalator', scale_factor=1.5
         ))
-        self.btn_rampcorr.setToolTip('Ramp correctors to correct values')
-        self.btn_rampcorr.setObjectName('rmpbtn')
-        self.btn_rampcorr.setStyleSheet(
+
+        self.btn_rampupcorr.setToolTip('Ramp correctors to correct values')
+        self.btn_rampupcorr.setObjectName('rmpupbtn')
+        self.btn_rampupcorr.setStyleSheet(
             '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        self.ramp_initial_icon = self.btn_rampcorr.icon()
+        self.btn_rampdowncorr = QPushButton('', self)
+        self.btn_rampdowncorr.clicked.connect(
+            lambda: self._ramp_corr(is_rampup=False))
+        self.btn_rampdowncorr.setIcon(qta.icon(
+            'mdi.escalator-down', scale_factor=1.5
+        ))
+
+        self.btn_rampdowncorr.setToolTip('Ramp correctors to zero values')
+        self.btn_rampdowncorr.setObjectName('rmpdownbtn')
+        self.btn_rampdowncorr.setStyleSheet(
+            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+
+        self.ramp_initial_icon = self.btn_rampupcorr.icon()
+
         self.ld_rampnrpts = QLabel(
             "Nr. Points:", self, alignment=Qt.AlignRight
         )
@@ -556,6 +571,13 @@ class IDFFWindow(SiriusMainWindow):
         self.sb_rampintvl.setDecimals(2)
         self.sb_rampintvl.setValue(10.0)
 
+        self.ld_rampupcorr = QLabel(
+            "Ramp-up:", self, alignment=Qt.AlignRight
+        )
+        self.ld_rampdowncorr = QLabel(
+            "Ramp-down:", self, alignment=Qt.AlignRight
+        )
+
         wid = QWidget()
         wid.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Maximum)
         lay = QGridLayout(wid)
@@ -564,18 +586,26 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.sb_rampnrpts, 1, 1)
         lay.addWidget(self.ld_rampintvl, 2, 0)
         lay.addWidget(self.sb_rampintvl, 2, 1)
-        lay.addWidget(
-            self.btn_rampcorr, 3, 0, 1, 2, alignment=Qt.AlignHCenter
-        )
+        lay.addWidget(self.ld_rampupcorr, 3, 0)
+        lay.addWidget(self.btn_rampupcorr, 3, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.ld_rampdowncorr, 4, 0)
+        lay.addWidget(self.btn_rampdowncorr, 4, 1, alignment=Qt.AlignHCenter)
+        # lay.addWidget(
+        #     self.btn_rampcorr, 3, 0, 1, 2, alignment=Qt.AlignHCenter
+        # )
         return wid
 
-    def _ramp_corr(self):
+    def _ramp_corr(self, is_rampup):
+
+        if not self.sb_rampnrpts.isEnabled:
+            return
+
         nrpts = self.sb_rampnrpts.value()
         time_interval = self.sb_rampintvl.value()
 
         self.thread = QThread()
         self.worker = RampCorrWorker(
-            self._idffdev, nrpts, time_interval
+            self._idffdev, nrpts, time_interval, is_rampup
         )
 
         self.worker.moveToThread(self.thread)
@@ -594,7 +624,8 @@ class IDFFWindow(SiriusMainWindow):
         self._set_ramp_running(True)
 
     def _set_ramp_running(self, running: bool):
-        self.btn_rampcorr.setEnabled(not running)
+        self.btn_rampupcorr.setEnabled(not running)
+        self.btn_rampdowncorr.setEnabled(not running)
         self.sb_rampnrpts.setEnabled(not running)
         self.sb_rampintvl.setEnabled(not running)
 
@@ -602,7 +633,7 @@ class IDFFWindow(SiriusMainWindow):
             icon = qta.icon('fa5s.spinner', animation=qta.Spin(self))
         else:
             icon = self.ramp_initial_icon
-        self.btn_rampcorr.setIcon(icon)
+        self.btn_rampupcorr.setIcon(icon)
 
     def _handle_ramp_error(self, msg):
         self._set_ramp_running(False)
@@ -612,8 +643,8 @@ class IDFFWindow(SiriusMainWindow):
 
         self._error_popup = QMessageBox(self)
         self._error_popup.setIcon(QMessageBox.Critical)
-        self._error_popup.setWindowTitle("Erro na rampa")
-        self._error_popup.setText("Não foi possível executar a rampa de corretoras.")
+        self._error_popup.setWindowTitle("Ramp Error")
+        self._error_popup.setText("Unable to run correctors ramp.")
         self._error_popup.setInformativeText(msg)
         self._error_popup.setStandardButtons(QMessageBox.Ok)
 
@@ -624,16 +655,21 @@ class IDFFWindow(SiriusMainWindow):
 
 
 class RampCorrWorker(QObject):
+    """."""
+
     finished = Signal()
     error = Signal(str)
 
-    def __init__(self, idffdev, nrpts, time_interval):
+    def __init__(self, idffdev, nrpts, time_interval, is_rampup):
+        """."""
         super().__init__()
+        self._is_rampup = is_rampup
         self._idffdev = idffdev
         self._nrpts = nrpts
         self._time_interval = time_interval
 
     def run(self):
+        """."""
         try:
             devctrl = self._idffdev.ctrldev
             if not devctrl.loopstate:
@@ -645,13 +681,17 @@ class RampCorrWorker(QObject):
                     if configname != self._idffdev.idffconfig.name:
                         self._idffdev.load_config(configname)
                 # run correctors' ramp
-                self._idffdev.rampup_corr_currents(
+                if self._is_rampup:
+                    ramp_func = self._idffdev.rampup_corr_currents
+                else:
+                    ramp_func = self._idffdev.rampdown_corr_currents
+                ramp_func(
                     nrpts=self._nrpts,
                     time_interval=self._time_interval,
                     dry_run=False
                 )
             else:
-                self.error.emit("Loop is running. Cannot ramp.")
+                self.error.emit("Loop is running. Cannot ramp correctors.")
 
         except Exception as e:
             self.error.emit(str(e))
