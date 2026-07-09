@@ -262,8 +262,10 @@ class OpticsCorrWindow(SiriusMainWindow):
         wid = QWidget(self.gb_corr)
 
         widlay = QHBoxLayout(wid)
-        spsw = PyDMStateButton(wid, 'Glob:Test:LoopState-Sel')
-        rdbl = SiriusLedState(wid, 'Glob:Test:LoopState-Sts')
+        spsw = PyDMStateButton(wid, self.ioc_prefix.substitute(
+            propty='LoopState-Sel'))
+        rdbl = SiriusLedState(wid, self.ioc_prefix.substitute(
+            propty='LoopState-Sts'))
         widlay.addWidget(spsw)
         widlay.addWidget(rdbl)
 
@@ -284,23 +286,15 @@ class OpticsCorrWindow(SiriusMainWindow):
 
         freqbar = QHBoxLayout()
         freqbar.setContentsMargins(0, 0, 0, 0)
-        freqpvn = 'Glob:Test:LoopFreq'
+        freqpvn = 'LoopFreq-{}'
         freqbar.addWidget(QLabel('Frequency [Hz]', self.wid_atcr))
-        freqbar.addWidget(SiriusSpinbox(self.wid_atcr, freqpvn+'-SP'))
-        freqrb = SiriusLabel(self.wid_atcr, freqpvn+'-RB')
+        freqbar.addWidget(SiriusSpinbox(self.wid_atcr,
+            self.ioc_prefix.substitute(propty=freqpvn.format('SP'))))
+        freqrb = SiriusLabel(self.wid_atcr,
+            self.ioc_prefix.substitute(propty=freqpvn.format('RB')))
         freqrb.setAlignment(Qt.AlignCenter)
         freqbar.addWidget(freqrb)
         lay_atcr.addLayout(freqbar)
-
-        aplfacbar = QHBoxLayout()
-        aplfacbar.setContentsMargins(0, 0, 0, 0)
-        aplfacpvn = 'Glob:Test:LoopApplyFactor'
-        aplfacbar.addWidget(QLabel('Apply Factor', self.wid_atcr))
-        aplfacbar.addWidget(SiriusSpinbox(self.wid_atcr, aplfacpvn+'-SP'))
-        aplfacrb = SiriusLabel(self.wid_atcr, aplfacpvn+'-RB')
-        aplfacrb.setAlignment(Qt.AlignCenter)
-        aplfacbar.addWidget(aplfacrb)
-        lay_atcr.addLayout(aplfacbar)
 
         lay_atcr.addWidget(QLabel('<h4>PID</h4>', self.wid_atcr))
 
@@ -321,12 +315,43 @@ class OpticsCorrWindow(SiriusMainWindow):
         hpl.addWidget(
             QLabel('<h4>Y</h4>', self.wid_atcr, alignment=_qtal), 2, 0
         )
-        pvn = 'Glob:Test:LoopPID'
-        for i, k in enumerate(('Kp', 'Ki', 'Kd'), 1):
-            hpl.addWidget(SiriusSpinbox(self.wid_atcr, pvn+'X'+k+'-SP'), 1, i)
-            hpl.addWidget(SiriusSpinbox(self.wid_atcr, pvn+'Y'+k+'-SP'), 2, i)
-        for j in range(4):
-            hpl.setColumnStretch(j, 1 if j == 0 else 5)
+
+        self._issetting_tunepid = False
+        # self.b_change_tunepid_sprb = QPushButton('SP', self)
+        self._tunepid_spicon = qta.icon(
+                'mdi.alpha-s', 'mdi.alpha-p', options=[
+                    dict(scale_factor=1.5, offset=(-0.22, 0.0)),
+                    dict(scale_factor=1.5, offset=(+0.22, 0.0))])
+        self._tunepid_rbicon = qta.icon(
+                'mdi.alpha-r', 'mdi.alpha-b', options=[
+                    dict(scale_factor=1.5, offset=(-0.22, 0.0)),
+                    dict(scale_factor=1.5, offset=(+0.22, 0.0))])
+        self.b_change_tunepid_sprb = QPushButton(self._tunepid_spicon, '', self)
+        # self.b_change_tunepid_sprb.setContentsMargins(0, 0, 0, 0)
+        # self.b_change_tunepid_sprb.setSizePolicy(QSzPly.Fixed, QSzPly.Fixed)
+        self.tunepid_pvs = [
+            self.ioc_prefix.substitute(propty='LoopPID'+_k+_pl+_pvt)
+            for _k in ['Kp', 'Ki', 'Kd']
+            for _pl in ['X', 'Y']
+            for _pvt in ['-SP', '-RB']
+        ]
+        self.tunepid_widgets = dict(
+            (_pv, SiriusSpinbox(self.wid_atcr, _pv) if _pv.endswith('SP')
+             else SiriusLabel(self.wid_atcr, _pv))
+            for _pv in self.tunepid_pvs
+        )
+        self.b_change_tunepid_sprb.clicked.connect(self._change_tunepid_sprb)
+        hpl.addWidget(self.b_change_tunepid_sprb, 0, 0)
+        for _pv, wid in self.tunepid_widgets.items():
+            wid.setVisible(_pv.endswith('RB'))
+            i = 1 if _pv.split('PID')[-1][2] == 'X' else 2
+            j = ('Kp', 'Ki', 'Kd').index(_pv.split('PID')[-1][:2]) + 1
+            hpl.addWidget(wid, i, j)
+
+        hpl.setColumnStretch(0, 1)
+        hpl.setColumnStretch(1, 6)
+        hpl.setColumnStretch(2, 6)
+        hpl.setColumnStretch(3, 6)
         lay_atcr.addLayout(hpl)
         corr_tab.addTab(self.wid_atcr, 'Loop')
 
@@ -683,3 +708,17 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.pb_change_sp.setIcon(icon)
         self.lb_sp.setText(textX)
         self.lb_rb.setText(textY)
+
+    def _change_tunepid_sprb(self):
+        self._issetting_tunepid = not self._issetting_tunepid
+        for pvn, wid in self.tunepid_widgets.items():
+            if (pvn.endswith('SP') and self._issetting_tunepid) or \
+            (pvn.endswith('RB') and not self._issetting_tunepid):
+                wid.setVisible(True)
+            else:
+                wid.setVisible(False)
+        # text = 'RB' if self._issetting_tunepid else 'SP'
+        # self.b_change_tunepid_sprb.setText(text)
+        self.b_change_tunepid_sprb.setText('')
+        icon = self._tunepid_rbicon if self._issetting_tunepid else self._tunepid_spicon
+        self.b_change_tunepid_sprb.setIcon(icon)
