@@ -889,8 +889,8 @@ class BbBAcqSB(QWidget):
         lay.addWidget(lb_mktune, 1, 2)
         lay.addWidget(ld_mkmag, 0, 3)
         lay.addWidget(lb_mkmag, 1, 3)
-        lay.addWidget(ld_mkphs, 0, 3)
-        lay.addWidget(lb_mkphs, 1, 3)
+        lay.addWidget(ld_mkphs, 0, 4)
+        lay.addWidget(lb_mkphs, 1, 4)
         lay.setRowStretch(0, 2)
         lay.setRowStretch(3, 2)
 
