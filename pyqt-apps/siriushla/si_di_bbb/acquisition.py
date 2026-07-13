@@ -175,11 +175,15 @@ class _BbBAcqMarkerConfig(QWidget):
         lay = QGridLayout(self)
 
         cb_mode = PyDMEnumComboBox(
-            self, self.dev_pref+':'+self.acq_type+'_MODE'
+            self, self.dev_pref + '_MODE'
         )
         le_low = SiriusSpinbox(self, self.dev_pref + '_LOW')
         le_high = SiriusSpinbox(self, self.dev_pref + '_HIGH')
         le_skew = SiriusSpinbox(self, self.dev_pref + '_SKEW')
+        le_high.limitsFromChannel = False
+        le_high.setRange(0, 579 / 2)
+        le_low.limitsFromChannel = False
+        le_low.setRange(0, 579 / 2)
         lb_skew = SiriusLabel(self, self.dev_pref + '_SKEWNESS')
 
         lay.addWidget(QLabel('Search Method', self), 0, 0)
