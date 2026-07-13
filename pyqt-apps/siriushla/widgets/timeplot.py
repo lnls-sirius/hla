@@ -243,8 +243,8 @@ class SiriusTimePlot(PyDMTimePlot):
         if self.carch is None:
             self.carch = ClientArchiver()
         self.carch.timeout = 120
-        data = self.carch.getData(
-            pvname, t_init, t_end, process_type, process_bin_intvl)
+        data = self.carch.get_data(
+            pvname, t_init, t_end, process_bin_intvl, process_type)
         if not data:
             return
         return data['timestamp'], data['value']
