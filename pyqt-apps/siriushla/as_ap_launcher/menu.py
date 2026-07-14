@@ -1,14 +1,24 @@
 #!/usr/bin/env python-sirius
 
 """Mock application launcher."""
+
 import re as _re
 import subprocess as _sbp
 
 from epics import PV as _PV
 
-from qtpy.QtWidgets import QVBoxLayout, QMessageBox, QMenuBar, \
-    QMenu, QHBoxLayout, QWidget, QPushButton, QAction, QGroupBox, \
-    QInputDialog
+from qtpy.QtWidgets import (
+    QVBoxLayout,
+    QMessageBox,
+    QMenuBar,
+    QMenu,
+    QHBoxLayout,
+    QWidget,
+    QPushButton,
+    QAction,
+    QGroupBox,
+    QInputDialog,
+)
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _prefix
@@ -110,10 +120,12 @@ def get_object(ismenubar=True, parent=None):
 
             pvssave = LEVEL2A('Save', pvsconfig)
             self.connect_newprocess(
-                pvssave, 'sirius-hla-as-ap-pvsconfigs-save.py')
+                pvssave, 'sirius-hla-as-ap-pvsconfigs-save.py'
+            )
             pvsload = LEVEL2A('Load', pvsconfig)
             self.connect_newprocess(
-                pvsload, 'sirius-hla-as-ap-pvsconfigs-load.py')
+                pvsload, 'sirius-hla-as-ap-pvsconfigs-load.py'
+            )
             standby = LEVEL2A('Standby', pvsconfig)
             signal = util.get_appropriate_signal(standby)
             signal.connect(self._applyconfig)
@@ -137,7 +149,8 @@ def get_object(ismenubar=True, parent=None):
 
             procserv = LEVEL2A('ProcServ', menu)
             self.connect_newprocess(
-                procserv, 'sirius-hla-as-ap-pctrl', is_pydm=True)
+                procserv, 'sirius-hla-as-ap-pctrl', is_pydm=True
+            )
             self.add_object_to_level1(menu, procserv)
 
             chart = LEVEL2A('TimeChart', menu)
@@ -151,36 +164,50 @@ def get_object(ismenubar=True, parent=None):
             osci = LEVEL2M('Osc.View', menu)
             asdifctdig = QAction('AS-DI-FCT', osci)
             util.connect_newprocess(
-                asdifctdig, ['gvncviewer', Scopes.AS_DI_FCTDIG],
-                is_window=False)
+                asdifctdig,
+                ['gvncviewer', Scopes.AS_DI_FCTDIG],
+                is_window=False,
+            )
             asdifpmdig = QAction('AS-DI-FPM', osci)
             util.connect_newprocess(
-                asdifpmdig, ['gvncviewer', Scopes.AS_DI_FPMDIG],
-                is_window=False)
+                asdifpmdig,
+                ['gvncviewer', Scopes.AS_DI_FPMDIG],
+                is_window=False,
+            )
             lidiict = QAction('LI-DI-ICT', osci)
             util.connect_newprocess(
-                lidiict, ['gvncviewer', Scopes.LI_DI_ICTOSC],
-                is_window=False)
+                lidiict, ['gvncviewer', Scopes.LI_DI_ICTOSC], is_window=False
+            )
             lipumodltr = QAction('LI-PU-MODLTR', osci)
             util.connect_newprocess(
-                lipumodltr, ['gvncviewer', Scopes.LI_PU_OSC_MODLTR],
-                is_window=False)
+                lipumodltr,
+                ['gvncviewer', Scopes.LI_PU_OSC_MODLTR],
+                is_window=False,
+            )
             tbpuinjbo = QAction('TB-PU-InjBO', osci)
             util.connect_newprocess(
-                tbpuinjbo, ['gvncviewer', Scopes.TB_PU_OSC_INJBO],
-                is_window=False)
+                tbpuinjbo,
+                ['gvncviewer', Scopes.TB_PU_OSC_INJBO],
+                is_window=False,
+            )
             tspuejebo = QAction('TS-PU-EjeBO', osci)
             util.connect_newprocess(
-                tspuejebo, ['gvncviewer', Scopes.TS_PU_OSC_EJEBO],
-                is_window=False)
+                tspuejebo,
+                ['gvncviewer', Scopes.TS_PU_OSC_EJEBO],
+                is_window=False,
+            )
             tspuinjsi = QAction('TS-PU-InjSI', osci)
             util.connect_newprocess(
-                tspuinjsi, ['gvncviewer', Scopes.TS_PU_OSC_INJSI],
-                is_window=False)
+                tspuinjsi,
+                ['gvncviewer', Scopes.TS_PU_OSC_INJSI],
+                is_window=False,
+            )
             sipuinjsi = QAction('SI-PU-InjSI', osci)
             util.connect_newprocess(
-                sipuinjsi, ['gvncviewer', Scopes.SI_PU_OSC_INJSI],
-                is_window=False)
+                sipuinjsi,
+                ['gvncviewer', Scopes.SI_PU_OSC_INJSI],
+                is_window=False,
+            )
 
             osci.addAction(asdifctdig)
             osci.addAction(asdifpmdig)
@@ -238,11 +265,13 @@ def get_object(ismenubar=True, parent=None):
             main = QAction('Main', timing)
             main.setIcon(qta.icon('mdi.timer'))
             self.connect_newprocess(
-                main, ['sirius-hla-as-ti-control.py', '-t', 'main'])
+                main, ['sirius-hla-as-ti-control.py', '-t', 'main']
+            )
             summary = QAction('Monitor', timing)
             summary.setIcon(util.get_monitor_icon('mdi.timer'))
             self.connect_newprocess(
-                summary, ['sirius-hla-as-ti-control.py', '-t', 'monitor'])
+                summary, ['sirius-hla-as-ti-control.py', '-t', 'monitor']
+            )
 
             TimingMain.create_devices_menu(timing)
             timing.addAction(main)
@@ -284,13 +313,16 @@ def get_object(ismenubar=True, parent=None):
             vacuum.setObjectName('ASApp')
             agilent = QAction('Agilent', vacuum)
             self.connect_newprocess(
-                agilent, 'sirius-hla-as-va-agilent4uhv', is_pydm=True)
+                agilent, 'sirius-hla-as-va-agilent4uhv', is_pydm=True
+            )
             mks = QAction('MKS', vacuum)
             self.connect_newprocess(
-                mks, 'sirius-hla-as-va-mks937b', is_pydm=True)
+                mks, 'sirius-hla-as-va-mks937b', is_pydm=True
+            )
             gamma = QAction('Gamma Counters', vacuum)
             self.connect_newprocess(
-                gamma, 'sirius-hla-as-ap-countingpru', is_pydm=True)
+                gamma, 'sirius-hla-as-ap-countingpru', is_pydm=True
+            )
             vacuum.addAction(agilent)
             vacuum.addAction(mks)
             vacuum.addAction(gamma)
@@ -302,13 +334,15 @@ def get_object(ismenubar=True, parent=None):
             termo = LEVEL2A('Temp', menu)
             termo.setIcon(qta.icon('fa5s.thermometer-half'))
             self.connect_newprocess(
-                termo, 'sirius-hla-as-ap-mbtemp', is_pydm=True)
+                termo, 'sirius-hla-as-ap-mbtemp', is_pydm=True
+            )
 
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('ASApp')
             energy_button = QAction('Energy Button', optics)
             self.connect_newprocess(
-                energy_button, 'sirius-hla-as-ap-energybutton.py')
+                energy_button, 'sirius-hla-as-ap-energybutton.py'
+            )
             offconv = QAction('Offline Converter', optics)
             self.connect_newprocess(offconv, 'sirius-hla-as-ap-magoffconv.py')
             optics.addAction(energy_button)
@@ -338,7 +372,8 @@ def get_object(ismenubar=True, parent=None):
             menu.setObjectName('LIApp')
             launcher = LEVEL2A('Launcher', menu)
             util.connect_newprocess(
-                launcher, 'sirius-hla-li-ap-launcher.sh', is_window=False)
+                launcher, 'sirius-hla-li-ap-launcher.sh', is_window=False
+            )
 
             PS = self._set_ps_menu('li')
             PS.setIcon(qta.icon('mdi.car-battery'))
@@ -352,11 +387,13 @@ def get_object(ismenubar=True, parent=None):
 
             bpm2 = QAction('BPM2', bpms_menu)
             self.connect_newprocess(
-                bpm2, ["sirius-hla-li-di-bpms.py", 'LA-BI:BPM2'])
+                bpm2, ['sirius-hla-li-di-bpms.py', 'LA-BI:BPM2']
+            )
             bpms_menu.addAction(bpm2)
             bpm3 = QAction('BPM3', bpms_menu)
             self.connect_newprocess(
-                bpm3, ["sirius-hla-li-di-bpms.py", 'LA-BI:BPM3'])
+                bpm3, ['sirius-hla-li-di-bpms.py', 'LA-BI:BPM3']
+            )
             bpms_menu.addAction(bpm3)
 
             scrns = DIG.addAction('Screens')
@@ -422,7 +459,7 @@ def get_object(ismenubar=True, parent=None):
         def _create_section_menu(self, name, sec):
             sec = sec.lower()
             menu = LEVEL1(name, self)
-            menu.setObjectName(sec.upper()+'App')
+            menu.setObjectName(sec.upper() + 'App')
 
             PS = self._set_ps_menu(sec)
             PS.setIcon(qta.icon('mdi.car-battery'))
@@ -445,9 +482,16 @@ def get_object(ismenubar=True, parent=None):
 
             if sec == 'si':
                 INTLK = LEVEL2A('Orb.Intlk', menu)
-                INTLK.setIcon(qta.icon(
-                    'mdi.currency-sign', 'mdi.alarm-light',
-                    options=[dict(scale_factor=1.1), dict(scale_factor=0.5)]))
+                INTLK.setIcon(
+                    qta.icon(
+                        'mdi.currency-sign',
+                        'mdi.alarm-light',
+                        options=[
+                            dict(scale_factor=1.1),
+                            dict(scale_factor=0.5),
+                        ],
+                    )
+                )
                 self.connect_newprocess(INTLK, 'sirius-hla-si-ap-orbintlk.py')
                 self.add_object_to_level1(menu, INTLK)
 
@@ -462,7 +506,8 @@ def get_object(ismenubar=True, parent=None):
 
             All = LEVEL2A('All', menu)
             self.connect_newprocess(
-                All, ['sirius-hla-si-id-control.py', '-isall'])
+                All, ['sirius-hla-si-id-control.py', '-isall']
+            )
             self.add_object_to_level1(menu, All)
 
             idlist = [
@@ -479,12 +524,15 @@ def get_object(ismenubar=True, parent=None):
             for idname in idlist:
                 idname = SiriusPVName(idname)
                 beamline = IDSearch.conv_idname_2_beamline(idname)
-                text = '{0} - {1} ({2})'.format(
-                    idname.dev, idname.sub, beamline) \
-                    if LEVEL2A == QAction else beamline
+                text = (
+                    '{0} - {1} ({2})'.format(idname.dev, idname.sub, beamline)
+                    if LEVEL2A == QAction
+                    else beamline
+                )
                 ID_DEV = LEVEL2A(text, menu)
                 self.connect_newprocess(
-                    ID_DEV, ['sirius-hla-si-id-control.py', '-dev', idname])
+                    ID_DEV, ['sirius-hla-si-id-control.py', '-dev', idname]
+                )
                 self.add_object_to_level1(menu, ID_DEV)
 
             return menu
@@ -519,22 +567,24 @@ def get_object(ismenubar=True, parent=None):
 
         def _set_optics_menu(self, sec):
             optics = LEVEL2M('Optics', self)
-            optics.setObjectName(sec.upper()+'App')
+            optics.setObjectName(sec.upper() + 'App')
 
             if sec in {'tb', 'ts'}:
                 launcher = QAction('Main', optics)
                 self.connect_newprocess(
-                    launcher, 'sirius-hla-'+sec+'-ap-control.py')
+                    launcher, 'sirius-hla-' + sec + '-ap-control.py'
+                )
                 optics.addAction(launcher)
             elif sec == 'bo':
                 injbo = QAction('InjBO', optics)
                 self.connect_newprocess(
-                    injbo, 'sirius-hla-bo-ap-injcontrol.py')
+                    injbo, 'sirius-hla-bo-ap-injcontrol.py'
+                )
                 optics.addAction(injbo)
 
             sofb = QAction('SOFB', optics)
             sofb.setIcon(qta.icon('fa5s.hammer'))
-            self.connect_newprocess(sofb, 'sirius-hla-'+sec+'-ap-sofb.py')
+            self.connect_newprocess(sofb, 'sirius-hla-' + sec + '-ap-sofb.py')
             optics.addAction(sofb)
 
             if sec == 'si':
@@ -546,46 +596,57 @@ def get_object(ismenubar=True, parent=None):
             if sec in {'tb', 'ts'}:
                 PosAng = QAction('PosAng', optics)
                 self.connect_newprocess(
-                    PosAng, 'sirius-hla-'+sec+'-ap-posang.py')
+                    PosAng, 'sirius-hla-' + sec + '-ap-posang.py'
+                )
                 optics.addAction(PosAng)
             if 'tb' in sec:
                 Emittance = QAction('Emittance Meas', optics)
                 self.connect_newprocess(
-                    Emittance, 'sirius-hla-tb-ap-emittance.py')
+                    Emittance, 'sirius-hla-tb-ap-emittance.py'
+                )
                 optics.addAction(Emittance)
             if sec in {'bo', 'si'}:
                 TuneCorr = QAction('Tune Correction', optics)
-                icon = qta.icon('mdi.pulse', 'mdi.hammer', options=[
-                    dict(scale_factor=1.3, offset=(0.0, 0.05)),
-                    dict(scale_factor=0.72, offset=(-0.1, -0.3), hflip=True)])
+                icon = qta.icon(
+                    'mdi.pulse',
+                    'mdi.hammer',
+                    options=[
+                        dict(scale_factor=1.3, offset=(0.0, 0.05)),
+                        dict(
+                            scale_factor=0.72, offset=(-0.1, -0.3), hflip=True
+                        ),
+                    ],
+                )
                 TuneCorr.setIcon(icon)
                 self.connect_newprocess(
-                    TuneCorr, 'sirius-hla-'+sec+'-ap-tunecorr.py')
+                    TuneCorr, 'sirius-hla-' + sec + '-ap-tunecorr.py'
+                )
                 optics.addAction(TuneCorr)
 
                 ChromCorr = QAction('Chromaticity Correction', optics)
                 self.connect_newprocess(
-                    ChromCorr, 'sirius-hla-'+sec+'-ap-chromcorr.py')
+                    ChromCorr, 'sirius-hla-' + sec + '-ap-chromcorr.py'
+                )
                 optics.addAction(ChromCorr)
 
                 trajfit = QAction('Trajectory Fitting', optics)
                 self.connect_newprocess(
-                    trajfit, 'sirius-hla-'+sec+'-ap-trajfit.py')
+                    trajfit, 'sirius-hla-' + sec + '-ap-trajfit.py'
+                )
                 optics.addAction(trajfit)
             if 'si' in sec:
                 CurrLT = QAction('Current and Lifetime', optics)
-                self.connect_newprocess(
-                    CurrLT, 'sirius-hla-si-ap-currlt.py')
+                self.connect_newprocess(CurrLT, 'sirius-hla-si-ap-currlt.py')
                 optics.addAction(CurrLT)
 
                 coupm = QAction('Coupling Meas', optics)
-                self.connect_newprocess(
-                    coupm, 'sirius-hla-si-ap-coupmeas.py')
+                self.connect_newprocess(coupm, 'sirius-hla-si-ap-coupmeas.py')
                 optics.addAction(coupm)
             if 'bo' in sec:
                 ChargeMon = QAction('Charge Monitor', optics)
                 self.connect_newprocess(
-                    ChargeMon, 'sirius-hla-bo-ap-chargemon.py')
+                    ChargeMon, 'sirius-hla-bo-ap-chargemon.py'
+                )
                 optics.addAction(ChargeMon)
 
                 ramp = QAction('Ramp', optics)
@@ -596,7 +657,7 @@ def get_object(ismenubar=True, parent=None):
 
         def _set_diagnostic_menu(self, sec):
             diag = LEVEL2M('DI', self)
-            diag.setObjectName(sec.upper()+'App')
+            diag.setObjectName(sec.upper() + 'App')
             BPMs = self._set_bpm_menu(sec)
             act = QAction('BPMs', diag)
             act.setIcon(qta.icon('mdi.currency-sign'))
@@ -605,16 +666,19 @@ def get_object(ismenubar=True, parent=None):
             # diag.addMenu(BPMs)
             if sec in {'tb', 'ts'}:
                 ICTs = QAction('ICTs', diag)
-                self.connect_newprocess(ICTs, 'sirius-hla-'+sec+'-di-icts.py')
+                self.connect_newprocess(
+                    ICTs, 'sirius-hla-' + sec + '-di-icts.py'
+                )
                 diag.addAction(ICTs)
             elif sec in {'bo', 'si'}:
                 DCCT = QMenu('DCCTs', diag)
-                DCCT.setObjectName(sec.upper()+'App')
+                DCCT.setObjectName(sec.upper() + 'App')
                 DCCT.setIcon(qta.icon('mdi.current-dc'))
                 for dev in get_dcct_list(sec.upper()):
                     act_dev = DCCT.addAction(dev)
                     self.connect_newprocess(
-                        act_dev, ['sirius-hla-as-di-dcct.py', dev])
+                        act_dev, ['sirius-hla-as-di-dcct.py', dev]
+                    )
                 diag.addMenu(DCCT)
             if 'tb' in sec:
                 Slits = QAction('Slits', diag)
@@ -623,29 +687,31 @@ def get_object(ismenubar=True, parent=None):
             if sec in {'bo', 'si'}:
                 Tune = QAction('Tune', diag)
                 Tune.setIcon(qta.icon('mdi.pulse', scale_factor=1.3))
-                self.connect_newprocess(Tune, 'sirius-hla-'+sec+'-di-tune.py')
+                self.connect_newprocess(
+                    Tune, 'sirius-hla-' + sec + '-di-tune.py'
+                )
                 diag.addAction(Tune)
                 VLight = QAction('VLight', diag)
                 self.connect_newprocess(
-                    VLight, 'sirius-hla-'+sec+'-di-vlight.py')
+                    VLight, 'sirius-hla-' + sec + '-di-vlight.py'
+                )
                 diag.addAction(VLight)
             if 'si' not in sec:
                 Scrns = QMenu('Screens', diag)
                 Scrns.setIcon(qta.icon('mdi.camera-metering-center'))
-                Scrns.setObjectName(sec.upper()+'App')
+                Scrns.setObjectName(sec.upper() + 'App')
                 for dev in get_scrn_list(sec.upper()):
                     act_dev = Scrns.addAction(dev)
                     self.connect_newprocess(
-                        act_dev, ['sirius-hla-as-di-scrn.py', dev])
+                        act_dev, ['sirius-hla-as-di-scrn.py', dev]
+                    )
                 diag.addMenu(Scrns)
             else:
                 # Filling Pattern Monitor (FPMOsc)
                 fpmosc = QAction('FPMOsc', diag)
                 fpmosc.setIcon(qta.icon('mdi.basket-fill'))
-                fpmosc.setObjectName(sec.upper()+'App')
-                self.connect_newprocess(
-                    fpmosc, ['sirius-hla-si-di-fpmosc.py']
-                )
+                fpmosc.setObjectName(sec.upper() + 'App')
+                self.connect_newprocess(fpmosc, ['sirius-hla-si-di-fpmosc.py'])
                 diag.addAction(fpmosc)
 
                 Scrap = QAction('Scrapers', diag)
@@ -657,28 +723,30 @@ def get_object(ismenubar=True, parent=None):
 
                 Dvf1 = Dvf.addAction('DVF 1')
                 self.connect_newprocess(
-                    Dvf1, ['sirius-hla-bl-ap-imgproc.py',
-                           'CAX:A:BASLER01'])
+                    Dvf1, ['sirius-hla-bl-ap-imgproc.py', 'CAX:A:BASLER01']
+                )
 
                 Dvf2 = Dvf.addAction('DVF 2')
                 self.connect_newprocess(
-                    Dvf2, ['sirius-hla-bl-ap-imgproc.py',
-                           'CAX:B:BASLER01'])
+                    Dvf2, ['sirius-hla-bl-ap-imgproc.py', 'CAX:B:BASLER01']
+                )
 
                 diag.addMenu(Dvf)
 
                 BbB = QMenu('BbB', diag)
-                BbB.setObjectName(sec.upper()+'App')
+                BbB.setObjectName(sec.upper() + 'App')
 
                 AllBbB = BbB.addAction('All')
                 self.connect_newprocess(
-                    AllBbB, ['sirius-hla-si-di-bbb.py', '-dev', 'all'])
+                    AllBbB, ['sirius-hla-si-di-bbb.py', '-dev', 'all']
+                )
 
                 for idc in ['Horizontal', 'Vertical', 'Longitudinal']:
-                    dev_pref = 'SI-Glob:DI-BbBProc-'+idc[0]
+                    dev_pref = 'SI-Glob:DI-BbBProc-' + idc[0]
                     act_dev = BbB.addAction(idc)
                     self.connect_newprocess(
-                        act_dev, ['sirius-hla-si-di-bbb.py', '-dev', dev_pref])
+                        act_dev, ['sirius-hla-si-di-bbb.py', '-dev', dev_pref]
+                    )
 
                 diag.addMenu(BbB)
             return diag
@@ -686,38 +754,41 @@ def get_object(ismenubar=True, parent=None):
         def _set_bpm_menu(self, sec):
             cmd = ['sirius-hla-as-di-bpm.py', sec]
             menu = QMenu('BPMs', self)
-            menu.setObjectName(sec.upper()+'App')
+            menu.setObjectName(sec.upper() + 'App')
             menu.setIcon(qta.icon('mdi.currency-sign'))
             if sec == 'si':
                 action = menu.addAction('Equalize Switching')
                 action.setIcon(qta.icon('mdi.approximately-equal-box'))
                 self.connect_newprocess(
-                    action, 'sirius-hla-si-di-equalize_bpms_switching.py')
+                    action, 'sirius-hla-si-di-equalize_bpms_switching.py'
+                )
             action = menu.addAction('Monitor')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
-            self.connect_newprocess(action, cmd + ['-w', 'Monitor', ])
+            self.connect_newprocess(action, cmd + ['-w', 'Monitor'])
             menu2 = menu.addMenu('Acquisition Data')
-            menu2.setObjectName(sec.upper()+'App')
+            menu2.setObjectName(sec.upper() + 'App')
             if sec in {'bo', 'si'}:
                 for mode in ('Antennas', 'Positions'):
                     menu3 = menu2.addMenu(mode)
-                    menu3.setObjectName(sec.upper()+'App')
+                    menu3.setObjectName(sec.upper() + 'App')
                     cmd2 = cmd + ['-m', mode]
                     self._create_bpm_actions(sec, menu3, 'AcqData', cmd2)
             else:
                 for mode in ('Antennas', 'Positions'):
                     cmd2 = cmd + ['-m', mode]
-                    self._create_bpm_actions(
-                        sec, menu2, 'AcqData', cmd2, mode)
+                    self._create_bpm_actions(sec, menu2, 'AcqData', cmd2, mode)
             return menu
 
         def _create_bpm_actions(self, sec, menu, act, cmd, name=None):
             cmd = cmd + ['-w', act]
             if sec == 'bo':
                 for i in range(5):
-                    action = menu.addAction('subsec {0:02d}-{1:02d}'.format(
-                        10*i+2, ((10*(i+1)+1)) % 50))
-                    self.connect_newprocess(action, cmd + ['-s', str(i+1)])
+                    action = menu.addAction(
+                        'subsec {0:02d}-{1:02d}'.format(
+                            10 * i + 2, (10 * (i + 1) + 1) % 50
+                        )
+                    )
+                    self.connect_newprocess(action, cmd + ['-s', str(i + 1)])
             elif sec == 'si':
                 for i in range(1, 21):
                     sub = '{0:02d}'.format(i)
@@ -730,7 +801,7 @@ def get_object(ismenubar=True, parent=None):
         def _set_ps_menu(self, sec):
             scr = 'sirius-hla-' + sec + '-ps-control.py'
             psmenu = LEVEL2M('PS', self)
-            psmenu.setObjectName(sec.upper()+'App')
+            psmenu.setObjectName(sec.upper() + 'App')
 
             if sec == 'it':
                 lens = QAction('Lens', psmenu)
@@ -739,7 +810,8 @@ def get_object(ismenubar=True, parent=None):
                 return psmenu
 
             all_dev = QAction(
-                'All'+('' if sec != 'si' else ' Families'), psmenu)
+                'All' + ('' if sec != 'si' else ' Families'), psmenu
+            )
             self.connect_newprocess(all_dev, [scr, '--device', 'all'])
             psmenu.addAction(all_dev)
 
@@ -751,7 +823,8 @@ def get_object(ismenubar=True, parent=None):
             else:
                 spect = QAction('Spectrometer', psmenu)
                 self.connect_newprocess(
-                    spect, [scr, '--device', 'spectrometer'])
+                    spect, [scr, '--device', 'spectrometer']
+                )
                 psmenu.addAction(spect)
 
             # quads
@@ -768,12 +841,21 @@ def get_object(ismenubar=True, parent=None):
             ps_indiv = {
                 'Correctors': {
                     'device': 'corrector-slow',
-                    'graphs': {'All': '(CH|CV|CC)', 'CH': 'CH', 'CV': 'CV', 'CC': 'CC'},
+                    'graphs': {
+                        'All': '(CH|CV|CC)',
+                        'CH': 'CH',
+                        'CV': 'CV',
+                        'CC': 'CC',
+                    },
                 },
                 'Trims': {
                     'device': 'trim-quadrupole',
-                    'graphs': {'All': 'Q(F|D|[1-4]).*', 'QF': 'QF.*',
-                               'QD': 'QD.*', 'Q1,Q2,Q3&&Q4': 'Q[1-4].*'},
+                    'graphs': {
+                        'All': 'Q(F|D|[1-4]).*',
+                        'QF': 'QF.*',
+                        'QD': 'QD.*',
+                        'Q1,Q2,Q3&&Q4': 'Q[1-4].*',
+                    },
                 },
                 'Skew Quadrupoles': {
                     'device': 'skew-quadrupole',
@@ -786,45 +868,59 @@ def get_object(ismenubar=True, parent=None):
                 'Septa Feedforward Correctors': {
                     'device': 'corrector-septff',
                     'graphs': {
-                        'All': 'FFC(H|V)', 'FFCH': 'FFCH', 'FFCV': 'FFCV',
+                        'All': 'FFC(H|V)',
+                        'FFCH': 'FFCH',
+                        'FFCV': 'FFCV',
                     },
                 },
             }
             if sec != 'li':
                 for pstype, data in ps_indiv.items():
                     type_menu = psmenu.addMenu(pstype)
-                    type_menu.setObjectName(sec.upper()+'App')
+                    type_menu.setObjectName(sec.upper() + 'App')
 
                     if sec == 'si' and 'Feedforward' not in pstype:
                         all_menu = type_menu.addMenu('All')
-                        all_menu.setObjectName(sec.upper()+'App')
+                        all_menu.setObjectName(sec.upper() + 'App')
                     elif 'Correctors' in pstype:
                         all_menu = type_menu
 
                     # list
                     all_lst_act = QAction('List', all_menu)
                     self.connect_newprocess(
-                        all_lst_act, [scr, '--device', data['device']])
+                        all_lst_act, [scr, '--device', data['device']]
+                    )
                     all_menu.addAction(all_lst_act)
 
                     # graphs
                     if len(data['graphs']) > 1:
                         all_gph_menu = all_menu.addMenu('Graph')
-                        all_gph_menu.setObjectName(sec.upper()+'App')
+                        all_gph_menu.setObjectName(sec.upper() + 'App')
                         for label, filt in data['graphs'].items():
                             act = QAction(label, all_gph_menu)
                             self.connect_newprocess(
-                                act, ['sirius-hla-as-ps-graphmon.py',
-                                      '--section', sec.upper(),
-                                      '--device', filt])
+                                act,
+                                [
+                                    'sirius-hla-as-ps-graphmon.py',
+                                    '--section',
+                                    sec.upper(),
+                                    '--device',
+                                    filt,
+                                ],
+                            )
                             all_gph_menu.addAction(act)
                     else:
                         all_gph_act = QAction('Graph', all_menu)
                         self.connect_newprocess(
                             all_gph_act,
-                            ['sirius-hla-as-ps-graphmon.py',
-                             '--section', sec.upper(), '--device',
-                             data['graphs']['All']])
+                            [
+                                'sirius-hla-as-ps-graphmon.py',
+                                '--section',
+                                sec.upper(),
+                                '--device',
+                                data['graphs']['All'],
+                            ],
+                        )
                         all_menu.addAction(all_gph_act)
 
                     if sec != 'si' or 'Feedforward' in pstype:
@@ -834,10 +930,17 @@ def get_object(ismenubar=True, parent=None):
                     sec_menu = type_menu.addMenu('Subsectors')
                     sec_menu.setObjectName('SIApp')
                     for i in range(20):
-                        act = sec_menu.addAction('SI-{:02d}'.format(i+1))
+                        act = sec_menu.addAction('SI-{:02d}'.format(i + 1))
                         self.connect_newprocess(
-                            act, [scr, '--device', data['device'],
-                                  '--subsection', '{:02d}.*'.format(i+1)])
+                            act,
+                            [
+                                scr,
+                                '--device',
+                                data['device'],
+                                '--subsection',
+                                '{:02d}.*'.format(i + 1),
+                            ],
+                        )
 
                     # trims fams
                     if pstype != 'Trims':
@@ -845,25 +948,37 @@ def get_object(ismenubar=True, parent=None):
 
                     fam_all_menu = type_menu.addMenu('Families')
                     fam_all_menu.setObjectName('SIApp')
-                    fams = PSSearch.get_psnames(
-                        {'sec': 'SI', 'sub': 'Fam', 'dev': 'Q(D|F|[1-4]).*'})
+                    fams = PSSearch.get_psnames({
+                        'sec': 'SI',
+                        'sub': 'Fam',
+                        'dev': 'Q(D|F|[1-4]).*',
+                    })
                     for fam in fams:
                         fam = SiriusPVName(fam)
                         fam_menu = fam_all_menu.addMenu(fam.dev)
                         fam_menu.setObjectName('SIApp')
                         act1 = QAction('List', fam_menu)
                         self.connect_newprocess(
-                            act1, [scr, '--device', fam, '-istrim'])
+                            act1, [scr, '--device', fam, '-istrim']
+                        )
                         fam_menu.addAction(act1)
                         act2 = QAction('Graph', fam_menu)
                         self.connect_newprocess(
-                            act2, ['sirius-hla-as-ps-graphmon.py',
-                                   '--section', 'SI', '--device', fam.dev])
+                            act2,
+                            [
+                                'sirius-hla-as-ps-graphmon.py',
+                                '--section',
+                                'SI',
+                                '--device',
+                                fam.dev,
+                            ],
+                        )
                         fam_menu.addAction(act2)
             else:
                 corrs = QAction('Correctors', psmenu)
                 self.connect_newprocess(
-                    corrs, [scr, '--device', 'corrector-slow'])
+                    corrs, [scr, '--device', 'corrector-slow']
+                )
                 psmenu.addAction(corrs)
                 lens = QAction('Lens', psmenu)
                 self.connect_newprocess(lens, [scr, '--device', 'lens'])
@@ -875,7 +990,8 @@ def get_object(ismenubar=True, parent=None):
             if sec == 'bo':
                 skew = QAction('Skew Quadrupoles', psmenu)
                 self.connect_newprocess(
-                    skew, [scr, '--device', 'skew-quadrupole'])
+                    skew, [scr, '--device', 'skew-quadrupole']
+                )
                 psmenu.addAction(skew)
 
                 wfmerr = QAction('Waveform Error', psmenu)
@@ -886,7 +1002,7 @@ def get_object(ismenubar=True, parent=None):
 
         def _set_pu_menu(self, sec):
             pumenu = LEVEL2M('PU', self)
-            pumenu.setObjectName(sec.upper()+'App')
+            pumenu.setObjectName(sec.upper() + 'App')
             script = 'sirius-hla-' + sec + '-pu-control.py'
             if sec == 'si':
                 pmag = QAction('Injection', pumenu)
@@ -904,23 +1020,24 @@ def get_object(ismenubar=True, parent=None):
                 pumenu.addAction(pmag)
             elif sec == 'as':
                 pmag = QAction('InjBO, EjeBO, InjSI && PingSI', pumenu)
-                self.connect_newprocess(
-                    pmag, 'sirius-hla-as-pu-control.py')
+                self.connect_newprocess(pmag, 'sirius-hla-as-pu-control.py')
                 pumenu.addAction(pmag)
                 pmag = QAction('TB, BO, TS && SI', pumenu)
                 self.connect_newprocess(
-                    pmag, ['sirius-hla-as-pu-control.py', '-g', 'sectors'])
+                    pmag, ['sirius-hla-as-pu-control.py', '-g', 'sectors']
+                )
                 pumenu.addAction(pmag)
             return pumenu
 
         def _set_rf_menu(self, sec):
             menu = LEVEL2M('RF', self)
-            menu.setObjectName(sec.upper()+'App')
+            menu.setObjectName(sec.upper() + 'App')
 
             status = QAction('Main', menu)
             status.setIcon(qta.icon('mdi.waves'))
             self.connect_newprocess(
-                status, 'sirius-hla-'+sec.lower()+'-rf-control.py')
+                status, 'sirius-hla-' + sec.lower() + '-rf-control.py'
+            )
             menu.addAction(status)
             return menu
 
@@ -928,21 +1045,23 @@ def get_object(ismenubar=True, parent=None):
             secl = sec.lower()
             menu = LEVEL2M('VA', self)
             menu.setIcon(qta.icon('mdi.network-outline', vflip=True))
-            menu.setObjectName(sec.upper()+'App')
+            menu.setObjectName(sec.upper() + 'App')
 
             if sec != 'it':
                 agilent = QAction('Agilent', menu)
                 self.connect_newprocess(
                     agilent,
-                    'sirius-hla-'+secl+'-va-agilent4uhv-overview',
-                    is_pydm=True)
+                    'sirius-hla-' + secl + '-va-agilent4uhv-overview',
+                    is_pydm=True,
+                )
                 menu.addAction(agilent)
 
             mks = QAction('MKS', menu)
             self.connect_newprocess(
                 mks,
-                'sirius-hla-'+secl+'-va-mks937b-overview',
-                is_pydm=True)
+                'sirius-hla-' + secl + '-va-mks937b-overview',
+                is_pydm=True,
+            )
             menu.addAction(mks)
 
             return menu
@@ -958,34 +1077,46 @@ def get_object(ismenubar=True, parent=None):
                 config_name = 'turnoff'
 
             ans = QMessageBox.question(
-                self, 'Are you Sure?',
-                "Do you really want to apply the Configuration '" +
-                config_name + "' to the machine?",
-                QMessageBox.Yes, QMessageBox.Cancel)
+                self,
+                'Are you Sure?',
+                "Do you really want to apply the Configuration '"
+                + config_name
+                + "' to the machine?",
+                QMessageBox.Yes,
+                QMessageBox.Cancel,
+            )
             if ans != QMessageBox.Yes:
                 return
 
             current, ok = QInputDialog.getDouble(
-                self, 'Enter value: ',
-                'Enter FilaPS standby current [A]\n'
-                'or cancel to not set it: ',
-                value=0.7, min=0.0, max=1.5, decimals=3)
+                self,
+                'Enter value: ',
+                'Enter FilaPS standby current [A]\nor cancel to not set it: ',
+                value=0.7,
+                min=0.0,
+                max=1.5,
+                decimals=3,
+            )
             if ok:
                 fila_pv = _PV(
-                    _prefix+'LI-01:EG-FilaPS:currentoutsoft',
-                    connection_timeout=0.05)
+                    _prefix + 'LI-01:EG-FilaPS:currentoutsoft',
+                    connection_timeout=0.05,
+                )
                 fila_pv.get()  # force connection
                 if fila_pv.connected:
                     fila_pv.put(current)
                 else:
                     QMessageBox.warning(
-                        self, 'Message',
-                        'Could not connect to LI-01:EG-FilaPS!')
+                        self,
+                        'Message',
+                        'Could not connect to LI-01:EG-FilaPS!',
+                    )
 
             client = ConfigDBClient()
 
             WinClass = create_window_from_widget(
-                SelectAndApplyPVsWidget, 'Select PVs to Apply Standby')
+                SelectAndApplyPVsWidget, 'Select PVs to Apply Standby'
+            )
             wind = WinClass(self, client)
             wind.widget.settingFinished.connect(wind.close)
             wind.widget.fill_config('global_config', config_name)
@@ -999,14 +1130,17 @@ def get_object(ismenubar=True, parent=None):
 
             reg = r'[0-9]{4}x[0-9]{4}\+([0-9]{1,4})\+[0-9]{1,4}'
             ds_pos = [
-                _re.findall(reg, d)[0] for di in disps
-                for d in di.split(' ') if _re.match(reg, d)]
+                _re.findall(reg, d)[0]
+                for di in disps
+                for d in di.split(' ')
+                if _re.match(reg, d)
+            ]
 
             _, ds_names = list(zip(*sorted(zip(ds_pos, ds_names))))
             for i, name in enumerate(ds_names):
                 cmd = f'xrandr --auto --output {name:s} --mode {res:s}'
                 if i:
-                    oname = ds_names[i-1]
+                    oname = ds_names[i - 1]
                     cmd += f' --right-of {oname:s}'
                 _sbp.getoutput(cmd)
 

@@ -1,8 +1,15 @@
 """Control of EVG Timing Device."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
-    QGridLayout, QLabel, QSplitter, QSizePolicy as QSzPol
+from qtpy.QtWidgets import (
+    QVBoxLayout,
+    QHBoxLayout,
+    QWidget,
+    QGridLayout,
+    QLabel,
+    QSplitter,
+    QSizePolicy as QSzPol,
+)
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -10,25 +17,31 @@ from siriuspy.timesys import csdev as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName
 
-from ..util import connect_window, get_appropriate_color, \
-    connect_newprocess
+from ..util import connect_window, get_appropriate_color, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, PyDMLed, PyDMStateButton, SiriusLabel
 
-from .low_level_devices import EventList as _EventList, EVG as _EVG, \
-    BucketList, EVR as _EVR, EVE as _EVE, AFC as _AFC, FOUT as _FOUT
+from .low_level_devices import (
+    EventList as _EventList,
+    EVG as _EVG,
+    BucketList,
+    EVR as _EVR,
+    EVE as _EVE,
+    AFC as _AFC,
+    FOUT as _FOUT,
+)
 from .hl_trigger import HLTriggerList as _HLTriggerList
 
 
 class TimingMain(SiriusMainWindow):
-
     def __init__(self, parent=None, prefix=''):
         super().__init__(parent)
         self.prefix = prefix
         self.setupui()
         self.setObjectName('ASApp')
         self.setWindowIcon(
-            qta.icon('mdi.timer', color=get_appropriate_color('AS')))
+            qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        )
 
     def setupui(self):
         self.setupmenus()
@@ -60,43 +73,58 @@ class TimingMain(SiriusMainWindow):
         evg_dev = SiriusPVName(LLTimeSearch.get_evg_name())
         evg_pref = evg_dev.substitute(prefix=self.prefix)
         sp = PyDMPushButton(
-            self, init_channel=evg_pref.substitute(propty='UpdateEvt-Cmd'),
-            pressValue=1)
+            self,
+            init_channel=evg_pref.substitute(propty='UpdateEvt-Cmd'),
+            pressValue=1,
+        )
         sp.setIcon(qta.icon('fa5s.sync'))
         sp.setToolTip('Update Events Table')
         sp.setObjectName('but')
         sp.setStyleSheet(
-            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}'
+        )
         rb = PyDMLed(
-            self, init_channel=evg_pref.substitute(propty='EvtSyncStatus-Mon'))
+            self, init_channel=evg_pref.substitute(propty='EvtSyncStatus-Mon')
+        )
         rb.setOffColor(rb.Red)
         rb.setOnColor(rb.LightGreen)
-        lay.addWidget(self._create_prop_widget(
-            '<h4>Update Evts</h4>', wid, (sp, rb)), 0, 0)
+        lay.addWidget(
+            self._create_prop_widget('<h4>Update Evts</h4>', wid, (sp, rb)),
+            0,
+            0,
+        )
 
         sp = PyDMStateButton(
-            self, init_channel=evg_pref.substitute(propty='ContinuousEvt-Sel'))
+            self, init_channel=evg_pref.substitute(propty='ContinuousEvt-Sel')
+        )
         rb = PyDMLed(
-            self, init_channel=evg_pref.substitute(propty='ContinuousEvt-Sts'))
-        lay.addWidget(self._create_prop_widget(
-            '<h4>Continuous</h4>', wid, (sp, rb)), 0, 1)
+            self, init_channel=evg_pref.substitute(propty='ContinuousEvt-Sts')
+        )
+        lay.addWidget(
+            self._create_prop_widget('<h4>Continuous</h4>', wid, (sp, rb)),
+            0,
+            1,
+        )
 
         sp = PyDMStateButton(
-            self, init_channel=evg_pref.substitute(propty='InjectionEvt-Sel'))
+            self, init_channel=evg_pref.substitute(propty='InjectionEvt-Sel')
+        )
         rb = PyDMLed(
-            self, init_channel=evg_pref.substitute(propty='InjectionEvt-Sts'))
-        lay.addWidget(self._create_prop_widget(
-            '<h4>Injection</h4>', wid, (sp, rb)), 0, 2)
+            self, init_channel=evg_pref.substitute(propty='InjectionEvt-Sts')
+        )
+        lay.addWidget(
+            self._create_prop_widget('<h4>Injection</h4>', wid, (sp, rb)), 0, 2
+        )
 
-        bucketlist_wid = BucketList(
-            self.centralWidget(), evg_dev, self.prefix)
+        bucketlist_wid = BucketList(self.centralWidget(), evg_dev, self.prefix)
         bucketlist_wid.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Preferred)
         lay.addWidget(bucketlist_wid, 0, 3, 2, 1)
 
         hlay = QHBoxLayout()
         lab = QLabel('Inj Count:', wid)
         pydmlab = SiriusLabel(
-            wid, init_channel=evg_pref.substitute(propty='InjCount-Mon'))
+            wid, init_channel=evg_pref.substitute(propty='InjCount-Mon')
+        )
         pydmlab.setStyleSheet('min-width:5em;')
         pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         hlay.addStretch()
@@ -104,17 +132,20 @@ class TimingMain(SiriusMainWindow):
         hlay.addWidget(pydmlab)
         hlay.addStretch()
         pydmlab = SiriusLabel(
-            wid, init_channel=evg_pref.substitute(propty='STATEMACHINE'))
+            wid, init_channel=evg_pref.substitute(propty='STATEMACHINE')
+        )
         pydmlab.setStyleSheet('min-width:10em;')
         hlay.addWidget(pydmlab)
         hlay.addStretch()
         pydmlab = SiriusLabel(
-            wid, init_channel=evg_pref.substitute(propty='SeqCount-SP'))
-        pydmlab.rules =\
-            '[{"name": "VisibleRule", "property": "Visible", ' +\
-            '"expression": "ch[0]==5", "channels": [{"channel": "' +\
-            evg_pref.substitute(propty_name='STATEMACHINE') +\
-            '", "trigger": true}]}]'
+            wid, init_channel=evg_pref.substitute(propty='SeqCount-SP')
+        )
+        pydmlab.rules = (
+            '[{"name": "VisibleRule", "property": "Visible", '
+            + '"expression": "ch[0]==5", "channels": [{"channel": "'
+            + evg_pref.substitute(propty_name='STATEMACHINE')
+            + '", "trigger": true}]}]'
+        )
         pydmlab.setStyleSheet('min-width:3em;')
         hlay.addWidget(pydmlab)
         hlay.addStretch()
@@ -124,23 +155,34 @@ class TimingMain(SiriusMainWindow):
     def setevents(self):
         props = {'name', 'ext_trig', 'mode', 'delay_type', 'delay'}
         evg_pref = LLTimeSearch.get_evg_name()
-        names = list(map(
-            lambda x: evg_pref.substitute(propty=x[0]),
-            sorted(
-                HLTimeSearch.get_configurable_hl_events().items(),
-                key=lambda x: x[1])))
+        names = list(
+            map(
+                lambda x: evg_pref.substitute(propty=x[0]),
+                sorted(
+                    HLTimeSearch.get_configurable_hl_events().items(),
+                    key=lambda x: x[1],
+                ),
+            )
+        )
         evts = _EventList(
-            name='High Level Events', parent=self, prefix=self.prefix,
-            props=props, obj_names=names)
+            name='High Level Events',
+            parent=self,
+            prefix=self.prefix,
+            props=props,
+            obj_names=names,
+        )
         return evts
 
     def settriggers(self):
-        props = {
-            'detailed', 'status', 'name', 'state', 'source', 'delay'}
+        props = {'detailed', 'status', 'name', 'state', 'source', 'delay'}
         names = HLTimeSearch.get_hl_triggers()
         trigs = _HLTriggerList(
-            name='High Level Triggers', parent=self, prefix=self.prefix,
-            props=props, obj_names=names)
+            name='High Level Triggers',
+            parent=self,
+            prefix=self.prefix,
+            props=props,
+            obj_names=names,
+        )
         return trigs
 
     def setupmenus(self):
@@ -151,8 +193,11 @@ class TimingMain(SiriusMainWindow):
 
         action = main_menu.addAction('&Monitor')
         connect_newprocess(
-            action, ['sirius-hla-as-ti-control.py', '-t', 'monitor'],
-            parent=self, is_window=True)
+            action,
+            ['sirius-hla-as-ti-control.py', '-t', 'monitor'],
+            parent=self,
+            is_window=True,
+        )
 
     @staticmethod
     def create_devices_menu(main_menu, prefix=''):
