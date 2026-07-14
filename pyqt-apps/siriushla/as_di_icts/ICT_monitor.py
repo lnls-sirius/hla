@@ -625,14 +625,14 @@ class _MyWaveformCurveItem(WaveformCurveItem):
         if self.y_waveform is None:
             return
         if self.x_waveform is None:
-            self.setData(y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float_))
+            self.setData(y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float64))
             return
         if self.x_waveform.shape[0] > self.y_waveform.shape[0]:
             self.x_waveform = self.x_waveform[:self.y_waveform.shape[0]]
         elif self.x_waveform.shape[0] < self.y_waveform.shape[0]:
             self.y_waveform = self.y_waveform[:self.x_waveform.shape[0]]
-        self.setData(x=self.x_waveform[0:POINTS_TO_PLOT].astype(np.float_),
-                     y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float_))
+        self.setData(x=self.x_waveform[0:POINTS_TO_PLOT].astype(np.float64),
+                     y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float64))
         self.needs_new_x = True
         self.needs_new_y = True
 
