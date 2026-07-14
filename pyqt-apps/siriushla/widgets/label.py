@@ -2,7 +2,7 @@
 
 from pyqtgraph import functions as func
 from qtpy.QtWidgets import QLabel, QApplication
-from qtpy.QtCore import Qt, Property, Q_ENUMS
+from qtpy.QtCore import Qt, Property
 from pydm.utilities import units
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
@@ -12,7 +12,7 @@ from pydm.utilities import is_pydm_app, is_qt_designer
 from siriuspy.clientarch import Time as _Time
 
 
-class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
+class SiriusLabel(QLabel, TextFormatter, PyDMWidget):
     """
     A QLabel with support for Channels and more from PyDM
 
@@ -26,7 +26,6 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         If True, label do not use unit convertion feature.
         Default to False.
     """
-    Q_ENUMS(DisplayFormat)
     DisplayFormat = DisplayFormat
     DisplayFormat.Time = 6
     DisplayFormat.BSMPUDCVersion = 7

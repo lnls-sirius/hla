@@ -5,11 +5,12 @@ import hashlib as _hashlib
 import logging as _log
 
 import numpy as _np
+from enum import Enum
 
 from qtpy.QtWidgets import QStyleOption, QFrame, QMessageBox, QInputDialog, \
     QLineEdit
 from qtpy.QtGui import QPainter
-from qtpy.QtCore import Property, Q_ENUMS, QByteArray, QRectF, \
+from qtpy.QtCore import Property, QEnum, QByteArray, QRectF, \
     QSize, Signal, Qt, QFile
 from qtpy.QtSvg import QSvgRenderer
 
@@ -34,13 +35,10 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
     bit : int
         Bit of the PV value to be handled.
     """
-
-    class buttonShapeMap:
-        """Enum class of shapes of button."""
-
-        locals().update(**BUTTONSHAPE)
-
-    Q_ENUMS(buttonShapeMap)
+    @QEnum
+    class buttonShapeMap(Enum):
+        Squared = 0
+        Rounded = 1
 
     # enumMap for buttonShapeMap
     locals().update(**BUTTONSHAPE)
@@ -379,7 +377,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.renderer.load(QByteArray(buttonstate_bytearray))
         self.renderer.render(painter, bounds)
 
-    @Property(buttonShapeMap)
+    @Property(Enum)
     def shape(self):
         """
         Property to define the shape of the button.
