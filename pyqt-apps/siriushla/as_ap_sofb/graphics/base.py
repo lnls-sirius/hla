@@ -437,20 +437,20 @@ class BaseWidget(QWidget):
 
 class UpdateGraph(QObject):
     """Worker to update graphics."""
-    avex = Signal([float])
-    stdx = Signal([float])
-    p2px = Signal([float])
-    ave_pstdx = Signal([float])
-    ave_mstdx = Signal([float])
-    data_sigx = Signal([_np.ndarray])
-    ref_sigx = Signal([_np.ndarray])
-    avey = Signal([float])
-    stdy = Signal([float])
-    p2py = Signal([float])
-    ave_pstdy = Signal([float])
-    ave_mstdy = Signal([float])
-    data_sigy = Signal([_np.ndarray])
-    ref_sigy = Signal([_np.ndarray])
+    avex = Signal((float, ))
+    stdx = Signal((float, ))
+    p2px = Signal((float, ))
+    ave_pstdx = Signal((float, ))
+    ave_mstdx = Signal((float, ))
+    data_sigx = Signal((_np.ndarray, ))
+    ref_sigx = Signal((_np.ndarray, ))
+    avey = Signal((float, ))
+    stdy = Signal((float, ))
+    p2py = Signal((float, ))
+    ave_pstdy = Signal((float, ))
+    ave_mstdy = Signal((float, ))
+    data_sigy = Signal((_np.ndarray, ))
+    ref_sigy = Signal((_np.ndarray, ))
 
     UNIT = 1e-6  # orbit is in um and strength in urad
 
