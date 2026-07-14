@@ -98,7 +98,7 @@ class SelectionMatrixWidget(QWidget):
             scr_ar = QScrollArea(self)
             scr_ar.setWidget(scr_ar_wid)
             scr_ar.setWidgetResizable(True)
-            scr_ar.setSizeAdjustPolicy(scr_ar.AdjustToContents)
+            scr_ar.setSizeAdjustPolicy(scr_ar.SizeAdjustPolicy.AdjustToContents)
             lay.addWidget(scr_ar, 1, 0, 1, 1)
         else:
             scr_ar_wid.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)

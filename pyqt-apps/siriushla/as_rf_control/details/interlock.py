@@ -36,7 +36,7 @@ class LLRFInterlockDetails(SiriusDialog):
         lay.addWidget(self.title)
 
         scarea = QScrollArea(self)
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
         scr_ar_wid = QWidget()
         scarea.setWidget(scr_ar_wid)

@@ -54,7 +54,7 @@ class RFMainControl(SiriusMainWindow):
         label = QLabel('<h2>'+self.section+' RF Controls - Overview</h2>',
                        self, alignment=Qt.AlignCenter)
         scarea = QScrollArea(self)
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
         scr_ar_wid = QWidget()
         scarea.setWidget(scr_ar_wid)

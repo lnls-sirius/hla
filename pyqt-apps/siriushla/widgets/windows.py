@@ -148,7 +148,7 @@ def create_window_from_widget(
                     scroll.setWidget(self.widget)
                     scroll.setWidgetResizable(True)
                     scroll.setSizeAdjustPolicy(
-                        QScrollArea.AdjustToContentsOnFirstShow)
+                        QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
                     self.setCentralWidget(scroll)
 
                     scroll_style = '#scroll{'

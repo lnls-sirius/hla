@@ -69,7 +69,7 @@ class SSACurrentsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
 
         scarea = QScrollArea(self)
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
         scr_ar_wid = QWidget()
         scarea.setWidget(scr_ar_wid)

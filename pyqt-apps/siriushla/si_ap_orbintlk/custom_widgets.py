@@ -421,7 +421,7 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
         scarea = QScrollArea(self)
         scarea.setStyleSheet(
             '.QScrollArea{min-height: 30em;}')
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
 
         scr_ar_wid = QWidget()
