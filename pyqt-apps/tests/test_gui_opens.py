@@ -22,6 +22,8 @@ from siriushla.li_eg_control import LIEgunWindow
 
 from siriushla.tb_di_slits import SlitsView
 
+from siriushla.bl_ap_imgproc import BLImgProc
+
 
 linac_scripts_config = [
     LLRFMain,
@@ -63,6 +65,12 @@ tb_scripts_config = [
 ]
 
 
+bl_scripts_config = [
+    (BLImgProc, {"dvf": "CAX:A:BASLER01"}),
+    (BLImgProc, {"dvf": "CAX:B:BASLER01"})
+]
+
+
 @pytest.fixture
 def open_gui(gui_config, qtbot):
     if isinstance(gui_config, tuple):
@@ -90,4 +98,8 @@ def test_ts_gui_opens(open_gui):
 
 @pytest.mark.parametrize("gui_config", tb_scripts_config)
 def test_tb_gui_opens(open_gui):
+    assert open_gui
+
+@pytest.mark.parametrize("gui_config", bl_scripts_config)
+def test_bl_gui_opens(open_gui):
     assert open_gui
