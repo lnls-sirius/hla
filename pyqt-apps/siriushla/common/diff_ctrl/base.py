@@ -2,6 +2,7 @@
 """Scraper and Slit Monitor Base class."""
 
 import os as _os
+from pathlib import Path
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
@@ -94,9 +95,14 @@ class DiffCtrlDevMonitor(QWidget):
             parent=self, label='Go to maximum aperture', pressValue=1,
             init_channel=self.device.substitute(propty='Home-Cmd'))
 
-        tmp_file = _substitute_in_file(
-            _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
-            self.orientation.lower()+'mon.ui', {'PREFIX': self.prefix})
+        file_path = _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' + \
+            self.orientation.lower()+'mon.ui'
+        ui_file = _substitute_in_file(
+            file_path, {'PREFIX': self.prefix})
+        path = Path(file_path)
+        tmp_file = str(path.with_name(f"temp_{path.name}"))
+        with open(tmp_file, "w") as file:
+            file.write(ui_file.getvalue())
         self.dev_widget = loadUi(tmp_file)
         self.dev_widget.setObjectName('dev')
         self.dev_widget_scrarea = QScrollArea()
