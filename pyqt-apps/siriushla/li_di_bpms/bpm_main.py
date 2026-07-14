@@ -449,7 +449,7 @@ class DigBeamPosProc(SiriusMainWindow):
 
         selector = enum_button.PyDMEnumButton(
             init_channel=self.prefix + self.device_name+":"+channel)
-        selector.widgetType = 0
+        selector.widgetType = enum_button.WidgetType.PushButton
         selector.orientation = orientation
         lay.addWidget(selector, 0)
 
