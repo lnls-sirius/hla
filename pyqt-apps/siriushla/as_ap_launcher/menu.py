@@ -23,6 +23,7 @@ from siriushla.as_ap_configdb.pvsconfigs import SelectAndApplyPVsWidget
 from siriushla.as_di_scrns.list_scrns import get_scrn_list
 from siriushla.as_di_dccts.main import get_dcct_list
 from siriushla.si_ap_fofb import get_fofb_icon
+from siriushla.as_ti_control import TimingMain
 
 
 def get_pushbutton(name, parent):
@@ -242,6 +243,8 @@ def get_object(ismenubar=True, parent=None):
             summary.setIcon(util.get_monitor_icon('mdi.timer'))
             self.connect_newprocess(
                 summary, ['sirius-hla-as-ti-control.py', '-t', 'monitor'])
+
+            TimingMain.create_devices_menu(timing)
             timing.addAction(main)
             timing.addAction(summary)
 

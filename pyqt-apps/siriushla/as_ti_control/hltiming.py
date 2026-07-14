@@ -146,48 +146,53 @@ class TimingMain(SiriusMainWindow):
     def setupmenus(self):
         main_menu = self.menuBar()
         main_menu.setNativeMenuBar(False)
-        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
 
-        menu = main_menu.addMenu('&Devices')
-        action = menu.addAction('EVG')
-        evg = SiriusPVName(LLTimeSearch.get_evg_name())
-        Window = create_window_from_widget(_EVG, title=evg, icon=icon)
-        connect_window(
-            action, Window, None, prefix=self.prefix, device=evg)
-
-        menu_evr = menu.addMenu('EVRs')
-        for evr in LLTimeSearch.get_device_names(filters={'dev': 'EVR'}):
-            action = menu_evr.addAction(evr)
-            Window = create_window_from_widget(_EVR, title=evr, icon=icon)
-            connect_window(
-                action, Window, None, prefix=self.prefix, device=evr)
-
-        menu_eve = menu.addMenu('EVEs')
-        for eve in LLTimeSearch.get_device_names(filters={'dev': 'EVE'}):
-            action = menu_eve.addAction(eve)
-            Window = create_window_from_widget(_EVE, title=eve, icon=icon)
-            connect_window(
-                action, Window, None, prefix=self.prefix, device=eve)
-
-        menu_afc = menu.addMenu('AMCs')
-        for afc in LLTimeSearch.get_device_names(
-                filters={'dev': 'AMCFPGAEVR'}):
-            action = menu_afc.addAction(afc)
-            Window = create_window_from_widget(_AFC, title=afc, icon=icon)
-            connect_window(
-                action, Window, None, prefix=self.prefix, device=afc)
-
-        menu_fout = menu.addMenu('Fouts')
-        for fout in LLTimeSearch.get_device_names(filters={'dev': 'Fout'}):
-            action = menu_fout.addAction(fout)
-            Window = create_window_from_widget(_FOUT, title=fout, icon=icon)
-            connect_window(
-                action, Window, None, prefix=self.prefix, device=fout)
+        self.create_devices_menu(main_menu, prefix=self.prefix)
 
         action = main_menu.addAction('&Monitor')
         connect_newprocess(
             action, ['sirius-hla-as-ti-control.py', '-t', 'monitor'],
             parent=self, is_window=True)
+
+    @staticmethod
+    def create_devices_menu(main_menu, prefix=''):
+        LLTim = LLTimeSearch
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+
+        menu = main_menu.addMenu('&Devices')
+        menu.setObjectName('ASApp')
+        action = menu.addAction('EVG')
+        evg = SiriusPVName(LLTim.get_evg_name())
+        window = create_window_from_widget(_EVG, title=evg, icon=icon)
+        connect_window(action, window, None, prefix=prefix, device=evg)
+
+        menu_evr = menu.addMenu('EVRs')
+        menu_evr.setObjectName('ASApp')
+        for evr in LLTim.get_device_names(filters={'dev': 'EVR'}):
+            action = menu_evr.addAction(evr)
+            window = create_window_from_widget(_EVR, title=evr, icon=icon)
+            connect_window(action, window, None, prefix=prefix, device=evr)
+
+        menu_eve = menu.addMenu('EVEs')
+        menu_eve.setObjectName('ASApp')
+        for eve in LLTim.get_device_names(filters={'dev': 'EVE'}):
+            action = menu_eve.addAction(eve)
+            window = create_window_from_widget(_EVE, title=eve, icon=icon)
+            connect_window(action, window, None, prefix=prefix, device=eve)
+
+        menu_afc = menu.addMenu('AMCs')
+        menu_afc.setObjectName('ASApp')
+        for afc in LLTim.get_device_names(filters={'dev': 'AMCFPGAEVR'}):
+            action = menu_afc.addAction(afc)
+            window = create_window_from_widget(_AFC, title=afc, icon=icon)
+            connect_window(action, window, None, prefix=prefix, device=afc)
+
+        menu_fout = menu.addMenu('Fouts')
+        menu_fout.setObjectName('ASApp')
+        for fout in LLTim.get_device_names(filters={'dev': 'Fout'}):
+            action = menu_fout.addAction(fout)
+            window = create_window_from_widget(_FOUT, title=fout, icon=icon)
+            connect_window(action, window, None, prefix=prefix, device=fout)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)
