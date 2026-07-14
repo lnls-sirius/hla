@@ -1,6 +1,6 @@
 """Configuration window model definition."""
 import re
-from qtpy.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
+from qtpy.QtCore import Qt, QAbstractTableModel, QModelIndex
 from qtpy.QtWidgets import QItemDelegate, QDoubleSpinBox
 from qtpy.QtGui import QColor
 from siriuspy.clientconfigdb import ConfigDBClient
@@ -190,8 +190,8 @@ class ConfigModel(QAbstractTableModel):
             pvname = self._vertical_header[index.row()]['name']
             pvtype = self._vertical_header[index.row()]['type']
             if pvtype == float:
-                return QVariant("{:8.5f}".format(
-                    self._configurations[index.column()].values[pvname]))
+                return "{:8.5f}".format(
+                    self._configurations[index.column()].values[pvname])
             else:
                 raise NotImplementedError
 
@@ -200,19 +200,19 @@ class ConfigModel(QAbstractTableModel):
         if role == Qt.TextAlignmentRole:
             pass
         if role != Qt.DisplayRole:
-            return QVariant()
+            return object()
         if orientation == Qt.Horizontal:
             if not self._configurations[section].dirty:
-                return QVariant(self._configurations[section].name)
+                return self._configurations[section].name
             else:
-                return QVariant(self._configurations[section].name + "*")
+                return self._configurations[section].name + "*"
         elif orientation == Qt.Vertical:
             if role == Qt.DisplayRole:
                 pvname = self._vertical_header[section]['name']
                 vheader = "{}".format(pvname)
-                return QVariant(vheader)
+                return vheader
 
-        return QVariant(int(section + 1))
+        return int(section + 1)
 
     def flags(self, index):
         """Override to make cells editable."""
