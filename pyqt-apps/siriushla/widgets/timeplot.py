@@ -55,7 +55,7 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             super().receiveNewValue(new_value)
 
     @Slot()
-    def redrawCurve(self):
+    def redrawCurve(self, min_x = None, max_x = None):
         """
         Rederive redrawCurve to use data only refered to timespan.
         """
