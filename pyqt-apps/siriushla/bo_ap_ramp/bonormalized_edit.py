@@ -6,10 +6,10 @@ from functools import partial as _part
 import numpy as _np
 
 from qtpy.QtCore import Qt, Signal, Slot
-from qtpy.QtGui import QKeySequence
+from qtpy.QtGui import QKeySequence, QUndoStack
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QMenuBar, \
-    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox
+    QUndoCommand, QHBoxLayout, QMessageBox
 import qtawesome as qta
 
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
