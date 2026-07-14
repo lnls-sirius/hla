@@ -44,8 +44,8 @@ class SpinBoxDelegate(QStyledItemDelegate):
         editor.setMinimum(self.mini)
         editor.setMaximum(self.maxi)
         editor.setDecimals(self.prec)
-        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        locale.setNumberOptions(locale.RejectGroupSeparator)
+        locale = QLocale(QLocale.English, territory=QLocale.UnitedStates)
+        locale.setNumberOptions(QLocale.RejectGroupSeparator)
         editor.setLocale(locale)
         return editor
 
