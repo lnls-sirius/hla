@@ -31,7 +31,7 @@ class LIModltrWindow(SiriusMainWindow):
 
         self._setupUi()
 
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):

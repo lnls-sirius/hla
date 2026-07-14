@@ -33,7 +33,7 @@ class CurrLTWindow(SiriusMainWindow):
         self.setObjectName('SIApp')
         self.setWindowTitle('SI Current Info: Current and Lifetime')
         self._setupUi()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):

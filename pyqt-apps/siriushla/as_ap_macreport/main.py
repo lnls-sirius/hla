@@ -37,7 +37,7 @@ class MacReportWindow(SiriusMainWindow):
 
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
-        self.setFocus(True)
+        self.setFocus()
 
     def _setupUi(self):
         cwid = QWidget(self)

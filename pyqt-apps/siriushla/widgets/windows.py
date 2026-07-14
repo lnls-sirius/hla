@@ -29,7 +29,7 @@ def _create_siriuswindow(qt_type):
         def __init__(self, *args, **kwargs):
             """Init."""
             super().__init__(*args, **kwargs)
-            self.setFocus(True)
+            self.setFocus()
             self.app = QApplication.instance()
             if isinstance(self, SiriusMainWindow):
                 self.label_version = QLabel(

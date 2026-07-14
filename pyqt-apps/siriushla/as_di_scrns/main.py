@@ -63,7 +63,7 @@ class SiriusScrnView(QWidget):
             self.scrn_prefix.substitute(propty='ImgROIOffsetY-RB'))
 
         self._setupUi()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
         self._loadCalibrationGrid(default=True)
 
