@@ -675,11 +675,12 @@ class EVG(BaseWidget):
         gbox_log = QGroupBox('Timestamp Log', self)
         lay_v.addWidget(gbox_log)
 
-        ld_logstp = QLabel('<b>Stop Log</b>', self)
-        self.sb_logstp = PyDMStateButton(self, self.get_pvname('stoplog'))
-        self.led_logstp = SiriusLedState(self, self.get_pvname('STOPLOGRBV'))
-        gb_logstp = self._create_small_group(
-            '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
+        ld_logen = QLabel('<b>Enable Log</b>', self)
+        self.sb_logen = PyDMStateButton(self, self.get_pvname('EnableLog-Sel'))
+        self.led_logen = SiriusLedState(self, self.get_pvname('EnableLog-Sts'))
+        self.led_logen.offColor = self.led_logen.Red
+        gb_logen = self._create_small_group(
+            '', gbox_log, (ld_logen, self.sb_logen, self.led_logen))
 
         ld_logrst = QLabel('<b>Reset Log</b>', self)
         self.pb_logrst = SiriusPushButton(self,
@@ -731,7 +732,7 @@ class EVG(BaseWidget):
             '', gbox_log, (ld_logsub, self.lb_logsub))
 
         lay_log = QGridLayout(gbox_log)
-        lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logen, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
@@ -761,11 +762,12 @@ class EVG(BaseWidget):
 
         ld_enbstp = QLabel('<b>Enable Log Buffer</b>', self)
         pvname_enbstp_sel = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sel')
+            propty=self.device.propty+'EnableLogBuff-Sel')
         self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
         pvname_enbstp_sts = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sts')
+            propty=self.device.propty+'EnableLogBuff-Sts')
         self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        self.led_enbstp.offColor = self.led_enbstp.Red
         gb_enbstp = self._create_small_group(
             '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
 
@@ -1166,7 +1168,7 @@ class EventList(BaseList):
 
     _MIN_WIDs = {
         'ext_trig': 4, 'mode': 6.6, 'delay_type': 4.2, 'delay': 5.2,
-        'delayraw': 5.2, 'description': 9.7, 'code': 3.2, 'name': 4.8,
+        'delayraw': 5.2, 'description': 7, 'code': 3.2, 'name': 4.8,
         }
     _LABELS = {
         'ext_trig': 'Trig.', 'mode': 'Mode', 'description': 'Description',
@@ -1220,6 +1222,7 @@ class EventList(BaseList):
         elif prop == 'description':
             pvname = device.substitute(propty=device.propty+'Desc-Cte')
             sp = SiriusLabel(self, init_channel=pvname)
+            sp.setAlignment(Qt.AlignCenter)
         elif prop == 'code':
             pvname = device.substitute(propty=device.propty+'Code-Mon')
             sp = SiriusLabel(self, init_channel=pvname)
@@ -1237,7 +1240,7 @@ class ClockList(BaseList):
         'frequency': 4.8,
         'mux_div': 6,
         'mux_enbl': 4.8,
-        'description': 9.7,
+        'description': 7,
         }
     _LABELS = {
         'name': 'Name',
@@ -1283,6 +1286,7 @@ class ClockList(BaseList):
         elif prop == 'description':
             pvname = device.substitute(propty=device.propty+'Desc-Cte')
             sp = SiriusLabel(self, init_channel=pvname)
+            sp.setAlignment(Qt.AlignCenter)
         if rb is None:
             return (sp, )
         return (sp, rb)
@@ -2310,11 +2314,12 @@ class _EVR_EVE(BaseWidget):
         # Timestamp Log
         gbox_log = QGroupBox('Timestamp Log', self)
 
-        ld_logstp = QLabel('<b>Stop Log</b>', self)
-        self.sb_logstp = PyDMStateButton(self, self.get_pvname('stoplog'))
-        self.led_logstp = SiriusLedState(self, self.get_pvname('STOPLOGRBV'))
-        gb_logstp = self._create_small_group(
-            '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
+        ld_logen = QLabel('<b>Enable Log</b>', self)
+        self.sb_logen = PyDMStateButton(self, self.get_pvname('EnableLog-Sel'))
+        self.led_logen = SiriusLedState(self, self.get_pvname('EnableLog-Sts'))
+        self.led_logen.offColor = self.led_logen.Red
+        gb_logen = self._create_small_group(
+            '', gbox_log, (ld_logen, self.sb_logen, self.led_logen))
 
         ld_logrst = QLabel('<b>Reset Log</b>', self)
         self.pb_logrst = SiriusPushButton(self,
@@ -2366,7 +2371,7 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logsub, self.lb_logsub))
 
         lay_log = QGridLayout(gbox_log)
-        lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logen, 0, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
@@ -2395,11 +2400,12 @@ class _EVR_EVE(BaseWidget):
 
         ld_enbstp = QLabel('<b>Enable Log Buffer</b>', self)
         pvname_enbstp_sel = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sel')
+            propty=self.device.propty+'EnableLogBuff-Sel')
         self.sb_enbstp = PyDMStateButton(self, init_channel=pvname_enbstp_sel)
         pvname_enbstp_sts = self.device.substitute(
-            propty=self.device.propty+'StopSoftLog-Sts')
+            propty=self.device.propty+'EnableLogBuff-Sts')
         self.led_enbstp = PyDMLed(self, init_channel=pvname_enbstp_sts)
+        self.led_enbstp.offColor = self.led_enbstp.Red
         gb_enbstp = self._create_small_group(
             '', gbox_log, (ld_enbstp, self.sb_enbstp, self.led_enbstp))
 

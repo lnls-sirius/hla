@@ -59,7 +59,7 @@ class _BbBModalAnalysis(QWidget):
             lineStyle=Qt.SolidLine)
         gp_spec.add_marker(
             name='Marker',
-            xchannel=self.prop_pref+'MD_PEAKFREQ',
+            xchannel=self.prop_pref+'MD_FREQ',
             ychannel=self.prop_pref+'MD_PEAK',
             color=QColor('red'), symbol='o')
 
@@ -99,33 +99,29 @@ class _BbBModalAnalysis(QWidget):
         lay_ctrl.addWidget(sb_avg, 3, 2)
 
         # Markers
-        ld_rng = QLabel('Range (kHz)', self, alignment=Qt.AlignCenter)
-        le_low = PyDMLineEdit(self, self.prop_pref+'MD_SP_LOW')
-        le_high = PyDMLineEdit(self, self.prop_pref+'MD_SP_HIGH')
-        cb_mode = PyDMEnumComboBox(self, self.prop_pref+'MD_SP_SEARCH')
-
         ld_mnum = QLabel('Mode #', self, alignment=Qt.AlignRight)
-        lb_mnum = SiriusLabel(self, self.prop_pref+'MD_MAXMODE')
-
         ld_mamp = QLabel('Mode Amp.', self, alignment=Qt.AlignRight)
-        lb_mamp = SiriusLabel(self, self.prop_pref+'MD_MAXVAL')
-
         ld_peak = QLabel('Value', self, alignment=Qt.AlignRight)
-        lb_peak = SiriusLabel(self, self.prop_pref+'MD_PEAK')
-
-        ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignRight)
-        lb_pfrq = SiriusLabel(self, self.prop_pref+'MD_PEAKFREQ')
-        lb_pfrq.showUnits = True
-
+        ld_pfrq = QLabel('Freq.', self, alignment=Qt.AlignRight)
         ld_tune = QLabel('Tune', self, alignment=Qt.AlignRight)
-        lb_tune = SiriusLabel(self, self.prop_pref+'MD_PEAKTUNE')
+
+        wid_mkr = _BbBAcqMarkerConfig(
+            self,
+            prefix=self._prefix,
+            device=self._device,
+            acq_type=self.acq_type + '_MD'
+        )
+        lb_peak = SiriusLabel(self, self.prop_pref + '_MD_PEAK')
+        lb_peak.showUnits = True
+        lb_pfrq = SiriusLabel(self, self.prop_pref + '_MD_FREQ')
+        lb_pfrq.showUnits = True
+        lb_tune = SiriusLabel(self, self.prop_pref + '_MD_TUNE')
+        lb_mnum = SiriusLabel(self, self.prop_pref+'MD_MAXMODE')
+        lb_mamp = SiriusLabel(self, self.prop_pref+'MD_MAXVAL')
 
         gb_mark = QGroupBox('Marker', self)
         lay_mark = QGridLayout(gb_mark)
-        lay_mark.addWidget(ld_rng, 0, 0)
-        lay_mark.addWidget(le_low, 1, 0)
-        lay_mark.addWidget(le_high, 2, 0)
-        lay_mark.addWidget(cb_mode, 3, 0)
+        lay_mark.addWidget(wid_mkr, 0, 0, 5, 1)
         lay_mark.addWidget(ld_mnum, 0, 1)
         lay_mark.addWidget(lb_mnum, 0, 2)
         lay_mark.addWidget(ld_mamp, 1, 1)
@@ -153,6 +149,49 @@ class _BbBModalAnalysis(QWidget):
         lay.addWidget(gb_mark, 3, 1)
         lay.setRowStretch(1, 2)
         lay.setRowStretch(2, 2)
+
+
+class _BbBAcqMarkerConfig(QWidget):
+    """BbB Acquisition Marker Config Widget."""
+
+    def __init__(
+            self,
+            parent=None,
+            prefix=_vaca_prefix,
+            device='',
+            acq_type='SRAM'
+        ):
+        """Init."""
+        super().__init__(parent)
+        set_bbb_color(self, device)
+        self._prefix = prefix
+        self._device = _PVName(device)
+        self.acq_type = acq_type
+        self.dev_pref = self._device.substitute(prefix=prefix, propty=acq_type)
+        self.prop_pref = self.dev_pref + f':{acq_type:s}_'
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+
+        cb_mode = PyDMEnumComboBox(
+            self, self.dev_pref+':'+self.acq_type+'_MODE'
+        )
+        le_low = SiriusSpinbox(self, self.dev_pref + '_LOW')
+        le_high = SiriusSpinbox(self, self.dev_pref + '_HIGH')
+        le_skew = SiriusSpinbox(self, self.dev_pref + '_SKEW')
+        lb_skew = SiriusLabel(self, self.dev_pref + '_SKEWNESS')
+
+        lay.addWidget(QLabel('Search Method', self), 0, 0)
+        lay.addWidget(QLabel('Low', self), 1, 0)
+        lay.addWidget(QLabel('High', self), 2, 0)
+        lay.addWidget(QLabel('Skew', self), 3, 0)
+        lay.addWidget(QLabel('Skewness', self), 4, 0)
+        lay.addWidget(cb_mode, 0, 1)
+        lay.addWidget(le_low, 1, 1)
+        lay.addWidget(le_high, 2, 1)
+        lay.addWidget(le_skew, 3, 1)
+        lay.addWidget(lb_skew, 4, 1)
 
 
 class _BbBAcqBase(QWidget):
@@ -360,13 +399,13 @@ class _BbBAcqBase(QWidget):
             lineStyle=Qt.SolidLine)
         gp_avgspe.add_marker(
             name='Marker 1',
-            xchannel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ1',
-            ychannel=self.dev_pref+':'+self.TYPE+'_PEAK1',
+            xchannel=self.dev_pref+':'+self.TYPE+'_M1_FREQ',
+            ychannel=self.dev_pref+':'+self.TYPE+'_M1_PEAK',
             color=QColor('red'), symbol='o')
         gp_avgspe.add_marker(
             name='Marker 2',
-            xchannel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ2',
-            ychannel=self.dev_pref+':'+self.TYPE+'_PEAK2',
+            xchannel=self.dev_pref+':'+self.TYPE+'_M2_FREQ',
+            ychannel=self.dev_pref+':'+self.TYPE+'_M2_PEAK',
             color=QColor('magenta'), symbol='s')
 
         lay_graph = QGridLayout()
@@ -425,55 +464,67 @@ class _BbBAcqBase(QWidget):
         lay_acqctrl.addWidget(le_bunpatt, 2, 4, 1, 3)
 
         # Markers
-        ld_mk1 = QLabel('1', self, alignment=Qt.AlignCenter)
-        ld_mk2 = QLabel('2', self, alignment=Qt.AlignCenter)
-        ld_span = QLabel('Span (kHz)', self, alignment=Qt.AlignCenter)
-        ld_mode = QLabel('Mode', self, alignment=Qt.AlignCenter)
+        ld_mode = QLabel('Configuration', self, alignment=Qt.AlignCenter)
         ld_val = QLabel('Value', self, alignment=Qt.AlignCenter)
         ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignCenter)
         ld_tune = QLabel('Tune', self, alignment=Qt.AlignCenter)
 
-        le_low1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_LOW1')
-        le_high1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_HIGH1')
-        cb_mode1 = PyDMEnumComboBox(
-            self, self.dev_pref+':'+self.TYPE+'_SP_SEARCH1')
-        lb_peak1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK1')
+        btn_mkr1 = QPushButton('Marker 1', self)
+        window = create_window_from_widget(
+            _BbBAcqMarkerConfig,
+            title='SRAM Marker 1',
+            icon=get_bbb_icon(),
+            is_main=False
+        )
+        connect_window(
+            btn_mkr1,
+            window,
+            self,
+            prefix=self._prefix,
+            device=self._device,
+            acq_type=self.TYPE + '_M1'
+        )
+        lb_peak1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M1_PEAK')
         lb_peak1.showUnits = True
-        lb_pfrq1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ1')
+        lb_pfrq1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M1_FREQ')
         lb_pfrq1.showUnits = True
-        lb_tune1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE1')
+        lb_tune1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M1_TUNE')
 
-        le_low2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_LOW2')
-        le_high2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_HIGH2')
-        cb_mode2 = PyDMEnumComboBox(
-            self, self.dev_pref+':'+self.TYPE+'_SP_SEARCH2')
-        lb_peak2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK2')
+        btn_mkr2 = QPushButton('Marker 2', self)
+        window = create_window_from_widget(
+            _BbBAcqMarkerConfig,
+            title='SRAM Marker 2',
+            icon=get_bbb_icon(),
+            is_main=False
+        )
+        connect_window(
+            btn_mkr2,
+            window,
+            self,
+            prefix=self._prefix,
+            device=self._device,
+            acq_type=self.TYPE + '_M2'
+        )
+        lb_peak2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M2_PEAK')
         lb_peak2.showUnits = True
-        lb_pfrq2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ2')
+        lb_pfrq2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M2_FREQ')
         lb_pfrq2.showUnits = True
-        lb_tune2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE2')
+        lb_tune2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_M2_TUNE')
 
         gbox_mark = QGroupBox('Markers', self)
         lay_mark = QGridLayout(gbox_mark)
-        lay_mark.addWidget(ld_span, 0, 1, 1, 2)
-        lay_mark.addWidget(ld_mode, 0, 3)
-        lay_mark.addWidget(ld_val, 0, 4)
-        lay_mark.addWidget(ld_pfrq, 0, 5)
-        lay_mark.addWidget(ld_tune, 0, 6)
-        lay_mark.addWidget(ld_mk1, 1, 0)
-        lay_mark.addWidget(le_low1, 1, 1)
-        lay_mark.addWidget(le_high1, 1, 2)
-        lay_mark.addWidget(cb_mode1, 1, 3)
-        lay_mark.addWidget(lb_peak1, 1, 4)
-        lay_mark.addWidget(lb_pfrq1, 1, 5)
-        lay_mark.addWidget(lb_tune1, 1, 6)
-        lay_mark.addWidget(ld_mk2, 2, 0)
-        lay_mark.addWidget(le_low2, 2, 1)
-        lay_mark.addWidget(le_high2, 2, 2)
-        lay_mark.addWidget(cb_mode2, 2, 3)
-        lay_mark.addWidget(lb_peak2, 2, 4)
-        lay_mark.addWidget(lb_pfrq2, 2, 5)
-        lay_mark.addWidget(lb_tune2, 2, 6)
+        lay_mark.addWidget(ld_mode, 0, 0)
+        lay_mark.addWidget(ld_val, 0, 1)
+        lay_mark.addWidget(ld_pfrq, 0, 2)
+        lay_mark.addWidget(ld_tune, 0, 3)
+        lay_mark.addWidget(btn_mkr1, 1, 0)
+        lay_mark.addWidget(lb_peak1, 1, 1)
+        lay_mark.addWidget(lb_pfrq1, 1, 2)
+        lay_mark.addWidget(lb_tune1, 1, 3)
+        lay_mark.addWidget(btn_mkr2, 2, 0)
+        lay_mark.addWidget(lb_peak2, 2, 1)
+        lay_mark.addWidget(lb_pfrq2, 2, 2)
+        lay_mark.addWidget(lb_tune2, 2, 3)
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -710,8 +761,8 @@ class BbBAcqSB(QWidget):
             xchannel=self.dev_pref+':SB_FREQ',
             color=QColor('blue'), lineStyle=Qt.SolidLine)
         gp_mag.add_marker(
-            self.dev_pref+':SB_PEAKFREQ1',
-            self.dev_pref+':SB_PEAK1',
+            self.dev_pref+':SB_M1_FREQ',
+            self.dev_pref+':SB_M1_PEAK',
             name='Mag', color=QColor('magenta'), symbol='o')
 
         gp_phs = WfmGraph(self)
@@ -723,8 +774,8 @@ class BbBAcqSB(QWidget):
             xchannel=self.dev_pref+':SB_FREQ',
             color=QColor('blue'), lineStyle=Qt.SolidLine)
         gp_phs.add_marker(
-            self.dev_pref+':SB_PEAKFREQ1',
-            self.dev_pref+':SB_PHASE1',
+            self.dev_pref+':SB_M1_FREQ',
+            self.dev_pref+':SB_M1_PHASE',
             name='Phs', color=QColor('magenta'), symbol='o')
 
         ld_tfenbl = QLabel('Transfer Function Enable', self)
@@ -798,49 +849,50 @@ class BbBAcqSB(QWidget):
         lay_acqctrl.addWidget(lb_bunid, 1, 6)
 
         # Marker
-        ld_mkspan = QLabel('Span (kHz)', self, alignment=Qt.AlignCenter)
-        le_mklow = PyDMLineEdit(self, self.dev_pref+':SB_SP_LOW1')
-        le_mkhigh = PyDMLineEdit(self, self.dev_pref+':SB_SP_HIGH1')
-
-        ld_mkmode = QLabel('Mode', self, alignment=Qt.AlignCenter)
-        cb_mkmode = PyDMEnumComboBox(self, self.dev_pref+':SB_SP_SEARCH1')
-
+        btn_mkr1 = QPushButton('Marker 1', self)
+        window = create_window_from_widget(
+            _BbBAcqMarkerConfig,
+            title='SRAM Marker 1',
+            icon=get_bbb_icon(),
+            is_main=False
+        )
+        connect_window(
+            btn_mkr1,
+            window,
+            self,
+            prefix=self._prefix,
+            device=self._device,
+            acq_type='SB_M1'
+        )
+        ld_marker = QLabel('Configuration', self, alignment=Qt.AlignCenter)
         ld_mkfreq = QLabel('Frequency', self, alignment=Qt.AlignCenter)
-        lb_mkfreq = SiriusLabel(self, self.dev_pref+':SB_PEAKFREQ1')
-        lb_mkfreq.showUnits = True
-
         ld_mktune = QLabel('Tune', self, alignment=Qt.AlignCenter)
-        lb_mktune = SiriusLabel(self, self.dev_pref+':SB_PEAKTUNE1')
-        lb_mktune.showUnits = True
-
         ld_mkmag = QLabel('Magnitude', self, alignment=Qt.AlignCenter)
-        lb_mkmag = SiriusLabel(self, self.dev_pref+':SB_PEAK1')
-        lb_mkmag.showUnits = True
-
         ld_mkphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-        lb_mkphs = SiriusLabel(self, self.dev_pref+':SB_PHASE1')
+
+        lb_mkfreq = SiriusLabel(self, self.dev_pref+':SB_M1_FREQ')
+        lb_mkfreq.showUnits = True
+        lb_mktune = SiriusLabel(self, self.dev_pref+':SB_M1_TUNE')
+        lb_mktune.showUnits = True
+        lb_mkmag = SiriusLabel(self, self.dev_pref+':SB_M1_PEAK')
+        lb_mkmag.showUnits = True
+        lb_mkphs = SiriusLabel(self, self.dev_pref+':SB_M1_PHASE')
         lb_mkphs.showUnits = True
 
-        lay = QGridLayout()
-        lay.addWidget(ld_mkfreq, 1, 0)
-        lay.addWidget(lb_mkfreq, 2, 0)
-        lay.addWidget(ld_mktune, 1, 1)
-        lay.addWidget(lb_mktune, 2, 1)
-        lay.addWidget(ld_mkmag, 1, 2)
-        lay.addWidget(lb_mkmag, 2, 2)
-        lay.addWidget(ld_mkphs, 1, 3)
-        lay.addWidget(lb_mkphs, 2, 3)
+        gbox_mk = QGroupBox('Marker', self)
+        lay = QGridLayout(gbox_mk)
+        lay.addWidget(ld_marker, 0, 0)
+        lay.addWidget(btn_mkr1, 1, 0)
+        lay.addWidget(ld_mkfreq, 0, 1)
+        lay.addWidget(lb_mkfreq, 1, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(ld_mktune, 0, 2)
+        lay.addWidget(lb_mktune, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(ld_mkmag, 0, 3)
+        lay.addWidget(lb_mkmag, 1, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(ld_mkphs, 0, 4)
+        lay.addWidget(lb_mkphs, 1, 4, alignment=Qt.AlignCenter)
         lay.setRowStretch(0, 2)
         lay.setRowStretch(3, 2)
-
-        gbox_mk = QGroupBox('Marker', self)
-        lay_mk = QGridLayout(gbox_mk)
-        lay_mk.addWidget(ld_mkmode, 0, 0)
-        lay_mk.addWidget(cb_mkmode, 0, 1)
-        lay_mk.addWidget(ld_mkspan, 1, 0, 1, 2)
-        lay_mk.addWidget(le_mklow, 2, 0)
-        lay_mk.addWidget(le_mkhigh, 2, 1)
-        lay_mk.addLayout(lay, 0, 2, 3, 1)
 
         wid = QWidget()
         lay = QGridLayout(wid)

@@ -63,7 +63,7 @@ class BbBTimingWidget(QWidget):
         sb_fidsigoff.setMaximum(3000)
         ld_fiddelay = QLabel('Fiducial Delay', self)
         sb_fiddelay = SiriusSpinbox(self, self.dev_pref+':FID_DELAY')
-        fr_fiddelay = SiriusFrame(self, self.dev_pref+':FID_DELAY_SUBWR')
+        fr_fiddelay = SiriusFrame(self, self.dev_pref+':FID_DELAY_HW_SUBWR')
         fr_fiddelay.add_widget(sb_fiddelay)
 
         gbox_tictrl = QGroupBox('Timing Control', self)

@@ -510,9 +510,9 @@ class MacReportWindow(SiriusMainWindow):
                     self, 'Ops...', 'Insert a valid time interval.')
                 return
 
-            self._macreport.timestamp_start = \
+            self._macreport.time_start = \
                 self.dt_start.dateTime().toSecsSinceEpoch()
-            self._macreport.timestamp_stop = \
+            self._macreport.time_stop = \
                 self.dt_stop.dateTime().toSecsSinceEpoch()
 
             self._progress_list.clear()

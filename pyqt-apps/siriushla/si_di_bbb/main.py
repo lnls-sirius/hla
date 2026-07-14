@@ -38,13 +38,13 @@ class BbBMainWindow(SiriusMainWindow):
             BbBGPIOWidget, title='Front-Back End', icon=get_bbb_icon(),
             is_main=True)
         connect_window(
-            self._but_fbe, window, self, prefix=self.prefix,
-            device='')  # device will be filled by the QComboBox callback
+            self._but_fbe, window, self, prefix=self.prefix, device=''
+        )  # device will be filled by the QComboBox callback
 
         cbox = QComboBox(self)
         cbox.addItems(['L', 'H', 'V'])
         cbox.currentTextChanged.connect(self._change_fbe_proc)
-        cbox.setCurrentIndex(2)
+        cbox.setCurrentIndex(0)
 
         hlay = QHBoxLayout()
         hlay.addWidget(QLabel('Plane', self))
