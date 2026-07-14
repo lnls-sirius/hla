@@ -32,7 +32,7 @@ class DetachableTabWidget(QTabWidget):
         self.detachedTabs = dict()
 
         # Close all detached tabs if the application is closed explicitly
-        QCoreApplication.aboutToQuit.connect(self.closeDetachedTabs)  # @UndefinedVariable
+        QCoreApplication.instance().aboutToQuit.connect(self.closeDetachedTabs)  # @UndefinedVariable
 
     @Slot(int, QPoint)
     def detachTab(self, index, point):
