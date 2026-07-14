@@ -9,7 +9,21 @@ from siriushla.as_ap_injcontrol import TLControlWindow
 from siriushla.as_ap_posang.HLPosAng import PosAngCorr
 from siriushla.as_ap_sofb import MainWindow
 from siriushla.as_ap_sofb.graphics import ShowMatrixWidget
+from siriushla.as_ps_control import PlotWfmErrorWindow
 from siriushla.as_di_icts import ICTMonitoring
+from siriushla.as_ap_configdb.normconfigs import ConfigManagerWindow
+from siriushla.as_di_vlight import VLightCamView
+from siriushla.as_di_tune import Tune
+from siriushla.as_ap_opticscorr import OpticsCorrWindow
+from siriushla.as_ap_injcontrol import InjBOControlWindow
+from siriushla.as_ap_currinfo.charge_monitor import BOMonitor
+from siriushla.as_rf_control.advanced_details import ADCDACDetails, \
+    AutoStartDetails, CalEqDetails, CalSysDetails, HardwareDetails, \
+    LoopsDetails, RampsDetails, RFInputsDetails, TuningDetails
+from siriushla.as_rf_control.control import RFMainControl
+from siriushla.as_rf_control.details import CavityStatusDetails, FDLDetails, \
+    LLRFInterlockDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
+    SSADetailsBO, TempMonitor, TransmLineStatusDetails
 
 from siriushla.li_rf_llrf import LLRFMain
 from siriushla.li_va_control import VacuumMain
@@ -23,6 +37,8 @@ from siriushla.li_eg_control import LIEgunWindow
 from siriushla.tb_di_slits import SlitsView
 
 from siriushla.bl_ap_imgproc import BLImgProc
+
+from siriushla.bo_ap_ramp import RampMain
 
 
 linac_scripts_config = [
@@ -71,6 +87,40 @@ bl_scripts_config = [
 ]
 
 
+bo_scripts_config = [
+    (ShowMatrixWidget, {"device": "BO-Glob:AP-SOFB", "acc": "BO"}),
+    (MainWindow, {"acc": "BO"}),
+    (PSTabControlWindow, {"section": "BO"}),
+    (PUControlWindow, {"section": "BO"}),
+    (ConfigManagerWindow, {"config_type": "bo_normalized"}),
+    (VLightCamView, {"section": "BO"}),
+    (Tune, {"section": "BO"}),
+    (OpticsCorrWindow, {"opticsparam": "tune", "acc": "bo"}),
+    (OpticsCorrWindow, {"opticsparam": "chrom", "acc": "bo"}),
+    RampMain,
+    InjBOControlWindow,
+    BOMonitor,
+    (ADCDACDetails, {"section": "BO"}),
+    (AutoStartDetails, {"section": "BO"}),
+    (CalEqDetails, {"section": "BO"}),
+    (CalSysDetails, {"section": "BO"}),
+    (HardwareDetails, {"section": "BO"}),
+    (LoopsDetails, {"section": "BO"}),
+    (RampsDetails, {"section": "BO"}),
+    (RFInputsDetails, {"section": "BO"}),
+    (TuningDetails, {"section": "BO"}),
+    (FDLDetails, {"section": "BO"}),
+    (CavityStatusDetails, {"section": "BO"}),
+    (LLRFInterlockDetails, {"section": "BO"}),
+    (SlowLoopErrorDetails, {"section": "BO"}),
+    (SlowLoopParametersDetails, {"section": "BO"}),
+    (TempMonitor, {"section": "BO"}),
+    (TransmLineStatusDetails, {"section": "BO"}),
+    (RFMainControl, {"section": "BO"}),
+    SSADetailsBO
+]
+
+
 @pytest.fixture
 def open_gui(gui_config, qtbot):
     if isinstance(gui_config, tuple):
@@ -102,4 +152,8 @@ def test_tb_gui_opens(open_gui):
 
 @pytest.mark.parametrize("gui_config", bl_scripts_config)
 def test_bl_gui_opens(open_gui):
+    assert open_gui
+
+@pytest.mark.parametrize("gui_config", bo_scripts_config)
+def test_bo_gui_opens(open_gui):
     assert open_gui
