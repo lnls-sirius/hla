@@ -28,8 +28,8 @@ class ConfigTableWidget(QTableView):
     def _setup_ui(self):
         self.setModel(
             ConfigDbTableModel(self._config_type, self._client))
-        self.setSelectionBehavior(self.SelectRows)
-        self.setSelectionMode(self.SingleSelection)
+        self.setSelectionBehavior(self.SelectionBehavior.SelectRows)
+        self.setSelectionMode(self.SelectionMode.SingleSelection)
         self.setSortingEnabled(True)
         # self.horizontalHeader().setResizeMode(QHeaderView.Stretch)
         self.hideColumn(0)
