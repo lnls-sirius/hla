@@ -1,10 +1,19 @@
 import pytest
-from siriushla.li_rf_llrf import LLRFMain
-from siriushla.li_va_control import VacuumMain
-from siriushla.li_pu_modltr import LIModltrWindow
+from siriuspy.envars import VACA_PREFIX
+
 from siriushla.as_ps_control import PSTabControlWindow
 from siriushla.as_ap_measure import EmittanceMeasure
 from siriushla.as_ap_measure import EnergyMeasure
+from siriushla.as_pu_control import PUControlWindow
+from siriushla.as_ap_injcontrol import TLControlWindow
+from siriushla.as_ap_posang.HLPosAng import PosAngCorr
+from siriushla.as_ap_sofb import MainWindow
+from siriushla.as_ap_sofb.graphics import ShowMatrixWidget
+from siriushla.as_di_icts import ICTMonitoring
+
+from siriushla.li_rf_llrf import LLRFMain
+from siriushla.li_va_control import VacuumMain
+from siriushla.li_pu_modltr import LIModltrWindow
 from siriushla.li_ap_mps import MPSControl
 from siriushla.li_ap_mps import MPSMonitor
 from siriushla.li_di_bpms import DigBeamPosProc
@@ -17,7 +26,7 @@ linac_scripts_config = [
     VacuumMain,
     EnergyMeasure,
     LIModltrWindow,
-    (PSTabControlWindow, {"section": 'LI'}),
+    (PSTabControlWindow, {"section": "LI"}),
     (EmittanceMeasure, {"place": "LI"}),
     MPSControl,
     MPSMonitor,
@@ -26,6 +35,18 @@ linac_scripts_config = [
     LiBeamProfile,
     LIEgunWindow
 ]
+
+
+ts_scripts_config = [
+    (TLControlWindow, {"tl": "ts"}),
+    (PosAngCorr, {"tl": "ts"}),
+    (ShowMatrixWidget, {"device": "TS-Glob:AP-SOFB", "acc": "TS"}),
+    (MainWindow, {"acc": "TS"}),
+    (ICTMonitoring, {"tl": "TS", "prefix": VACA_PREFIX}),
+    (PSTabControlWindow, {"section": "TS"}),
+    (PUControlWindow, {"section": "TS"})
+]
+
 
 @pytest.fixture
 def open_gui(gui_config, qtbot):
@@ -46,4 +67,8 @@ def open_gui(gui_config, qtbot):
 
 @pytest.mark.parametrize("gui_config", linac_scripts_config)
 def test_linac_gui_opens(open_gui):
+    assert open_gui
+
+@pytest.mark.parametrize("gui_config", ts_scripts_config)
+def test_ts_gui_opens(open_gui):
     assert open_gui
