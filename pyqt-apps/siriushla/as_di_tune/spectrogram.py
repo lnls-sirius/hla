@@ -257,7 +257,7 @@ class BOTuneSpectrogramControls(QWidget):
         hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
 
         pal = self.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Base, self.background)
         self.setAutoFillBackground(True)
         self.setPalette(pal)
 

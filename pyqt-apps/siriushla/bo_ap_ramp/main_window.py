@@ -207,12 +207,12 @@ class RampMain(SiriusMainWindow):
         if self.ramp_config is not None:
             if not self.ramp_config.synchronized:
                 pal = self.config_parameters.palette()
-                pal.setColor(QPalette.Text, Qt.red)
+                pal.setColor(QPalette.ColorRole.Text, Qt.red)
                 self.config_parameters.setPalette(pal)
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
                 pal = self.config_parameters.palette()
-                pal.setColor(QPalette.Text, Qt.black)
+                pal.setColor(QPalette.ColorRole.Text, Qt.black)
                 self.config_parameters.setPalette(pal)
                 self.config_parameters.setToolTip('')
 
