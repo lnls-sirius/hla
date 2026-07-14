@@ -296,13 +296,14 @@ class TuneSpectraControls(QWidget):
             glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignLeft)
             # buttons
             self.bt_reg[i].setStyleSheet('min-width:5em; max-width:5em;')
-            self.bt_reg[i].setMenu(QMenu())
-            self.bt_reg[i].menu().addAction(
+            menu = QMenu()
+            menu.addAction(
                 'Save Tune H', _part(self._registerData, i, 'H'))
-            self.bt_reg[i].menu().addAction(
+            menu.addAction(
                 'Save Tune V', _part(self._registerData, i, 'V'))
-            self.bt_reg[i].menu().addAction(
+            menu.addAction(
                 'Clear', _part(self._clear_register, i))
+            self.bt_reg[i].setMenu(menu)
             glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignLeft)
             # label
             self.lb_reg[i].setMouseTracking(True)
