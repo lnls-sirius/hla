@@ -36,6 +36,7 @@ class SiriusWaveformPlot(PyDMWaveformPlot):
         if not self._needs_redraw:
             return
         for curve in self._curves:
-            if not (isinstance(curve.x_waveform, float) or isinstance(curve.y_waveform, float)):
+            if not (isinstance(curve.x_waveform, float) or isinstance(curve.y_waveform, float) or \
+                    isinstance(curve.x_waveform, int) or isinstance(curve.y_waveform, int)):
                 curve.redrawCurve()
         self._needs_redraw = False
