@@ -1,6 +1,6 @@
 """."""
-from qtpy.QtWidgets import QTabBar, QTabWidget, qApp, QMessageBox
-from qtpy.QtCore import Signal, Slot, QPoint, Qt
+from qtpy.QtWidgets import QTabBar, QTabWidget, QMessageBox
+from qtpy.QtCore import Signal, Slot, QPoint, Qt, QCoreApplication
 from qtpy.QtGui import QCursor
 
 from ..widgets import SiriusMainWindow
@@ -32,7 +32,7 @@ class DetachableTabWidget(QTabWidget):
         self.detachedTabs = dict()
 
         # Close all detached tabs if the application is closed explicitly
-        qApp.aboutToQuit.connect(self.closeDetachedTabs)  # @UndefinedVariable
+        QCoreApplication.instance().aboutToQuit.connect(self.closeDetachedTabs)  # @UndefinedVariable
 
     @Slot(int, QPoint)
     def detachTab(self, index, point):

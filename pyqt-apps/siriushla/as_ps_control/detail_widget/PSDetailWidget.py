@@ -102,7 +102,7 @@ class _BaseDetailWidget(QWidget):
 
         self.setObjectName(parent.objectName())
 
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
         self.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 

@@ -6,15 +6,23 @@ import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
     QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
-from pydm.widgets import PyDMImageView, PyDMPushButton, PyDMEnumComboBox, \
-    PyDMLineEdit
+from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, \
+    PyDMLineEdit, PyDMImageView
 from pydm.widgets.channel import PyDMChannel
 
 from siriushla.widgets import PyDMStateButton, SiriusLedState, SiriusLabel, \
     SiriusSpinbox
 
 
-class SiriusImageView(PyDMImageView):
+class PyDMImageViewBase(PyDMImageView):
+
+    @Slot(np.ndarray)
+    def image_value_changed(self, image):
+        if isinstance(image, np.ndarray):
+            super().image_value_changed(image)
+
+
+class SiriusImageView(PyDMImageViewBase):
     """A PyDMImageView with methods to handle screens calibration grids."""
 
     receivedData = Signal()

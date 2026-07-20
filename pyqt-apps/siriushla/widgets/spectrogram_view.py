@@ -7,7 +7,7 @@ import numpy as np
 import logging
 from qtpy.QtWidgets import QActionGroup, QToolTip, QMenu
 from qtpy.QtGui import QColor, QLinearGradient, QBrush, QPen
-from qtpy.QtCore import Signal, Slot, Property, QTimer, Q_ENUMS, \
+from qtpy.QtCore import Signal, Slot, Property, QTimer, \
     QThread, Qt, QRectF, QPointF
 from pyqtgraph import ViewBox, ImageItem, AxisItem, GraphicsLayoutWidget, \
     ColorMap, GraphicsWidget, LabelItem, PlotCurveItem, mkPen
@@ -213,7 +213,7 @@ class SpectrogramUpdateThread(QThread):
 
 
 class SiriusSpectrogramView(
-        GraphicsLayoutWidget, PyDMWidget, PyDMColorMap, ReadingOrder):
+        GraphicsLayoutWidget, PyDMWidget):
     """
     A SpectrogramView with support for Channels and more from PyDM.
 
@@ -242,10 +242,6 @@ class SiriusSpectrogramView(
     background : QColor, optional
         QColor to set the background color of the GraphicsView
     """
-
-    Q_ENUMS(PyDMColorMap)
-    Q_ENUMS(ReadingOrder)
-
     color_maps = cmaps
 
     def __init__(self, parent=None, image_channel=None,
@@ -602,15 +598,16 @@ class SiriusSpectrogramView(
         new_image : np.ndarray
             The new image data.  This can be a flat 1D array, or a 2D array.
         """
-        if new_image is None or new_image.size == 0:
-            return
-        logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
-        self.image_waveform = new_image
-        if not self._image_height and self._image_width:
-            self._image_height = new_image.size/self._image_width
-        elif not self._image_width and self._image_height:
-            self._image_width = new_image.size/self._image_height
-        self.needs_redraw = True
+        if isinstance(new_image, np.ndarray):
+            if new_image is None or new_image.size == 0:
+                return
+            logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
+            self.image_waveform = new_image
+            if not self._image_height and self._image_width:
+                self._image_height = new_image.size/self._image_width
+            elif not self._image_width and self._image_height:
+                self._image_width = new_image.size/self._image_height
+            self.needs_redraw = True
 
     @Slot(np.ndarray)
     @Slot(float)
@@ -628,7 +625,7 @@ class SiriusSpectrogramView(
         if isinstance(new_array, float):
             new_array = np.array([new_array, ])
         self._last_xaxis_data = new_array
-        if self._reading_order == self.Clike:
+        if self._reading_order == ReadingOrder.Clike:
             self._image_width = new_array.size
         else:
             self._image_height = new_array.size
@@ -650,7 +647,7 @@ class SiriusSpectrogramView(
         if isinstance(new_array, float):
             new_array = np.array([new_array, ])
         self._last_yaxis_data = new_array
-        if self._reading_order == self.Fortranlike:
+        if self._reading_order == ReadingOrder.Fortranlike:
             self._image_width = new_array.size
         else:
             self._image_height = new_array.size
@@ -765,7 +762,7 @@ class SiriusSpectrogramView(
             ixMin = self._last_xaxis_data.min()
             ixMax = self._last_xaxis_data.max()
         else:
-            iszx = self.imageWidth if self.readingOrder == self.Clike \
+            iszx = self.imageWidth if self.readingOrder == ReadingOrder.Clike \
                 else self.imageHeight
             ixMin = 0
             ixMax = iszx
@@ -775,7 +772,7 @@ class SiriusSpectrogramView(
             iyMin = self._last_yaxis_data.min()
             iyMax = self._last_yaxis_data.max()
         else:
-            iszy = self.imageHeight if self.readingOrder == self.Clike \
+            iszy = self.imageHeight if self.readingOrder == ReadingOrder.Clike \
                 else self.imageWidth
             iyMin = 0
             iyMax = iszy
@@ -1073,12 +1070,12 @@ class SiriusSpectrogramView(
         if self._reading_order != order:
             self._reading_order = order
 
-        if order == self.Clike:
+        if order == ReadingOrder.Clike:
             if self._last_xaxis_data is not None:
                 self._image_width = self._last_xaxis_data.size
             if self._last_yaxis_data is not None:
                 self._image_height = self._last_yaxis_data.size
-        elif order == self.Fortranlike:
+        elif order == ReadingOrder.Fortranlike:
             if self._last_yaxis_data is not None:
                 self._image_width = self._last_yaxis_data.size
             if self._last_xaxis_data is not None:

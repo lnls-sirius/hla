@@ -13,8 +13,8 @@ def _create_spinboxplus(qt_type):
         def __init__(self, *args, **kwargs):
             """Initialize object."""
             super().__init__(*args, **kwargs)
-            locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-            locale.setNumberOptions(locale.RejectGroupSeparator)
+            locale = QLocale(QLocale.English, territory=QLocale.UnitedStates)
+            locale.setNumberOptions(QLocale.RejectGroupSeparator)
             self.setLocale(locale)
             self.setFocusPolicy(Qt.StrongFocus)
             self.step_exponent = 0

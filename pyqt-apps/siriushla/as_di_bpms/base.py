@@ -220,7 +220,7 @@ class BaseGraph(BaseWidget):
         cdta = self.graph.curveAtIndex(-1)
         cbx = QCheckBox(name, self)
         plt = cbx.palette()
-        plt.setColor(plt.WindowText, cdta.color)
+        plt.setColor(plt.ColorRole.WindowText, cdta.color)
         cbx.setPalette(plt)
         cbx.setChecked(True)
         self.vbl.addWidget(cbx)

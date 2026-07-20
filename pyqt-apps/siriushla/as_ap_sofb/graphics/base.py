@@ -176,14 +176,14 @@ class BaseWidget(QWidget):
                 symbolSize=10)
             graph.addChannel(**opts)
             pen = mkPen(opts['color'], width=opts['lineWidth'])
-            pen.setStyle(4)
+            pen.setStyle(Qt.PenStyle.DashDotLine)
             cpstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
             self.updater[i].ave_pstd[pln].connect(cpstd.setValue)
             graph.addItem(cpstd)
             cmstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
             self.updater[i].ave_mstd[pln].connect(cmstd.setValue)
             graph.addItem(cmstd)
-            pen.setStyle(2)
+            pen.setStyle(Qt.PenStyle.DashLine)
             cave = InfiniteLine(pos=0.0, pen=pen, angle=0)
             self.updater[i].ave[pln].connect(cave.setValue)
             graph.addItem(cave)
@@ -350,9 +350,9 @@ class BaseWidget(QWidget):
     def _update_enable_list(self, pln, array, curve=None, idx=None):
         # cor = (255, 255, 255)
         # cor = (0, 200, 0)
-        cor = (0, 0, 0)
-        offbrs = mkBrush(*cor)
-        offpen = mkPen(*cor)
+        cor = QColor(0, 0, 0)
+        offbrs = mkBrush(cor)
+        offpen = mkPen(cor)
         offsimb = 's'
         simb = 'o'
         offsz = 15
@@ -437,20 +437,20 @@ class BaseWidget(QWidget):
 
 class UpdateGraph(QObject):
     """Worker to update graphics."""
-    avex = Signal([float])
-    stdx = Signal([float])
-    p2px = Signal([float])
-    ave_pstdx = Signal([float])
-    ave_mstdx = Signal([float])
-    data_sigx = Signal([_np.ndarray])
-    ref_sigx = Signal([_np.ndarray])
-    avey = Signal([float])
-    stdy = Signal([float])
-    p2py = Signal([float])
-    ave_pstdy = Signal([float])
-    ave_mstdy = Signal([float])
-    data_sigy = Signal([_np.ndarray])
-    ref_sigy = Signal([_np.ndarray])
+    avex = Signal((float, ))
+    stdx = Signal((float, ))
+    p2px = Signal((float, ))
+    ave_pstdx = Signal((float, ))
+    ave_mstdx = Signal((float, ))
+    data_sigx = Signal((_np.ndarray, ))
+    ref_sigx = Signal((_np.ndarray, ))
+    avey = Signal((float, ))
+    stdy = Signal((float, ))
+    p2py = Signal((float, ))
+    ave_pstdy = Signal((float, ))
+    ave_mstdy = Signal((float, ))
+    data_sigy = Signal((_np.ndarray, ))
+    ref_sigy = Signal((_np.ndarray, ))
 
     UNIT = 1e-6  # orbit is in um and strength in urad
 

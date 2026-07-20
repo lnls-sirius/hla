@@ -620,8 +620,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                     cbx.setChecked(True)
                     cbx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
                     pal = cbx.palette()
-                    pal.setColor(QPalette.Base, coloro)
-                    pal.setColor(QPalette.Text, Qt.white)
+                    pal.setColor(QPalette.ColorRole.Base, coloro)
+                    pal.setColor(QPalette.ColorRole.Text, Qt.white)
                     cbx.setPalette(pal)
                     visisel[ctrl] = cbx
                 visisel[ctrl].stateChanged.connect(curve.setVisible)
@@ -1047,7 +1047,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
 
     def _build_scroll_area(self, widget):
         area = QScrollArea(self)
-        area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        area.setSizeAdjustPolicy(QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         area.setWidgetResizable(True)
         area.setWidget(widget)
         widget.setObjectName('widget')

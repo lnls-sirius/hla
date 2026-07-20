@@ -488,7 +488,8 @@ class MainWindow(BaseObject, SiriusMainWindow):
         sz_pol.setVerticalStretch(1)
         dockwid.setSizePolicy(sz_pol)
         dockwid.setFloating(False)
-        dockwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        dockwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
+                            | QDockWidget.DockWidgetFeature.DockWidgetMovable)
         dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
         dockwid.setWidget(wid)
         return dockwid
@@ -517,7 +518,8 @@ class MainWindow(BaseObject, SiriusMainWindow):
         sz_pol.setVerticalStretch(1)
         dockwid.setSizePolicy(sz_pol)
         dockwid.setFloating(False)
-        dockwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        dockwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
+                            | QDockWidget.DockWidgetFeature.DockWidgetMovable)
         dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
         dockwid.setWidget(wid)
         return dockwid

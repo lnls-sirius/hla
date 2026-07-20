@@ -71,12 +71,13 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
     @Slot(np.ndarray)
     def image_value_changed(self, new_image):
         """Reimplement image_value_changed slot."""
-        if new_image is None or new_image.size == 0:
-            return
-        spec_size = self._image_height*self._image_width
-        self.image_waveform = new_image[:spec_size]
-        self.needs_update_buffer = True
-        self.needs_redraw = True
+        if isinstance(new_image, np.ndarray):
+            if new_image is None or new_image.size == 0:
+                return
+            spec_size = self._image_height*self._image_width
+            self.image_waveform = new_image[:spec_size]
+            self.needs_update_buffer = True
+            self.needs_redraw = True
 
     def process_image(self, image):
         """Process data."""
@@ -256,7 +257,7 @@ class BOTuneSpectrogramControls(QWidget):
         hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
 
         pal = self.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Base, self.background)
         self.setAutoFillBackground(True)
         self.setPalette(pal)
 

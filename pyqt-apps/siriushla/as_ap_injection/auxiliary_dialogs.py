@@ -504,7 +504,7 @@ class TopUpSettingsDialog(SiriusDialog):
         self.setWindowTitle(
             'Injection Controls - Top Up Standby and Warm Up Settings')
         self._setupUi()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
@@ -604,7 +604,7 @@ class PUModeSettingsDialog(SiriusDialog):
         self.setObjectName('ASApp')
         self.setWindowTitle('Injection Controls - PU Mode Settings')
         self._setupUi()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):

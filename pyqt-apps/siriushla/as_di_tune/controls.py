@@ -408,7 +408,7 @@ class TuneControls(QWidget):
                 min-width:6em; max-width:6em;
             }""")
         pal = self.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Base, self.background)
         self.setAutoFillBackground(True)
         self.setPalette(pal)
 

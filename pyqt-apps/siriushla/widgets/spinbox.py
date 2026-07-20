@@ -1,7 +1,7 @@
 """Sirius Spinbox."""
 
-from qtpy.QtCore import Property, Qt, QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import Property, Qt, QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 from pydm.widgets import PyDMSpinbox
 from pydm.widgets.base import PyDMWritableWidget, TextFormatter
 
@@ -186,9 +186,9 @@ class SiriusHexaSpinbox(SiriusSpinbox):
 
     def validate(self, text, pos):
         """Validate input in hexa base."""
-        regex = QRegExp("0x[0-9A-Fa-f]{1,8}")
+        regex = QRegularExpression("0x[0-9A-Fa-f]{1,8}")
         regex.setCaseSensitivity(Qt.CaseInsensitive)
-        return QRegExpValidator(regex, self).validate(text, pos)
+        return QRegularExpressionValidator(regex, self).validate(text, pos)
 
     def update_step_size(self):
         """Reimplement to use hexa base."""

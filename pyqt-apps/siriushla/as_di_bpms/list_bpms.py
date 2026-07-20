@@ -50,7 +50,7 @@ class SelectBPMs(BaseWidget):
         vbl.addWidget(search)
 
         scarea = QScrollArea(self)
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
 
         scr_ar_wid = QWidget()
@@ -111,7 +111,7 @@ class AcqDataSummary(BaseWidget):
 
         sa_class = get_custom_widget_class(QScrollArea)
         scarea = sa_class(self)
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
 
         wid = QWidget()

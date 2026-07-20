@@ -43,7 +43,7 @@ class TuneDetails(SiriusMainWindow):
             '<h3>Tune '+self.orientation+' Detailed Settings<h3>', self)
         self.title_label.setObjectName('title')
         pal = self.title_label.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Base, self.background)
         self.title_label.setAutoFillBackground(True)
         self.title_label.setPalette(pal)
 
@@ -518,7 +518,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
             '<h3>'+self.title+'<h3>', self, alignment=Qt.AlignCenter)
         self.title_label.setObjectName('title')
         pal = self.title_label.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Base, self.background)
         self.title_label.setAutoFillBackground(True)
         self.title_label.setPalette(pal)
         lay.addRow(self.title_label)

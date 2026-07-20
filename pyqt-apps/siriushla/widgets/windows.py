@@ -29,7 +29,7 @@ def _create_siriuswindow(qt_type):
         def __init__(self, *args, **kwargs):
             """Init."""
             super().__init__(*args, **kwargs)
-            self.setFocus(True)
+            self.setFocus()
             self.app = QApplication.instance()
             if isinstance(self, SiriusMainWindow):
                 self.label_version = QLabel(
@@ -148,7 +148,7 @@ def create_window_from_widget(
                     scroll.setWidget(self.widget)
                     scroll.setWidgetResizable(True)
                     scroll.setSizeAdjustPolicy(
-                        QScrollArea.AdjustToContentsOnFirstShow)
+                        QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
                     self.setCentralWidget(scroll)
 
                     scroll_style = '#scroll{'

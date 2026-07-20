@@ -36,7 +36,7 @@ class LLRFInterlockDetails(SiriusDialog):
         lay.addWidget(self.title)
 
         scarea = QScrollArea(self)
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
         scr_ar_wid = QWidget()
         scarea.setWidget(scr_ar_wid)
@@ -84,7 +84,7 @@ class LLRFInterlockDetails(SiriusDialog):
                 irow, icol = idx+1, 0
                 for key, pvn in dic['Status'].items():
                     led = SiriusLedAlert(self, self.prefix+pvn, bit=idx)
-                    led.shape = led.Square
+                    led.shape = led.ShapeMap.Square
                     if key != 'Mon':
                         led.offColor = led.DarkRed
                     lay_intlk.addWidget(led, irow, icol,

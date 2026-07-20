@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPainter, QPolygon, QColor, \
+from qtpy.QtWidgets import QWidget
+from qtpy.QtGui import QPainter, QPolygon, QColor, \
     QBrush, QFont
-from PyQt5.QtCore import Qt, QPoint
+from qtpy.QtCore import Qt, QPoint
 
 
 class PolygonWidget(QWidget):

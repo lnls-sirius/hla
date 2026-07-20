@@ -18,7 +18,6 @@ from qtpy.QtCore import Qt, Slot
 
 from pyqtgraph import PlotCurveItem, mkPen
 
-from pydm.widgets import PyDMImageView
 from pydm.widgets.logdisplay import PyDMLogDisplay
 
 import mathphys.constants as _consts
@@ -28,6 +27,7 @@ from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
     QSpinBoxPlus, QDoubleSpinBoxPlus
+from siriushla.common.cam_basler import PyDMImageViewBase
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams.update({
@@ -582,9 +582,9 @@ def gettransmat(elem, L, K1=None, B=None):
 
 def _calc_moments(axis, proj):
     dx = axis[1]-axis[0]
-    Norm = np.trapz(proj, dx=dx)
-    cen = np.trapz(proj*axis, dx=dx)/Norm
-    sec = np.trapz(proj*axis*axis, dx=dx)/Norm
+    Norm = np.trapezoid(proj, dx=dx)
+    cen = np.trapezoid(proj*axis, dx=dx)/Norm
+    sec = np.trapezoid(proj*axis*axis, dx=dx)/Norm
     std = np.sqrt(sec - cen*cen)
     return cen, std
 
@@ -607,7 +607,7 @@ def _fit_gaussian(x, y, amp=None, mu=None, sigma=None, y0=None):
     return p_opt
 
 
-class ImageView(PyDMImageView):
+class ImageView(PyDMImageViewBase):
 
     def __init__(self, callback, **kwargs):
         self.callback = callback
@@ -616,8 +616,9 @@ class ImageView(PyDMImageView):
 
     @Slot(np.ndarray)
     def image_value_changed(self, image):
-        image = self.callback(image, self._image_width)
-        super().image_value_changed(image)
+        if isinstance(image, np.ndarray):
+            image = self.callback(image, self._image_width)
+            super().image_value_changed(image)
 
 
 class ProcessImage(QWidget):
