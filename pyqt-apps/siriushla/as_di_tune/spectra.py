@@ -143,7 +143,7 @@ class TuneSpectraView(SiriusWaveformPlot):
                             name=mtyp+'Mark '+si, redraw_mode=2,
                             color=marker_color[mtyp+'Mark'][ax][si],
                             lineWidth=1, lineStyle=1,
-                            symbol='o', symbolSize=10)
+                            symbol='o', symbolSize=7)
                         mark_dict['curve'] = self.curveAtIndex(ci)
                         mark_dict['curve'].opts['symbolBrush'] = mkBrush(marker_color[mtyp+'Mark'][ax][si])
                         ci += 1
