@@ -105,10 +105,17 @@ class TuneControls(QWidget):
 
         # Nr. Samples p/ spec
         lbl_nrsmp = QLabel('Nr. Samples p/ Spec.', self)
+        self.le_nrsmp = PyDMLineEdit(
+            parent=self, init_channel=self.device.substitute(
+                dev='TuneProc', propty_name='SwePts',
+                propty_suffix='SP'))
         self.lb_nrsmp = SiriusLabel(
             parent=self, init_channel=self.device.substitute(
                 dev='TuneProc', propty_name='SwePts',
                 propty_suffix='RB'))
+        hbox_nrsmp = QHBoxLayout()
+        hbox_nrsmp.addWidget(self.le_nrsmp)
+        hbox_nrsmp.addWidget(self.lb_nrsmp)
 
         if self.section == 'SI':
             # Acquisition Time
@@ -368,7 +375,7 @@ class TuneControls(QWidget):
             lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
             lay.addRow(lbl_acqcnt, hbox_acqcnt)
         lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(lbl_nrsmp, self.lb_nrsmp)
+        lay.addRow(lbl_nrsmp, hbox_nrsmp)
         if self.section == 'SI':
             lay.addRow(lbl_acqtime, self.cb_acqtime)
             lay.addRow(lbl_swetime, self.lb_swetime)
