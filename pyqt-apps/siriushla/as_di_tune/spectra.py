@@ -10,6 +10,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, \
     QComboBox, QCheckBox, QLabel, QPushButton, QMenu, QSpacerItem, \
     QSizePolicy as QSzPlcy, QFileDialog
 import qtawesome as qta
+from pyqtgraph import mkBrush
 
 from siriuspy.namesys import SiriusPVName as _PVName
 
@@ -41,7 +42,7 @@ class TuneSpectraView(SiriusWaveformPlot):
 
         self.addChannel(
             y_channel='FAKE:SpectrumH', name='Tune H',
-            redraw_mode=2, color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
+            redraw_mode=2, color='blue', lineWidth=1, lineStyle=Qt.SolidLine)
         self.curveH = self.curveAtIndex(0)
         self.curveH.x_channels = {
             'Tune': SiriusConnectionSignal(_PVName(
@@ -55,7 +56,7 @@ class TuneSpectraView(SiriusWaveformPlot):
 
         self.addChannel(
             y_channel='FAKE:SpectrumV', name='Tune V',
-            redraw_mode=2, color='red', lineWidth=2, lineStyle=Qt.SolidLine)
+            redraw_mode=2, color='red', lineWidth=1, lineStyle=Qt.SolidLine)
         self.curveV = self.curveAtIndex(1)
         self.curveV.x_channels = {
             'Tune': SiriusConnectionSignal(_PVName(
@@ -68,7 +69,7 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.curveV.setVisible(True)
 
         if self.section == 'SI':
-            self.maxRedrawRate = 5
+            self.maxRedrawRate = 20
             self.curveH_y_channel = SiriusConnectionSignal(_PVName(
                 'SI-Glob:DI-TuneProc-H:Trace-Mon').substitute(
                     prefix=self.prefix))
@@ -141,9 +142,10 @@ class TuneSpectraView(SiriusWaveformPlot):
                             x_channel='FAKE:'+mtyp+'MarkX',
                             name=mtyp+'Mark '+si, redraw_mode=2,
                             color=marker_color[mtyp+'Mark'][ax][si],
-                            lineWidth=2, lineStyle=1,
+                            lineWidth=1, lineStyle=1,
                             symbol='o', symbolSize=10)
                         mark_dict['curve'] = self.curveAtIndex(ci)
+                        mark_dict['curve'].opts['symbolBrush'] = mkBrush(marker_color[mtyp+'Mark'][ax][si])
                         ci += 1
                         self.markers[ax][mtyp+'Mark'+si] = mark_dict
 
