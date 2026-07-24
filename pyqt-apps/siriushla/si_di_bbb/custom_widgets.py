@@ -21,7 +21,7 @@ class WfmGraph(SiriusWaveformPlot):
         self.setStyleSheet(
             '#graph {min-height: 6em; min-width: 15em;}')
 
-        self.maxRedrawRate = 2
+        self.maxRedrawRate = 20
 
         self.autoRangeX = True
         self.autoRangeY = True
@@ -45,9 +45,8 @@ class WfmGraph(SiriusWaveformPlot):
         self.addChannel(
             x_channel='', y_channel='',
             name=name, color=color, lineStyle=lineStyle, lineWidth=lineWidth,
-            symbol='o', symbolSize=symbolSize)
+            symbol=None, symbolSize=symbolSize)
         curve = self.curveAtIndex(-1)
-        curve.opts['symbolBrush'] = mkBrush(color)
         curve.nchannel = None
         curve.offset = offset
         if nchannel is not None:
