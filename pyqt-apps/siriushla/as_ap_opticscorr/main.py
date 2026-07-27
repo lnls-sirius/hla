@@ -80,10 +80,10 @@ class OpticsCorrWindow(SiriusMainWindow):
             if self.acc == 'SI':
                 self.pb_updref.setStyleSheet(
                     'min-height:2.4em; max-height:2.4em; margin-top:1em;')
-                self.tunesourcepvlist_pv = _PV(
-                    self.ioc_prefix.substitute(propty='TuneSourcePVList-Mon'),
-                    connection_timeout=0.3,
-                )
+                # self.tunesourcepvlist_pv = _PV(
+                #     self.ioc_prefix.substitute(propty='TuneSourcePVList-Mon'),
+                #     connection_timeout=0.3,
+                # )
                 self.gb_digmon = QGroupBox('Tune Monitor', self)
                 self.gb_digmon.setLayout(self._setupDigMonLayout())
                 self.gb_corr = QGroupBox('Correction', self)
@@ -250,10 +250,13 @@ class OpticsCorrWindow(SiriusMainWindow):
         lay_tune = QGridLayout()
 
         prec = 5
-        val = self.tunesourcepvlist_pv.value
-        tunex_pv, tuney_pv = val if val else ['None', 'None']
-        tunex_pv = _PVName(tunex_pv).substitute(prefix=self.prefix)
-        tuney_pv = _PVName(tuney_pv).substitute(prefix=self.prefix)
+        # val = self.tunesourcepvlist_pv.value
+        # tunex_pv, tuney_pv = val if val else ['None', 'None']
+        # tunex_pv = _PVName(tunex_pv).substitute(prefix=self.prefix)
+        # tuney_pv = _PVName(tuney_pv).substitute(prefix=self.prefix)
+
+        tunex_pv = self.ioc_prefix.substitute(propty='TuneX-Mon')
+        tuney_pv = self.ioc_prefix.substitute(propty='TuneY-Mon')
 
         self.ld_tunefrach = QLabel('<h4>Tune X</h4>', self,
             alignment=Qt.AlignHCenter)
@@ -286,7 +289,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         vbox_tunev.addWidget(self.lb_tunefracv)
         lay_tune.addWidget(wid_tunev, 0, 1)
 
-        self.tunesourcepvlist_pv.add_callback(self._update_tune_digmon)
+        # self.tunesourcepvlist_pv.add_callback(self._update_tune_digmon)
         return lay_tune
 
     def _setupCorrectionLayout(self):
@@ -785,8 +788,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.lb_sp.setText(textX)
         self.lb_rb.setText(textY)
 
-    def _update_tune_digmon(self, pvname, value, **kws):
-        _ = (pvname, kws)
-        pvx, pvy = _PVName(value[0]), _PVName(value[1])
-        self.lb_tunefrach.channel = pvx.substitute(prefix=self.prefix)
-        self.lb_tunefracv.channel = pvy.substitute(prefix=self.prefix)
+    # def _update_tune_digmon(self, pvname, value, **kws):
+    #     _ = (pvname, kws)
+    #     pvx, pvy = _PVName(value[0]), _PVName(value[1])
+    #     self.lb_tunefrach.channel = pvx.substitute(prefix=self.prefix)
+    #     self.lb_tunefracv.channel = pvy.substitute(prefix=self.prefix)
