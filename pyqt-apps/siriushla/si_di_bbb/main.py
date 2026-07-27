@@ -1,18 +1,22 @@
 """BbB Main Module."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QLabel, QWidget, QHBoxLayout, \
-    QPushButton, QComboBox
-
+from qtpy.QtWidgets import (
+    QComboBox,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QWidget
+)
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
 from ..util import connect_window
 from ..widgets import SiriusMainWindow
 from ..widgets.windows import create_window_from_widget
-
 from .bbb import BbBMainSettingsWidget
-from .util import get_bbb_icon, set_bbb_color
 from .gpio import BbBGPIOWidget
+from .util import get_bbb_icon, set_bbb_color
 
 
 class BbBMainWindow(SiriusMainWindow):
@@ -30,13 +34,17 @@ class BbBMainWindow(SiriusMainWindow):
 
     def _setupUi(self):
         self._ld_bbb = QLabel(
-            '<h3>BbB Control Window</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>BbB Control Window</h3>', self, alignment=Qt.AlignCenter
+        )
 
         self._but_fbe = QPushButton('FBE', self)
 
         window = create_window_from_widget(
-            BbBGPIOWidget, title='Front-Back End', icon=get_bbb_icon(),
-            is_main=True)
+            BbBGPIOWidget,
+            title='Front-Back End',
+            icon=get_bbb_icon(),
+            is_main=True,
+        )
         connect_window(
             self._but_fbe, window, self, prefix=self.prefix, device=''
         )  # device will be filled by the QComboBox callback
@@ -61,7 +69,7 @@ class BbBMainWindow(SiriusMainWindow):
         lay = QGridLayout(cwt)
 
         for col, idc in enumerate(idcs_types):
-            dev_pref = 'SI-Glob:DI-BbBProc-'+idc
+            dev_pref = 'SI-Glob:DI-BbBProc-' + idc
 
             wid = BbBMainSettingsWidget(self, self.prefix, dev_pref)
             set_bbb_color(wid, dev_pref)

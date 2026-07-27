@@ -114,11 +114,11 @@ class _BbBModalAnalysis(QWidget):
             device=self._device,
             acq_type=self.acq_type + '_MD'
         )
-        lb_peak = SiriusLabel(self, self.prop_pref + '_MD_PEAK')
+        lb_peak = SiriusLabel(self, self.prop_pref + 'MD_PEAK')
         lb_peak.showUnits = True
-        lb_pfrq = SiriusLabel(self, self.prop_pref + '_MD_FREQ')
+        lb_pfrq = SiriusLabel(self, self.prop_pref + 'MD_FREQ')
         lb_pfrq.showUnits = True
-        lb_tune = SiriusLabel(self, self.prop_pref + '_MD_TUNE')
+        lb_tune = SiriusLabel(self, self.prop_pref + 'MD_TUNE')
         lb_mnum = SiriusLabel(self, self.prop_pref+'MD_MAXMODE')
         lb_mamp = SiriusLabel(self, self.prop_pref+'MD_MAXVAL')
 

@@ -1,17 +1,21 @@
 """BbB Coefficients Module."""
 
 import numpy as _np
-from qtpy.QtCore import Qt
-from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QTabWidget
 import qtawesome as qta
 from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit, PyDMPushButton
-
+from qtpy.QtCore import Qt
+from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QTabWidget, QWidget
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusLedAlert, SiriusLabel, PyDMStateButton, \
-    SiriusLedState, SiriusSpinbox
+from ..widgets import (
+    PyDMStateButton,
+    SiriusLabel,
+    SiriusLedAlert,
+    SiriusLedState,
+    SiriusSpinbox
+)
 from .custom_widgets import WfmGraph
 from .util import set_bbb_color
 
@@ -60,10 +64,13 @@ class BbBCoefficientsWidget(QWidget):
     def _setupCoefficientsEditWidget(self, parent=None):
         wid = QGroupBox('Edit Coefficients', parent or self)
 
-        le_coefdesc = PyDMLineEdit(self, self.dev_pref+':DESC_COEFF')
+        le_coefdesc = PyDMLineEdit(self, self.dev_pref + ':DESC_COEFF')
         graph_coefs = WfmGraph(wid)
         graph_coefs.add_scatter_curve(
-            ychannel=self.dev_pref+':COEFF', lineStyle=Qt.SolidLine)
+            ychannel=self.dev_pref + ':COEFF',
+            lineStyle=Qt.SolidLine,
+            symbol='o',
+        )
 
         graph_fftmag = WfmGraph(wid)
         graph_fftmag.setObjectName('graph')
@@ -71,41 +78,57 @@ class BbBCoefficientsWidget(QWidget):
         graph_fftmag.setLabel('left', text='Magnitude [dB]')
         graph_fftmag.setLabel('bottom', text='Fractional Freq.')
         graph_fftmag.add_scatter_curve(
-            ychannel=self.dev_pref+':FTF_MAG',
-            xchannel=self.dev_pref+':FTF_FREQ',
-            color=QColor('blue'), lineWidth=2, lineStyle=Qt.SolidLine,
-            symbolSize=4)
+            ychannel=self.dev_pref + ':FTF_MAG',
+            xchannel=self.dev_pref + ':FTF_FREQ',
+            color=QColor('blue'),
+            lineWidth=2,
+            lineStyle=Qt.SolidLine,
+            symbolSize=4,
+        )
         graph_fftmag.add_scatter_curve(
-            ychannel=self.dev_pref+':FTF_GTUNE',
-            xchannel=self.dev_pref+':FTF_FTUNE',
-            name='Tune', color=QColor('red'))
+            ychannel=self.dev_pref + ':FTF_GTUNE',
+            xchannel=self.dev_pref + ':FTF_FTUNE',
+            name='Tune',
+            color=QColor('red'),
+            symbol='o',
+        )
 
         graph_fftphs = WfmGraph(wid)
         graph_fftphs.setLabel('left', text='Phase [°]')
         graph_fftphs.setLabel('bottom', text='Fractional Freq.')
         graph_fftphs.add_scatter_curve(
-            ychannel=self.dev_pref+':FTF_PHASE',
-            xchannel=self.dev_pref+':FTF_FREQ',
-            color=QColor('blue'), lineWidth=2, lineStyle=Qt.SolidLine,
-            symbolSize=4)
+            ychannel=self.dev_pref + ':FTF_PHASE',
+            xchannel=self.dev_pref + ':FTF_FREQ',
+            color=QColor('blue'),
+            lineWidth=2,
+            lineStyle=Qt.SolidLine,
+            symbolSize=4,
+        )
         graph_fftphs.add_scatter_curve(
-            ychannel=self.dev_pref+':FTF_PTUNE',
-            xchannel=self.dev_pref+':FTF_FTUNE',
-            name='Tune', color=QColor('red'))
+            ychannel=self.dev_pref + ':FTF_PTUNE',
+            xchannel=self.dev_pref + ':FTF_FTUNE',
+            name='Tune',
+            color=QColor('red'),
+            symbol='o',
+        )
 
         ld_fractune = QLabel(
-            '<h4> Marker:</h4>', wid, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+            '<h4> Marker:</h4>', wid, alignment=Qt.AlignLeft | Qt.AlignVCenter
+        )
         ld_ftval = QLabel(
-            'Frequency [0-1]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        sb_ftval = SiriusSpinbox(wid, self.dev_pref+':FTF_TUNE')
+            'Frequency [0-1]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter
+        )
+        sb_ftval = SiriusSpinbox(wid, self.dev_pref + ':FTF_TUNE')
         ld_ftgain = QLabel(
-            'Gain [dB]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lb_ftgain = Label(wid, self.dev_pref+':FTF_GTUNE')
+            'Gain [dB]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter
+        )
+        lb_ftgain = Label(wid, self.dev_pref + ':FTF_GTUNE')
         lb_ftgain.precisionFromPV = False
         lb_ftgain.precision = 2
         ld_ftphs = QLabel(
-            'Phase [°]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lb_ftphs = Label(wid, self.dev_pref+':FTF_PTUNE')
+            'Phase [°]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter
+        )
+        lb_ftphs = Label(wid, self.dev_pref + ':FTF_PTUNE')
         lb_ftphs.precisionFromPV = False
         lb_ftphs.precision = 2
 
@@ -138,31 +161,36 @@ class BbBCoefficientsWidget(QWidget):
 
     def _setupCoeffSettingsWidget(self):
         ld_coefchoo = QLabel('Choose Set', self, alignment=Qt.AlignRight)
-        cb_coefchoo = PyDMEnumComboBox(self, self.dev_pref+':LDSET')
+        cb_coefchoo = PyDMEnumComboBox(self, self.dev_pref + ':LDSET')
 
         pb_coefload = PyDMPushButton(
-            parent=self, label='Apply Set', icon=qta.icon('mdi.upload'),
-            init_channel=self.dev_pref+':BO_CPCOEFF', pressValue=1)
-        pb_coefload.setStyleSheet("icon-size:20px;")
+            parent=self,
+            label='Apply Set',
+            icon=qta.icon('mdi.upload'),
+            init_channel=self.dev_pref + ':BO_CPCOEFF',
+            pressValue=1,
+        )
+        pb_coefload.setStyleSheet('icon-size:20px;')
         pb_coefvrfy = PyDMPushButton(
-            parent=self, label='Verify Set',
+            parent=self,
+            label='Verify Set',
             icon=qta.icon('mdi.check-circle-outline'),
-            init_channel=self.dev_pref+':BO_CVERIFY', pressValue=1)
-        pb_coefvrfy.setStyleSheet("icon-size:20px;")
+            init_channel=self.dev_pref + ':BO_CVERIFY',
+            pressValue=1,
+        )
+        pb_coefvrfy.setStyleSheet('icon-size:20px;')
 
         ld_gen = QLabel(
-            '<h4>Generate Coefficients</h4>', self, alignment=Qt.AlignCenter)
-        ld_gengain = QLabel(
-            'Gain [0-1]', self, alignment=Qt.AlignRight)
-        sb_gengain = SiriusSpinbox(self, self.dev_pref+':FLT_GAIN')
+            '<h4>Generate Coefficients</h4>', self, alignment=Qt.AlignCenter
+        )
+        ld_gengain = QLabel('Gain [0-1]', self, alignment=Qt.AlignRight)
+        sb_gengain = SiriusSpinbox(self, self.dev_pref + ':FLT_GAIN')
         ld_genphs = QLabel('Phase [°]', self, alignment=Qt.AlignRight)
-        sb_genphs = SiriusSpinbox(self, self.dev_pref+':FLT_PHASE')
-        ld_genfreq = QLabel(
-            'Frequency [0-1]', self, alignment=Qt.AlignRight)
-        sb_genfreq = SiriusSpinbox(self, self.dev_pref+':FLT_FREQ')
-        ld_genntap = QLabel(
-            'Number of taps', self, alignment=Qt.AlignRight)
-        sb_genntap = SiriusSpinbox(self, self.dev_pref+':FLT_TAPS')
+        sb_genphs = SiriusSpinbox(self, self.dev_pref + ':FLT_PHASE')
+        ld_genfreq = QLabel('Frequency [0-1]', self, alignment=Qt.AlignRight)
+        sb_genfreq = SiriusSpinbox(self, self.dev_pref + ':FLT_FREQ')
+        ld_genntap = QLabel('Number of taps', self, alignment=Qt.AlignRight)
+        sb_genntap = SiriusSpinbox(self, self.dev_pref + ':FLT_TAPS')
 
         wid = QWidget(self)
         lay_genset = QGridLayout(wid)
@@ -193,29 +221,30 @@ class BbBCoefficientsWidget(QWidget):
         gbox_settings = QGroupBox('FeedBack Settings', self)
 
         ld_fbpatt = QLabel('Feedback Mask', self)
-        le_fbpatt = PyDMLineEdit(self, self.dev_pref+':FB_PATTERN')
+        le_fbpatt = PyDMLineEdit(self, self.dev_pref + ':FB_PATTERN')
 
         ld_cfpatt = QLabel('Alternate Mask', self)
-        le_cfpatt = PyDMLineEdit(self, self.dev_pref+':CF_PATTERN')
+        le_cfpatt = PyDMLineEdit(self, self.dev_pref + ':CF_PATTERN')
 
         ld_alter_inuse = QLabel('Alternate Set In Use', self)
         led_alter_inuse = SiriusLedState(
-            self, self.dev_pref+':CF_PATTERN_SUB.VALB')
+            self, self.dev_pref + ':CF_PATTERN_SUB.VALB'
+        )
 
         ld_fbenbl = QLabel('Enable', self)
-        pb_fbenbl = PyDMStateButton(self, self.dev_pref+':FBCTRL')
+        pb_fbenbl = PyDMStateButton(self, self.dev_pref + ':FBCTRL')
 
         ld_coefsel = QLabel('Coeficient Set', self)
-        cb_coefsel = PyDMEnumComboBox(self, self.dev_pref+':SETSEL')
+        cb_coefsel = PyDMEnumComboBox(self, self.dev_pref + ':SETSEL')
 
         ld_sftgain = QLabel('Shift Gain', self)
-        sb_sftgain = SiriusSpinbox(self, self.dev_pref+':SHIFTGAIN')
+        sb_sftgain = SiriusSpinbox(self, self.dev_pref + ':SHIFTGAIN')
 
         ld_downspl = QLabel('Downsampling', self)
-        sb_downspl = SiriusSpinbox(self, self.dev_pref+':PROC_DS')
+        sb_downspl = SiriusSpinbox(self, self.dev_pref + ':PROC_DS')
 
         ld_satthrs = QLabel('Sat. Threshold [%]', self)
-        sb_satthrs = SiriusSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
+        sb_satthrs = SiriusSpinbox(self, self.dev_pref + ':SAT_THRESHOLD')
 
         lay_patt = QGridLayout()
         lay_patt.addWidget(ld_fbpatt, 0, 0)
@@ -249,26 +278,26 @@ class BbBCoefficientsWidget(QWidget):
         gbox_settings = QGroupBox('Bunch Cleaning Settings', self)
 
         ld_bcenbl = QLabel('Enable', self)
-        cb_bcenbl = PyDMStateButton(self, self.dev_pref+':CLEAN_ENABLE')
+        cb_bcenbl = PyDMStateButton(self, self.dev_pref + ':CLEAN_ENABLE')
 
         ld_bcamp = QLabel('Amplitude', self)
-        sb_bcamp = SiriusSpinbox(self, self.dev_pref+':CLEAN_AMPL')
-        lb_svamp = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_AMPL')
+        sb_bcamp = SiriusSpinbox(self, self.dev_pref + ':CLEAN_AMPL')
+        lb_svamp = SiriusLabel(self, self.dev_pref + ':CLEAN_SAVE_AMPL')
 
         ld_bctune = QLabel('Tune', self)
-        sb_bctune = SiriusSpinbox(self, self.dev_pref+':CLEAN_TUNE')
-        lb_svfreq = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_FREQ')
+        sb_bctune = SiriusSpinbox(self, self.dev_pref + ':CLEAN_TUNE')
+        lb_svfreq = SiriusLabel(self, self.dev_pref + ':CLEAN_SAVE_FREQ')
 
         ld_bcspan = QLabel('Span', self)
-        le_bcspan = PyDMLineEdit(self, self.dev_pref+':CLEAN_SPAN')
-        lb_svspan = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_SPAN')
+        le_bcspan = PyDMLineEdit(self, self.dev_pref + ':CLEAN_SPAN')
+        lb_svspan = SiriusLabel(self, self.dev_pref + ':CLEAN_SAVE_SPAN')
 
         ld_bcper = QLabel('Period', self)
-        le_bcper = PyDMLineEdit(self, self.dev_pref+':CLEAN_PERIOD')
-        lb_svper = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_PERIOD')
+        le_bcper = PyDMLineEdit(self, self.dev_pref + ':CLEAN_PERIOD')
+        lb_svper = SiriusLabel(self, self.dev_pref + ':CLEAN_SAVE_PERIOD')
 
         ld_bcpatt = QLabel('Mask', self)
-        le_bcpatt = PyDMLineEdit(self, self.dev_pref+':CLEAN_PATTERN')
+        le_bcpatt = PyDMLineEdit(self, self.dev_pref + ':CLEAN_PATTERN')
 
         lay_clean = QGridLayout(gbox_settings)
         lay_clean.addWidget(QLabel('SAVED VALS.'), 0, 2)
@@ -296,50 +325,59 @@ class BbBCoefficientsWidget(QWidget):
     def _setupCoefficientsViewWidget(self):
         ld_coef0 = QLabel('<h4>Set 0</h4>', self)
         ld_coef0.setStyleSheet('max-width: 3em;')
-        lb_coef0 = SiriusLabel(self, self.dev_pref+':DESC_CSET0')
+        lb_coef0 = SiriusLabel(self, self.dev_pref + ':DESC_CSET0')
         lb_coef0.setStyleSheet('background-color: #DCDCDC;')
-        led_coef0 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.C')
-        led_coef0.setStyleSheet(
-            'min-width: 1.29em; max-width: 1.29em;')
+        led_coef0 = SiriusLedAlert(self, self.dev_pref + ':CVERIFY.C')
+        led_coef0.setStyleSheet('min-width: 1.29em; max-width: 1.29em;')
 
         graph_coef0 = WfmGraph(self)
         graph_coef0.add_scatter_curve(
-            ychannel=self.dev_pref+':CSET0', lineStyle=Qt.SolidLine)
+            ychannel=self.dev_pref + ':CSET0',
+            lineStyle=Qt.SolidLine,
+            symbol='o',
+        )
 
         ld_coef1 = QLabel('<h4>Set 1</h4>', self)
         ld_coef1.setStyleSheet('max-width: 3em;')
-        lb_coef1 = SiriusLabel(self, self.dev_pref+':DESC_CSET1')
+        lb_coef1 = SiriusLabel(self, self.dev_pref + ':DESC_CSET1')
         lb_coef1.setStyleSheet('background-color: #DCDCDC;')
-        led_coef1 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.D')
-        led_coef1.setStyleSheet(
-            'min-width: 1.29em; max-width: 1.29em;')
+        led_coef1 = SiriusLedAlert(self, self.dev_pref + ':CVERIFY.D')
+        led_coef1.setStyleSheet('min-width: 1.29em; max-width: 1.29em;')
 
         graph_coef1 = WfmGraph(self)
         graph_coef1.add_scatter_curve(
-            ychannel=self.dev_pref+':CSET1', lineStyle=Qt.SolidLine)
+            ychannel=self.dev_pref + ':CSET1',
+            lineStyle=Qt.SolidLine,
+            symbol='o',
+        )
 
         ld_coef2 = QLabel('<h4>Set 2</h4>', self)
         ld_coef2.setStyleSheet('max-width: 3em;')
-        lb_coef2 = SiriusLabel(self, self.dev_pref+':DESC_CSET2')
+        lb_coef2 = SiriusLabel(self, self.dev_pref + ':DESC_CSET2')
         lb_coef2.setStyleSheet('background-color: #DCDCDC;')
-        led_coef2 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.G')
-        led_coef2.setStyleSheet(
-            'min-width: 1.29em; max-width: 1.29em;')
+        led_coef2 = SiriusLedAlert(self, self.dev_pref + ':CVERIFY.G')
+        led_coef2.setStyleSheet('min-width: 1.29em; max-width: 1.29em;')
 
         graph_coef2 = WfmGraph(self)
         graph_coef2.add_scatter_curve(
-            ychannel=self.dev_pref+':CSET2', lineStyle=Qt.SolidLine)
+            ychannel=self.dev_pref + ':CSET2',
+            lineStyle=Qt.SolidLine,
+            symbol='o',
+        )
 
         ld_coef3 = QLabel('<h4>Set 3</h4>', self)
         ld_coef3.setStyleSheet('max-width: 3em;')
-        lb_coef3 = SiriusLabel(self, self.dev_pref+':DESC_CSET3')
+        lb_coef3 = SiriusLabel(self, self.dev_pref + ':DESC_CSET3')
         lb_coef3.setStyleSheet('background-color: #DCDCDC;')
-        led_coef3 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.H')
+        led_coef3 = SiriusLedAlert(self, self.dev_pref + ':CVERIFY.H')
         led_coef3.setStyleSheet('min-width: 1.29em; max-width: 1.29em;')
 
         graph_coef3 = WfmGraph(self)
         graph_coef3.add_scatter_curve(
-            ychannel=self.dev_pref+':CSET3', lineStyle=Qt.SolidLine)
+            ychannel=self.dev_pref + ':CSET3',
+            lineStyle=Qt.SolidLine,
+            symbol='o',
+        )
 
         gbox_coefview = QGroupBox('Coefficient Sets View', self)
         gbox_coefview.setLayout(QGridLayout())
