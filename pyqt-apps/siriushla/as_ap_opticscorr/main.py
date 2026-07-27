@@ -2,23 +2,23 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QPushButton, QVBoxLayout, QSpacerItem, QSizePolicy as QSzPly, \
-    QHBoxLayout, QTabWidget, QDoubleSpinBox
+    QHBoxLayout, QTabWidget
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.opticscorr.csdev import Const as _Const
+from siriuspy.epics import PV as _PV
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusSpinbox, \
-    PyDMStateButton, SiriusLabel, SiriusLedState, SiriusTimePlot
+    PyDMStateButton, SiriusLabel, SiriusLedState
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from .details import CorrParamsDetailWindow as _CorrParamsDetailWindow
 from .custom_widgets import StatusLed as _StatusLed, \
     ConfigLineEdit as _ConfigLineEdit
 
-from siriuspy.clientarch.time import Time
 
 class OpticsCorrWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui files."""
@@ -78,13 +78,19 @@ class OpticsCorrWindow(SiriusMainWindow):
                 self, label='Update Reference', pressValue=1,
                 init_channel=self.ioc_prefix.substitute(propty='SetNewRefKL-Cmd'))
             if self.acc == 'SI':
-                self.pb_updref.setStyleSheet('min-height:2.4em; max-height:2.4em; margin-top:1em;')
+                self.pb_updref.setStyleSheet(
+                    'min-height:2.4em; max-height:2.4em; margin-top:1em;')
+                self.tunesourcepvlist_pv = _PV(
+                    self.ioc_prefix.substitute(propty='TuneSourcePVList-Mon'),
+                    connection_timeout=0.3,
+                )
                 self.gb_digmon = QGroupBox('Tune Monitor', self)
                 self.gb_digmon.setLayout(self._setupDigMonLayout())
                 self.gb_corr = QGroupBox('Correction', self)
                 self.gb_corr.setLayout(self._setupCorrectionLayout())
             else:
-                self.pb_updref.setStyleSheet('min-height:2.4em; max-height:2.4em;')
+                self.pb_updref.setStyleSheet(
+                    'min-height:2.4em; max-height:2.4em;')
                 lay_optics.addWidget(self.pb_updref, 0, 0, 1, 2)
                 lay_optics.addWidget(self.gb_optprm, 1, 0)
         else:
@@ -241,36 +247,22 @@ class OpticsCorrWindow(SiriusMainWindow):
         return lay
 
     def _setupDigMonLayout(self):
-        # lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignCenter)
-        # lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignCenter)
-        # # self.lb_tunex = SiriusLabel(self, 'SI-Glob:DI-Tune-H:TuneFrac-Mon')
-        # # self.lb_tuney = SiriusLabel(self, 'SI-Glob:DI-Tune-V:TuneFrac-Mon')
-        # self.lb_tunex = SiriusLabel(self, 'SI-Glob:AP-TuneCorr:FakeTuneX-Mon')
-        # self.lb_tuney = SiriusLabel(self, 'SI-Glob:AP-TuneCorr:FakeTuneY-Mon')
-
-        # lay = QGridLayout()
-        # lay.addWidget(lb_x, 0, 0)
-        # lay.addWidget(self.lb_tunex, 0, 1)
-        # lay.addWidget(lb_y, 1, 0)
-        # lay.addWidget(self.lb_tuney, 1, 1)
-        # lay.setColumnStretch(0, 1)
-        # lay.setColumnStretch(1, 5)
         lay_tune = QGridLayout()
 
-        prec = 4
-        prefix = 'testv-'
+        prec = 5
+        tunex_pv, tuney_pv = self.tunesourcepvlist_pv.value
+        tunex_pv = _PVName(tunex_pv).substitute(prefix=self.prefix)
+        tuney_pv = _PVName(tuney_pv).substitute(prefix=self.prefix)
 
         self.ld_tunefrach = QLabel('<h4>Tune X</h4>', self,
             alignment=Qt.AlignHCenter)
-        self.lb_tunefrach = SiriusLabel(self,
-            prefix+'SI-Glob:AP-TuneCorr:FakeTuneX-Mon')
+        self.lb_tunefrach = SiriusLabel(self, tunex_pv)
         self.lb_tunefrach.precisionFromPV = False
         self.lb_tunefrach.precision = prec
         self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
         self.lb_tunefrach.setStyleSheet('QLabel{font-size: 16pt;}')
         wid_tuneh = QWidget()
         wid_tuneh.setObjectName('wid_tuneh')
-        # if self.use_color_labels:
         wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
         vbox_tuneh = QVBoxLayout(wid_tuneh)
         vbox_tuneh.addWidget(self.ld_tunefrach)
@@ -279,15 +271,13 @@ class OpticsCorrWindow(SiriusMainWindow):
 
         self.ld_tunefracv = QLabel('<h4>Tune Y</h4>', self,
             alignment=Qt.AlignHCenter)
-        self.lb_tunefracv = SiriusLabel(self,
-            prefix+'SI-Glob:AP-TuneCorr:FakeTuneY-Mon')
+        self.lb_tunefracv = SiriusLabel(self, tuney_pv)
         self.lb_tunefracv.precisionFromPV = False
         self.lb_tunefracv.precision = prec
         self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
         self.lb_tunefracv.setStyleSheet('QLabel{font-size: 16pt;}')
         wid_tunev = QWidget()
         wid_tunev.setObjectName('wid_tunev')
-        # if self.use_color_labels:
         wid_tunev.setStyleSheet('background-color:#FFB3B3;')
         vbox_tunev = QVBoxLayout(wid_tunev)
         vbox_tunev.setAlignment(Qt.AlignHCenter)
@@ -295,54 +285,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         vbox_tunev.addWidget(self.lb_tunefracv)
         lay_tune.addWidget(wid_tunev, 0, 1)
 
-        # timeplot
-        timespan = 30  # [s]
-        self.timeplot = SiriusTimePlot(parent=self, background='w')
-        self.timeplot.timeSpan = timespan
-        self.timeplot.autoRangeY = True
-        # self.timeplot.maxYRange = 150.0
-        # self.timeplot.minYRange = 0.0
-        self.timeplot.showXGrid = True
-        self.timeplot.showYGrid = True
-
-        self.timeplot.setObjectName('timeplot')
-        self.timeplot.setStyleSheet(
-            '#timeplot{min-width:24em; min-height: 12em;}')
-
-        pvname = prefix+'SI-Glob:AP-TuneCorr:FakeTuneX-Mon'
-        color = 'blue'
-        self.timeplot.addYChannel(
-            pvname, name=pvname, color=color, lineWidth=2,
-            axis='left')
-        self.timeplot.setLabel(
-            'left', text='Frac Tune X', units='', color='blue')
-
-        pvname = prefix+'SI-Glob:AP-TuneCorr:FakeTuneY-Mon'
-        color = 'red'
-        self.timeplot.addYChannel(
-            pvname, name=pvname, color=color, lineWidth=2,
-            axis='right')
-        self.timeplot.setLabel(
-            'right', text='Frac Tune Y', units='', color='red')
-
-        plotwid = QWidget()
-        plotwid_lay = QVBoxLayout(plotwid)
-        plotwid_lay.addWidget(self.timeplot)
-
-        timespanlay = QHBoxLayout()
-        timespanlay.setAlignment(Qt.AlignHCenter)
-        timespanlay.addWidget(QLabel('Interval [s]:'), alignment=Qt.AlignLeft)
-        timespan_b = QDoubleSpinBox()
-        timespan_b.setRange(1.0, 3*60.0)
-        timespan_b.setSingleStep(5.0)
-        timespan_b.setValue(timespan)
-        timespan_b.valueChanged.connect(self.timeplot.setTimeSpan)
-        timespanlay.addWidget(timespan_b, alignment=Qt.AlignLeft)
-
-        plotwid_lay.addLayout(timespanlay)
-
-        lay_tune.addWidget(plotwid, 1, 0, 1, 2)
-
+        self.tunesourcepvlist_pv.add_callback(self._update_tune_digmon)
         return lay_tune
 
     def _setupCorrectionLayout(self):
@@ -377,10 +320,26 @@ class OpticsCorrWindow(SiriusMainWindow):
 
         lay_atcr.addWidget(QLabel('<h4>General</h4>', self.wid_atcr))
 
+        # Tune Source
+        self.tunesrc_wid = QWidget(self.wid_atcr)
+        lay_tunesrc = QHBoxLayout(self.tunesrc_wid)
+        lay_tunesrc.setContentsMargins(0, 0, 0, 0)
+        tunesrcpvn = 'TuneSource-{}'
+        tunesrc_lbl = QLabel('Tune Source', self.wid_atcr)
+        tunesrc_cbbx = PyDMEnumComboBox(self.tunesrc_wid,
+            self.ioc_prefix.substitute(propty=tunesrcpvn.format('Sel')))
+        tunesrc_rb = SiriusLabel(self.tunesrc_wid,
+            self.ioc_prefix.substitute(propty=tunesrcpvn.format('Sts')))
+        lay_tunesrc.addWidget(tunesrc_lbl)
+        lay_tunesrc.addWidget(tunesrc_cbbx)
+        lay_tunesrc.addWidget(tunesrc_rb)
+        lay_atcr.addWidget(self.tunesrc_wid)
+
+        # Loop Frequency
         freqbar = QHBoxLayout()
         freqbar.setContentsMargins(0, 0, 0, 0)
         freqpvn = 'LoopFreq-{}'
-        freqbar.addWidget(QLabel('Frequency [Hz]', self.wid_atcr),
+        freqbar.addWidget(QLabel('Loop Freq. [Hz]', self.wid_atcr),
             alignment=Qt.AlignLeft)
         freqspinbox = SiriusSpinbox(self.wid_atcr,
             self.ioc_prefix.substitute(propty=freqpvn.format('SP')))
@@ -444,36 +403,16 @@ class OpticsCorrWindow(SiriusMainWindow):
         hpl = QGridLayout()
         _qtal = Qt.AlignCenter
         hpl.addWidget(
-            QLabel('<h4>Kp</h4>', self.wid_atcr, alignment=_qtal), 1, 0
-        )
+            QLabel('<h4>Kp</h4>', self.wid_atcr, alignment=_qtal), 0, 1)
         hpl.addWidget(
-            QLabel('<h4>Ki</h4>', self.wid_atcr, alignment=_qtal), 2, 0
-        )
+            QLabel('<h4>Ki</h4>', self.wid_atcr, alignment=_qtal), 0, 2)
         hpl.addWidget(
-            QLabel('<h4>Kd</h4>', self.wid_atcr, alignment=_qtal), 3, 0
-        )
-        hpl.addWidget(
-            QLabel('<h4>X</h4>', self.wid_atcr, alignment=_qtal), 0, 1, 1, 2
-        )
-        hpl.addWidget(
-            QLabel('<h4>Y</h4>', self.wid_atcr, alignment=_qtal), 0, 3, 1, 2
-        )
+            QLabel('<h4>Kd</h4>', self.wid_atcr, alignment=_qtal), 0, 3)
 
-        self._issetting_tunepid = False
-        # self._tunepid_spicon = qta.icon(
-        #         'mdi.alpha-s', 'mdi.alpha-p', options=[
-        #             dict(scale_factor=1.5, offset=(-0.22, 0.0)),
-        #             dict(scale_factor=1.5, offset=(+0.22, 0.0))])
-        # self._tunepid_rbicon = qta.icon(
-        #         'mdi.alpha-r', 'mdi.alpha-b', options=[
-        #             dict(scale_factor=1.5, offset=(-0.22, 0.0)),
-        #             dict(scale_factor=1.5, offset=(+0.22, 0.0))])
-        # self.b_change_tunepid_sprb = QPushButton(
-        #     self._tunepid_spicon, '', self)
+        # PID
         self.tunepid_pvs = [
-            self.ioc_prefix.substitute(propty='LoopPID'+_k+_pl+_pvt)
+            self.ioc_prefix.substitute(propty='LoopPID'+_k+_pvt)
             for _k in ['Kp', 'Ki', 'Kd']
-            for _pl in ['X', 'Y']
             for _pvt in ['-SP', '-RB']
         ]
         self.tunepid_widgets = dict(
@@ -481,8 +420,6 @@ class OpticsCorrWindow(SiriusMainWindow):
              else SiriusLabel(self.wid_atcr, _pv))
             for _pv in self.tunepid_pvs
         )
-        # self.b_change_tunepid_sprb.clicked.connect(self._change_tunepid_sprb)
-        # hpl.addWidget(self.b_change_tunepid_sprb, 0, 0)
         for _pv, wid in self.tunepid_widgets.items():
             i = 1 if _pv.split('PID')[-1][2] == 'X' else 3
             if _pv.endswith('RB'):
@@ -490,12 +427,7 @@ class OpticsCorrWindow(SiriusMainWindow):
             else:
                 wid.setSingleStep(0.05)
             j = ('Kp', 'Ki', 'Kd').index(_pv.split('PID')[-1][:2]) + 1
-            hpl.addWidget(wid, j, i)
-
-        # hpl.setColumnStretch(0, 1)
-        # hpl.setColumnStretch(1, 6)
-        # hpl.setColumnStretch(2, 6)
-        # hpl.setColumnStretch(3, 6)
+            hpl.addWidget(wid, i, j)
         lay_atcr.addLayout(hpl)
         corr_tab.addTab(self.wid_atcr, 'Loop')
 
@@ -853,16 +785,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.lb_sp.setText(textX)
         self.lb_rb.setText(textY)
 
-    def _change_tunepid_sprb(self):
-        self._issetting_tunepid = not self._issetting_tunepid
-        for pvn, wid in self.tunepid_widgets.items():
-            if (pvn.endswith('SP') and self._issetting_tunepid) or \
-            (pvn.endswith('RB') and not self._issetting_tunepid):
-                wid.setVisible(True)
-            else:
-                wid.setVisible(False)
-        # text = 'RB' if self._issetting_tunepid else 'SP'
-        # self.b_change_tunepid_sprb.setText(text)
-        self.b_change_tunepid_sprb.setText('')
-        icon = self._tunepid_rbicon if self._issetting_tunepid else self._tunepid_spicon
-        self.b_change_tunepid_sprb.setIcon(icon)
+    def _update_tune_digmon(self, pvname, value, **kws):
+        _ = (pvname, kws)
+        pvx, pvy = _PVName(value[0]), _PVName(value[1])
+        self.lb_tunefrach.channel = pvx.substitute(prefix=self.prefix)
+        self.lb_tunefracv.channel = pvy.substitute(prefix=self.prefix)
