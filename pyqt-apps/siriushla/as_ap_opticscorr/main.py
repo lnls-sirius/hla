@@ -327,75 +327,74 @@ class OpticsCorrWindow(SiriusMainWindow):
         tunesrcpvn = 'TuneSource-{}'
         tunesrc_lbl = QLabel('Tune Source', self.wid_atcr)
         tunesrc_cbbx = PyDMEnumComboBox(self.tunesrc_wid,
-            self.ioc_prefix.substitute(propty=tunesrcpvn.format('Sel')))
+            self.ioc_prefix.substitute(propty=tunesrcpvn.format('Sel')),
+        )
         tunesrc_rb = SiriusLabel(self.tunesrc_wid,
             self.ioc_prefix.substitute(propty=tunesrcpvn.format('Sts')))
-        lay_tunesrc.addWidget(tunesrc_lbl)
-        lay_tunesrc.addWidget(tunesrc_cbbx)
-        lay_tunesrc.addWidget(tunesrc_rb)
+        lay_tunesrc.addWidget(tunesrc_lbl, 2, alignment=Qt.AlignLeft)
+        lay_tunesrc.addWidget(tunesrc_cbbx, alignment=Qt.AlignRight)
+        lay_tunesrc.addWidget(tunesrc_rb, alignment=Qt.AlignLeft)
         lay_atcr.addWidget(self.tunesrc_wid)
 
         # Loop Frequency
         freqbar = QHBoxLayout()
         freqbar.setContentsMargins(0, 0, 0, 0)
+        freqbar_lbl = QLabel('Loop Freq. [Hz]', self.wid_atcr)
         freqpvn = 'LoopFreq-{}'
-        freqbar.addWidget(QLabel('Loop Freq. [Hz]', self.wid_atcr),
-            alignment=Qt.AlignLeft)
         freqspinbox = SiriusSpinbox(self.wid_atcr,
             self.ioc_prefix.substitute(propty=freqpvn.format('SP')))
         freqspinbox.setSingleStep(0.5)
-        freqbar.addWidget(freqspinbox, alignment=Qt.AlignCenter)
         freqrb = SiriusLabel(self.wid_atcr,
             self.ioc_prefix.substitute(propty=freqpvn.format('RB')))
-        freqbar.addWidget(freqrb, alignment=Qt.AlignRight)
+        freqbar.addWidget(freqbar_lbl, 2, alignment=Qt.AlignLeft)
+        freqbar.addWidget(freqspinbox, alignment=Qt.AlignRight)
+        freqbar.addWidget(freqrb, alignment=Qt.AlignLeft)
         lay_atcr.addLayout(freqbar)
 
         # RefTuneX
         reftunexbar = QHBoxLayout()
         reftunexbar.setContentsMargins(0, 0, 0, 0)
         tunexpvn = 'RefTuneX-{}'
-        reftunexbar.addWidget(QLabel('Ref. Tune X', self.wid_atcr),
-            alignment=Qt.AlignLeft)
+        reftunex_lbl = QLabel('Ref. Tune X', self.wid_atcr)
         reftunex_wid = SiriusSpinbox(self.wid_atcr,
             self.ioc_prefix.substitute(propty=tunexpvn.format('SP')))
         reftunex_wid.setSingleStep(0.001)
-        reftunexbar.addWidget(reftunex_wid,
-            alignment=Qt.AlignCenter)
         reftunexrb = SiriusLabel(self.wid_atcr,
             self.ioc_prefix.substitute(propty=tunexpvn.format('RB')))
-        reftunexbar.addWidget(reftunexrb, alignment=Qt.AlignRight)
+        reftunexbar.addWidget(reftunex_lbl, 2, alignment=Qt.AlignLeft)
+        reftunexbar.addWidget(reftunex_wid, alignment=Qt.AlignRight)
+        reftunexbar.addWidget(reftunexrb, alignment=Qt.AlignLeft)
         lay_atcr.addLayout(reftunexbar)
 
         # RefTuneY
         reftuneybar = QHBoxLayout()
         reftuneybar.setContentsMargins(0, 0, 0, 0)
         tuneypvn = 'RefTuneY-{}'
-        reftuneybar.addWidget(QLabel('Ref. Tune Y', self.wid_atcr),
-            alignment=Qt.AlignLeft)
+        reftuney_lbl = QLabel('Ref. Tune Y', self.wid_atcr)
         reftuney_wid = SiriusSpinbox(self.wid_atcr,
             self.ioc_prefix.substitute(propty=tuneypvn.format('SP')))
         reftuney_wid.setSingleStep(0.001)
-        reftuneybar.addWidget(reftuney_wid,
-            alignment=Qt.AlignCenter)
         reftuneyrb = SiriusLabel(self.wid_atcr,
             self.ioc_prefix.substitute(propty=tuneypvn.format('RB')))
-        reftuneybar.addWidget(reftuneyrb, alignment=Qt.AlignRight)
+
+        reftuneybar.addWidget(reftuney_lbl, 2, alignment=Qt.AlignLeft)
+        reftuneybar.addWidget(reftuney_wid, alignment=Qt.AlignRight)
+        reftuneybar.addWidget(reftuneyrb, alignment=Qt.AlignLeft)
         lay_atcr.addLayout(reftuneybar)
 
         # MaxTuneErr
         maxtuneerrbar = QHBoxLayout()
         maxtuneerrbar.setContentsMargins(0, 0, 0, 0)
         maxtuneerrpvn = 'MaxTuneErr-{}'
-        maxtuneerrbar.addWidget(QLabel('Max. Tune Error', self.wid_atcr),
-            alignment=Qt.AlignLeft)
+        maxtuneerr_lbl = QLabel('Max. Tune Error', self.wid_atcr)
         maxtuneerr_wid = SiriusSpinbox(self.wid_atcr,
             self.ioc_prefix.substitute(propty=maxtuneerrpvn.format('SP')))
         maxtuneerr_wid.setSingleStep(0.005)
-        maxtuneerrbar.addWidget(maxtuneerr_wid,
-            alignment=Qt.AlignCenter)
         maxtuneerrrb = SiriusLabel(self.wid_atcr,
             self.ioc_prefix.substitute(propty=maxtuneerrpvn.format('RB')))
-        maxtuneerrbar.addWidget(maxtuneerrrb, alignment=Qt.AlignRight)
+        maxtuneerrbar.addWidget(maxtuneerr_lbl, 2, alignment=Qt.AlignLeft)
+        maxtuneerrbar.addWidget(maxtuneerr_wid, alignment=Qt.AlignCenter)
+        maxtuneerrbar.addWidget(maxtuneerrrb, alignment=Qt.AlignLeft)
         lay_atcr.addLayout(maxtuneerrbar)
 
         lay_atcr.addWidget(QLabel('<h4>PID</h4>', self.wid_atcr))
