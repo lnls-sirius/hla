@@ -250,7 +250,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         lay_tune = QGridLayout()
 
         prec = 5
-        tunex_pv, tuney_pv = self.tunesourcepvlist_pv.value
+        val = self.tunesourcepvlist_pv.value
+        tunex_pv, tuney_pv = val if val else ['None', 'None']
         tunex_pv = _PVName(tunex_pv).substitute(prefix=self.prefix)
         tuney_pv = _PVName(tuney_pv).substitute(prefix=self.prefix)
 
