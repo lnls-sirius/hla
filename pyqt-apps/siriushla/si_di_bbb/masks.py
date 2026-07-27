@@ -38,23 +38,27 @@ class BbBMasksWidget(QWidget):
         graph_exct.add_scatter_curve(
             ychannel=self.dev_pref+':FB_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Feedback', color=QColor('blue'))
+            name='Feedback', color=QColor('blue'), symbol='o')
         graph_exct.add_scatter_curve(
             ychannel=self.dev_pref+':CF_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Alternate', color=QColor('green'), offset=0.02)
+            name='Alternate', color=QColor('green'),
+            symbol='o', offset=0.02)
         graph_exct.add_scatter_curve(
             ychannel=self.dev_pref+':DRIVE0_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Drive0', color=QColor('red'), offset=0.04)
+            name='Drive0', color=QColor('red'),
+            symbol='o', offset=0.04)
         graph_exct.add_scatter_curve(
             ychannel=self.dev_pref+':DRIVE1_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Drive1', color=QColor('magenta'), offset=0.06)
+            name='Drive1', color=QColor('magenta'),
+            symbol='o', offset=0.06)
         graph_exct.add_scatter_curve(
             ychannel=self.dev_pref+':DRIVE2_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Drive2', color=QColor('orange'), offset=0.08)
+            name='Drive2', color=QColor('orange'),
+            symbol='o', offset=0.08)
         graph_exct.setLabel('left', '')
 
         graph_spec = WfmGraph(self)
@@ -65,11 +69,13 @@ class BbBMasksWidget(QWidget):
         graph_spec.add_scatter_curve(
             ychannel=self.dev_pref+':SRAM_ACQ_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='SRAM', color=QColor('red'))
+            name='SRAM', color=QColor('red'),
+            symbol='o')
         graph_spec.add_scatter_curve(
             ychannel=self.dev_pref+':BRAM_ACQ_MASK',
             xchannel=self.dev_pref+':BRAM_XSC',
-            name='BRAM', color=QColor('blue'), offset=0.02)
+            name='BRAM', color=QColor('blue'),
+            symbol='o', offset=0.02)
         graph_spec.setLabel('left', '')
 
         lay = QGridLayout(self)

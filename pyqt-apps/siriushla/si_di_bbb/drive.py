@@ -171,15 +171,18 @@ class BbBDriveSettingsWidget(QWidget):
         graph_exct.add_scatter_curve(
             ychannel=dev_pref+':DRIVE0_MASK',
             xchannel=dev_pref+':SRAM_XSC',
-            name='Drive0', color=QColor('red'))
+            name='Drive0', color=QColor('red'),
+            symbol='o')
         graph_exct.add_scatter_curve(
             ychannel=dev_pref+':DRIVE1_MASK',
             xchannel=dev_pref+':SRAM_XSC',
-            name='Drive1', color=QColor('magenta'), offset=0.02)
+            name='Drive1', color=QColor('magenta'),
+            symbol='o', offset=0.02)
         graph_exct.add_scatter_curve(
             ychannel=dev_pref+':DRIVE2_MASK',
             xchannel=dev_pref+':SRAM_XSC',
-            name='Drive2', color=QColor('orange'), offset=0.04)
+            name='Drive2', color=QColor('orange'),
+            symbol='o', offset=0.04)
         graph_exct.setLabel('left', '')
 
         self.layout().addWidget(graph_exct, 3, 0, 1, 5)

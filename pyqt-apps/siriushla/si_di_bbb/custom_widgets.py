@@ -39,13 +39,13 @@ class WfmGraph(SiriusWaveformPlot):
 
     def add_scatter_curve(
             self, ychannel='', xchannel='', name='', color=QColor('blue'),
-            lineStyle=Qt.NoPen, lineWidth=1, symbolSize=10, nchannel=None,
-            offset=None):
+            lineStyle=Qt.NoPen, lineWidth=1, symbol=None, symbolSize=10,
+            nchannel=None, offset=None):
         """."""
         self.addChannel(
             x_channel='', y_channel='',
             name=name, color=color, lineStyle=lineStyle, lineWidth=lineWidth,
-            symbol=None, symbolSize=symbolSize)
+            symbol=symbol, symbolSize=symbolSize)
         curve = self.curveAtIndex(-1)
         curve.nchannel = None
         curve.offset = offset
