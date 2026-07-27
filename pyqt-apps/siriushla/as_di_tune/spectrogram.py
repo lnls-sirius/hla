@@ -4,16 +4,25 @@ import logging
 import time as _time
 
 import numpy as np
-
-from qtpy.QtGui import QPalette, QColor
-from qtpy.QtCore import Qt, Slot, Signal
-from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
-    QComboBox, QCheckBox, QLabel, QPushButton
 import qtawesome as qta
-
+from qtpy.QtCore import Qt, Signal, Slot
+from qtpy.QtGui import QColor, QPalette
+from qtpy.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QWidget
+)
 from siriuspy.namesys import SiriusPVName
-from siriushla.widgets import SiriusSpectrogramView, QSpinBoxPlus
-from siriushla.widgets import SiriusConnectionSignal
+
+from siriushla.widgets import (
+    QSpinBoxPlus,
+    SiriusConnectionSignal,
+    SiriusSpectrogramView
+)
 
 
 class BOTuneSpectrogram(SiriusSpectrogramView):
@@ -25,16 +34,19 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
     buffer_size_changed = Signal(int)
     idx2send_changed = Signal(int)
 
-    def __init__(self, parent=None, prefix='', orientation='H',
-                 background='w'):
+    def __init__(
+        self, parent=None, prefix='', orientation='H', background='w'
+    ):
         """Init."""
         self.prefix = prefix
         self.orientation = orientation
         self.device = SiriusPVName('BO-Glob:DI-Tune-O')
         self.device = self.device.substitute(
-            prefix=self.prefix, idx=orientation)
+            prefix=self.prefix, idx=orientation
+        )
         image_channel = self.device.substitute(
-            dev='TuneProc', propty='SpecArray-Mon')
+            dev='TuneProc', propty='SpecArray-Mon'
+        )
         xaxis_channel = self.device.substitute(propty='TuneFracArray-Mon')
         yaxis_channel = self.device.substitute(propty='TimeArray-Mon')
         roioffx_channel = self.device.substitute(propty='ROIOffXConv-RB')
@@ -49,15 +61,17 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         )
 
         self.needs_update_buffer = False
-        super().__init__(parent=parent,
-                         image_channel=image_channel,
-                         xaxis_channel=xaxis_channel,
-                         yaxis_channel=yaxis_channel,
-                         roioffsetx_channel=roioffx_channel,
-                         roioffsety_channel=roioffy_channel,
-                         roiwidth_channel=roiwidth_channel,
-                         roiheight_channel=roiheight_channel,
-                         background=background)
+        super().__init__(
+            parent=parent,
+            image_channel=image_channel,
+            xaxis_channel=xaxis_channel,
+            yaxis_channel=yaxis_channel,
+            roioffsetx_channel=roioffx_channel,
+            roioffsety_channel=roioffy_channel,
+            roiwidth_channel=roiwidth_channel,
+            roiheight_channel=roiheight_channel,
+            background=background,
+        )
         self.redraw_on_xaxis_change = False
         self.redraw_on_yaxis_change = False
         self.normalizeData = True
@@ -73,7 +87,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         """Reimplement image_value_changed slot."""
         if new_image is None or new_image.size == 0:
             return
-        spec_size = self._image_height*self._image_width
+        spec_size = self._image_height * self._image_width
         self.image_waveform = new_image[:spec_size]
         self.needs_update_buffer = True
         self.needs_redraw = True
@@ -92,9 +106,9 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             image_shape = image.shape
             aux = np.zeros(last_buff_shape)
             if last_buff_shape > image_shape:
-                aux[:image_shape[0], :image_shape[1]] += image
+                aux[: image_shape[0], : image_shape[1]] += image
             elif last_buff_shape < image_shape:
-                aux += image[:last_buff_shape[0], :last_buff_shape[1]]
+                aux += image[: last_buff_shape[0], : last_buff_shape[1]]
             else:
                 aux += image
             image = aux
@@ -120,7 +134,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
         # update last data
         self.last_data = image
-        last_data_size = image.shape[0]-1
+        last_data_size = image.shape[0] - 1
         self.buffer_data_size.emit(last_data_size)
         if not self._idx2send > last_data_size:
             # Emit spectrum data
@@ -178,8 +192,12 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             pos = self._image_item.mapFromDevice(ev.pos())
             if not self._image_item.height():
                 pass
-            elif pos.y() > 0 and pos.y() <= self._image_item.height() and\
-                    pos.x() > 0 and pos.x() <= self._image_item.width():
+            elif (
+                pos.y() > 0
+                and pos.y() <= self._image_item.height()
+                and pos.x() > 0
+                and pos.x() <= self._image_item.width()
+            ):
                 self._idx2send = int(pos.y())
                 self.idx2send_changed.emit(self._idx2send)
                 if self.last_data is not None:
@@ -190,8 +208,9 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 class BOTuneSpectrogramControls(QWidget):
     """Booster Tune Spectrogram Controls."""
 
-    def __init__(self, parent=None, prefix='', orientation='H',
-                 title='', background='w'):
+    def __init__(
+        self, parent=None, prefix='', orientation='H', title='', background='w'
+    ):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
@@ -204,7 +223,8 @@ class BOTuneSpectrogramControls(QWidget):
         self.lb_title = QLabel(self.title, self, alignment=Qt.AlignCenter)
 
         self.spectrogram = BOTuneSpectrogram(
-            self, self.prefix, self.orientation)
+            self, self.prefix, self.orientation
+        )
 
         self.cb_show_roi = QCheckBox('Show ROI', self)
         self.cb_show_roi.stateChanged.connect(self.spectrogram.showROI)
@@ -224,19 +244,20 @@ class BOTuneSpectrogramControls(QWidget):
         self.lb_buffsz = QLabel('1', self)
         self.lb_buffsz.setStyleSheet('min-width:1.29em;max-width:1.29em;')
         self.spectrogram.buffer_curr_size.connect(self.lb_buffsz.setText)
-        self.pb_resetbuff = QPushButton(
-            qta.icon('mdi.delete-empty'), '', self)
+        self.pb_resetbuff = QPushButton(qta.icon('mdi.delete-empty'), '', self)
         self.pb_resetbuff.setToolTip('Reset buffer')
         self.pb_resetbuff.setObjectName('resetbuff')
         self.pb_resetbuff.setStyleSheet(
-            "#resetbuff{min-width:25px; max-width:25px; icon-size:20px;}")
+            '#resetbuff{min-width:25px; max-width:25px; icon-size:20px;}'
+        )
         self.pb_resetbuff.clicked.connect(self.spectrogram.resetBuffer)
 
         self.cb_choose_x = QComboBox(self)
         self.cb_choose_x.addItem('Tune Frac.')
         self.cb_choose_x.addItem('Frequency')
         self.cb_choose_x.currentIndexChanged.connect(
-            self.spectrogram.toggleXChannel)
+            self.spectrogram.toggleXChannel
+        )
 
         hbox_ctrls = QHBoxLayout()
         hbox_ctrls.setContentsMargins(0, 0, 0, 0)
