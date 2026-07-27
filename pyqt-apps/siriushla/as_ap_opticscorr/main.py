@@ -328,7 +328,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.tunesrc_wid = QWidget(self.wid_atcr)
         lay_tunesrc = QHBoxLayout(self.tunesrc_wid)
         lay_tunesrc.setContentsMargins(0, 0, 0, 0)
-        tunesrcpvn = 'TuneSource-{}'
+        tunesrcpvn = 'TuneSrc-{}'
         tunesrc_lbl = QLabel('Tune Source', self.wid_atcr)
         tunesrc_cbbx = PyDMEnumComboBox(self.tunesrc_wid,
             self.ioc_prefix.substitute(propty=tunesrcpvn.format('Sel')),
