@@ -2,26 +2,30 @@
 
 import os as _os
 
-from qtpy.QtGui import QPixmap, QColor
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem, \
-    QHBoxLayout
 from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
-
+from qtpy.QtCore import Qt
+from qtpy.QtGui import QColor, QPixmap
+from qtpy.QtWidgets import (
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QSpacerItem,
+    QWidget
+)
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import PyDMStateButton, SiriusFrame, SiriusLabel, SiriusSpinbox
-
-from .util import set_bbb_color
 from .custom_widgets import WfmGraph
+from .util import set_bbb_color
 
 
 class BbBSingleDriveSettingsWidget(QWidget):
     """BbB Drive Settings Widget."""
 
     def __init__(
-            self, parent=None, prefix=_vaca_prefix, device='', dr_num=None):
+        self, parent=None, prefix=_vaca_prefix, device='', dr_num=None
+    ):
         """Init."""
         super().__init__(parent)
         set_bbb_color(self, device)
@@ -38,16 +42,20 @@ class BbBSingleDriveSettingsWidget(QWidget):
     def _setupUi(self):
         if self._driver_num is None:
             ld_drive = QLabel(
-                '<h3>Drive Pattern Generator</h3>', self,
-                alignment=Qt.AlignCenter)
+                '<h3>Drive Pattern Generator</h3>',
+                self,
+                alignment=Qt.AlignCenter,
+            )
         else:
             ld_drive = QWidget(self)
             ld_drive.setLayout(QHBoxLayout())
             labd = QLabel(
                 f'<h3>Driver {self._driver_num:d}, NCO BITS: </h3>',
-                ld_drive, alignment=Qt.AlignRight)
+                ld_drive,
+                alignment=Qt.AlignRight,
+            )
             labd.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-            lab = SiriusLabel(ld_drive, self.dev_pref+'BITS')
+            lab = SiriusLabel(ld_drive, self.dev_pref + 'BITS')
             lab.setStyleSheet('font-size: 13pt; font-weight: bold;')
             lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
             ld_drive.layout().addStretch()
@@ -56,29 +64,29 @@ class BbBSingleDriveSettingsWidget(QWidget):
             ld_drive.layout().addStretch()
 
         ld_amp = QLabel('Amplitude', self)
-        sb_amp = SiriusSpinbox(self, self.dev_pref+'AMPL')
+        sb_amp = SiriusSpinbox(self, self.dev_pref + 'AMPL')
 
         ld_freq = QLabel('Frequency', self)
-        sb_freq = SiriusSpinbox(self, self.dev_pref+'FREQ')
+        sb_freq = SiriusSpinbox(self, self.dev_pref + 'FREQ')
 
         ld_wav = QLabel('Waveform', self)
-        cb_wav = PyDMEnumComboBox(self, self.dev_pref+'WAVEFORM')
+        cb_wav = PyDMEnumComboBox(self, self.dev_pref + 'WAVEFORM')
 
         ld_tmod = QLabel('Time MODulation', self)
-        cb_tmod = PyDMStateButton(self, self.dev_pref+'MOD')
+        cb_tmod = PyDMStateButton(self, self.dev_pref + 'MOD')
 
         ld_span = QLabel('Span', self)
-        sb_span = SiriusSpinbox(self, self.dev_pref+'SPAN')
+        sb_span = SiriusSpinbox(self, self.dev_pref + 'SPAN')
 
         ld_perd = QLabel('Period', self)
-        sb_perd = SiriusSpinbox(self, self.dev_pref+'PERIOD')
+        sb_perd = SiriusSpinbox(self, self.dev_pref + 'PERIOD')
 
         ld_patt = QLabel('Drive Pattern', self)
-        le_patt = PyDMLineEdit(self, self.dev_pref+'PATTERN')
+        le_patt = PyDMLineEdit(self, self.dev_pref + 'PATTERN')
 
-        lb_actfreq = SiriusLabel(self, self.dev_pref+'FREQ_ACT_STRING')
-        lb_actspan = SiriusLabel(self, self.dev_pref+'SPAN_ACT_STRING')
-        lb_actperd = SiriusLabel(self, self.dev_pref+'PERIOD_ACT')
+        lb_actfreq = SiriusLabel(self, self.dev_pref + 'FREQ_ACT_STRING')
+        lb_actspan = SiriusLabel(self, self.dev_pref + 'SPAN_ACT_STRING')
+        lb_actperd = SiriusLabel(self, self.dev_pref + 'PERIOD_ACT')
 
         lay = QGridLayout(self)
         lay.addWidget(ld_drive, 0, 1, 1, 3)
@@ -102,8 +110,11 @@ class BbBSingleDriveSettingsWidget(QWidget):
         lay.addItem(QSpacerItem(1, 10), 9, 1)
         lay.addItem(QSpacerItem(1, 10), 13, 1)
         if self._driver_num in {None, 1}:
-            pixmap = QPixmap(_os.path.join(
-                _os.path.abspath(_os.path.dirname(__file__)), 'drive.png'))
+            pixmap = QPixmap(
+                _os.path.join(
+                    _os.path.abspath(_os.path.dirname(__file__)), 'drive.png'
+                )
+            )
             il_drive = QLabel(self)
             il_drive.setPixmap(pixmap)
             il_drive.setScaledContents(True)
@@ -152,13 +163,14 @@ class BbBDriveSettingsWidget(QWidget):
     def _setupUi(self):
         self.setLayout(QGridLayout())
         ld_drive = QLabel(
-            '<h2>Drive Pattern Generators</h2>',
-            self, alignment=Qt.AlignCenter)
+            '<h2>Drive Pattern Generators</h2>', self, alignment=Qt.AlignCenter
+        )
         self.layout().addWidget(ld_drive, 0, 0, 1, 5)
         for i in range(3):
             drive = BbBSingleDriveSettingsWidget(
-                prefix=self._prefix, device=self._device, dr_num=i)
-            self.layout().addWidget(drive, 1, 2*i)
+                prefix=self._prefix, device=self._device, dr_num=i
+            )
+            self.layout().addWidget(drive, 1, 2 * i)
         self.layout().setColumnStretch(1, 2)
         self.layout().setColumnStretch(3, 2)
 
@@ -169,17 +181,28 @@ class BbBDriveSettingsWidget(QWidget):
         graph_exct.showLegend = True
         graph_exct.axisColor = QColor('black')
         graph_exct.add_scatter_curve(
-            ychannel=dev_pref+':DRIVE0_MASK',
-            xchannel=dev_pref+':SRAM_XSC',
-            name='Drive0', color=QColor('red'))
+            ychannel=dev_pref + ':DRIVE0_MASK',
+            xchannel=dev_pref + ':SRAM_XSC',
+            name='Drive0',
+            color=QColor('red'),
+            symbol='o',
+        )
         graph_exct.add_scatter_curve(
-            ychannel=dev_pref+':DRIVE1_MASK',
-            xchannel=dev_pref+':SRAM_XSC',
-            name='Drive1', color=QColor('magenta'), offset=0.02)
+            ychannel=dev_pref + ':DRIVE1_MASK',
+            xchannel=dev_pref + ':SRAM_XSC',
+            name='Drive1',
+            color=QColor('magenta'),
+            symbol='o',
+            offset=0.02,
+        )
         graph_exct.add_scatter_curve(
-            ychannel=dev_pref+':DRIVE2_MASK',
-            xchannel=dev_pref+':SRAM_XSC',
-            name='Drive2', color=QColor('orange'), offset=0.04)
+            ychannel=dev_pref + ':DRIVE2_MASK',
+            xchannel=dev_pref + ':SRAM_XSC',
+            name='Drive2',
+            color=QColor('orange'),
+            symbol='o',
+            offset=0.04,
+        )
         graph_exct.setLabel('left', '')
 
         self.layout().addWidget(graph_exct, 3, 0, 1, 5)

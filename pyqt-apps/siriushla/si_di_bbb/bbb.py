@@ -1,27 +1,40 @@
 """BbB Control Module."""
 
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
-    QGroupBox, QSpacerItem, QSizePolicy as QSzPlcy, QPushButton, QHBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMEnumComboBox
-
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import (
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSizePolicy as QSzPlcy,
+    QSpacerItem,
+    QWidget
+)
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..util import connect_window, connect_newprocess
-from ..widgets.windows import create_window_from_widget
-from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
-    PyDMLedMultiChannel, DetachableTabWidget, SiriusLabel, SiriusPushButton, \
+from ..util import connect_newprocess, connect_window
+from ..widgets import (
+    DetachableTabWidget,
+    PyDMLedMultiChannel,
+    PyDMStateButton,
+    SiriusLabel,
+    SiriusLedAlert,
+    SiriusMainWindow,
+    SiriusPushButton,
     SiriusSpinbox
-
-from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
-from .coefficients import BbBCoefficientsWidget
+)
+from ..widgets.windows import create_window_from_widget
+from .acquisition import BbBAcqBRAM, BbBAcqSB, BbBAcqSRAM
 from .advanced_settings import BbBAdvancedSettingsWidget
-from .pwr_amps import BbBPwrAmpsWidget
-from .masks import BbBMasksWidget
+from .coefficients import BbBCoefficientsWidget
 from .drive import BbBDriveSettingsWidget
 from .environment import BbBEnvironmMonWidget
+from .masks import BbBMasksWidget
+from .pwr_amps import BbBPwrAmpsWidget
 from .timing import BbBTimingWidget
 from .util import get_bbb_icon, set_bbb_color
 
@@ -35,18 +48,19 @@ class BbBControlWindow(SiriusMainWindow):
         self.prefix = prefix
         self.device = _PVName(device)
         self.dev_pref = self.device.substitute(prefix=prefix)
-        self.setWindowTitle(device+' Control Window')
+        self.setWindowTitle(device + ' Control Window')
         self.setObjectName('SIApp')
         self.setWindowIcon(get_bbb_icon())
         self._setupUi()
 
     def _setupUi(self):
         label = QLabel(
-            '<h1>'+self.device+'</h1>', self,
-            alignment=Qt.AlignCenter)
+            '<h1>' + self.device + '</h1>', self, alignment=Qt.AlignCenter
+        )
 
         main_wid = BbBMainSettingsWidget(
-            self, self.prefix, self.device, resume=False)
+            self, self.prefix, self.device, resume=False
+        )
         coeff_wid = BbBCoefficientsWidget(self, self.prefix, self.device)
         drive_wid = BbBDriveSettingsWidget(self, self.prefix, self.device)
         sram_wid = BbBAcqSRAM(self, self.prefix, self.device)
@@ -57,7 +71,8 @@ class BbBControlWindow(SiriusMainWindow):
         pwr_amp_wid = BbBPwrAmpsWidget(self, self.prefix, self.device)
         env_wid = BbBEnvironmMonWidget(self, self.prefix, self.device)
         advanced_wid = BbBAdvancedSettingsWidget(
-            self, self.prefix, self.device)
+            self, self.prefix, self.device
+        )
 
         tab = DetachableTabWidget(self)
         tab.setObjectName('SITab')
@@ -85,18 +100,16 @@ class BbBControlWindow(SiriusMainWindow):
 class BbBMainSettingsWidget(QWidget):
     """BbB Main Senttings Widget."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, device='',
-                 resume=True):
+    def __init__(
+        self, parent=None, prefix=_vaca_prefix, device='', resume=True
+    ):
         """Init."""
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
         self._device = _PVName(device)
         self.dev_pref = self._device.substitute(prefix=prefix)
-        typ2label = {
-            'H': 'Horizontal',
-            'V': 'Vertical',
-            'L': 'Longitudinal'}
+        typ2label = {'H': 'Horizontal', 'V': 'Vertical', 'L': 'Longitudinal'}
         self._label = typ2label[self._device[-1]]
         self._is_resumed = resume
         self._setupUi()
@@ -108,13 +121,15 @@ class BbBMainSettingsWidget(QWidget):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop | Qt.AlignCenter)
         if self._is_resumed:
-            led_gensts = SiriusLedAlert(self, self.dev_pref+':ERRSUM')
+            led_gensts = SiriusLedAlert(self, self.dev_pref + ':ERRSUM')
             dev_label = QLabel(
-                '<h3>'+self._label+'</h3>', self, alignment=Qt.AlignCenter)
+                '<h3>' + self._label + '</h3>', self, alignment=Qt.AlignCenter
+            )
             self.pb_detail = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
             self.pb_detail.setObjectName('dtls')
             self.pb_detail.setStyleSheet(
-                '#dtls{min-width:20px;max-width:20px;icon-size:15px;}')
+                '#dtls{min-width:20px;max-width:20px;icon-size:15px;}'
+            )
             cmd = ['sirius-hla-si-di-bbb.py', '-dev', self.dev_pref]
             if self._prefix:
                 cmd.extend(['-p', self._prefix])
@@ -151,19 +166,19 @@ class BbBMainSettingsWidget(QWidget):
 
     def _setupFeedbackSettings(self):
         ld_fbenbl = QLabel('Enable', self)
-        pb_fbenbl = PyDMStateButton(self, self.dev_pref+':FBCTRL')
+        pb_fbenbl = PyDMStateButton(self, self.dev_pref + ':FBCTRL')
 
         ld_coefsel = QLabel('Coeficient Set', self)
-        cb_coefsel = PyDMEnumComboBox(self, self.dev_pref+':SETSEL')
+        cb_coefsel = PyDMEnumComboBox(self, self.dev_pref + ':SETSEL')
 
         ld_sftgain = QLabel('Shift Gain', self)
-        sb_sftgain = SiriusSpinbox(self, self.dev_pref+':SHIFTGAIN')
+        sb_sftgain = SiriusSpinbox(self, self.dev_pref + ':SHIFTGAIN')
 
         ld_downspl = QLabel('Downsampling', self)
-        sb_downspl = SiriusSpinbox(self, self.dev_pref+':PROC_DS')
+        sb_downspl = SiriusSpinbox(self, self.dev_pref + ':PROC_DS')
 
         ld_satthrs = QLabel('Sat. Threshold [%]', self)
-        sb_satthrs = SiriusSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
+        sb_satthrs = SiriusSpinbox(self, self.dev_pref + ':SAT_THRESHOLD')
 
         lay = QGridLayout()
         lay.addWidget(ld_fbenbl, 1, 0)
@@ -181,7 +196,8 @@ class BbBMainSettingsWidget(QWidget):
             wid = QWidget()
             wid.setLayout(lay)
             fb_label = QLabel(
-                '<h4>Feedback Settings</h4>', self, alignment=Qt.AlignCenter)
+                '<h4>Feedback Settings</h4>', self, alignment=Qt.AlignCenter
+            )
             lay.setContentsMargins(0, 0, 0, 0)
             lay.setVerticalSpacing(12)
             lay.addWidget(fb_label, 0, 0, 1, 2)
@@ -190,7 +206,7 @@ class BbBMainSettingsWidget(QWidget):
             wid.setLayout(lay)
 
             ld_gensts = QLabel('Setup Status', self)
-            led_gensts = SiriusLedAlert(self, self.dev_pref+':ERRSUM')
+            led_gensts = SiriusLedAlert(self, self.dev_pref + ':ERRSUM')
             lay.addWidget(ld_gensts, 6, 0)
             lay.addWidget(led_gensts, 6, 1)
         return wid
@@ -200,22 +216,29 @@ class BbBMainSettingsWidget(QWidget):
             ld_status = QLabel('<h4>Status</h4>', self)
 
             chs2vals = {
-                self.dev_pref+':CLKMISS': 0,
-                self.dev_pref+':PLL_UNLOCK': 0,
-                self.dev_pref+':DCM_UNLOCK': 0,
-                self.dev_pref+':ADC_OVR': 0,
-                self.dev_pref+':SAT': 0,
-                self.dev_pref+':FID_ERR': 0,
+                self.dev_pref + ':CLKMISS': 0,
+                self.dev_pref + ':PLL_UNLOCK': 0,
+                self.dev_pref + ':DCM_UNLOCK': 0,
+                self.dev_pref + ':ADC_OVR': 0,
+                self.dev_pref + ':SAT': 0,
+                self.dev_pref + ':FID_ERR': 0,
             }
             led_status = PyDMLedMultiChannel(self, chs2vals)
             led_status.setStyleSheet(
-                'QLed{min-width:1.29em; max-width:1.29em;}')
+                'QLed{min-width:1.29em; max-width:1.29em;}'
+            )
             wind = create_window_from_widget(
-                BbBStatusWidget, title='BbB Status Details')
+                BbBStatusWidget, title='BbB Status Details'
+            )
             connect_window(
-                led_status, wind, resume=True,
-                parent=self, signal=led_status.clicked,
-                prefix=self._prefix, device=self._device)
+                led_status,
+                wind,
+                resume=True,
+                parent=self,
+                signal=led_status.clicked,
+                prefix=self._prefix,
+                device=self._device,
+            )
 
             wid = QWidget()
             lay = QGridLayout(wid)
@@ -233,8 +256,9 @@ class BbBMainSettingsWidget(QWidget):
 class BbBStatusWidget(QWidget):
     """."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, device='',
-                 resume=False):
+    def __init__(
+        self, parent=None, prefix=_vaca_prefix, device='', resume=False
+    ):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
@@ -246,34 +270,37 @@ class BbBStatusWidget(QWidget):
 
     def _setupUi(self):
         ld_clkmis = QLabel('Clock missing', alignment=Qt.AlignCenter)
-        led_clkmis = SiriusLedAlert(self, self.dev_pref+':CLKMISS')
-        lb_clkmis = SiriusLabel(self, self.dev_pref+':CLKMISS_COUNT')
+        led_clkmis = SiriusLedAlert(self, self.dev_pref + ':CLKMISS')
+        lb_clkmis = SiriusLabel(self, self.dev_pref + ':CLKMISS_COUNT')
 
         ld_pllulk = QLabel('PLL Unlocked', alignment=Qt.AlignCenter)
-        led_pllulk = SiriusLedAlert(self, self.dev_pref+':PLL_UNLOCK')
-        lb_pllulk = SiriusLabel(self, self.dev_pref+':PLL_UNLOCK_COUNT')
+        led_pllulk = SiriusLedAlert(self, self.dev_pref + ':PLL_UNLOCK')
+        lb_pllulk = SiriusLabel(self, self.dev_pref + ':PLL_UNLOCK_COUNT')
 
         ld_dcmulk = QLabel('DCM unlocked', alignment=Qt.AlignCenter)
-        led_dcmulk = SiriusLedAlert(self, self.dev_pref+':DCM_UNLOCK')
-        lb_dcmulk = SiriusLabel(self, self.dev_pref+':DCM_UNLOCK_COUNT')
+        led_dcmulk = SiriusLedAlert(self, self.dev_pref + ':DCM_UNLOCK')
+        lb_dcmulk = SiriusLabel(self, self.dev_pref + ':DCM_UNLOCK_COUNT')
 
         ld_avcovr = QLabel('ADC Overrange', alignment=Qt.AlignCenter)
-        led_avcovr = SiriusLedAlert(self, self.dev_pref+':ADC_OVR')
-        lb_avcovr = SiriusLabel(self, self.dev_pref+':ADC_OVR_COUNT')
+        led_avcovr = SiriusLedAlert(self, self.dev_pref + ':ADC_OVR')
+        lb_avcovr = SiriusLabel(self, self.dev_pref + ':ADC_OVR_COUNT')
 
         ld_outsat = QLabel('Output satured', alignment=Qt.AlignCenter)
-        led_outsat = SiriusLedAlert(self, self.dev_pref+':SAT')
-        lb_outsat = SiriusLabel(self, self.dev_pref+':SAT_COUNT')
+        led_outsat = SiriusLedAlert(self, self.dev_pref + ':SAT')
+        lb_outsat = SiriusLabel(self, self.dev_pref + ':SAT_COUNT')
 
         ld_fiderr = QLabel('Fiducial Error', alignment=Qt.AlignCenter)
-        led_fiderr = SiriusLedAlert(self, self.dev_pref+':FID_ERR')
-        lb_fiderr = SiriusLabel(self, self.dev_pref+':FID_ERR_COUNT')
+        led_fiderr = SiriusLedAlert(self, self.dev_pref + ':FID_ERR')
+        lb_fiderr = SiriusLabel(self, self.dev_pref + ':FID_ERR_COUNT')
 
         ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
-        lb_intvl = SiriusLabel(self, self.dev_pref+':RST_COUNT')
+        lb_intvl = SiriusLabel(self, self.dev_pref + ':RST_COUNT')
         pb_intvl = SiriusPushButton(
-            self, init_channel=self.dev_pref+':CNTRST', pressValue=1,
-            releaseValue=0)
+            self,
+            init_channel=self.dev_pref + ':CNTRST',
+            pressValue=1,
+            releaseValue=0,
+        )
         pb_intvl.setText('Reset')
         pb_intvl.setToolTip('Reset Counts')
         pb_intvl.setIcon(qta.icon('fa5s.sync'))
@@ -286,14 +313,22 @@ class BbBStatusWidget(QWidget):
         if self._is_resumed:
             lay.addWidget(
                 QLabel('<h3>Status</h3>', self, alignment=Qt.AlignCenter),
-                0, 0, 1, 3)
+                0,
+                0,
+                1,
+                3,
+            )
             lay.addItem(
-                QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+                QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0
+            )
         lay.addWidget(
             QLabel('<h4>Description</h4>', self, alignment=Qt.AlignCenter),
-            2, 1)
+            2,
+            1,
+        )
         lay.addWidget(
-            QLabel('<h4>Count</h4>', self, alignment=Qt.AlignCenter), 2, 2)
+            QLabel('<h4>Count</h4>', self, alignment=Qt.AlignCenter), 2, 2
+        )
         lay.addWidget(led_clkmis, 3, 0)
         lay.addWidget(ld_clkmis, 3, 1)
         lay.addWidget(lb_clkmis, 3, 2)
@@ -341,25 +376,25 @@ class BbBInfoWidget(QGroupBox):
         self.setTitle('System Information')
 
         ld_rffreq = QLabel('Nominal RF Frequency', self)
-        lb_rffreq = SiriusLabel(self, self.dev_pref+':RF_FREQ')
+        lb_rffreq = SiriusLabel(self, self.dev_pref + ':RF_FREQ')
         lb_rffreq.showUnits = True
 
         ld_revfrq = QLabel('Revolution Frequency', self)
-        lb_revfrq = SiriusLabel(self, self.dev_pref+':FREV')
+        lb_revfrq = SiriusLabel(self, self.dev_pref + ':FREV')
         lb_revfrq.showUnits = True
 
         ld_hn = QLabel('Harmonic Number', self)
-        lb_hn = SiriusLabel(self, self.dev_pref+':HARM_NUM')
+        lb_hn = SiriusLabel(self, self.dev_pref + ':HARM_NUM')
 
         ld_gtwrvw = QLabel('Gateway Revision', self)
-        lb_gtwrvw = SiriusLabel(self, self.dev_pref+':REVISION')
+        lb_gtwrvw = SiriusLabel(self, self.dev_pref + ':REVISION')
 
         ld_gtwtyp = QLabel('Gateway Type', self)
-        lb_gtwtyp = SiriusLabel(self, self.dev_pref+':GW_TYPE')
+        lb_gtwtyp = SiriusLabel(self, self.dev_pref + ':GW_TYPE')
         lb_gtwtyp.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_ipaddr = QLabel('IP Address', self)
-        lb_ipaddr = SiriusLabel(self, self.dev_pref+':IP_ADDR')
+        lb_ipaddr = SiriusLabel(self, self.dev_pref + ':IP_ADDR')
 
         lay = QGridLayout(self)
         lay.setVerticalSpacing(15)
@@ -376,5 +411,4 @@ class BbBInfoWidget(QGroupBox):
         lay.addWidget(ld_ipaddr, 5, 0)
         lay.addWidget(lb_ipaddr, 5, 1)
 
-        self.setStyleSheet(
-            "SiriusLabel{qproperty-alignment: AlignCenter;}")
+        self.setStyleSheet('SiriusLabel{qproperty-alignment: AlignCenter;}')
