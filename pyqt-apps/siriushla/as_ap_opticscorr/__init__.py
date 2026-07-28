@@ -1,3 +1,3 @@
 """Optics Correction HLA Module."""
 
-from .main import OpticsCorrWindow
+from .main import OpticsCorrWindow, SITuneCorrWindow

@@ -12,6 +12,10 @@ from qtpy.QtWidgets import (
     QSizePolicy as QSzPly,
     QHBoxLayout,
     QTabWidget,
+    QDockWidget,
+    QMenuBar,
+    QMenu,
+    QAction,
 )
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
@@ -982,3 +986,760 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.pb_change_sp.setIcon(icon)
         self.lb_sp.setText(text_x)
         self.lb_rb.setText(text_y)
+
+
+class SITuneCorrWindow(SiriusMainWindow):
+    """Class to include some intelligence in the .ui files."""
+
+    def __init__(self, acc, opticsparam, parent=None, prefix=_VACA_PREFIX):
+        """Initialize some widgets."""
+        super(SITuneCorrWindow, self).__init__(parent)
+        self.prefix = prefix
+        self.acc = acc.upper()
+        self.param = opticsparam
+        self.ioc_prefix = _PVName(
+            self.acc + "-Glob:AP-" + self.param.title() + "Corr"
+        )
+        self.ioc_prefix = self.ioc_prefix.substitute(prefix=self.prefix)
+        self.title = self.acc + " " + self.param.title() + " Correction"
+
+        self.param_pv = "DeltaTune{0}-{1}"
+        self.intstrength = "KL"
+        self.intstrength_calcdesc = "DeltaKL-Mon"
+        self.intstrength_calcpv = "DeltaKL{}-Mon"
+        self.fams = list(_Const.SI_QFAMS_TUNECORR)
+
+        self._setupui()
+
+    def _setupui(self):
+        self.setWindowModality(Qt.WindowModal)
+        self.setWindowTitle(self.title)
+        self.setDocumentMode(False)
+        self.setDockNestingEnabled(True)
+
+        self.ioc_log = self._create_log_docwidget()
+        self.qfams_kl_monitor = self._create_families_docwidget()
+        self.tunefb_control = self._create_ioc_control_docwidget()
+
+        print("created")
+
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.ioc_log)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.qfams_kl_monitor)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.tunefb_control)
+
+        mwid = self._create_diagmon_widget()
+        self.setCentralWidget(mwid)
+
+        self._create_menus()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def _create_diagmon_widget(self):
+        digmon = QGroupBox("Tune Monitor", self)
+
+        lay = QGridLayout()
+        prec = 5
+        tunex_pv = self.ioc_prefix.substitute(propty="TuneX-Mon")
+        tuney_pv = self.ioc_prefix.substitute(propty="TuneY-Mon")
+
+        self.ld_tunefrach = QLabel(
+            "<h4>Tune X</h4>", self, alignment=Qt.AlignHCenter
+        )
+        self.lb_tunefrach = SiriusLabel(self, tunex_pv)
+        self.lb_tunefrach.precisionFromPV = False
+        self.lb_tunefrach.precision = prec
+        self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
+        self.lb_tunefrach.setStyleSheet("QLabel{font-size: 16pt;}")
+        wid_tuneh = QWidget()
+        wid_tuneh.setObjectName("wid_tuneh")
+        wid_tuneh.setStyleSheet("background-color:#B3E5FF;")
+        vbox_tuneh = QVBoxLayout(wid_tuneh)
+        vbox_tuneh.addWidget(self.ld_tunefrach)
+        vbox_tuneh.addWidget(self.lb_tunefrach)
+        lay.addWidget(wid_tuneh, 0, 0)
+
+        self.ld_tunefracv = QLabel(
+            "<h4>Tune Y</h4>", self, alignment=Qt.AlignHCenter
+        )
+        self.lb_tunefracv = SiriusLabel(self, tuney_pv)
+        self.lb_tunefracv.precisionFromPV = False
+        self.lb_tunefracv.precision = prec
+        self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
+        self.lb_tunefracv.setStyleSheet("QLabel{font-size: 16pt;}")
+        wid_tunev = QWidget()
+        wid_tunev.setObjectName("wid_tunev")
+        wid_tunev.setStyleSheet("background-color:#FFB3B3;")
+        vbox_tunev = QVBoxLayout(wid_tunev)
+        vbox_tunev.setAlignment(Qt.AlignHCenter)
+        vbox_tunev.addWidget(self.ld_tunefracv)
+        vbox_tunev.addWidget(self.lb_tunefracv)
+        lay.addWidget(wid_tunev, 0, 1)
+
+        digmon.setLayout(lay)
+        return digmon
+
+    def _create_log_docwidget(self):
+        docwid = QDockWidget(self)
+        docwid.setWindowTitle("IOC Log")
+        sz_pol = QSzPly(QSzPly.Preferred, QSzPly.Preferred)
+        docwid.setSizePolicy(sz_pol)
+        docwid.setFloating(False)
+        docwid.setObjectName("doc_IOCLog")
+        docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:30em;}")
+        wid_cont = QWidget()
+        docwid.setWidget(wid_cont)
+        vbl = QVBoxLayout(wid_cont)
+        vbl.setContentsMargins(0, 0, 0, 0)
+        pdm_log = PyDMLogLabel(
+            wid_cont, self.ioc_prefix.substitute(propty="Log-Mon")
+        )
+        pdm_log.setAlternatingRowColors(True)
+        pdm_log.maxCount = 2000
+        vbl.addWidget(pdm_log)
+        hbl = QHBoxLayout()
+        vbl.addLayout(hbl)
+        hbl.addStretch()
+        pbtn = QPushButton("Clear Log", wid_cont)
+        pbtn.clicked.connect(pdm_log.clear)
+        hbl.addWidget(pbtn)
+        hbl.addStretch()
+        return docwid
+
+    def _create_families_docwidget(self):
+        docwid = QDockWidget(self)
+        docwid.setWindowTitle("Families Strength Monitor")
+
+        wid = QWidget()
+        docwid.setWidget(wid)
+
+        lay = QGridLayout()
+        lay.setContentsMargins(10, 10, 10, 10)
+
+        lb_family = QLabel("<h4>Family</h4>", self, alignment=Qt.AlignCenter)
+        lb_family.setStyleSheet("max-height:1.29em;")
+        lay.addWidget(lb_family, 0, 1)
+
+        lb_rbdesc = QLabel(
+            "<h4>" + self.intstrength + "-RB</h4>",
+            self,
+            alignment=Qt.AlignCenter,
+        )
+        lb_rbdesc.setStyleSheet("max-height:1.29em;")
+        lay.addWidget(lb_rbdesc, 0, 2)
+
+        if self.param == "tune":
+            lb_refdesc = QLabel(
+                "<h4>RefKL-Mon</h4>", self, alignment=Qt.AlignCenter
+            )
+            lb_refdesc.setStyleSheet("max-height:1.29em;")
+            lay.addWidget(lb_refdesc, 0, 3)
+
+        lb_lastddesc = QLabel(
+            "<h4>" + self.intstrength_calcdesc + "</h4>",
+            self,
+            alignment=Qt.AlignCenter,
+        )
+        lb_lastddesc.setStyleSheet("max-height:1.29em;")
+        lay.addWidget(lb_lastddesc, 0, 4)
+
+        row = 1
+        for fam in self.fams:
+            dev_name = _PVName(self.acc + "-Fam:PS-" + fam)
+            pref_name = dev_name.substitute(prefix=self.prefix)
+
+            pbt = QPushButton(qta.icon("fa5s.list-ul"), "", self)
+            pbt.setObjectName("pbt")
+            pbt.setStyleSheet(
+                """#pbt{
+                    min-width:25px; max-width:25px;
+                    min-height:25px; max-height:25px;
+                    icon-size:20px;}"""
+            )
+            _hlautil.connect_window(
+                pbt, _PSDetailWindow, parent=self, psname=dev_name
+            )
+            lay.addWidget(pbt, row, 0)
+
+            lb_name = QLabel(fam, self, alignment=Qt.AlignCenter)
+            lay.addWidget(lb_name, row, 1)
+
+            lb_rb = SiriusLabel(
+                self, pref_name.substitute(propty=self.intstrength + "-RB")
+            )
+            lay.addWidget(lb_rb, row, 2)
+
+            if self.param == "tune":
+                lb_ref = SiriusLabel(
+                    self,
+                    self.ioc_prefix.substitute(propty="RefKL" + fam + "-Mon"),
+                )
+                lay.addWidget(lb_ref, row, 3)
+
+            lb_calc = SiriusLabel(
+                self,
+                self.ioc_prefix.substitute(
+                    propty=self.intstrength_calcpv.format(fam)
+                ),
+            )
+            lay.addWidget(lb_calc, row, 4)
+            row += 1
+        wid.setLayout(lay)
+        return docwid
+
+    def _create_ioc_control_docwidget(self):
+        docwid = QDockWidget(self)
+        docwid.setWindowTitle("IOC Control")
+        sz_pol = QSzPly(QSzPly.Preferred, QSzPly.Preferred)
+        docwid.setSizePolicy(sz_pol)
+        docwid.setFloating(False)
+        docwid.setObjectName("doc_IOCCtrl")
+        docwid.setStyleSheet("#doc_IOCCtrl{min-width:20em; min-height:30em;}")
+
+        wid = QWidget()
+        docwid.setWidget(wid)
+        lay = QVBoxLayout()
+
+        wid_corr = self._get_correction_widget()
+        lay.addWidget(wid_corr)
+
+        wid_matrix = self._get_matrix_widget()
+        lay.addWidget(wid_matrix)
+
+        wid.setLayout(lay)
+        return docwid
+
+    def _create_menus(self):
+        menubar = QMenuBar(self)
+        menubar.setNativeMenuBar(False)
+
+        menuopen = QMenu("Open", menubar)
+        actions = (("IOC &Log", "IOC Log", "", True, self.ioc_log),)
+        self.setMenuBar(menubar)
+        for name, tool, short, check, doc in actions:
+            action = QAction(name, self)
+            action.setToolTip(tool)
+            action.setShortcut(short)
+            action.setCheckable(check)
+            action.setChecked(check)
+            action.setEnabled(True)
+            action.setVisible(True)
+            action.toggled.connect(doc.setVisible)
+            doc.visibilityChanged.connect(action.setChecked)
+            menuopen.addAction(action)
+        menubar.addAction(menuopen.menuAction())
+
+    def _get_correction_widget(self):
+        widcorr = QGroupBox("Correction", self)
+        laycorr = QVBoxLayout()
+        laycorr.setContentsMargins(0, 0, 0, 0)
+
+        wid = QWidget()
+        hbl = QHBoxLayout()
+        # hbl.setContentsMargins(0, 0, 0, 0)
+        spsw = PyDMStateButton(
+            wid, self.ioc_prefix.substitute(propty="LoopState-Sel")
+        )
+        rdbl = SiriusLedState(
+            wid, self.ioc_prefix.substitute(propty="LoopState-Sts")
+        )
+        hbl.addWidget(
+            QLabel("Auto Correction State:", wid), 5, alignment=Qt.AlignLeft
+        )
+        hbl.addWidget(spsw, alignment=Qt.AlignRight)
+        hbl.addWidget(rdbl, alignment=Qt.AlignLeft)
+        wid.setLayout(hbl)
+        laycorr.addWidget(wid)
+
+        corr_tab = QTabWidget(widcorr)
+        corr_tab.setObjectName(self.acc + "Tab")
+        laycorr.addWidget(corr_tab)
+
+        # Loop ################################################################
+        self.wid_atcr = QWidget()
+        lay_atcr = QGridLayout(self.wid_atcr)
+        # lay_atcr.setContentsMargins(0, 0, 0, 0)
+        lay_atcr.setAlignment(Qt.AlignTop)
+
+        ln = 0
+        mainlbl = QLabel("General", self.wid_atcr)
+        mainlbl.setStyleSheet(
+            "margin-top:0em;margin-bottom:0em;font-weight:bold;"
+        )
+        lay_atcr.addWidget(mainlbl, ln, 0, 1, 3, alignment=Qt.AlignLeft)
+
+        # Tune Source
+        ln += 1
+        tunesrcpvn = "TuneSrc-{}"
+        tunesrc_lbl = QLabel("Tune Source", self.wid_atcr)
+        tunesrc_cbbx = PyDMEnumComboBox(
+            self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sel"))
+        )
+        tunesrc_rb = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts"))
+        )
+        lay_atcr.addWidget(tunesrc_lbl, ln, 0, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(tunesrc_cbbx, ln, 1, alignment=Qt.AlignRight)
+        lay_atcr.addWidget(tunesrc_rb, ln, 2, alignment=Qt.AlignLeft)
+
+        # Loop Frequency
+        ln += 1
+        freqbar_lbl = QLabel("Loop Freq. [Hz]", self.wid_atcr)
+        freqpvn = "LoopFreq-{}"
+        freqspinbox = SiriusSpinbox(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=freqpvn.format("SP")),
+        )
+        freqspinbox.setSingleStep(0.5)
+        freqrb = SiriusLabel(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=freqpvn.format("RB")),
+        )
+        lay_atcr.addWidget(freqbar_lbl, ln, 0, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(freqspinbox, ln, 1, alignment=Qt.AlignRight)
+        lay_atcr.addWidget(freqrb, ln, 2, alignment=Qt.AlignLeft)
+
+        # RefTuneX
+        ln += 1
+        tunexpvn = "RefTuneX-{}"
+        reftunex_lbl = QLabel("Ref. Tune X", self.wid_atcr)
+        reftunex_wid = SiriusSpinbox(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=tunexpvn.format("SP")),
+        )
+        reftunex_wid.setSingleStep(0.001)
+        reftunexrb = SiriusLabel(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=tunexpvn.format("RB")),
+        )
+        lay_atcr.addWidget(reftunex_lbl, ln, 0, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(reftunex_wid, ln, 1, alignment=Qt.AlignRight)
+        lay_atcr.addWidget(reftunexrb, ln, 2, alignment=Qt.AlignLeft)
+
+        # RefTuneY
+        ln += 1
+        tuneypvn = "RefTuneY-{}"
+        reftuney_lbl = QLabel("Ref. Tune Y", self.wid_atcr)
+        reftuney_wid = SiriusSpinbox(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=tuneypvn.format("SP")),
+        )
+        reftuney_wid.setSingleStep(0.001)
+        reftuneyrb = SiriusLabel(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=tuneypvn.format("RB")),
+        )
+
+        lay_atcr.addWidget(reftuney_lbl, ln, 0, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(reftuney_wid, ln, 1, alignment=Qt.AlignRight)
+        lay_atcr.addWidget(reftuneyrb, ln, 2, alignment=Qt.AlignLeft)
+
+        # MaxTuneErr
+        ln += 1
+        maxtuneerrpvn = "MaxTuneErr-{}"
+        maxtuneerr_lbl = QLabel("Max. Tune Error", self.wid_atcr)
+        maxtuneerr_wid = SiriusSpinbox(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=maxtuneerrpvn.format("SP")),
+        )
+        maxtuneerr_wid.setSingleStep(0.005)
+        maxtuneerrrb = SiriusLabel(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=maxtuneerrpvn.format("RB")),
+        )
+        lay_atcr.addWidget(maxtuneerr_lbl, ln, 0, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(maxtuneerr_wid, ln, 1, alignment=Qt.AlignRight)
+        lay_atcr.addWidget(maxtuneerrrb, ln, 2, alignment=Qt.AlignLeft)
+
+        # PID parameters
+        ln += 1
+        tempwid = QWidget()
+        hpl = QGridLayout()
+        hpl.setContentsMargins(0, 0, 0, 0)
+        pidlbl = QLabel("PID parameters", self.wid_atcr)
+        pidlbl.setStyleSheet(
+            "margin-top:1em;margin-bottom:0em;font-weight:bold;"
+        )
+        hpl.addWidget(pidlbl, 0, 0, 1, 3, alignment=Qt.AlignLeft)
+
+        _qtal = Qt.AlignCenter
+        hpl.addWidget(
+            QLabel("<h4>Kp</h4>", self.wid_atcr, alignment=_qtal), 1, 1
+        )
+        hpl.addWidget(
+            QLabel("<h4>Ki</h4>", self.wid_atcr, alignment=_qtal), 1, 2
+        )
+        hpl.addWidget(
+            QLabel("<h4>Kd</h4>", self.wid_atcr, alignment=_qtal), 1, 3
+        )
+        self.tunepid_pvs = [
+            self.ioc_prefix.substitute(propty="LoopPID" + _k + _pvt)
+            for _k in ["Kp", "Ki", "Kd"]
+            for _pvt in ["-SP", "-RB"]
+        ]
+        self.tunepid_widgets = dict(
+            (
+                _pv,
+                SiriusSpinbox(self.wid_atcr, _pv)
+                if _pv.endswith("SP")
+                else SiriusLabel(self.wid_atcr, _pv),
+            )
+            for _pv in self.tunepid_pvs
+        )
+        for _pv, wid in self.tunepid_widgets.items():
+            i = 1 if _pv.split("PID")[-1][2] == "X" else 3
+            if _pv.endswith("RB"):
+                i += 1
+            else:
+                wid.setSingleStep(0.05)
+            j = ("Kp", "Ki", "Kd").index(_pv.split("PID")[-1][:2]) + 1
+            hpl.addWidget(wid, i, j, alignment=_qtal)
+        tempwid.setLayout(hpl)
+        lay_atcr.addWidget(tempwid, ln, 0, 1, 3)
+        corr_tab.addTab(self.wid_atcr, "Loop")
+
+        # Manual ##############################################################
+        self.wid_optics = QWidget()
+        lay_optics = QGridLayout(self.wid_optics)
+        # lay_optics.setContentsMargins(0, 0, 0, 0)
+
+        pb_updref = PyDMPushButton(
+            self,
+            label="Update Reference",
+            pressValue=1,
+            init_channel=self.ioc_prefix.substitute(propty="SetNewRefKL-Cmd"),
+        )
+        pb_updref.setStyleSheet(
+            "min-height:2.4em; max-height:2.4em; margin-top:1em;"
+        )
+        lay_optics.addWidget(pb_updref, 0, 0, 1, 2)
+
+        gb_optprm = QGroupBox("ΔTune", self)
+        print("almost there")
+        gb_optprm.setLayout(self._setup_optics_param_layout())
+        lay_optics.addWidget(gb_optprm, 1, 0)
+
+        corr_tab.addTab(self.wid_optics, "Manual")
+
+        # Settings ############################################################
+        wid_sett = QWidget()
+        lay_sett = QGridLayout()
+        # lay_sett.setContentsMargins(0, 0, 0, 0)
+        lay_sett.setAlignment(Qt.AlignTop)
+        _qtal = Qt.AlignLeft
+
+        cb_method = PyDMEnumComboBox(
+            self, self.ioc_prefix.substitute(propty="CorrMeth-Sel")
+        )
+        lb_method = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="CorrMeth-Sts")
+        )
+        lay_sett.addWidget(
+            QLabel("Method", wid_sett), 0, 0, alignment=Qt.AlignLeft
+        )
+        lay_sett.addWidget(cb_method, 0, 1, Qt.AlignRight)
+        lay_sett.addWidget(lb_method, 0, 2, Qt.AlignLeft)
+
+        cb_group = PyDMEnumComboBox(
+            self, self.ioc_prefix.substitute(propty="CorrGroup-Sel")
+        )
+        lb_group = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="CorrGroup-Sts")
+        )
+        lay_sett.addWidget(
+            QLabel("Grouping", wid_sett), 1, 0, alignment=Qt.AlignLeft
+        )
+        lay_sett.addWidget(cb_group, 1, 1, Qt.AlignRight)
+        lay_sett.addWidget(lb_group, 1, 2, Qt.AlignLeft)
+
+        bt_sync = PyDMStateButton(
+            self, self.ioc_prefix.substitute(propty="SyncCorr-Sel")
+        )
+        bt_sync.shape = 1
+        lb_sync = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="SyncCorr-Sts")
+        )
+        lay_sett.addWidget(
+            QLabel("Sync", wid_sett), 2, 0, alignment=Qt.AlignLeft
+        )
+        lay_sett.addWidget(bt_sync, 2, 1, Qt.AlignRight)
+        lay_sett.addWidget(lb_sync, 2, 2, Qt.AlignLeft)
+
+        wid_sett.setLayout(lay_sett)
+        corr_tab.addTab(wid_sett, "Settings")
+
+        widcorr.setLayout(laycorr)
+        return widcorr
+
+    def _setup_optics_param_layout(self):
+        self.lb_x = QLabel("<h4>X</h4>", self, alignment=Qt.AlignCenter)
+        self.lb_y = QLabel("<h4>Y</h4>", self, alignment=Qt.AlignCenter)
+        self.lb_sp = QLabel("<h4>SP</h4>", self, alignment=Qt.AlignCenter)
+        self.lb_rb = QLabel("<h4>RB</h4>", self, alignment=Qt.AlignCenter)
+        self.lb_mon = QLabel(
+            "<h4>Estimative</h4>", self, alignment=Qt.AlignCenter
+        )
+
+        self.sb_paramx = SiriusSpinbox(
+            self,
+            self.ioc_prefix.substitute(propty=self.param_pv.format("X", "SP")),
+        )
+        self.sb_paramx.setSingleStep(0.001)
+        self.sb_paramy = SiriusSpinbox(
+            self,
+            self.ioc_prefix.substitute(propty=self.param_pv.format("Y", "SP")),
+        )
+        self.sb_paramy.setSingleStep(0.001)
+
+        self.lb_paramx = SiriusLabel(
+            self,
+            self.ioc_prefix.substitute(propty=self.param_pv.format("X", "RB")),
+        )
+        self.lb_paramy = SiriusLabel(
+            self,
+            self.ioc_prefix.substitute(propty=self.param_pv.format("Y", "RB")),
+        )
+
+        self.lb_prmmonx = SiriusLabel(
+            self,
+            self.ioc_prefix.substitute(
+                propty=self.param_pv.format("X", "Mon")
+            ),
+        )
+        self.lb_prmmony = SiriusLabel(
+            self,
+            self.ioc_prefix.substitute(
+                propty=self.param_pv.format("Y", "Mon")
+            ),
+        )
+
+        self.bt_apply = PyDMPushButton(
+            self,
+            label="Apply",
+            pressValue=1,
+            init_channel=self.ioc_prefix.substitute(propty="ApplyDelta-Cmd"),
+        )
+
+        print("here?")
+
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.addWidget(self.lb_sp, 0, 1)
+        lay.addWidget(self.lb_rb, 0, 2)
+        lay.addWidget(self.lb_x, 1, 0)
+        lay.addWidget(self.sb_paramx, 1, 1)
+        lay.addWidget(self.lb_paramx, 1, 2)
+        lay.addWidget(self.lb_y, 2, 0)
+        lay.addWidget(self.sb_paramy, 2, 1)
+        lay.addWidget(self.lb_paramy, 2, 2)
+        lay.addWidget(self.lb_mon, 0, 3)
+        lay.addWidget(self.lb_prmmonx, 1, 3)
+        lay.addWidget(self.lb_prmmony, 2, 3)
+        lay.addWidget(self.bt_apply, 3, 1)
+        lay.setColumnStretch(0, 1)
+        lay.setColumnStretch(1, 5)
+        lay.setColumnStretch(2, 5)
+        lay.setColumnStretch(3, 5)
+
+        print("here?")
+
+        return lay
+
+    def _get_matrix_widget(self):
+        widmat = QGroupBox("Matrix", self)
+        laymat = QVBoxLayout()
+        laymat.setContentsMargins(0, 10, 0, 0)
+
+        tabw = QTabWidget(widmat)
+        tabw.setObjectName("SI TuneCorr Matrix Tab")
+        laymat.addWidget(tabw)
+
+        main_wid = self._get_matrix_main_widget(tabw)
+        tabw.addTab(main_wid, "Main")
+        meas_wid = self._get_matrix_meas_widget(tabw)
+        tabw.addTab(meas_wid, "Config")
+
+        widmat.setLayout(laymat)
+        return widmat
+
+    def _get_matrix_main_widget(self, parent):
+        wid = QWidget(parent)
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+
+        # self.led_sts = _StatusLed(
+        #     self, self.ioc_prefix.substitute(propty="Status-Mon")
+        # )
+        # lay.addWidget(QLabel("<h4>Status</h4>"), 0, 0)
+        # lay.addWidget(self.led_sts, 0, 1, alignment=Qt.AlignLeft)
+
+        wid_rns = QGroupBox("Load and Save", wid)
+        lay_rns = QGridLayout()
+
+        conf_bt = QPushButton(qta.icon("fa5s.list-ul"), "", self)
+        _hlautil.connect_window(
+            conf_bt,
+            _CorrParamsDetailWindow,
+            parent=self,
+            acc=self.acc,
+            opticsparam=self.param,
+            prefix=self.prefix,
+            fams=self.fams,
+        )
+        le_cname = _ConfigLineEdit(
+            self, self.ioc_prefix.substitute(propty="ConfigName-SP")
+        )
+        ln = 0
+        lay_rns.addWidget(QLabel("Config. Name:"), ln, 0)
+        lay_rns.addWidget(le_cname, ln, 1, 2, 1)
+        lay_rns.addWidget(conf_bt, ln, 3)
+        alb_cname = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="ConfigName-RB")
+        )
+        ln += 2
+        lay_rns.addWidget(alb_cname, ln, 1)
+
+        lb_meas_name = QLabel("Name to save", self)
+        le_meas_conf_name = PyDMLineEdit(
+            self, self.ioc_prefix.substitute(propty="MeasConfigName-SP")
+        )
+        lb_meas_conf_name = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="MeasConfigName-RB")
+        )
+        ln += 1
+        lay_rns.addWidget(lb_meas_name, ln, 0)
+        lay_rns.addWidget(le_meas_conf_name, ln, 1)
+        ln += 1
+        lay_rns.addWidget(lb_meas_conf_name, ln, 1)
+
+        lb_meas_conf_save = QLabel("Force Save", self)
+        bt_meas_conf_save = PyDMPushButton(
+            self,
+            icon=qta.icon("mdi.content-save"),
+            label="",
+            init_channel=self.ioc_prefix.substitute(
+                propty="MeasConfigSave-Cmd"
+            ),
+            pressValue=1,
+        )
+        bt_meas_conf_save.setObjectName("save")
+        bt_meas_conf_save.setStyleSheet(
+            "#save{min-width:25px; max-width:25px; icon-size:20px;}"
+        )
+        ln += 1
+        lay_rns.addWidget(lb_meas_conf_save, ln, 0)
+        lay_rns.addWidget(bt_meas_conf_save, ln, 1, alignment=Qt.AlignLeft)
+        wid_rns.setLayout(lay_rns)
+
+        lay.addWidget(wid_rns)
+
+        wid_run = QGroupBox("Meas", wid)
+        lay_run = QHBoxLayout()
+        lay_run.setAlignment(Qt.AlignTop)
+
+        lb_meas_conf_sts = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="MeasConfigStatus-Mon")
+        )
+        bt_meas_conf_start = PyDMPushButton(
+            self,
+            icon=qta.icon("fa5s.play"),
+            label="",
+            init_channel=self.ioc_prefix.substitute(propty="MeasConfig-Cmd"),
+            pressValue=_Const.MeasCmd.Start,
+        )
+        bt_meas_conf_start.setObjectName("start")
+        bt_meas_conf_start.setStyleSheet(
+            "#start{min-width:25px; max-width:25px; icon-size:20px;}"
+        )
+        bt_meas_conf_stop = PyDMPushButton(
+            self,
+            icon=qta.icon("fa5s.stop"),
+            label="",
+            init_channel=self.ioc_prefix.substitute(propty="MeasConfig-Cmd"),
+            pressValue=_Const.MeasCmd.Stop,
+        )
+        bt_meas_conf_stop.setObjectName("stop")
+        bt_meas_conf_stop.setStyleSheet(
+            "#stop{min-width:25px; max-width:25px; icon-size:20px;}"
+        )
+        bt_meas_conf_rst = PyDMPushButton(
+            self,
+            icon=qta.icon("fa5s.sync"),
+            label="",
+            init_channel=self.ioc_prefix.substitute(propty="MeasConfig-Cmd"),
+            pressValue=_Const.MeasCmd.Reset,
+        )
+        bt_meas_conf_rst.setObjectName("rst")
+        bt_meas_conf_rst.setStyleSheet(
+            "#rst{min-width:25px; max-width:25px; icon-size:20px;}"
+        )
+        lay_run.addWidget(QLabel("Status:", wid_run), alignment=Qt.AlignLeft)
+        lay_run.addWidget(lb_meas_conf_sts, alignment=Qt.AlignLeft)
+        lay_run.addWidget(bt_meas_conf_start, alignment=Qt.AlignRight)
+        lay_run.addWidget(bt_meas_conf_stop, alignment=Qt.AlignRight)
+        lay_run.addWidget(bt_meas_conf_rst, alignment=Qt.AlignRight)
+
+        wid_run.setLayout(lay_run)
+        lay.addWidget(wid_run)
+
+        wid.setLayout(lay)
+        return wid
+
+    def _get_matrix_meas_widget(self, parent):
+        wid = QWidget(parent)
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        mag_type = "Q"
+        unit = "[1/m]"
+        pvn = self.ioc_prefix.substitute(
+            propty="MeasConfigDelta"
+            + self.intstrength
+            + "Fam"
+            + mag_type
+            + "F"
+        )
+        lb_meas_conf_foc = QLabel(
+            "Fam. Δ" + self.intstrength + " " + mag_type + "F " + unit, self
+        )
+        sb_meas_conf_dfam_foc = SiriusSpinbox(
+            self, pvn.substitute(propty_suffix="SP")
+        )
+        lb_meas_conf_dfam_foc = SiriusLabel(
+            self, pvn.substitute(propty_suffix="RB")
+        )
+        lay.addWidget(lb_meas_conf_foc, 0, 0)
+        lay.addWidget(sb_meas_conf_dfam_foc, 0, 1)
+        lay.addWidget(lb_meas_conf_dfam_foc, 0, 2)
+
+        pvn = self.ioc_prefix.substitute(
+            propty="MeasConfigDelta"
+            + self.intstrength
+            + "Fam"
+            + mag_type
+            + "D"
+        )
+        lb_meas_conf_defoc = QLabel(
+            "Fam. Δ" + self.intstrength + " " + mag_type + "D " + unit, self
+        )
+        sb_meas_conf_dfam_defoc = SiriusSpinbox(
+            self, pvn.substitute(propty_suffix="SP")
+        )
+        lb_meas_conf_dfam_defoc = SiriusLabel(
+            self, pvn.substitute(propty_suffix="RB")
+        )
+        lay.addWidget(lb_meas_conf_defoc, 1, 0)
+        lay.addWidget(sb_meas_conf_dfam_defoc, 1, 1)
+        lay.addWidget(lb_meas_conf_dfam_defoc, 1, 2)
+
+        lb_meas_wait = QLabel("Wait [s]", self)
+        sb_meas_conf_wait = SiriusSpinbox(
+            self, self.ioc_prefix.substitute(propty="MeasConfigWait-SP")
+        )
+        lb_meas_conf_wait = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty="MeasConfigWait-RB")
+        )
+        lay.addWidget(lb_meas_wait, 2, 0)
+        lay.addWidget(sb_meas_conf_wait, 2, 1)
+        lay.addWidget(lb_meas_conf_wait, 2, 2)
+
+        wid.setLayout(lay)
+        return wid
