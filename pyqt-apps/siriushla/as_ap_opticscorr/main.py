@@ -1115,15 +1115,19 @@ class SITuneCorrWindow(SiriusMainWindow):
         )
         famskl_lay.addWidget(fams_klplot)
 
+        # famskl_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
+        # tune_frac_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
+        # spec_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
+
         lay.addWidget(tune_frac_wid)
         lay.addWidget(spec_wid)
         lay.addWidget(famskl_wid)
 
         tune_h = 50
-        lay.setColumnMinimumWidth(0, 15 * tune_h)
         lay.setRowMinimumHeight(0, tune_h)
-        lay.setRowMinimumHeight(1, 11 * tune_h)
-        lay.setRowMinimumHeight(2, 2.5 * tune_h)
+        lay.setRowMinimumHeight(1, 15 * tune_h)
+        lay.setRowMinimumHeight(2, 3 * tune_h)
+        lay.setColumnMinimumWidth(0, 20 * tune_h)
 
         return digmon
 
@@ -1162,7 +1166,7 @@ class SITuneCorrWindow(SiriusMainWindow):
         docwid.setWidget(wid)
 
         lay = QGridLayout(wid)
-        lay.setContentsMargins(5, 5, 0, 0)
+        lay.setContentsMargins(0, 5, 0, 0)
 
         lb_family = QLabel("Family", self)
         lb_family.setStyleSheet("max-height:1.29em; font-weight:bold;")
@@ -1196,7 +1200,7 @@ class SITuneCorrWindow(SiriusMainWindow):
             _hlautil.connect_window(
                 pbt, _PSDetailWindow, parent=self, psname=dev_name
             )
-            lay.addWidget(pbt, row, 0, alignment=Qt.AlignLeft)
+            lay.addWidget(pbt, row, 0, alignment=Qt.AlignRight)
 
             lb_name = QLabel(fam, self, alignment=Qt.AlignCenter)
             lay.addWidget(lb_name, row, 1)
@@ -1630,12 +1634,12 @@ class SITuneCorrWindow(SiriusMainWindow):
         )
         ln = 1
         lay.addWidget(QLabel("Config. Name:"), ln, 0)
-        lay.addWidget(le_cname, ln, 1, 1, 2)
-        lay.addWidget(conf_bt, ln, 3)
+        lay.addWidget(le_cname, ln, 1)
+        lay.addWidget(conf_bt, ln, 2)
         lb_cname = SiriusLabel(
             self, self.ioc_prefix.substitute(propty="ConfigName-RB")
         )
-        lay.addWidget(lb_cname, ln + 1, 1, 1, 2)
+        lay.addWidget(lb_cname, ln + 1, 1)
 
         laysts.addWidget(wid)
         widsts.setLayout(laysts)
@@ -1952,7 +1956,10 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             self._handle_source_change
         )
 
-        self._enum_map = {i: s for i, s in enumerate(_Const.TuneSrc._fields)}
+        # testing on sirius@lnls451-linux: _Const.TuneSrc does not exist
+        # self._enum_map = {i: s for i, s in enumerate(_Const.TuneSrc._fields)}
+        _fields = ('TuneSpec', 'BbB_SRAM_M2', 'BbB_SB_M1', 'BbB_SRAM_M1')
+        self._enum_map = {i: s for i, s in enumerate(_fields)}
 
     def _as_array(self, data):
         if data is None:
