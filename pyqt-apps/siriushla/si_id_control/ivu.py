@@ -307,12 +307,13 @@ class IVUControlWindow(IDCommonControlWindow):
                 lbl = "ID Status"
             sts_lbl = QLabel(lbl)
             irow = idx + 1
-            read_sts = SiriusLedState(self, init_channel=pvname)
+            if lbl in ["Interlocked", "Pitch_Err"]:
+                read_sts = SiriusLedAlert(self, init_channel=pvname)
+            else:
+                read_sts = SiriusLedState(self, init_channel=pvname)
             if lbl == "HeartBeat":
                 read_sts.offColor = SiriusLedState.Gray
-            elif lbl == "IsAtMaxGap":
-                read_sts.offColor = SiriusLedState.Yellow
-            elif lbl in ["Interlocked", "Pitch_Err", "ID Status"]:
+            elif lbl in ["ID Status", "UN_Reach"]:
                 read_sts.offColor = SiriusLedState.Red
             dev_lay.addWidget(read_sts, irow, 0)
             dev_lay.addWidget(sts_lbl, irow, 1)
@@ -548,6 +549,8 @@ class IVUControlDetails(IDCommonDialog):
             pv_info = f'{sts}_Err'
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gen = SiriusLedState(self, pvname)
+            if sts == "Center":
+                ld_gen = SiriusLedAlert(self, init_channel=pvname)
             glay_sts.addWidget(lbl, lin, 0)
             glay_sts.addWidget(ld_gen, lin, 1, alignment=Qt.AlignCenter)
 
