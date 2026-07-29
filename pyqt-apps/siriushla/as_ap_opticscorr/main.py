@@ -20,7 +20,6 @@ from qtpy.QtWidgets import (
     QMenu,
     QAction,
 )
-from pyqtgraph import InfiniteLine
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 
@@ -49,9 +48,6 @@ from .custom_widgets import (
 
 from siriushla.as_di_tune import Tune as _TuneWindow
 from siriushla.si_di_bbb import BbBControlWindow as _BbBWindow
-
-
-REV_FREQ = 578.303
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -1494,7 +1490,6 @@ class SITuneCorrWindow(SiriusMainWindow):
         lay_optics.addWidget(pb_updref, 0, 0, 1, 2)
 
         gb_optprm = QGroupBox("ΔTune", self)
-        print("almost there")
         gb_optprm.setLayout(self._setup_optics_param_layout())
         lay_optics.addWidget(gb_optprm, 1, 0)
 
@@ -1599,8 +1594,6 @@ class SITuneCorrWindow(SiriusMainWindow):
             init_channel=self.ioc_prefix.substitute(propty="ApplyDelta-Cmd"),
         )
 
-        print("here?")
-
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self.lb_sp, 0, 1)
@@ -1619,8 +1612,6 @@ class SITuneCorrWindow(SiriusMainWindow):
         lay.setColumnStretch(1, 5)
         lay.setColumnStretch(2, 5)
         lay.setColumnStretch(3, 5)
-
-        print("here?")
 
         return lay
 
@@ -1864,7 +1855,6 @@ class SITuneCorrWindow(SiriusMainWindow):
             return
 
         src = self._tunesrc_pv.value
-        print("Tune src = ", src)
 
         if src is None:
             return
@@ -2045,19 +2035,10 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.curve = self.curveAtIndex(0)
         self.curve.setVisible(True)
 
-        self.refline = InfiniteLine(
-            angle=90, movable=False, pen=QColor("black")
-        )
-        self.addItem(self.refline)
-        self.refline.setVisible(False)
-
         self.ref_tune_signal = SiriusConnectionSignal(
             self.ioc_prefix.substitute(
                 propty="RefTuneX-RB" if self.plane == "H" else "RefTuneY-RB"
             )
-        )
-        self.ref_tune_signal.new_value_signal[float].connect(
-            self._update_refline
         )
 
         self.tunesrc_signal = SiriusConnectionSignal(
@@ -2075,9 +2056,6 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         value = self.tunesrc_signal.value
         if value is not None:
             self._handle_source_change(value)
-        value = self.ref_tune_signal.value
-        if value is not None:
-            self._update_refline()
 
     def _as_array(self, data):
         if data is None:
@@ -2093,7 +2071,6 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             return
 
         self.current_source = src
-        print("Source =", src)
 
         if self.x_signal:
             self.x_signal.disconnect()
@@ -2159,7 +2136,8 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         if ref_tune is None:
             return None
 
-        freq = float(ref_tune) * REV_FREQ
+        rev_freq = 578.303
+        freq = float(ref_tune) * rev_freq
         return (freq - self.band_khz / 2.0, freq + self.band_khz / 2.0)
 
     def _update_plot(self):
@@ -2187,32 +2165,3 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
         self.curve.receiveXWaveform(x)
         self.curve.receiveYWaveform(y)
-
-    def _get_tunespec_ref(self, reftune):
-        if not hasattr(self, "tunespec_centerfreq_pv"):
-            self.tunespec_centerfreq_pv = _PV(
-                _PVName(
-                    f"SI-Glob:DI-Tune-{self.plane}:CenterFreq-RB"
-                ).substitute(prefix=self.prefix),
-                connection_timeout=0.5,
-            )
-        cfreq = self.tunespec_centerfreq_pv.value
-        print('Cfreq = ', cfreq)
-        return cfreq + reftune
-
-    def _update_refline(self, *args, **kwargs):
-        print('here now')
-        ref_tune = self.ref_tune_signal.value
-        print('ref tune', self.plane, ref_tune)
-        if ref_tune is None:
-            self.refline.setVisible(False)
-            return
-        src = self.tunesrc_signal.value
-        if not src:
-            return
-        if src != 0:
-            freq = float(ref_tune) * REV_FREQ
-        else:
-            freq = self._get_tunespec_ref(ref_tune)
-        self.refline.setValue(freq)
-        self.refline.setVisible(True)
