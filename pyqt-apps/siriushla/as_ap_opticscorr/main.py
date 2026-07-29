@@ -20,6 +20,7 @@ from qtpy.QtWidgets import (
     QMenu,
     QAction,
 )
+from pyqtgraph import InfiniteLine
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 
@@ -48,6 +49,9 @@ from .custom_widgets import (
 
 from siriushla.as_di_tune import Tune as _TuneWindow
 from siriushla.si_di_bbb import BbBControlWindow as _BbBWindow
+
+
+REV_FREQ = 578.303
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -1112,9 +1116,25 @@ class SITuneCorrWindow(SiriusMainWindow):
         famskl_lay = QHBoxLayout(famskl_wid)
         famskl_lay.setContentsMargins(0, 10, 0, 5)
         fams_klplot = DeltaKLFamiliesPlot(
-            ioc_prefix=self.ioc_prefix, fams=self.fams, parent=famskl_wid
+            ioc_prefix=self.ioc_prefix,
+            fams=self.fams,
+            parent=famskl_wid,
+            prefix=self.prefix,
         )
         famskl_lay.addWidget(fams_klplot)
+
+        famskl_diff_wid = QGroupBox("Difference: KL - RefKL", digmon)
+        famskl_diff_lay = QHBoxLayout(famskl_diff_wid)
+        famskl_diff_lay.setContentsMargins(0, 10, 0, 5)
+        fams_kl_diffplot = DeltaKLFamiliesPlot(
+            ioc_prefix=self.ioc_prefix,
+            fams=self.fams,
+            parent=famskl_diff_wid,
+            diff=True,
+            symbol="s",
+            prefix=self.prefix,
+        )
+        famskl_diff_lay.addWidget(fams_kl_diffplot)
 
         # famskl_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
         # tune_frac_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
@@ -1123,11 +1143,13 @@ class SITuneCorrWindow(SiriusMainWindow):
         lay.addWidget(tune_frac_wid)
         lay.addWidget(spec_wid)
         lay.addWidget(famskl_wid)
+        lay.addWidget(famskl_diff_wid)
 
         tune_h = 50
         lay.setRowMinimumHeight(0, tune_h)
-        lay.setRowMinimumHeight(1, 15 * tune_h)
+        lay.setRowMinimumHeight(1, 10 * tune_h)
         lay.setRowMinimumHeight(2, 3 * tune_h)
+        lay.setRowMinimumHeight(3, 3 * tune_h)
         lay.setColumnMinimumWidth(0, 20 * tune_h)
 
         return digmon
@@ -1320,7 +1342,7 @@ class SITuneCorrWindow(SiriusMainWindow):
         )
         self._tunesrc_pv = _PV(
             self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts")),
-            connection_timeout=0.5
+            connection_timeout=0.5,
         )
         self.tunesrc_rb = SiriusLabel(
             self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts"))
@@ -1829,20 +1851,20 @@ class SITuneCorrWindow(SiriusMainWindow):
         return docwid
 
     def _open_tunexsource_window(self):
-        self._open_tunesource_window(plane='X')
+        self._open_tunesource_window(plane="X")
 
     def _open_tuneysource_window(self):
-        self._open_tunesource_window(plane='Y')
+        self._open_tunesource_window(plane="Y")
 
     def _open_tunesource_window(self, plane):
         # testing on sirius@lnls451-linux: _Const.TuneSrc does not exist
-        _fields = ('TuneSpec', 'BbB_SRAM_M2', 'BbB_SB_M1', 'BbB_SRAM_M1')
+        _fields = ("TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
 
         if plane not in ["X", "Y"]:
             return
 
         src = self._tunesrc_pv.value
-        print('Tune src = ', src)
+        print("Tune src = ", src)
 
         if src is None:
             return
@@ -1876,21 +1898,32 @@ class SITuneCorrWindow(SiriusMainWindow):
             getattr(self, attr).click()
 
 
-
-
 class DeltaKLFamiliesPlot(SiriusWaveformPlot):
     """."""
 
-    def __init__(self, ioc_prefix, fams, parent=None):
+    def __init__(
+        self,
+        ioc_prefix,
+        fams,
+        parent=None,
+        diff=False,
+        color=None,
+        symbol=None,
+        prefix=_VACA_PREFIX,
+    ):
         """."""
         super().__init__(parent=parent)
-
         self.ioc_prefix = ioc_prefix
+        self.prefix = prefix
         self.fams = fams
         self.channels = dict()
+        self.diff = bool(diff)
+
+        self.setObjectName("graph")
+        self.setStyleSheet("#graph {min-height: 13em; min-width: 20em;}")
 
         self.autoRangeX = False
-        # self.autoRangeY = True
+        self.autoRangeY = True
         _lim_dkl = -2e-5
         self.setRange(xRange=[0, len(fams) - 1], yRange=[-_lim_dkl, +_lim_dkl])
         self.showXGrid = True
@@ -1899,21 +1932,17 @@ class DeltaKLFamiliesPlot(SiriusWaveformPlot):
         self.backgroundColor = QColor(255, 255, 255)
         self.showLegend = False
 
-        color = "blue"
+        color = color if color else "black"
+        symb = symbol if symbol else "o"
         self.addChannel(
             y_channel="FAKE:DeltaKLFamilies",
-            name="Delta KL",
+            name="Delta KL" if not self.diff else "KL-RB - RefKL",
             redraw_mode=2,
             color=color,
-            lineWidth=0,
-            # barWidth=2,
-            # lineStyle=Qt.SolidLine,
             lineStyle=0,
-            symbol="o",
-            # symbol=,
-            symbolSize=8,
-            # symbolPen=color,
-            # symbolBrush=color,
+            lineWidth=1,
+            symbol=symb,
+            symbolSize=7,
         )
 
         axis = self.getAxis("bottom")
@@ -1921,33 +1950,57 @@ class DeltaKLFamiliesPlot(SiriusWaveformPlot):
         axis.setTicks([labels])
 
         self.curve_dkl = self.curveAtIndex(0)
-
+        self.curve_dkl.setSymbolBrush(QColor(color))
         self.curve_dkl.setVisible(True)
 
         for fam in self.fams:
-            ch = SiriusConnectionSignal(
-                self.ioc_prefix.substitute(propty=f"DeltaKL{fam}-Mon")
-            )
-            ch.fam = fam
-            ch.new_value_signal[float].connect(self._update_curve)
-            self.channels[fam] = ch
+            if not self.diff:
+                ch = SiriusConnectionSignal(
+                    self.ioc_prefix.substitute(propty=f"DeltaKL{fam}-Mon")
+                )
+                ch.fam = fam
+                ch.new_value_signal[float].connect(self._update_curve)
+                self.channels[fam] = ch
+            else:
+                pv_rb = _PVName(f"SI-Fam:PS-{fam}").substitute(
+                    propty="KL-RB", prefix=self.prefix
+                )
+                ch_rb = SiriusConnectionSignal(pv_rb)
+                ch_rb.new_value_signal[float].connect(self._update_curve)
+
+                ch_ref = SiriusConnectionSignal(
+                    self.ioc_prefix.substitute(propty=f"RefKL{fam}-Mon")
+                )
+                ch_ref.new_value_signal[float].connect(self._update_curve)
+
+                self.channels[fam] = {"rb": ch_rb, "ref": ch_ref}
 
         self._update_curve()
 
         self.setSizePolicy(QSzPly.Expanding, QSzPly.Expanding)
 
-    def _update_curve(self, *args, **kwargs):
+    def _get_value(self, fam):
+        if not self.diff:
+            ch = self.channels[fam]
+            if ch.connected and ch.value is not None:
+                return float(ch.value)
+            return _np.nan
+
+        ch_rb = self.channels[fam]["rb"]
+        ch_ref = self.channels[fam]["ref"]
+
+        if (
+            ch_rb.connected
+            and ch_rb.value is not None
+            and ch_ref.connected
+            and ch_ref.value is not None
+        ):
+            return float(ch_rb.value) - float(ch_ref.value)
+        return _np.nan
+
+    def _update_curve(self):
         x = _np.arange(len(self.fams), dtype=float)
-        y = _np.array(
-            [
-                self.channels[fam].value
-                if self.channels[fam].connected
-                and self.channels[fam].value is not None
-                else _np.nan
-                for fam in self.fams
-            ],
-            dtype=float,
-        )
+        y = _np.array([self._get_value(fam) for fam in self.fams], dtype=float)
         valid = _np.isfinite(y)
         if not valid.any():
             return
@@ -1992,10 +2045,19 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.curve = self.curveAtIndex(0)
         self.curve.setVisible(True)
 
+        self.refline = InfiniteLine(
+            angle=90, movable=False, pen=QColor("black")
+        )
+        self.addItem(self.refline)
+        self.refline.setVisible(False)
+
         self.ref_tune_signal = SiriusConnectionSignal(
             self.ioc_prefix.substitute(
                 propty="RefTuneX-RB" if self.plane == "H" else "RefTuneY-RB"
             )
+        )
+        self.ref_tune_signal.new_value_signal[float].connect(
+            self._update_refline
         )
 
         self.tunesrc_signal = SiriusConnectionSignal(
@@ -2007,12 +2069,15 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
         # testing on sirius@lnls451-linux: _Const.TuneSrc does not exist
         # self._enum_map = {i: s for i, s in enumerate(_Const.TuneSrc._fields)}
-        _fields = ('TuneSpec', 'BbB_SRAM_M2', 'BbB_SB_M1', 'BbB_SRAM_M1')
+        _fields = ("TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
         self._enum_map = {i: s for i, s in enumerate(_fields)}
 
         value = self.tunesrc_signal.value
         if value is not None:
             self._handle_source_change(value)
+        value = self.ref_tune_signal.value
+        if value is not None:
+            self._update_refline()
 
     def _as_array(self, data):
         if data is None:
@@ -2028,7 +2093,7 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             return
 
         self.current_source = src
-        print('Source =', src)
+        print("Source =", src)
 
         if self.x_signal:
             self.x_signal.disconnect()
@@ -2043,7 +2108,7 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         if "TuneSpec" in src:
             self._configure_tunespec_source()
         elif "BbB" in src:
-            mode = src.split('_')[1]
+            mode = src.split("_")[1]
             self._configure_bbb_source(mode)
 
     def _configure_tunespec_source(self):
@@ -2094,7 +2159,7 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         if ref_tune is None:
             return None
 
-        freq = float(ref_tune) * 578.303
+        freq = float(ref_tune) * REV_FREQ
         return (freq - self.band_khz / 2.0, freq + self.band_khz / 2.0)
 
     def _update_plot(self):
@@ -2122,3 +2187,30 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
         self.curve.receiveXWaveform(x)
         self.curve.receiveYWaveform(y)
+
+    def _get_tunespec_ref(self, reftune):
+        if not hasattr(self, "tunespec_centerfreq_pv"):
+            self.tunespec_centerfreq_pv = _PV(
+                _PVName(
+                    f"SI-Glob:DI-Tune-{self.plane}:CenterFreq-RB"
+                ).substitute(prefix=self.prefix),
+                connection_timeout=0.5,
+            )
+        cfreq = self.tunespec_centerfreq_pv.value
+        print('Cfreq = ', cfreq)
+        return cfreq + reftune
+
+    def _update_refline(self, *args, **kwargs):
+        ref_tune = self.ref_tune_signal.value
+        if ref_tune is None:
+            self.refline.setVisible(False)
+            return
+        src = self.tunesrc_signal.value
+        if not src:
+            return
+        if src != 0:
+            freq = float(ref_tune) * REV_FREQ
+        else:
+            freq = self._get_tunespec_ref(ref_tune)
+        self.refline.setValue(freq)
+        self.refline.setVisible(True)
