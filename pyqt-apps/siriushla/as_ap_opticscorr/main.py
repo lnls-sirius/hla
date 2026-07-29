@@ -2201,7 +2201,9 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         return cfreq + reftune
 
     def _update_refline(self, *args, **kwargs):
+        print('here now')
         ref_tune = self.ref_tune_signal.value
+        print('ref tune', self.plane, ref_tune)
         if ref_tune is None:
             self.refline.setVisible(False)
             return
