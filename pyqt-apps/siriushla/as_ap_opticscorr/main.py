@@ -47,6 +47,7 @@ from .custom_widgets import (
 )
 
 from siriushla.as_di_tune import Tune as _TuneWindow
+from siriushla.si_di_bbb import BbBControlWindow as _BbBWindow
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -1317,23 +1318,22 @@ class SITuneCorrWindow(SiriusMainWindow):
         tunesrc_cbbx = PyDMEnumComboBox(
             self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sel"))
         )
-        tunesrc_rb = SiriusLabel(
+        self._tunesrc_pv = _PV(
+            self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts")),
+            connection_timeout=0.5
+        )
+        self.tunesrc_rb = SiriusLabel(
             self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts"))
         )
         diwin_bt = QPushButton(qta.icon("fa5s.list-ul"), "", self)
-        _hlautil.connect_window(
-            diwin_bt,
-            _TuneWindow,
-            parent=self,
-            prefix=self.prefix,
-            section="SI",
-        )
+        diwin_bt.clicked.connect(self._open_tunexsource_window)
+
         lay_atcr.addWidget(tunesrc_lbl, ln, 0, alignment=Qt.AlignLeft)
         lay_atcr.addWidget(tunesrc_cbbx, ln, 1, alignment=Qt.AlignRight)
 
         wid_tunesrc_rbw = QWidget(self.wid_atcr)
         lay_tunesrc_rbw = QHBoxLayout(wid_tunesrc_rbw)
-        lay_tunesrc_rbw.addWidget(tunesrc_rb)
+        lay_tunesrc_rbw.addWidget(self.tunesrc_rb)
         lay_tunesrc_rbw.addWidget(diwin_bt)
         lay_tunesrc_rbw.setContentsMargins(0, 0, 0, 0)
 
@@ -1828,6 +1828,55 @@ class SITuneCorrWindow(SiriusMainWindow):
         lay.addWidget(wid_klplot)
         return docwid
 
+    def _open_tunexsource_window(self):
+        self._open_tunesource_window(plane='X')
+
+    def _open_tuneysource_window(self):
+        self._open_tunesource_window(plane='Y')
+
+    def _open_tunesource_window(self, plane):
+        # testing on sirius@lnls451-linux: _Const.TuneSrc does not exist
+        _fields = ('TuneSpec', 'BbB_SRAM_M2', 'BbB_SB_M1', 'BbB_SRAM_M1')
+
+        if plane not in ["X", "Y"]:
+            return
+
+        src = self._tunesrc_pv.value
+        print('Tune src = ', src)
+
+        if src is None:
+            return
+
+        if src == 0:
+            if not hasattr(self, "_open_tunespec_bt"):
+                self._open_tunespec_bt = QPushButton(self)
+                _hlautil.connect_window(
+                    self._open_tunespec_bt,
+                    _TuneWindow,
+                    parent=self,
+                    prefix=self.prefix,
+                    section="SI",
+                )
+            self._open_tunespec_bt.click()
+
+        elif src in (1, 2, 3):
+            plane_bbb = "H" if plane == "X" else "V"
+
+            attr = f"_open_bbb_{plane_bbb.lower()}_bt"
+            if not hasattr(self, attr):
+                setattr(self, attr, QPushButton(self))
+                _hlautil.connect_window(
+                    getattr(self, attr),
+                    _BbBWindow,
+                    parent=self,
+                    prefix=self.prefix,
+                    device=f"SI-Glob:DI-BbBProc-{plane_bbb}",
+                )
+
+            getattr(self, attr).click()
+
+
+
 
 class DeltaKLFamiliesPlot(SiriusWaveformPlot):
     """."""
@@ -1961,6 +2010,10 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         _fields = ('TuneSpec', 'BbB_SRAM_M2', 'BbB_SB_M1', 'BbB_SRAM_M1')
         self._enum_map = {i: s for i, s in enumerate(_fields)}
 
+        value = self.tunesrc_signal.value
+        if value is not None:
+            self._handle_source_change(value)
+
     def _as_array(self, data):
         if data is None:
             return None
@@ -1975,6 +2028,12 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             return
 
         self.current_source = src
+
+        if self.x_signal:
+            self.x_signal.disconnect()
+        if self.y_signal:
+            self.y_signal.disconnect()
+
         self.x_signal = None
         self.y_signal = None
         self._x_data_full = None
