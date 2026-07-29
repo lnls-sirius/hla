@@ -2071,8 +2071,9 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
                 prefix=self.prefix
             )
         )
+        spec = "SPEC" if mode == "SRAM" else "MAG"
         self.y_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_SPEC").substitute(
+            _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_{spec}").substitute(
                 prefix=self.prefix
             )
         )
