@@ -1,6 +1,9 @@
 """OpticsCorr main module."""
 
+import numpy as _np
+
 from qtpy.QtCore import Qt
+from qtpy.QtGui import QColor
 from qtpy.QtWidgets import (
     QLabel,
     QWidget,
@@ -23,6 +26,7 @@ from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.opticscorr.csdev import Const as _Const
+from siriuspy.epics import PV as _PV
 
 from siriushla import util as _hlautil
 from siriushla.widgets import (
@@ -32,6 +36,8 @@ from siriushla.widgets import (
     PyDMStateButton,
     SiriusLabel,
     SiriusLedState,
+    SiriusConnectionSignal,
+    SiriusWaveformPlot,
 )
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from .details import CorrParamsDetailWindow as _CorrParamsDetailWindow
@@ -39,6 +45,8 @@ from .custom_widgets import (
     StatusLed as _StatusLed,
     ConfigLineEdit as _ConfigLineEdit,
 )
+
+from siriushla.as_di_tune import Tune as _TuneWindow
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -1009,7 +1017,11 @@ class SITuneCorrWindow(SiriusMainWindow):
         self.intstrength_calcpv = "DeltaKL{}-Mon"
         self.fams = list(_Const.SI_QFAMS_TUNECORR)
 
+        self.setWindowTitle(self.title)
+        self.setObjectName(self.acc + "App")
         self._setupui()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupui(self):
         self.setWindowModality(Qt.WindowModal)
@@ -1018,26 +1030,28 @@ class SITuneCorrWindow(SiriusMainWindow):
         self.setDockNestingEnabled(True)
 
         self.ioc_log = self._create_log_docwidget()
-        self.qfams_kl_monitor = self._create_families_docwidget()
+        self.qfams_kl_table = self._create_families_docwidget()
         self.tunefb_control = self._create_ioc_control_docwidget()
 
-        print("created")
+        self.mwid = self._create_diagmon_centralwidget()
+        self.setCentralWidget(self.mwid)
 
         self.addDockWidget(Qt.LeftDockWidgetArea, self.ioc_log)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.qfams_kl_monitor)
         self.addDockWidget(Qt.RightDockWidgetArea, self.tunefb_control)
-
-        mwid = self._create_diagmon_widget()
-        self.setCentralWidget(mwid)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.qfams_kl_table)
 
         self._create_menus()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
 
-    def _create_diagmon_widget(self):
-        digmon = QGroupBox("Tune Monitor", self)
+    def _create_diagmon_centralwidget(self):
+        digmon = QGroupBox("SI Tune Monitor", self)
+        lay = QGridLayout(digmon)
+        # lay = QVBoxLayout(digmon)
 
-        lay = QGridLayout()
+        tune_frac_wid = QWidget(digmon)
+        tune_frac_lay = QHBoxLayout(tune_frac_wid)
+        tune_frac_lay.setContentsMargins(0, 5, 0, 5)
         prec = 5
         tunex_pv = self.ioc_prefix.substitute(propty="TuneX-Mon")
         tuney_pv = self.ioc_prefix.substitute(propty="TuneY-Mon")
@@ -1056,7 +1070,7 @@ class SITuneCorrWindow(SiriusMainWindow):
         vbox_tuneh = QVBoxLayout(wid_tuneh)
         vbox_tuneh.addWidget(self.ld_tunefrach)
         vbox_tuneh.addWidget(self.lb_tunefrach)
-        lay.addWidget(wid_tuneh, 0, 0)
+        tune_frac_lay.addWidget(wid_tuneh)
 
         self.ld_tunefracv = QLabel(
             "<h4>Tune Y</h4>", self, alignment=Qt.AlignHCenter
@@ -1073,9 +1087,44 @@ class SITuneCorrWindow(SiriusMainWindow):
         vbox_tunev.setAlignment(Qt.AlignHCenter)
         vbox_tunev.addWidget(self.ld_tunefracv)
         vbox_tunev.addWidget(self.lb_tunefracv)
-        lay.addWidget(wid_tunev, 0, 1)
+        tune_frac_lay.addWidget(wid_tunev)
 
-        digmon.setLayout(lay)
+        spec_wid = QGroupBox("Spectrum", digmon)
+        spec_lay = QGridLayout(spec_wid)
+        spec_lay.setContentsMargins(0, 10, 0, 5)
+        wid_spect_x = TuneSpectrumPlot(
+            prefix=self.prefix,
+            plane="H",
+            ioc_prefix=self.ioc_prefix,
+            parent=spec_wid,
+        )
+        wid_spect_y = TuneSpectrumPlot(
+            prefix=self.prefix,
+            plane="V",
+            ioc_prefix=self.ioc_prefix,
+            parent=spec_wid,
+        )
+        spec_lay.addWidget(wid_spect_x, 0, 0)
+        spec_lay.addWidget(wid_spect_y, 0, 1)
+
+        famskl_wid = QGroupBox("\u0394KL Monitor", digmon)
+        famskl_lay = QHBoxLayout(famskl_wid)
+        famskl_lay.setContentsMargins(0, 10, 0, 5)
+        fams_klplot = DeltaKLFamiliesPlot(
+            ioc_prefix=self.ioc_prefix, fams=self.fams, parent=famskl_wid
+        )
+        famskl_lay.addWidget(fams_klplot)
+
+        lay.addWidget(tune_frac_wid)
+        lay.addWidget(spec_wid)
+        lay.addWidget(famskl_wid)
+
+        tune_h = 50
+        lay.setColumnMinimumWidth(0, 15 * tune_h)
+        lay.setRowMinimumHeight(0, tune_h)
+        lay.setRowMinimumHeight(1, 11 * tune_h)
+        lay.setRowMinimumHeight(2, 2.5 * tune_h)
+
         return digmon
 
     def _create_log_docwidget(self):
@@ -1086,10 +1135,10 @@ class SITuneCorrWindow(SiriusMainWindow):
         docwid.setFloating(False)
         docwid.setObjectName("doc_IOCLog")
         docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:30em;}")
-        wid_cont = QWidget()
+        wid_cont = QWidget(parent=docwid)
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
-        vbl.setContentsMargins(0, 0, 0, 0)
+        vbl.setContentsMargins(5, 5, 0, 5)
         pdm_log = PyDMLogLabel(
             wid_cont, self.ioc_prefix.substitute(propty="Log-Mon")
         )
@@ -1107,40 +1156,29 @@ class SITuneCorrWindow(SiriusMainWindow):
 
     def _create_families_docwidget(self):
         docwid = QDockWidget(self)
-        docwid.setWindowTitle("Families Strength Monitor")
+        docwid.setWindowTitle("Strength Monitor")
 
         wid = QWidget()
         docwid.setWidget(wid)
 
-        lay = QGridLayout()
-        lay.setContentsMargins(10, 10, 10, 10)
+        lay = QGridLayout(wid)
+        lay.setContentsMargins(5, 5, 0, 0)
 
-        lb_family = QLabel("<h4>Family</h4>", self, alignment=Qt.AlignCenter)
-        lb_family.setStyleSheet("max-height:1.29em;")
-        lay.addWidget(lb_family, 0, 1)
+        lb_family = QLabel("Family", self)
+        lb_family.setStyleSheet("max-height:1.29em; font-weight:bold;")
+        lay.addWidget(lb_family, 0, 1, alignment=Qt.AlignCenter)
 
-        lb_rbdesc = QLabel(
-            "<h4>" + self.intstrength + "-RB</h4>",
-            self,
-            alignment=Qt.AlignCenter,
-        )
-        lb_rbdesc.setStyleSheet("max-height:1.29em;")
-        lay.addWidget(lb_rbdesc, 0, 2)
+        lb_rbdesc = QLabel("KL-RB", self)
+        lb_rbdesc.setStyleSheet("max-height:1.29em; font-weight:bold;")
+        lay.addWidget(lb_rbdesc, 0, 2, alignment=Qt.AlignCenter)
 
-        if self.param == "tune":
-            lb_refdesc = QLabel(
-                "<h4>RefKL-Mon</h4>", self, alignment=Qt.AlignCenter
-            )
-            lb_refdesc.setStyleSheet("max-height:1.29em;")
-            lay.addWidget(lb_refdesc, 0, 3)
+        lb_refdesc = QLabel("RefKL-Mon", self)
+        lb_refdesc.setStyleSheet("max-height:1.29em; font-weight:bold;")
+        lay.addWidget(lb_refdesc, 0, 3, alignment=Qt.AlignCenter)
 
-        lb_lastddesc = QLabel(
-            "<h4>" + self.intstrength_calcdesc + "</h4>",
-            self,
-            alignment=Qt.AlignCenter,
-        )
-        lb_lastddesc.setStyleSheet("max-height:1.29em;")
-        lay.addWidget(lb_lastddesc, 0, 4)
+        lb_lastddesc = QLabel("DeltaKL-Mon", self)
+        lb_lastddesc.setStyleSheet("max-height:1.29em; font-weight:bold;")
+        lay.addWidget(lb_lastddesc, 0, 4, alignment=Qt.AlignRight)
 
         row = 1
         for fam in self.fams:
@@ -1158,7 +1196,7 @@ class SITuneCorrWindow(SiriusMainWindow):
             _hlautil.connect_window(
                 pbt, _PSDetailWindow, parent=self, psname=dev_name
             )
-            lay.addWidget(pbt, row, 0)
+            lay.addWidget(pbt, row, 0, alignment=Qt.AlignLeft)
 
             lb_name = QLabel(fam, self, alignment=Qt.AlignCenter)
             lay.addWidget(lb_name, row, 1)
@@ -1166,14 +1204,12 @@ class SITuneCorrWindow(SiriusMainWindow):
             lb_rb = SiriusLabel(
                 self, pref_name.substitute(propty=self.intstrength + "-RB")
             )
-            lay.addWidget(lb_rb, row, 2)
+            lay.addWidget(lb_rb, row, 2, alignment=Qt.AlignCenter)
 
-            if self.param == "tune":
-                lb_ref = SiriusLabel(
-                    self,
-                    self.ioc_prefix.substitute(propty="RefKL" + fam + "-Mon"),
-                )
-                lay.addWidget(lb_ref, row, 3)
+            lb_ref = SiriusLabel(
+                self, self.ioc_prefix.substitute(propty="RefKL" + fam + "-Mon")
+            )
+            lay.addWidget(lb_ref, row, 3, alignment=Qt.AlignCenter)
 
             lb_calc = SiriusLabel(
                 self,
@@ -1181,9 +1217,9 @@ class SITuneCorrWindow(SiriusMainWindow):
                     propty=self.intstrength_calcpv.format(fam)
                 ),
             )
-            lay.addWidget(lb_calc, row, 4)
+            lay.addWidget(lb_calc, row, 4, alignment=Qt.AlignRight)
             row += 1
-        wid.setLayout(lay)
+
         return docwid
 
     def _create_ioc_control_docwidget(self):
@@ -1198,6 +1234,9 @@ class SITuneCorrWindow(SiriusMainWindow):
         wid = QWidget()
         docwid.setWidget(wid)
         lay = QVBoxLayout()
+
+        wid_sts = self._get_general_sts_widget()
+        lay.addWidget(wid_sts)
 
         wid_corr = self._get_correction_widget()
         lay.addWidget(wid_corr)
@@ -1277,9 +1316,24 @@ class SITuneCorrWindow(SiriusMainWindow):
         tunesrc_rb = SiriusLabel(
             self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts"))
         )
+        diwin_bt = QPushButton(qta.icon("fa5s.list-ul"), "", self)
+        _hlautil.connect_window(
+            diwin_bt,
+            _TuneWindow,
+            parent=self,
+            prefix=self.prefix,
+            section="SI",
+        )
         lay_atcr.addWidget(tunesrc_lbl, ln, 0, alignment=Qt.AlignLeft)
         lay_atcr.addWidget(tunesrc_cbbx, ln, 1, alignment=Qt.AlignRight)
-        lay_atcr.addWidget(tunesrc_rb, ln, 2, alignment=Qt.AlignLeft)
+
+        wid_tunesrc_rbw = QWidget(self.wid_atcr)
+        lay_tunesrc_rbw = QHBoxLayout(wid_tunesrc_rbw)
+        lay_tunesrc_rbw.addWidget(tunesrc_rb)
+        lay_tunesrc_rbw.addWidget(diwin_bt)
+        lay_tunesrc_rbw.setContentsMargins(0, 0, 0, 0)
+
+        lay_atcr.addWidget(wid_tunesrc_rbw, ln, 2, alignment=Qt.AlignRight)
 
         # Loop Frequency
         ln += 1
@@ -1544,36 +1598,22 @@ class SITuneCorrWindow(SiriusMainWindow):
 
         return lay
 
-    def _get_matrix_widget(self):
-        widmat = QGroupBox("Matrix", self)
-        laymat = QVBoxLayout()
-        laymat.setContentsMargins(0, 10, 0, 0)
+    def _get_general_sts_widget(self):
+        widsts = QGroupBox("Status", self)
+        laysts = QVBoxLayout()
+        laysts.setContentsMargins(0, 10, 0, 0)
 
-        tabw = QTabWidget(widmat)
-        tabw.setObjectName("SI TuneCorr Matrix Tab")
-        laymat.addWidget(tabw)
-
-        main_wid = self._get_matrix_main_widget(tabw)
-        tabw.addTab(main_wid, "Main")
-        meas_wid = self._get_matrix_meas_widget(tabw)
-        tabw.addTab(meas_wid, "Config")
-
-        widmat.setLayout(laymat)
-        return widmat
-
-    def _get_matrix_main_widget(self, parent):
-        wid = QWidget(parent)
-        lay = QVBoxLayout()
+        wid = QWidget(widsts)
+        lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
 
-        # self.led_sts = _StatusLed(
-        #     self, self.ioc_prefix.substitute(propty="Status-Mon")
-        # )
-        # lay.addWidget(QLabel("<h4>Status</h4>"), 0, 0)
-        # lay.addWidget(self.led_sts, 0, 1, alignment=Qt.AlignLeft)
-
-        wid_rns = QGroupBox("Load and Save", wid)
-        lay_rns = QGridLayout()
+        led_sts = _StatusLed(
+            self, self.ioc_prefix.substitute(propty="Status-Mon")
+        )
+        stslbl = QLabel("IOC Status:", self)
+        stslbl.setStyleSheet("font-weight:bold;")
+        lay.addWidget(stslbl, 0, 0, alignment=Qt.AlignLeft)
+        lay.addWidget(led_sts, 0, 1, alignment=Qt.AlignLeft)
 
         conf_bt = QPushButton(qta.icon("fa5s.list-ul"), "", self)
         _hlautil.connect_window(
@@ -1588,30 +1628,48 @@ class SITuneCorrWindow(SiriusMainWindow):
         le_cname = _ConfigLineEdit(
             self, self.ioc_prefix.substitute(propty="ConfigName-SP")
         )
-        ln = 0
-        lay_rns.addWidget(QLabel("Config. Name:"), ln, 0)
-        lay_rns.addWidget(le_cname, ln, 1, 2, 1)
-        lay_rns.addWidget(conf_bt, ln, 3)
-        alb_cname = SiriusLabel(
+        ln = 1
+        lay.addWidget(QLabel("Config. Name:"), ln, 0)
+        lay.addWidget(le_cname, ln, 1, 1, 2)
+        lay.addWidget(conf_bt, ln, 3)
+        lb_cname = SiriusLabel(
             self, self.ioc_prefix.substitute(propty="ConfigName-RB")
         )
-        ln += 2
-        lay_rns.addWidget(alb_cname, ln, 1)
+        lay.addWidget(lb_cname, ln + 1, 1, 1, 2)
 
-        lb_meas_name = QLabel("Name to save", self)
+        laysts.addWidget(wid)
+        widsts.setLayout(laysts)
+        return widsts
+
+    def _get_matrix_widget(self):
+        widmat = QGroupBox("Matrix", self)
+        laymat = QVBoxLayout(widmat)
+        laymat.setContentsMargins(0, 5, 0, 0)
+
+        wid = self._get_matrix_main_widget(widmat)
+        laymat.addWidget(wid)
+
+        # widmat.setLayout(laymat)
+        return widmat
+
+    def _get_matrix_main_widget(self, parent):
+        wid = QWidget(parent)
+        lay = QVBoxLayout(wid)
+        lay.setAlignment(Qt.AlignTop)
+
+        wid_rns = QGroupBox("Save", wid)
+        lay_rns = QGridLayout(wid_rns)
+
+        ln = 0
+        lb_meas_name = QLabel("Name to save:", self)
         le_meas_conf_name = PyDMLineEdit(
             self, self.ioc_prefix.substitute(propty="MeasConfigName-SP")
         )
         lb_meas_conf_name = SiriusLabel(
             self, self.ioc_prefix.substitute(propty="MeasConfigName-RB")
         )
-        ln += 1
         lay_rns.addWidget(lb_meas_name, ln, 0)
         lay_rns.addWidget(le_meas_conf_name, ln, 1)
-        ln += 1
-        lay_rns.addWidget(lb_meas_conf_name, ln, 1)
-
-        lb_meas_conf_save = QLabel("Force Save", self)
         bt_meas_conf_save = PyDMPushButton(
             self,
             icon=qta.icon("mdi.content-save"),
@@ -1625,15 +1683,14 @@ class SITuneCorrWindow(SiriusMainWindow):
         bt_meas_conf_save.setStyleSheet(
             "#save{min-width:25px; max-width:25px; icon-size:20px;}"
         )
+        lay_rns.addWidget(bt_meas_conf_save, ln, 2, alignment=Qt.AlignRight)
         ln += 1
-        lay_rns.addWidget(lb_meas_conf_save, ln, 0)
-        lay_rns.addWidget(bt_meas_conf_save, ln, 1, alignment=Qt.AlignLeft)
-        wid_rns.setLayout(lay_rns)
+        lay_rns.addWidget(lb_meas_conf_name, ln, 1)
 
         lay.addWidget(wid_rns)
 
-        wid_run = QGroupBox("Meas", wid)
-        lay_run = QHBoxLayout()
+        wid_run = QGroupBox("Meas.", wid)
+        lay_run = QHBoxLayout(wid_run)
         lay_run.setAlignment(Qt.AlignTop)
 
         lb_meas_conf_sts = SiriusLabel(
@@ -1678,13 +1735,17 @@ class SITuneCorrWindow(SiriusMainWindow):
         lay_run.addWidget(bt_meas_conf_stop, alignment=Qt.AlignRight)
         lay_run.addWidget(bt_meas_conf_rst, alignment=Qt.AlignRight)
 
-        wid_run.setLayout(lay_run)
         lay.addWidget(wid_run)
 
-        wid.setLayout(lay)
+        lay_rns = QGridLayout()
+        wid_measconf = QGroupBox("Config. Meas.", wid)
+        lay_measconf = QVBoxLayout(wid_measconf)
+        lay_measconf.addWidget(self._get_matrix_measconf_widget(wid_measconf))
+        lay.addWidget(wid_measconf)
+        # wid.setLayout(lay)
         return wid
 
-    def _get_matrix_meas_widget(self, parent):
+    def _get_matrix_measconf_widget(self, parent):
         wid = QWidget(parent)
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
@@ -1743,3 +1804,252 @@ class SITuneCorrWindow(SiriusMainWindow):
 
         wid.setLayout(lay)
         return wid
+
+    def _create_famsklplot_docwidget(self):
+        docwid = QDockWidget(self)
+        docwid.setWindowTitle("Families" + r"$\Delta$" + "KL Monitor")
+        sz_pol = QSzPly(QSzPly.Preferred, QSzPly.Preferred)
+        docwid.setSizePolicy(sz_pol)
+        docwid.setFloating(False)
+        docwid.setObjectName("doc_dKLMon")
+        # docwid.setStyleSheet("#doc_dKLMon{min-width:20em; min-height:30em;}")
+
+        wid = QWidget()
+        docwid.setWidget(wid)
+        lay = QVBoxLayout(wid)
+
+        wid_klplot = DeltaKLFamiliesPlot(
+            ioc_prefix=self.ioc_prefix, fams=self.fams, parent=wid
+        )
+        lay.addWidget(wid_klplot)
+        return docwid
+
+
+class DeltaKLFamiliesPlot(SiriusWaveformPlot):
+    """."""
+
+    def __init__(self, ioc_prefix, fams, parent=None):
+        """."""
+        super().__init__(parent=parent)
+
+        self.ioc_prefix = ioc_prefix
+        self.fams = fams
+        self.channels = dict()
+
+        self.autoRangeX = False
+        # self.autoRangeY = True
+        _lim_dkl = -2e-5
+        self.setRange(xRange=[0, len(fams) - 1], yRange=[-_lim_dkl, +_lim_dkl])
+        self.showXGrid = True
+        self.showYGrid = True
+        self.axisColor = QColor(0, 0, 0)
+        self.backgroundColor = QColor(255, 255, 255)
+        self.showLegend = False
+
+        color = "blue"
+        self.addChannel(
+            y_channel="FAKE:DeltaKLFamilies",
+            name="Delta KL",
+            redraw_mode=2,
+            color=color,
+            lineWidth=0,
+            # barWidth=2,
+            # lineStyle=Qt.SolidLine,
+            lineStyle=0,
+            symbol="o",
+            # symbol=,
+            symbolSize=8,
+            # symbolPen=color,
+            # symbolBrush=color,
+        )
+
+        axis = self.getAxis("bottom")
+        labels = [(i, f) for i, f in enumerate(fams)]
+        axis.setTicks([labels])
+
+        self.curve_dkl = self.curveAtIndex(0)
+
+        self.curve_dkl.setVisible(True)
+
+        for fam in self.fams:
+            ch = SiriusConnectionSignal(
+                self.ioc_prefix.substitute(propty=f"DeltaKL{fam}-Mon")
+            )
+            ch.fam = fam
+            ch.new_value_signal[float].connect(self._update_curve)
+            self.channels[fam] = ch
+
+        self._update_curve()
+
+        self.setSizePolicy(QSzPly.Expanding, QSzPly.Expanding)
+
+    def _update_curve(self, *args, **kwargs):
+        x = _np.arange(len(self.fams), dtype=float)
+        y = _np.array(
+            [
+                self.channels[fam].value
+                if self.channels[fam].connected
+                and self.channels[fam].value is not None
+                else _np.nan
+                for fam in self.fams
+            ],
+            dtype=float,
+        )
+        valid = _np.isfinite(y)
+        if not valid.any():
+            return
+        self.curve_dkl.receiveXWaveform(x[valid])
+        self.curve_dkl.receiveYWaveform(y[valid])
+
+
+class TuneSpectrumPlot(SiriusWaveformPlot):
+    """."""
+
+    def __init__(self, prefix="", plane="H", ioc_prefix=None, parent=None):
+        """."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.plane = plane.upper()
+        self.ioc_prefix = ioc_prefix
+
+        self.current_source = None
+        self.x_signal = None
+        self.y_signal = None
+
+        self._x_data_full = None
+        self._y_data_full = None
+        self.band_khz = 20.0
+
+        self.autoRangeX = True
+        self.autoRangeY = True
+        self.showXGrid = True
+        self.showYGrid = True
+        self.axisColor = QColor(0, 0, 0)
+        self.backgroundColor = QColor(255, 255, 255)
+        self.showLegend = False
+
+        self.addChannel(
+            y_channel=f"FAKE:Spectrum{self.plane}",
+            name=f"Tune {self.plane}",
+            redraw_mode=2,
+            color="blue" if self.plane == "H" else "red",
+            lineWidth=1,
+            lineStyle=Qt.SolidLine,
+        )
+        self.curve = self.curveAtIndex(0)
+        self.curve.setVisible(True)
+
+        self.ref_tune_signal = SiriusConnectionSignal(
+            self.ioc_prefix.substitute(
+                propty="RefTuneX-RB" if self.plane == "H" else "RefTuneY-RB"
+            )
+        )
+
+        self.tunesrc_signal = SiriusConnectionSignal(
+            self.ioc_prefix.substitute(propty="TuneSrc-Sts")
+        )
+        self.tunesrc_signal.new_value_signal[int].connect(
+            self._handle_source_change
+        )
+
+        self._enum_map = {i: s for i, s in enumerate(_Const.TuneSrc._fields)}
+
+    def _as_array(self, data):
+        if data is None:
+            return None
+        return _np.atleast_1d(_np.asarray(data, dtype=float))
+
+    def _handle_source_change(self, value):
+        src = self._enum_map.get(value, str(value))
+        self._set_source(src)
+
+    def _set_source(self, src):
+        if src == self.current_source:
+            return
+
+        self.current_source = src
+        self.x_signal = None
+        self.y_signal = None
+        self._x_data_full = None
+        self._y_data_full = None
+
+        if "TuneSpec" in src:
+            self._configure_tunespec_source()
+        elif "BbB" in src or "SRAM" in src:
+            self._configure_bbb_source()
+
+    def _configure_tunespec_source(self):
+        plane = self.plane
+
+        self.x_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-Tune-{plane}:FreqArray-Mon").substitute(
+                prefix=self.prefix
+            )
+        )
+        self.y_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-TuneProc-{plane}:Trace-Mon").substitute(
+                prefix=self.prefix
+            )
+        )
+
+        self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
+        self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
+
+    def _configure_bbb_source(self):
+        plane = self.plane
+
+        self.x_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-BbBProc-{plane}:SRAM_FREQ").substitute(
+                prefix=self.prefix
+            )
+        )
+        self.y_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-BbBProc-{plane}:SRAM_SPEC").substitute(
+                prefix=self.prefix
+            )
+        )
+
+        self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
+        self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
+
+    def _receive_x(self, data):
+        self._x_data_full = self._as_array(data)
+        self._update_plot()
+
+    def _receive_y(self, data):
+        self._y_data_full = self._as_array(data)
+        self._update_plot()
+
+    def _get_span_hz(self):
+        ref_tune = self.ref_tune_signal.value
+        if ref_tune is None:
+            return None
+
+        freq = float(ref_tune) * 578.303
+        return (freq - self.band_khz / 2.0, freq + self.band_khz / 2.0)
+
+    def _update_plot(self):
+        if self._x_data_full is None or self._y_data_full is None:
+            return
+
+        x = self._x_data_full
+        y = self._y_data_full
+
+        n = min(len(x), len(y))
+        if n == 0:
+            return
+        x = x[:n]
+        y = y[:n]
+
+        if "BbB" in self.current_source:
+            span = self._get_span_hz()
+            if span is not None:
+                fmin, fmax = span
+                mask = (x >= fmin) & (x <= fmax)
+
+                if mask.any():
+                    x = x[mask]
+                    y = y[mask]
+
+        self.curve.receiveXWaveform(x)
+        self.curve.receiveYWaveform(y)
