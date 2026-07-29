@@ -2028,6 +2028,7 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             return
 
         self.current_source = src
+        print('Source =', src)
 
         if self.x_signal:
             self.x_signal.disconnect()
@@ -2041,8 +2042,9 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
         if "TuneSpec" in src:
             self._configure_tunespec_source()
-        elif "BbB" in src or "SRAM" in src:
-            self._configure_bbb_source()
+        elif "BbB" in src:
+            mode = src.split('_')[1]
+            self._configure_bbb_source(mode)
 
     def _configure_tunespec_source(self):
         plane = self.plane
@@ -2061,16 +2063,16 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
         self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
 
-    def _configure_bbb_source(self):
+    def _configure_bbb_source(self, mode):
         plane = self.plane
 
         self.x_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-BbBProc-{plane}:SRAM_FREQ").substitute(
+            _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_FREQ").substitute(
                 prefix=self.prefix
             )
         )
         self.y_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-BbBProc-{plane}:SRAM_SPEC").substitute(
+            _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_SPEC").substitute(
                 prefix=self.prefix
             )
         )
