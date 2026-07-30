@@ -8,10 +8,9 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_opticscorr import OpticsCorrWindow as SITuneCorrWindow
 try:
     from siriushla.as_ap_opticscorr import SITuneCorrWindow
-    print('Using SITuneCorrWindow')
+    print('> Using SITuneCorrWindow')
 except Exception as e:
-    print('Using OpticsCorrWindow')
-    print(e)
+    print(e + '\n> Using OpticsCorrWindow')
 
 
 parser = _argparse.ArgumentParser(

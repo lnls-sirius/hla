@@ -20,6 +20,7 @@ from qtpy.QtWidgets import (
     QMenu,
     QAction,
 )
+from pyqtgraph import InfiniteLine as _InfLine, mkPen as _Pen
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 
@@ -1116,6 +1117,7 @@ class SITuneCorrWindow(SiriusMainWindow):
             fams=self.fams,
             parent=famskl_wid,
             prefix=self.prefix,
+            yrange_lim=-1.5e-5,
         )
         famskl_lay.addWidget(fams_klplot)
 
@@ -1848,9 +1850,6 @@ class SITuneCorrWindow(SiriusMainWindow):
         self._open_tunesource_window(plane="Y")
 
     def _open_tunesource_window(self, plane):
-        # testing on sirius@lnls451-linux: _Const.TuneSrc does not exist
-        _fields = ("TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
-
         if plane not in ["X", "Y"]:
             return
 
@@ -1899,6 +1898,7 @@ class DeltaKLFamiliesPlot(SiriusWaveformPlot):
         diff=False,
         color=None,
         symbol=None,
+        yrange_lim=None,
         prefix=_VACA_PREFIX,
     ):
         """."""
@@ -1913,9 +1913,14 @@ class DeltaKLFamiliesPlot(SiriusWaveformPlot):
         self.setStyleSheet("#graph {min-height: 13em; min-width: 20em;}")
 
         self.autoRangeX = False
-        self.autoRangeY = True
-        _lim_dkl = -2e-5
-        self.setRange(xRange=[0, len(fams) - 1], yRange=[-_lim_dkl, +_lim_dkl])
+        if yrange_lim:
+            self.autoRangeY = False
+            _lim_dkl = float(yrange_lim)  # -2e-5
+            self.setRange(
+                xRange=[0, len(fams) - 1], yRange=[-_lim_dkl, +_lim_dkl]
+            )
+        else:
+            self.autoRangeY = True
         self.showXGrid = True
         self.showYGrid = True
         self.axisColor = QColor(0, 0, 0)
@@ -2011,6 +2016,8 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.current_source = None
         self.x_signal = None
         self.y_signal = None
+        self.shift_signal = None
+        self._shift = 0.0
 
         self._x_data_full = None
         self._y_data_full = None
@@ -2040,6 +2047,21 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
                 propty="RefTuneX-RB" if self.plane == "H" else "RefTuneY-RB"
             )
         )
+        self.ref_line = _InfLine(
+            angle=90,
+            movable=False,
+            pen=_Pen(color=(0, 0, 0), width=2),
+            label=f"RefTune{'X' if self.plane == 'H' else 'Y'}",
+            labelOpts={
+                "position": 0.10,
+                "color": (0, 0, 0),
+                "fill": (255, 255, 255, 0),
+                "movable": False,
+                "anchors": [(0, 0.5), (0, 0.5)],
+            },
+        )
+        self.addItem(self.ref_line)
+        self.ref_line.setVisible(False)
 
         self.tunesrc_signal = SiriusConnectionSignal(
             self.ioc_prefix.substitute(propty="TuneSrc-Sts")
@@ -2047,15 +2069,24 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.tunesrc_signal.new_value_signal[int].connect(
             self._handle_source_change
         )
+        self.ref_tune_signal.new_value_signal[float].connect(
+            self._update_reftune
+        )
 
         # testing on sirius@lnls451-linux: _Const.TuneSrc does not exist
-        # self._enum_map = {i: s for i, s in enumerate(_Const.TuneSrc._fields)}
-        _fields = ("TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
+        try:
+            _fields = _Const.TuneSrc._fields
+        except Exception as e:
+            print(e)
+            _fields = ("TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
         self._enum_map = {i: s for i, s in enumerate(_fields)}
 
         value = self.tunesrc_signal.value
         if value is not None:
             self._handle_source_change(value)
+        value = self.ref_tune_signal.value
+        if value is not None:
+            self._update_reftune(value)
 
     def _as_array(self, data):
         if data is None:
@@ -2076,9 +2107,13 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             self.x_signal.disconnect()
         if self.y_signal:
             self.y_signal.disconnect()
+        if self.shift_signal:
+            self.shift_signal.disconnect()
 
         self.x_signal = None
         self.y_signal = None
+        self.shift_signal = None
+
         self._x_data_full = None
         self._y_data_full = None
 
@@ -2091,8 +2126,14 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
     def _configure_tunespec_source(self):
         plane = self.plane
 
+        self.shift_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-Tune-{plane}:RevN-RB").substitute(
+                prefix=self.prefix
+            )
+        )
+
         self.x_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-Tune-{plane}:FreqArray-Mon").substitute(
+            _PVName(f"SI-Glob:DI-Tune-{plane}:TuneFracArray-Mon").substitute(
                 prefix=self.prefix
             )
         )
@@ -2104,9 +2145,16 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
         self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
         self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
+        self.shift_signal.new_value_signal[float].connect(self._receive_shift)
 
     def _configure_bbb_source(self, mode):
         plane = self.plane
+
+        self.shift_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-BbBProc-{plane}:FREV").substitute(
+                prefix=self.prefix
+            )
+        )
 
         self.x_signal = SiriusConnectionSignal(
             _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_FREQ").substitute(
@@ -2122,6 +2170,18 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
         self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
         self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
+        self.shift_signal.new_value_signal[float].connect(self._receive_shift)
+
+    def _update_reftune(self, value):
+        if value is not None:
+            self.ref_line.setPos(value)
+            self.ref_line.setVisible(True)
+        else:
+            self.ref_line.setVisible(False)
+
+    def _receive_shift(self, data):
+        self._shift = float(data)
+        self._update_plot()
 
     def _receive_x(self, data):
         self._x_data_full = self._as_array(data)
@@ -2136,9 +2196,12 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         if ref_tune is None:
             return None
 
-        rev_freq = 578.303
+        rev_freq = self.shift_signal.value
+        if rev_freq is None:
+            return None
+
         freq = float(ref_tune) * rev_freq
-        return (freq - self.band_khz / 2.0, freq + self.band_khz / 2.0)
+        return (freq - self.band_khz / 2, freq + self.band_khz / 2)
 
     def _update_plot(self):
         if self._x_data_full is None or self._y_data_full is None:
@@ -2162,6 +2225,13 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
                 if mask.any():
                     x = x[mask]
                     y = y[mask]
+
+            y = y / self._shift
+            x = x / self._shift
+
+        else:
+            x = x - self._shift
+            y = y - self._shift
 
         self.curve.receiveXWaveform(x)
         self.curve.receiveYWaveform(y)
