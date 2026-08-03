@@ -303,12 +303,14 @@ class IVUControlWindow(IDCommonControlWindow):
                 lbl = lbl.split('-')[0]
             if "Status" in lbl:
                 lbl = "ID Status"
+            if "UN_Reach" in lbl:
+                lbl = "MovementDone"
             sts_lbl = QLabel(lbl)
             irow = idx + 1
             read_sts = SiriusLedState(self, init_channel=pvname)
             if lbl == "HeartBeat":
                 read_sts.offColor = SiriusLedState.Gray
-            elif lbl in ["ID Status", "UN_Reach"]:
+            elif lbl in ["ID Status", "MovementDone"]:
                 read_sts.offColor = SiriusLedState.Red
             dev_lay_1.addWidget(read_sts, irow, 0)
             dev_lay_1.addWidget(sts_lbl, irow, 1)
@@ -330,9 +332,11 @@ class IVUControlWindow(IDCommonControlWindow):
             pvname = self.dev_pref.substitute(propty=lbl)
             if "Mon" in lbl:
                 lbl = lbl.split('-')[0]
+            if "Pitch_Err" in lbl:
+                lbl = "PitchError"
             sts_lbl = QLabel(lbl)
             irow = idx + 1
-            if lbl in ["Interlocked", "CenterError", "Pitch_Err"]:
+            if lbl in ["Interlocked", "CenterError", "PitchError"]:
                 read_sts = SiriusLedAlert(self, init_channel=pvname)
             dev_lay_2.addWidget(read_sts, irow, 0)
             dev_lay_2.addWidget(sts_lbl, irow, 1)
