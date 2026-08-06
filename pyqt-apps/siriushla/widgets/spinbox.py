@@ -187,7 +187,7 @@ class SiriusHexaSpinbox(SiriusSpinbox):
     def validate(self, text, pos):
         """Validate input in hexa base."""
         regex = QRegularExpression("0x[0-9A-Fa-f]{1,8}")
-        regex.setCaseSensitivity(Qt.CaseInsensitive)
+        regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
         return QRegularExpressionValidator(regex, self).validate(text, pos)
 
     def update_step_size(self):
