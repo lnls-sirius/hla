@@ -318,11 +318,11 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor.setModel(self.editor_model)
         self.editor.setSelectionBehavior(self.editor.SelectionBehavior.SelectRows)
         self.editor.setSortingEnabled(True)
-        self.editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.editor.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.d_editor.setModel(self.d_editor_model)
         self.d_editor.setSelectionBehavior(self.editor.SelectionBehavior.SelectRows)
         self.d_editor.setSortingEnabled(True)
-        self.d_editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.d_editor.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.d_editor.setSelectionMode(self.d_editor.SelectionMode.SingleSelection)
         # Set tree model and options
         self.tree_model = JsonTreeModel(None, None, self._model)

@@ -31,7 +31,7 @@ class ConfigTableWidget(QTableView):
         self.setSelectionBehavior(self.SelectionBehavior.SelectRows)
         self.setSelectionMode(self.SelectionMode.SingleSelection)
         self.setSortingEnabled(True)
-        # self.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        # self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.hideColumn(0)
         self.hideColumn(3)
         self.model().sort(2, Qt.DescendingOrder)
