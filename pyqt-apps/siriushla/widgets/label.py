@@ -97,7 +97,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
 
     @staticmethod
     def get_timedelta_string(dt):  # seconds
-        """Convert a duration in seconds to a 'HH:MM:SS' string (ISO 8061).
+        """Convert a duration in seconds to a 'HH:MM:SS' string.
 
         Parameters
         ----------
@@ -108,15 +108,11 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         -------
         str
             Duration formatted as 'HH:MM:SS'.
-
-        Note
-        -------
-        - Hours can exceed '99'.
         """
         hr = int(dt // 3600)
         m = int((dt % 3600) // 60)
         s = int((dt % 3600) % 60)
-        return '{:02d}:{:02d}:{:02d}'.format(hr, m, s)
+        return '{:d}:{:02d}:{:02d}'.format(hr, m, s)
 
     def value_changed(self, new_value):
         """Callback invoked when the Channel value is changed.
