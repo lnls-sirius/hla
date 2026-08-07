@@ -99,18 +99,12 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_lifetime = QLabel('Lifetime', self)
         self._ld_lifetime.setStyleSheet("font-weight:bold; max-height1.5em;")
         self._ld_lifetime.setAlignment(Qt.AlignCenter)
-        self._lb_lifetime = QLabel('0:00:00', self)
-        self._lb_lifetime.channel = self.devname.substitute(
-            propty='Lifetime-Mon')
+        lifetime_pvname = self.devname.substitute(propty='LifetimeHour-Mon')
+        self._lb_lifetime = SiriusLabel(self, lifetime_pvname)
         self._lb_lifetime.setStyleSheet("font-size:40px;")
-        self.lifetime_dcct_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='Lifetime-Mon'))
-        self.lifetime_dcct_pv.new_value_signal[float].connect(
-            self._format_lifetime_label)
-        self.lifetime_bpm_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='LifetimeBPM-Mon'))
-        self.lifetime_bpm_pv.new_value_signal[float].connect(
-            self._format_lifetime_label)
+        self._lb_lifetime.displayFormat = (
+            SiriusLabel.DisplayFormat.TimeDeltaHours
+        )
 
         # # Graph
         self.graph = SiriusTimePlot(self, background='w')
@@ -168,6 +162,11 @@ class CurrLTWindow(SiriusMainWindow):
             self._curve_lifetimebpm,
             self.devname.substitute(propty='LifetimeBPM-Mon'),
             t_init=t_init_iso, t_end=t_end_iso, factor=3600)
+
+        self.lifetime_dcct_pv = SiriusConnectionSignal(
+            self.devname.substitute(propty='LifetimeHour-Mon'))
+        self.lifetime_bpm_pv = SiriusConnectionSignal(
+            self.devname.substitute(propty='LifetimeBPMHour-Mon'))
 
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self._update_graph)
@@ -574,17 +573,6 @@ class CurrLTWindow(SiriusMainWindow):
 
     # ---------- auxiliar methods ----------
 
-    def _format_lifetime_label(self, value):
-        """Format lifetime label."""
-        if self._lb_lifetime.channel != self.sender().address:
-            return
-        lt = 0 if _np.isnan(value) else value
-        H = int(lt // 3600)
-        m = int((lt % 3600) // 60)
-        s = int((lt % 3600) % 60)
-        lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
-        self._lb_lifetime.setText(lt_str)
-
     @Slot(str)
     def _handle_lifetime_type_sel(self, text):
         """Handle lifetime type selection."""
@@ -682,9 +670,9 @@ class CurrLTWindow(SiriusMainWindow):
     def _update_graph(self, value):
         """Receive new lifetime values and update curves in hours."""
         if 'BPM' in self.sender().address:
-            self._curve_lifetimebpm.receiveNewValue(value/3600)
+            self._curve_lifetimebpm.receiveNewValue(value)
         else:
-            self._curve_lifetimedcct.receiveNewValue(value/3600)
+            self._curve_lifetimedcct.receiveNewValue(value)
 
     @Slot(_np.ndarray)
     def _update_waveforms(self, value):
