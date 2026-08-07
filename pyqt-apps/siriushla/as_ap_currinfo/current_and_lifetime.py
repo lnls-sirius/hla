@@ -99,18 +99,18 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_lifetime = QLabel('Lifetime', self)
         self._ld_lifetime.setStyleSheet("font-weight:bold; max-height1.5em;")
         self._ld_lifetime.setAlignment(Qt.AlignCenter)
-        self._lb_lifetime = QLabel('0:00:00', self)
-        self._lb_lifetime.channel = self.devname.substitute(
-            propty='Lifetime-Mon')
+        lifetime_pvname = self.devname.substitute(propty='Lifetime-Mon')
+        self._lb_lifetime = SiriusLabel(self, lifetime_pvname)
         self._lb_lifetime.setStyleSheet("font-size:40px;")
+        self._lb_lifetime.displayFormat = (
+            SiriusLabel.DisplayFormat.TimeDeltaSeconds
+        )
+
+        # PVs used to update the plot
         self.lifetime_dcct_pv = SiriusConnectionSignal(
             self.devname.substitute(propty='Lifetime-Mon'))
-        self.lifetime_dcct_pv.new_value_signal[float].connect(
-            self._format_lifetime_label)
         self.lifetime_bpm_pv = SiriusConnectionSignal(
             self.devname.substitute(propty='LifetimeBPM-Mon'))
-        self.lifetime_bpm_pv.new_value_signal[float].connect(
-            self._format_lifetime_label)
 
         # # Graph
         self.graph = SiriusTimePlot(self, background='w')
@@ -573,17 +573,6 @@ class CurrLTWindow(SiriusMainWindow):
         return gbox
 
     # ---------- auxiliar methods ----------
-
-    def _format_lifetime_label(self, value):
-        """Format lifetime label."""
-        if self._lb_lifetime.channel != self.sender().address:
-            return
-        lt = 0 if _np.isnan(value) else value
-        H = int(lt // 3600)
-        m = int((lt % 3600) // 60)
-        s = int((lt % 3600) % 60)
-        lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
-        self._lb_lifetime.setText(lt_str)
 
     @Slot(str)
     def _handle_lifetime_type_sel(self, text):
