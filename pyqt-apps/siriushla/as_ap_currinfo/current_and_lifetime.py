@@ -106,12 +106,6 @@ class CurrLTWindow(SiriusMainWindow):
             SiriusLabel.DisplayFormat.TimeDeltaHours
         )
 
-        # PVs used to update the plot
-        self.lifetime_dcct_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='Lifetime-Mon'))
-        self.lifetime_bpm_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='LifetimeBPM-Mon'))
-
         # # Graph
         self.graph = SiriusTimePlot(self, background='w')
         self.graph.plotItem.getAxis('left').setLabel(
@@ -168,6 +162,11 @@ class CurrLTWindow(SiriusMainWindow):
             self._curve_lifetimebpm,
             self.devname.substitute(propty='LifetimeBPM-Mon'),
             t_init=t_init_iso, t_end=t_end_iso, factor=3600)
+
+        self.lifetime_dcct_pv = SiriusConnectionSignal(
+            self.devname.substitute(propty='LifetimeHour-Mon'))
+        self.lifetime_bpm_pv = SiriusConnectionSignal(
+            self.devname.substitute(propty='LifetimeBPMHour-Mon'))
 
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self._update_graph)
@@ -671,9 +670,9 @@ class CurrLTWindow(SiriusMainWindow):
     def _update_graph(self, value):
         """Receive new lifetime values and update curves in hours."""
         if 'BPM' in self.sender().address:
-            self._curve_lifetimebpm.receiveNewValue(value/3600)
+            self._curve_lifetimebpm.receiveNewValue(value)
         else:
-            self._curve_lifetimedcct.receiveNewValue(value/3600)
+            self._curve_lifetimedcct.receiveNewValue(value)
 
     @Slot(_np.ndarray)
     def _update_waveforms(self, value):
