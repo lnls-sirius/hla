@@ -99,11 +99,11 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_lifetime = QLabel('Lifetime', self)
         self._ld_lifetime.setStyleSheet("font-weight:bold; max-height1.5em;")
         self._ld_lifetime.setAlignment(Qt.AlignCenter)
-        lifetime_pvname = self.devname.substitute(propty='Lifetime-Mon')
+        lifetime_pvname = self.devname.substitute(propty='LifetimeHour-Mon')
         self._lb_lifetime = SiriusLabel(self, lifetime_pvname)
         self._lb_lifetime.setStyleSheet("font-size:40px;")
         self._lb_lifetime.displayFormat = (
-            SiriusLabel.DisplayFormat.TimeDeltaSeconds
+            SiriusLabel.DisplayFormat.TimeDeltaHours
         )
 
         # PVs used to update the plot
