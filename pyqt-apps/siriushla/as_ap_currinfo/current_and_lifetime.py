@@ -605,12 +605,12 @@ class CurrLTWindow(SiriusMainWindow):
             self.graph.plotItem.getAxis('left').setLabel(
                 '01M1 BPM Sum', color='blue')
             self._lb_lifetime.channel = \
-                self.devname.substitute(propty='LifetimeBPM-Mon')
+                self.devname.substitute(propty='LifetimeBPMHour-Mon')
         else:
             self.graph.plotItem.getAxis('left').setLabel(
                 'Current [mA]', color='blue')
             self._lb_lifetime.channel = \
-                self.devname.substitute(propty='Lifetime-Mon')
+                self.devname.substitute(propty='LifetimeHour-Mon')
 
     def _handle_intvl_sett_visibility(self):
         """Handle sampling interval settings."""
