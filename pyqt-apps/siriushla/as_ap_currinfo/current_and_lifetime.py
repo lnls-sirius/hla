@@ -142,36 +142,42 @@ class CurrLTWindow(SiriusMainWindow):
             axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_bpmsum = self.graph.curveAtIndex(1)
         self.graph.fill_curve_with_archdata(
-            self._curve_bpmsum,  pvname,
+            self._curve_bpmsum, pvname,
             t_init=t_init_iso, t_end=t_end_iso)
 
+        pv_lt_dcct = self.devname.substitute(propty='LifetimeHour-Mon')
         self.graph.addYChannel(
-            y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
-            color='red', lineWidth=1)
+            y_channel=pv_lt_dcct,
+            axis='right',
+            name='Lifetime',
+            color='red',
+            lineWidth=1
+        )
         self._curve_lifetimedcct = self.graph.curveAtIndex(2)
         self.graph.fill_curve_with_archdata(
             self._curve_lifetimedcct,
-            self.devname.substitute(propty='Lifetime-Mon'),
-            t_init=t_init_iso, t_end=t_end_iso, factor=3600)
+            pvname=pv_lt_dcct,
+            t_init=t_init_iso,
+            t_end=t_end_iso,
+            factor=3600
+        )
 
+        pv_lt_bpm = self.devname.substitute(propty='LifetimeBPMHour-Mon')
         self.graph.addYChannel(
-            y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
-            color='red', lineWidth=1)
+            y_channel=pv_lt_bpm,
+            axis='right',
+            name='Lifetime',
+            color='red',
+            lineWidth=1
+        )
         self._curve_lifetimebpm = self.graph.curveAtIndex(3)
         self.graph.fill_curve_with_archdata(
             self._curve_lifetimebpm,
-            self.devname.substitute(propty='LifetimeBPM-Mon'),
-            t_init=t_init_iso, t_end=t_end_iso, factor=3600)
-
-        self.lifetime_dcct_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='LifetimeHour-Mon'))
-        self.lifetime_bpm_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='LifetimeBPMHour-Mon'))
-
-        self.lifetime_dcct_pv.new_value_signal[float].connect(
-            self._update_graph)
-        self.lifetime_bpm_pv.new_value_signal[float].connect(
-            self._update_graph)
+            pvname=pv_lt_bpm,
+            t_init=t_init_iso,
+            t_end=t_end_iso,
+            factor=3600
+        )
 
         self._flag_need_dcctx = True
         self._flag_need_dccty = True
@@ -665,14 +671,6 @@ class CurrLTWindow(SiriusMainWindow):
         """Update last sample time to current timestamp."""
         now = _time.time()
         self._le_lastsmpl.send_value_signal[float].emit(now)
-
-    @Slot(float)
-    def _update_graph(self, value):
-        """Receive new lifetime values and update curves in hours."""
-        if 'BPM' in self.sender().address:
-            self._curve_lifetimebpm.receiveNewValue(value)
-        else:
-            self._curve_lifetimedcct.receiveNewValue(value)
 
     @Slot(_np.ndarray)
     def _update_waveforms(self, value):
