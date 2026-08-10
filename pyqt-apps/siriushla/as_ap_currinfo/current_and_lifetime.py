@@ -158,8 +158,7 @@ class CurrLTWindow(SiriusMainWindow):
             self._curve_lifetimedcct,
             pvname=pv_lt_dcct,
             t_init=t_init_iso,
-            t_end=t_end_iso,
-            factor=3600
+            t_end=t_end_iso
         )
 
         pv_lt_bpm = self.devname.substitute(propty='LifetimeBPMHour-Mon')
@@ -175,8 +174,7 @@ class CurrLTWindow(SiriusMainWindow):
             self._curve_lifetimebpm,
             pvname=pv_lt_bpm,
             t_init=t_init_iso,
-            t_end=t_end_iso,
-            factor=3600
+            t_end=t_end_iso
         )
 
         self._flag_need_dcctx = True
