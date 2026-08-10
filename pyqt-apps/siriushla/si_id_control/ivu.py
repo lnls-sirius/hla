@@ -191,9 +191,6 @@ class IVUControlWindow(IDCommonControlWindow):
         pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
         pvname_mon = self.dev_pref.substitute(propty=pv_info["Mon"])
         self.mode_sp = PyDMStateButton(init_channel=pvname)
-        self.mode_sp.rules = (
-            '[{"name": "VisibleWarning", "property": "Enable", "expression": "ch[0] == 0",' +
-            '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
 
         lay.addWidget(self.mode_sp, row, 1)
 
