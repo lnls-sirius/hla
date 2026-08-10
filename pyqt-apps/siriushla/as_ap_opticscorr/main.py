@@ -485,7 +485,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         maxtuneerrbar = QHBoxLayout()
         maxtuneerrbar.setContentsMargins(0, 0, 0, 0)
         maxtuneerrpvn = "MaxTuneErr-{}"
-        maxtuneerr_lbl = QLabel("Max. Tune Error", self.wid_atcr)
+        maxtuneerr_lbl = QLabel("Max. Tune Err.", self.wid_atcr)
         maxtuneerr_wid = SiriusSpinbox(
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=maxtuneerrpvn.format("SP")),
@@ -1033,6 +1033,7 @@ class SITuneCorrWindow(SiriusMainWindow):
 
         self.ioc_log = self._create_log_docwidget()
         self.qfams_kl_table = self._create_families_docwidget()
+        self.qfams_kl_table.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
         self.tunefb_control = self._create_ioc_control_docwidget()
 
         self.mwid = self._create_diagmon_centralwidget()
@@ -1044,7 +1045,7 @@ class SITuneCorrWindow(SiriusMainWindow):
 
         self._create_menus()
         self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        # self.setFocusPolicy(Qt.StrongFocus)
 
     def _create_diagmon_centralwidget(self):
         digmon = QGroupBox("SI Tune Monitor", self)
@@ -1117,38 +1118,25 @@ class SITuneCorrWindow(SiriusMainWindow):
             fams=self.fams,
             parent=famskl_wid,
             prefix=self.prefix,
-            yrange_lim=-1.5e-5,
+            # yrange_lim=-1.5e-5,
         )
         famskl_lay.addWidget(fams_klplot)
-
-        famskl_diff_wid = QGroupBox("Difference: KL - RefKL", digmon)
-        famskl_diff_lay = QHBoxLayout(famskl_diff_wid)
-        famskl_diff_lay.setContentsMargins(0, 10, 0, 5)
-        fams_kl_diffplot = DeltaKLFamiliesPlot(
-            ioc_prefix=self.ioc_prefix,
-            fams=self.fams,
-            parent=famskl_diff_wid,
-            diff=True,
-            symbol="s",
-            prefix=self.prefix,
-        )
-        famskl_diff_lay.addWidget(fams_kl_diffplot)
-
-        # famskl_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
-        # tune_frac_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
-        # spec_wid.setSizePolicy(QSzPly.Preferred, QSzPly.Fixed)
 
         lay.addWidget(tune_frac_wid)
         lay.addWidget(spec_wid)
         lay.addWidget(famskl_wid)
-        lay.addWidget(famskl_diff_wid)
 
-        tune_h = 50
-        lay.setRowMinimumHeight(0, tune_h)
-        lay.setRowMinimumHeight(1, 10 * tune_h)
-        lay.setRowMinimumHeight(2, 3 * tune_h)
-        lay.setRowMinimumHeight(3, 3 * tune_h)
-        lay.setColumnMinimumWidth(0, 20 * tune_h)
+        famskl_wid.setStyleSheet("""
+        min-height: 15em;
+        max-height: 15em;
+        """)
+
+        # tune_h = 50
+        # lay.setRowMinimumHeight(0, tune_h)
+        # lay.setRowMinimumHeight(1, 10 * tune_h)
+        # lay.setRowMinimumHeight(2, 3 * tune_h)
+        # lay.setRowMinimumHeight(3, 3 * tune_h)
+        lay.setColumnMinimumWidth(0, 20 * 50)
 
         return digmon
 
@@ -1159,11 +1147,11 @@ class SITuneCorrWindow(SiriusMainWindow):
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setObjectName("doc_IOCLog")
-        docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:30em;}")
+        docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:20em;}")
         wid_cont = QWidget(parent=docwid)
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
-        vbl.setContentsMargins(5, 5, 0, 5)
+        vbl.setContentsMargins(5, 5, 5, 5)
         pdm_log = PyDMLogLabel(
             wid_cont, self.ioc_prefix.substitute(propty="Log-Mon")
         )
@@ -1187,7 +1175,7 @@ class SITuneCorrWindow(SiriusMainWindow):
         docwid.setWidget(wid)
 
         lay = QGridLayout(wid)
-        lay.setContentsMargins(0, 5, 0, 0)
+        lay.setContentsMargins(5, 5, 5, 5)
 
         lb_family = QLabel("Family", self)
         lb_family.setStyleSheet("max-height:1.29em; font-weight:bold;")
@@ -1254,7 +1242,7 @@ class SITuneCorrWindow(SiriusMainWindow):
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setObjectName("doc_IOCCtrl")
-        docwid.setStyleSheet("#doc_IOCCtrl{min-width:20em; min-height:30em;}")
+        docwid.setStyleSheet("#doc_IOCCtrl{min-width:20em; min-height:20em;}")
 
         wid = QWidget()
         docwid.setWidget(wid)
@@ -1277,7 +1265,11 @@ class SITuneCorrWindow(SiriusMainWindow):
         menubar.setNativeMenuBar(False)
 
         menuopen = QMenu("Open", menubar)
-        actions = (("IOC &Log", "IOC Log", "", True, self.ioc_log),)
+        actions = (
+            ("IOC &Log", "IOC Log", "", True, self.ioc_log),
+            ("Strength &Monitor", "Strength Monitor", "", True, self.qfams_kl_table),
+            ("IOC &Control", "IOC Control", "", True, self.tunefb_control),
+        )
         self.setMenuBar(menubar)
         for name, tool, short, check, doc in actions:
             action = QAction(name, self)
@@ -1321,43 +1313,18 @@ class SITuneCorrWindow(SiriusMainWindow):
         # Loop ################################################################
         self.wid_atcr = QWidget()
         lay_atcr = QGridLayout(self.wid_atcr)
-        # lay_atcr.setContentsMargins(0, 0, 0, 0)
         lay_atcr.setAlignment(Qt.AlignTop)
+
+        _qtac = Qt.AlignCenter
+        _qtal = Qt.AlignLeft
+        _qtar = Qt.AlignRight
 
         ln = 0
         mainlbl = QLabel("General", self.wid_atcr)
         mainlbl.setStyleSheet(
             "margin-top:0em;margin-bottom:0em;font-weight:bold;"
         )
-        lay_atcr.addWidget(mainlbl, ln, 0, 1, 3, alignment=Qt.AlignLeft)
-
-        # Tune Source
-        ln += 1
-        tunesrcpvn = "TuneSrc-{}"
-        tunesrc_lbl = QLabel("Tune Source", self.wid_atcr)
-        tunesrc_cbbx = PyDMEnumComboBox(
-            self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sel"))
-        )
-        self._tunesrc_pv = _PV(
-            self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts")),
-            connection_timeout=0.5,
-        )
-        self.tunesrc_rb = SiriusLabel(
-            self, self.ioc_prefix.substitute(propty=tunesrcpvn.format("Sts"))
-        )
-        diwin_bt = QPushButton(qta.icon("fa5s.list-ul"), "", self)
-        diwin_bt.clicked.connect(self._open_tunexsource_window)
-
-        lay_atcr.addWidget(tunesrc_lbl, ln, 0, alignment=Qt.AlignLeft)
-        lay_atcr.addWidget(tunesrc_cbbx, ln, 1, alignment=Qt.AlignRight)
-
-        wid_tunesrc_rbw = QWidget(self.wid_atcr)
-        lay_tunesrc_rbw = QHBoxLayout(wid_tunesrc_rbw)
-        lay_tunesrc_rbw.addWidget(self.tunesrc_rb)
-        lay_tunesrc_rbw.addWidget(diwin_bt)
-        lay_tunesrc_rbw.setContentsMargins(0, 0, 0, 0)
-
-        lay_atcr.addWidget(wid_tunesrc_rbw, ln, 2, alignment=Qt.AlignRight)
+        lay_atcr.addWidget(mainlbl, ln, 0, 1, 5, alignment=_qtal)
 
         # Loop Frequency
         ln += 1
@@ -1372,14 +1339,27 @@ class SITuneCorrWindow(SiriusMainWindow):
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=freqpvn.format("RB")),
         )
-        lay_atcr.addWidget(freqbar_lbl, ln, 0, alignment=Qt.AlignLeft)
-        lay_atcr.addWidget(freqspinbox, ln, 1, alignment=Qt.AlignRight)
-        lay_atcr.addWidget(freqrb, ln, 2, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(freqbar_lbl, ln, 0, alignment=_qtal)
+        lay_atcr.addWidget(freqspinbox, ln, 1, alignment=_qtar)
+        lay_atcr.addWidget(freqrb, ln, 2, alignment=_qtal)
 
-        # RefTuneX
+        # Plane Separation
         ln += 1
+        xlbl = QLabel("X", self.wid_atcr)
+        ylbl = QLabel("Y", self.wid_atcr)
+        xlbl.setStyleSheet("font-weight:bold;")
+        ylbl.setStyleSheet("font-weight:bold;")
+        lay_atcr.addWidget(xlbl, ln, 1, 1, 2, alignment=_qtac)
+        lay_atcr.addWidget(ylbl, ln, 3, 1, 2, alignment=_qtac)
+
+        #######################################################################
+
+        # Reference Tunes
+        ln += 1
+        reftune_lbl = QLabel("Ref. Tune", self.wid_atcr)
+        lay_atcr.addWidget(reftune_lbl, ln, 0, alignment=_qtal)
+
         tunexpvn = "RefTuneX-{}"
-        reftunex_lbl = QLabel("Ref. Tune X", self.wid_atcr)
         reftunex_wid = SiriusSpinbox(
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=tunexpvn.format("SP")),
@@ -1389,14 +1369,8 @@ class SITuneCorrWindow(SiriusMainWindow):
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=tunexpvn.format("RB")),
         )
-        lay_atcr.addWidget(reftunex_lbl, ln, 0, alignment=Qt.AlignLeft)
-        lay_atcr.addWidget(reftunex_wid, ln, 1, alignment=Qt.AlignRight)
-        lay_atcr.addWidget(reftunexrb, ln, 2, alignment=Qt.AlignLeft)
 
-        # RefTuneY
-        ln += 1
         tuneypvn = "RefTuneY-{}"
-        reftuney_lbl = QLabel("Ref. Tune Y", self.wid_atcr)
         reftuney_wid = SiriusSpinbox(
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=tuneypvn.format("SP")),
@@ -1407,51 +1381,99 @@ class SITuneCorrWindow(SiriusMainWindow):
             self.ioc_prefix.substitute(propty=tuneypvn.format("RB")),
         )
 
-        lay_atcr.addWidget(reftuney_lbl, ln, 0, alignment=Qt.AlignLeft)
-        lay_atcr.addWidget(reftuney_wid, ln, 1, alignment=Qt.AlignRight)
-        lay_atcr.addWidget(reftuneyrb, ln, 2, alignment=Qt.AlignLeft)
+        lay_atcr.addWidget(reftunex_wid, ln, 1, alignment=_qtar)
+        lay_atcr.addWidget(reftunexrb, ln, 2, alignment=_qtal)
+        lay_atcr.addWidget(reftuney_wid, ln, 3, alignment=_qtar)
+        lay_atcr.addWidget(reftuneyrb, ln, 4, alignment=_qtal)
 
-        # MaxTuneErr
+        # Max Tune Err
         ln += 1
-        maxtuneerrpvn = "MaxTuneErr-{}"
-        maxtuneerr_lbl = QLabel("Max. Tune Error", self.wid_atcr)
-        maxtuneerr_wid = SiriusSpinbox(
+        maxtuneerr_lbl = QLabel("Max. Tune Err.", self.wid_atcr)
+        lay_atcr.addWidget(maxtuneerr_lbl, ln, 0, alignment=_qtal)
+
+        maxtunexerrpvn = "MaxTuneXErr-{}"
+        maxtunexerr_wid = SiriusSpinbox(
             self.wid_atcr,
-            self.ioc_prefix.substitute(propty=maxtuneerrpvn.format("SP")),
+            self.ioc_prefix.substitute(propty=maxtunexerrpvn.format("SP")),
         )
-        maxtuneerr_wid.setSingleStep(0.005)
-        maxtuneerrrb = SiriusLabel(
+        maxtunexerr_wid.setSingleStep(0.005)
+        maxtunexerrrb = SiriusLabel(
             self.wid_atcr,
-            self.ioc_prefix.substitute(propty=maxtuneerrpvn.format("RB")),
+            self.ioc_prefix.substitute(propty=maxtunexerrpvn.format("RB")),
         )
-        lay_atcr.addWidget(maxtuneerr_lbl, ln, 0, alignment=Qt.AlignLeft)
-        lay_atcr.addWidget(maxtuneerr_wid, ln, 1, alignment=Qt.AlignRight)
-        lay_atcr.addWidget(maxtuneerrrb, ln, 2, alignment=Qt.AlignLeft)
+
+        maxtuneyerrpvn = "MaxTuneYErr-{}"
+        maxtuneyerr_wid = SiriusSpinbox(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=maxtuneyerrpvn.format("SP")),
+        )
+        maxtuneyerr_wid.setSingleStep(0.005)
+        maxtuneyerrrb = SiriusLabel(
+            self.wid_atcr,
+            self.ioc_prefix.substitute(propty=maxtuneyerrpvn.format("RB")),
+        )
+        lay_atcr.addWidget(maxtunexerr_wid, ln, 1, alignment=_qtar)
+        lay_atcr.addWidget(maxtunexerrrb, ln, 2, alignment=_qtal)
+        lay_atcr.addWidget(maxtuneyerr_wid, ln, 3, alignment=_qtar)
+        lay_atcr.addWidget(maxtuneyerrrb, ln, 4, alignment=_qtal)
+
+        # Tune Source
+        ln += 1
+        tunesrc_lbl = QLabel("Tune Source", self.wid_atcr)
+        lay_atcr.addWidget(tunesrc_lbl, ln, 0, alignment=_qtal)
+
+        tunexsrcpvn = "TuneXSrc-{}"
+        tunexsrc_cbbx = PyDMEnumComboBox(
+            self, self.ioc_prefix.substitute(propty=tunexsrcpvn.format("Sel"))
+        )
+        self.tunexsrc_rb = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty=tunexsrcpvn.format("Sts"))
+        )
+
+        tuneysrcpvn = "TuneYSrc-{}"
+        tuneysrc_cbbx = PyDMEnumComboBox(
+            self, self.ioc_prefix.substitute(propty=tuneysrcpvn.format("Sel"))
+        )
+        self._tuneysrc_pv = _PV(
+            self.ioc_prefix.substitute(propty=tuneysrcpvn.format("Sts")),
+            connection_timeout=0.5,
+        )
+        self.tuneysrc_rb = SiriusLabel(
+            self, self.ioc_prefix.substitute(propty=tuneysrcpvn.format("Sts"))
+        )
+
+        lay_atcr.addWidget(tunexsrc_cbbx, ln, 1, 1, 2)
+        lay_atcr.addWidget(tuneysrc_cbbx, ln, 3, 1, 2)
+        ln += 1
+        lay_atcr.addWidget(self.tunexsrc_rb, ln, 1, 1, 2, alignment=_qtac)
+        lay_atcr.addWidget(self.tuneysrc_rb, ln, 3, 1, 2, alignment=_qtac)
 
         # PID parameters
         ln += 1
-        tempwid = QWidget()
+        tempwid = QGroupBox("PID parameters", self.wid_atcr)
         hpl = QGridLayout()
-        hpl.setContentsMargins(0, 0, 0, 0)
-        pidlbl = QLabel("PID parameters", self.wid_atcr)
-        pidlbl.setStyleSheet(
-            "margin-top:1em;margin-bottom:0em;font-weight:bold;"
-        )
-        hpl.addWidget(pidlbl, 0, 0, 1, 3, alignment=Qt.AlignLeft)
 
-        _qtal = Qt.AlignCenter
+        _qtac = Qt.AlignCenter
+        _qtal = Qt.AlignLeft
         hpl.addWidget(
-            QLabel("<h4>Kp</h4>", self.wid_atcr, alignment=_qtal), 1, 1
+            QLabel("<h4>Kp</h4>", self.wid_atcr, alignment=_qtac), 2, 0
         )
         hpl.addWidget(
-            QLabel("<h4>Ki</h4>", self.wid_atcr, alignment=_qtal), 1, 2
+            QLabel("<h4>Ki</h4>", self.wid_atcr, alignment=_qtac), 3, 0
         )
         hpl.addWidget(
-            QLabel("<h4>Kd</h4>", self.wid_atcr, alignment=_qtal), 1, 3
+            QLabel("<h4>Kd</h4>", self.wid_atcr, alignment=_qtac), 4, 0
+        )
+        hpl.addWidget(
+            QLabel("<h4>X</h4>", self.wid_atcr, alignment=_qtac), 1, 1, 1, 2
+        )
+        hpl.addWidget(
+            QLabel("<h4>Y</h4>", self.wid_atcr, alignment=_qtac), 1, 3, 1, 2
         )
         self.tunepid_pvs = [
-            self.ioc_prefix.substitute(propty="LoopPID" + _k + _pvt)
+            self.ioc_prefix.substitute(propty="LoopPID" + _k + _pln + _pvt)
             for _k in ["Kp", "Ki", "Kd"]
+            for _pln in ["X", "Y"]
             for _pvt in ["-SP", "-RB"]
         ]
         self.tunepid_widgets = dict(
@@ -1464,15 +1486,17 @@ class SITuneCorrWindow(SiriusMainWindow):
             for _pv in self.tunepid_pvs
         )
         for _pv, wid in self.tunepid_widgets.items():
-            i = 1 if _pv.split("PID")[-1][2] == "X" else 3
+            col = 1 if _pv.split("PID")[-1][2] == "X" else 3
             if _pv.endswith("RB"):
-                i += 1
+                col += 1
+                align = _qtal
             else:
                 wid.setSingleStep(0.05)
-            j = ("Kp", "Ki", "Kd").index(_pv.split("PID")[-1][:2]) + 1
-            hpl.addWidget(wid, i, j, alignment=_qtal)
+                align = _qtar
+            row = ("Kp", "Ki", "Kd").index(_pv.split("PID")[-1][:2]) + 2
+            hpl.addWidget(wid, row, col, alignment=align)
         tempwid.setLayout(hpl)
-        lay_atcr.addWidget(tempwid, ln, 0, 1, 3)
+        lay_atcr.addWidget(tempwid, ln, 0, 1, 5)
         corr_tab.addTab(self.wid_atcr, "Loop")
 
         # Manual ##############################################################
@@ -1853,7 +1877,8 @@ class SITuneCorrWindow(SiriusMainWindow):
         if plane not in ["X", "Y"]:
             return
 
-        src = self._tunesrc_pv.value
+        src = self._tunexsrc_pv.value if plane == "X" \
+            else self._tuneysrc_pv.value
 
         if src is None:
             return
