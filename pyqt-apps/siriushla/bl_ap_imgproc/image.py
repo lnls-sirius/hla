@@ -184,6 +184,11 @@ class DVFImageView(PyDMImageView):
         self.fit_ellipse_con[param].new_value_signal[float].connect(
             lambda value: self.plot_fit_ellipse(value, fit_ellipse_pv))
 
+    # --- color changes by pv value ---
+
+    def _set_colormap(self, value, map):
+        self.colorMap = self.Jet if value == 1 else map
+
     # --- setup UI ---
 
     def _setupUi(self):

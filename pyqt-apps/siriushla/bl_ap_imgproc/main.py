@@ -51,6 +51,7 @@ class BLImgProc(QWidget):
         self.open_beamline_btn = None
         self.enable_gamma_btn = None
         self.gamma_enabled_conn = None
+        self._setup_beamline_ctrl_sts()
         self._setupUi()
 
         self.timer = QTimer()
@@ -143,6 +144,8 @@ class BLImgProc(QWidget):
             wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
             wid = DVFImageView(self.device, pvname)
+            self._setup_colormap_by_pv(self.beamline_ctrl_sts, wid,
+                                       wid.Monochrome)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
@@ -328,6 +331,14 @@ class BLImgProc(QWidget):
         # update log error label
         error_bl = self.blpps.blintlk.error_log
         self.pydm_lbl.setText(error_bl)
+
+    def _setup_beamline_ctrl_sts(self):
+        pvname = BLENBL_PVS["Sts"]
+        self.beamline_ctrl_sts = SiriusConnectionSignal(pvname)
+
+    def _setup_colormap_by_pv(self, pvname, wid, map):
+        pvname.new_value_signal[int].connect(
+            lambda value: wid._set_colormap(int(value), map))
 
     def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
