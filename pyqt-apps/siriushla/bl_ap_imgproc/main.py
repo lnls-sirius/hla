@@ -4,7 +4,7 @@ from datetime import datetime
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
-    QPushButton, QScrollArea
+    QPushButton, QScrollArea, QSpacerItem
 
 import qtawesome as qta
 
@@ -23,7 +23,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 
 from .util import PVS_IMGPROCCTRL, PVS_IMGPROCOVERVIEW, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
-    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS
+    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS, BLENBL_PVS
 from .image import DVFImageView
 from .blintlkctl import BLIntckCtrl
 
@@ -364,6 +364,25 @@ class BLImgProc(QWidget):
 
         return wid
 
+    def _setup_beamline_monitoring_widgets(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Beamline Monitoring")
+        wid.setMaximumHeight(200)
+
+        wid.setToolTip("If the LED is green, beamline optics is under standard conditions.\n"
+                       "If the LED is yellow, beamline optics is being aligned by CAX.")
+
+        self._beamline_enable_btn = PyDMStateButton(init_channel=BLENBL_PVS["Sel"])
+        lay.addWidget(self._beamline_enable_btn)
+
+        self.enabled_led = SiriusLedState(init_channel=BLENBL_PVS["Sts"])
+        self.enabled_led.setOffColor(SiriusLedState.Yellow)
+        lay.addWidget(self.enabled_led)
+
+        return wid
+
     def _setup_beamline_controls_widgets(self):
         wid = QGroupBox()
         lay = QVBoxLayout()
@@ -383,6 +402,12 @@ class BLImgProc(QWidget):
         lay.addWidget(widget)
 
         widget = self._setup_beamline_error_log()
+        lay.addWidget(widget)
+
+        widget = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Maximum)
+        lay.addItem(widget)
+
+        widget = self._setup_beamline_monitoring_widgets()
         lay.addWidget(widget)
 
         return wid
