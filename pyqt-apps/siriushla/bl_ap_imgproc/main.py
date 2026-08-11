@@ -253,6 +253,8 @@ class BLImgProc(QWidget):
                     widlay.addWidget(col)
             else:
                 wid = self.create_box_group(title, pv_data[1])
+                if title == "Image": 
+                    self._setup_border_by_pv(self.beamline_ctrl_sts, wid)
             glay.addWidget(wid, *loc)
 
         glay.setColumnStretch(0, 3)
@@ -339,6 +341,13 @@ class BLImgProc(QWidget):
     def _setup_colormap_by_pv(self, pvname, wid, map):
         pvname.new_value_signal[int].connect(
             lambda value: wid._set_colormap(int(value), map))
+
+    def _setup_border_by_pv(self, pvname, wid):
+        pvname.new_value_signal[int].connect(
+            lambda value: self._set_border_color(int(value), wid))
+
+    def _set_border_color(self, value, wid):
+        wid.setStyleSheet("" if value == 1 else "border: 4px solid #ebeb32;")
 
     def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
