@@ -146,6 +146,7 @@ class BLImgProc(QWidget):
             wid = DVFImageView(self.device, pvname)
             self._setup_colormap_by_pv(self.beamline_ctrl_sts, wid,
                                        wid.Monochrome)
+            self._create_floating_label(self.beamline_ctrl_sts, wid)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
@@ -348,6 +349,21 @@ class BLImgProc(QWidget):
 
     def _set_border_color(self, value, wid):
         wid.setStyleSheet("" if value == 1 else "border: 4px solid #ebeb32;")
+
+    def _create_floating_label(self, pvname, parent):
+        self.floating_label = QLabel("", parent)
+        self.floating_label.setGeometry(20, 20, 600, 30)
+        self._setup_floating_label_by_pv(pvname)
+        
+    def _set_floating_label(self, value):
+        self.floating_label.setStyleSheet(
+            "" if value == 1 else "font-size: 22px; color: #FFF; border: 0px;")
+        self.floating_label.setText(
+            "" if value == 1 else "Beam under CAX action. Image may be distorted.")
+
+    def _setup_floating_label_by_pv(self, pvname):
+        pvname.new_value_signal[int].connect(
+            lambda value: self._set_floating_label(int(value)))
 
     def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
