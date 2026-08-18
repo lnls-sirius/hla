@@ -46,8 +46,12 @@ class BbBMainWindow(SiriusMainWindow):
             is_main=True,
         )
         connect_window(
-            self._but_fbe, window, self, prefix=self.prefix, device=''
-        )  # device will be filled by the QComboBox callback
+            self._but_fbe,
+            window,
+            self,
+            prefix=self.prefix,
+            device='SI-Glob:DI-BbBProc-L'
+        )  # device will be changed by the QComboBox callback
 
         cbox = QComboBox(self)
         cbox.addItems(['L', 'H', 'V'])

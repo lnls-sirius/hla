@@ -191,9 +191,6 @@ class IVUControlWindow(IDCommonControlWindow):
         pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
         pvname_mon = self.dev_pref.substitute(propty=pv_info["Mon"])
         self.mode_sp = PyDMStateButton(init_channel=pvname)
-        self.mode_sp.rules = (
-            '[{"name": "VisibleWarning", "property": "Enable", "expression": "ch[0] == 0",' +
-            '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
 
         lay.addWidget(self.mode_sp, row, 1)
 
@@ -285,38 +282,62 @@ class IVUControlWindow(IDCommonControlWindow):
 
         lay.addStretch()
 
-        propty = 'System Status Monitoring'
-        devsts_labels = [
+        propty_1 = 'General Status'
+        devsts_labels_1 = [
             'HeartBeat',
             'IsAtMaxGap-Mon',
-            'Interlocked-Mon',
             'UN_Reach',
-            'Pitch_Err',
             'Status-Mon',
         ]
 
-        dev_lay = QGridLayout()
-        dev_title = QLabel(f'<h4>{propty}</h4>',
+        dev_lay_1 = QGridLayout()
+        dev_title_1 = QLabel(f'<h4>{propty_1}</h4>',
                             self, alignment=Qt.AlignCenter)
-        dev_lay.addWidget(dev_title, 0, 0, 1, 2, alignment=Qt.AlignCenter)
-        for idx, lbl in enumerate(devsts_labels):
+        dev_lay_1.addWidget(dev_title_1, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        for idx, lbl in enumerate(devsts_labels_1):
             pvname = self.dev_pref.substitute(propty=lbl)
             if "Mon" in lbl:
                 lbl = lbl.split('-')[0]
             if "Status" in lbl:
                 lbl = "ID Status"
+            if "UN_Reach" in lbl:
+                lbl = "MovementDone"
             sts_lbl = QLabel(lbl)
             irow = idx + 1
             read_sts = SiriusLedState(self, init_channel=pvname)
             if lbl == "HeartBeat":
                 read_sts.offColor = SiriusLedState.Gray
-            elif lbl == "IsAtMaxGap":
-                read_sts.offColor = SiriusLedState.Yellow
-            elif lbl in ["Interlocked", "Pitch_Err", "ID Status"]:
+            elif lbl in ["ID Status", "MovementDone"]:
                 read_sts.offColor = SiriusLedState.Red
-            dev_lay.addWidget(read_sts, irow, 0)
-            dev_lay.addWidget(sts_lbl, irow, 1)
-        lay.addLayout(dev_lay)
+            dev_lay_1.addWidget(read_sts, irow, 0)
+            dev_lay_1.addWidget(sts_lbl, irow, 1)
+        lay.addLayout(dev_lay_1)
+        lay.addStretch()
+
+        propty_2 = 'Errors Monitoring'
+        devsts_labels_2 = [
+            'Interlocked-Mon',
+            'Pitch_Err',
+            'CenterError-Mon'
+        ]
+
+        dev_lay_2 = QGridLayout()
+        dev_title_2 = QLabel(f'<h4>{propty_2}</h4>',
+                            self, alignment=Qt.AlignCenter)
+        dev_lay_2.addWidget(dev_title_2, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        for idx, lbl in enumerate(devsts_labels_2):
+            pvname = self.dev_pref.substitute(propty=lbl)
+            if "Mon" in lbl:
+                lbl = lbl.split('-')[0]
+            if "Pitch_Err" in lbl:
+                lbl = "PitchError"
+            sts_lbl = QLabel(lbl)
+            irow = idx + 1
+            if lbl in ["Interlocked", "CenterError", "PitchError"]:
+                read_sts = SiriusLedAlert(self, init_channel=pvname)
+            dev_lay_2.addWidget(read_sts, irow, 0)
+            dev_lay_2.addWidget(sts_lbl, irow, 1)
+        lay.addLayout(dev_lay_2)
         lay.addStretch()
 
         return gbox
@@ -547,7 +568,10 @@ class IVUControlDetails(IDCommonDialog):
             lbl = QLabel(sts)
             pv_info = f'{sts}_Err'
             pvname = self.dev_pref.substitute(propty=pv_info)
-            ld_gen = SiriusLedState(self, pvname)
+            if sts == "Center":
+                ld_gen = SiriusLedAlert(self, init_channel=pvname)
+            else:
+                ld_gen = SiriusLedState(self, pvname)
             glay_sts.addWidget(lbl, lin, 0)
             glay_sts.addWidget(ld_gen, lin, 1, alignment=Qt.AlignCenter)
 
