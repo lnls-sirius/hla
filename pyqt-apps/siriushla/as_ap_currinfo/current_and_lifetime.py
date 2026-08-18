@@ -99,18 +99,12 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_lifetime = QLabel('Lifetime', self)
         self._ld_lifetime.setStyleSheet("font-weight:bold; max-height1.5em;")
         self._ld_lifetime.setAlignment(Qt.AlignCenter)
-        self._lb_lifetime = QLabel('0:00:00', self)
-        self._lb_lifetime.channel = self.devname.substitute(
-            propty='Lifetime-Mon')
+        lifetime_pvname = self.devname.substitute(propty='LifetimeHour-Mon')
+        self._lb_lifetime = SiriusLabel(self, lifetime_pvname)
         self._lb_lifetime.setStyleSheet("font-size:40px;")
-        self.lifetime_dcct_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='Lifetime-Mon'))
-        self.lifetime_dcct_pv.new_value_signal[float].connect(
-            self._format_lifetime_label)
-        self.lifetime_bpm_pv = SiriusConnectionSignal(
-            self.devname.substitute(propty='LifetimeBPM-Mon'))
-        self.lifetime_bpm_pv.new_value_signal[float].connect(
-            self._format_lifetime_label)
+        self._lb_lifetime.displayFormat = (
+            SiriusLabel.DisplayFormat.TimeDeltaHours
+        )
 
         # # Graph
         self.graph = SiriusTimePlot(self, background='w')
@@ -148,31 +142,40 @@ class CurrLTWindow(SiriusMainWindow):
             axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_bpmsum = self.graph.curveAtIndex(1)
         self.graph.fill_curve_with_archdata(
-            self._curve_bpmsum,  pvname,
+            self._curve_bpmsum, pvname,
             t_init=t_init_iso, t_end=t_end_iso)
 
+        pv_lt_dcct = self.devname.substitute(propty='LifetimeHour-Mon')
         self.graph.addYChannel(
-            y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
-            color='red', lineWidth=1)
+            y_channel=pv_lt_dcct,
+            axis='right',
+            name='Lifetime',
+            color='red',
+            lineWidth=1
+        )
         self._curve_lifetimedcct = self.graph.curveAtIndex(2)
         self.graph.fill_curve_with_archdata(
             self._curve_lifetimedcct,
-            self.devname.substitute(propty='Lifetime-Mon'),
-            t_init=t_init_iso, t_end=t_end_iso, factor=3600)
+            pvname=pv_lt_dcct,
+            t_init=t_init_iso,
+            t_end=t_end_iso
+        )
 
+        pv_lt_bpm = self.devname.substitute(propty='LifetimeBPMHour-Mon')
         self.graph.addYChannel(
-            y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
-            color='red', lineWidth=1)
+            y_channel=pv_lt_bpm,
+            axis='right',
+            name='Lifetime',
+            color='red',
+            lineWidth=1
+        )
         self._curve_lifetimebpm = self.graph.curveAtIndex(3)
         self.graph.fill_curve_with_archdata(
             self._curve_lifetimebpm,
-            self.devname.substitute(propty='LifetimeBPM-Mon'),
-            t_init=t_init_iso, t_end=t_end_iso, factor=3600)
-
-        self.lifetime_dcct_pv.new_value_signal[float].connect(
-            self._update_graph)
-        self.lifetime_bpm_pv.new_value_signal[float].connect(
-            self._update_graph)
+            pvname=pv_lt_bpm,
+            t_init=t_init_iso,
+            t_end=t_end_iso
+        )
 
         self._flag_need_dcctx = True
         self._flag_need_dccty = True
@@ -574,17 +577,6 @@ class CurrLTWindow(SiriusMainWindow):
 
     # ---------- auxiliar methods ----------
 
-    def _format_lifetime_label(self, value):
-        """Format lifetime label."""
-        if self._lb_lifetime.channel != self.sender().address:
-            return
-        lt = 0 if _np.isnan(value) else value
-        H = int(lt // 3600)
-        m = int((lt % 3600) // 60)
-        s = int((lt % 3600) % 60)
-        lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
-        self._lb_lifetime.setText(lt_str)
-
     @Slot(str)
     def _handle_lifetime_type_sel(self, text):
         """Handle lifetime type selection."""
@@ -613,12 +605,12 @@ class CurrLTWindow(SiriusMainWindow):
             self.graph.plotItem.getAxis('left').setLabel(
                 '01M1 BPM Sum', color='blue')
             self._lb_lifetime.channel = \
-                self.devname.substitute(propty='LifetimeBPM-Mon')
+                self.devname.substitute(propty='LifetimeBPMHour-Mon')
         else:
             self.graph.plotItem.getAxis('left').setLabel(
                 'Current [mA]', color='blue')
             self._lb_lifetime.channel = \
-                self.devname.substitute(propty='Lifetime-Mon')
+                self.devname.substitute(propty='LifetimeHour-Mon')
 
     def _handle_intvl_sett_visibility(self):
         """Handle sampling interval settings."""
@@ -677,14 +669,6 @@ class CurrLTWindow(SiriusMainWindow):
         """Update last sample time to current timestamp."""
         now = _time.time()
         self._le_lastsmpl.send_value_signal[float].emit(now)
-
-    @Slot(float)
-    def _update_graph(self, value):
-        """Receive new lifetime values and update curves in hours."""
-        if 'BPM' in self.sender().address:
-            self._curve_lifetimebpm.receiveNewValue(value/3600)
-        else:
-            self._curve_lifetimedcct.receiveNewValue(value/3600)
 
     @Slot(_np.ndarray)
     def _update_waveforms(self, value):

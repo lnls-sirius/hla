@@ -30,6 +30,8 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
     DisplayFormat = DisplayFormat
     DisplayFormat.Time = 6
     DisplayFormat.BSMPUDCVersion = 7
+    DisplayFormat.TimeDeltaSeconds = 8
+    DisplayFormat.TimeDeltaHours = 9
 
     def __init__(self, parent=None, init_channel=None, keep_unit=False, **kws):
         """Init."""
@@ -93,9 +95,27 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
                 self.format_string += " {}"+"{}".format(unt_si)
         return self.format_string
 
-    def value_changed(self, new_value):
+    @staticmethod
+    def get_timedelta_string(dt):  # seconds
+        """Convert a duration in seconds to a 'HH:MM:SS' string.
+
+        Parameters
+        ----------
+        dt : int or float
+            Duration in seconds.
+
+        Returns
+        -------
+        str
+            Duration formatted as 'HH:MM:SS'.
         """
-        Callback invoked when the Channel value is changed.
+        hr = int(dt // 3600)
+        m = int((dt % 3600) // 60)
+        s = int((dt % 3600) % 60)
+        return '{:d}:{:02d}:{:02d}'.format(hr, m, s)
+
+    def value_changed(self, new_value):
+        """Callback invoked when the Channel value is changed.
         Sets the value of new_value accordingly at the Label.
 
         Parameters
@@ -104,9 +124,23 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             The new value from the channel. The type depends on the channel.
         """
         super(SiriusLabel, self).value_changed(new_value)
-        # If it is a DiaplayFormat.Time, parse with siriuspy.clientarch.Time
+        # If it is a DisplayFormat.Time, parse with siriuspy.clientarch.Time
         if self._display_format_type == self.DisplayFormat.Time:
             time = _Time(int(new_value)).time().isoformat() \
+                if new_value is not None else ''
+            self.setText(time)
+            return
+
+        # DisplayFormat: TimeDeltaSeconds
+        if self._display_format_type == self.DisplayFormat.TimeDeltaSeconds:
+            time = self.get_timedelta_string(new_value) \
+                if new_value is not None else ''
+            self.setText(time)
+            return
+
+        # DisplayFormat: TimeDeltaHours
+        if self._display_format_type == self.DisplayFormat.TimeDeltaHours:
+            time = self.get_timedelta_string(new_value * 3600) \
                 if new_value is not None else ''
             self.setText(time)
             return
