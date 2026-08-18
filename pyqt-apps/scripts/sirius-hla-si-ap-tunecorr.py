@@ -5,12 +5,7 @@ import sys as _sys
 import argparse as _argparse
 from siriuspy.envars import VACA_PREFIX
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_opticscorr import OpticsCorrWindow as SITuneCorrWindow
-try:
-    from siriushla.as_ap_opticscorr import SITuneCorrWindow
-    print('> Using SITuneCorrWindow')
-except Exception as e:
-    print(e + '\n> Using OpticsCorrWindow')
+from siriushla.as_ap_opticscorr import SITuneCorrWindow
 
 
 parser = _argparse.ArgumentParser(
