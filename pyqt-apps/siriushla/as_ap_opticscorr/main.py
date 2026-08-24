@@ -2058,11 +2058,12 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.backgroundColor = QColor(255, 255, 255)
         self.showLegend = False
 
+        color = "blue" if self.plane == "H" else "red"
         self.addChannel(
             y_channel=f"FAKE:Spectrum{self.plane}",
             name=f"Tune {self.plane}",
             redraw_mode=2,
-            color="blue" if self.plane == "H" else "red",
+            color=color,
             lineWidth=1,
             lineStyle=Qt.SolidLine,
         )
@@ -2074,14 +2075,16 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             y_channel=f"FAKE:MarkerY-{self.plane}",
             name=f"Tune {self.plane}",
             redraw_mode=2,
-            # color='black',
-            lineStyle=1,
+            color=color,
+            lineStyle=0,
             lineWidth=1,
             symbol='o',
-            symbolSize=7,
+            symbolSize=12,
         )
         self.marker = self.curveAtIndex(1)
         self.marker.setVisible(True)
+        self.marker.setSymbolBrush(QColor(color))
+        self._marker = [self._as_array(0), self._as_array(0)]
 
         self.ref_tune_signal = SiriusConnectionSignal(
             self.ioc_prefix.substitute(
@@ -2122,7 +2125,7 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
             _fields = _Const.TuneSrc._fields
         except Exception as e:
             print(e)
-            _fields = ("TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
+            _fields = ("Fake", "TuneSpec", "BbB_SRAM_M2", "BbB_SB_M1", "BbB_SRAM_M1")
         self._enum_map = {i: s for i, s in enumerate(_fields)}
 
         value = self.tunesrc_signal.value
@@ -2172,66 +2175,36 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         if "TuneSpec" in src:
             self._configure_tunespec_source()
         elif "BbB" in src:
-            mode = src.split("_")[1]
-            self._configure_bbb_source(mode)
+            _, mode, marker = src.split("_")
+            print(f'_={_}, mode={mode}, marker={marker}')
+            self._configure_bbb_source(mode, marker)
         self.prefix = prefix
 
     def _configure_tunespec_source(self):
         plane = self.plane
 
-        # self.shift_signal = SiriusConnectionSignal(
-        #     _PVName(f"SI-Glob:DI-Tune-{plane}:RevN-RB").substitute(
-        #         prefix=self.prefix
-        #     )
-        # )
-        # self.x_signal = SiriusConnectionSignal(
-        #     _PVName(f"SI-Glob:DI-Tune-{plane}:TuneFracArray-Mon").substitute(
-        #         prefix=self.prefix
-        #     )
-        # )
-        # self.y_signal = SiriusConnectionSignal(
-        #     _PVName(f"SI-Glob:DI-TuneProc-{plane}:Trace-Mon").substitute(
-        #         prefix=self.prefix
-        #     )
-        # )
+        self.shift_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-Tune-{plane}:RevN-RB").substitute(
+                prefix=self.prefix
+            )
+        )
+        self.x_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-Tune-{plane}:TuneFracArray-Mon").substitute(
+                prefix=self.prefix
+            )
+        )
+        self.y_signal = SiriusConnectionSignal(
+            _PVName(f"SI-Glob:DI-TuneProc-{plane}:Trace-Mon").substitute(
+                prefix=self.prefix
+            )
+        )
         self.marker_xsignal = SiriusConnectionSignal(
             _PVName(f"SI-Glob:DI-Tune-{plane}:TuneFrac-Mon").substitute(
                 prefix=self.prefix
             )
         )
         self.marker_ysignal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-Tune-{plane}:MarkY1-Mon").substitute(
-                prefix=self.prefix
-            )
-        )
-
-        # self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
-        # self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
-        # self.shift_signal.new_value_signal[float].connect(self._receive_shift)
-        self.marker_xsignal.new_value_signal[float].connect(
-            self._update_marker_chx
-        )
-        self.marker_ysignal.new_value_signal[float].connect(
-            self._update_marker_chy
-        )
-
-    def _configure_bbb_source(self, mode):
-        plane = self.plane
-
-        self.shift_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-BbBProc-{plane}:FREV").substitute(
-                prefix=self.prefix
-            )
-        )
-
-        self.x_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_FREQ").substitute(
-                prefix=self.prefix
-            )
-        )
-        spec = "SPEC" if mode == "SRAM" else "MAG"
-        self.y_signal = SiriusConnectionSignal(
-            _PVName(f"SI-Glob:DI-BbBProc-{plane}:{mode}_{spec}").substitute(
+            _PVName(f"SI-Glob:DI-TuneProc-{plane}:MarkY1-Mon").substitute(
                 prefix=self.prefix
             )
         )
@@ -2239,12 +2212,62 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
         self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
         self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
         self.shift_signal.new_value_signal[float].connect(self._receive_shift)
+        self.marker_xsignal.new_value_signal[float].connect(
+            self._update_marker_chx
+        )
+        self.marker_ysignal.new_value_signal[float].connect(
+            self._update_marker_chy
+        )
+
+    def _configure_bbb_source(self, mode, marker):
+        plane = self.plane
+
+        self.shift_signal = SiriusConnectionSignal(
+            _PVName(
+                f"SI-Glob:DI-BbBProc-{plane}:FREV"
+            ).substitute(prefix=self.prefix)
+        )
+        self.x_signal = SiriusConnectionSignal(
+            _PVName(
+                f"SI-Glob:DI-BbBProc-{plane}:{mode}_FREQ"
+            ).substitute(prefix=self.prefix)
+        )
+        spec = "SPEC" if mode == "SRAM" else "MAG"
+        self.y_signal = SiriusConnectionSignal(
+            _PVName(
+                f"SI-Glob:DI-BbBProc-{plane}:{mode}_{spec}"
+            ).substitute(prefix=self.prefix)
+        )
+        self.marker_xsignal = SiriusConnectionSignal(
+            _PVName(
+                f"SI-Glob:DI-BbBProc-{plane}:{mode}_{marker}_TUNE"
+            ).substitute(prefix=self.prefix)
+        )
+        self.marker_ysignal = SiriusConnectionSignal(
+            _PVName(
+                f"SI-Glob:DI-BbBProc-{plane}:{mode}_{marker}_PEAK"
+            ).substitute(prefix=self.prefix)
+        )
+
+        self.x_signal.new_value_signal[_np.ndarray].connect(self._receive_x)
+        self.y_signal.new_value_signal[_np.ndarray].connect(self._receive_y)
+        self.shift_signal.new_value_signal[float].connect(self._receive_shift)
+        self.marker_xsignal.new_value_signal[float].connect(
+            self._update_marker_chx
+        )
+        self.marker_ysignal.new_value_signal[float].connect(
+            self._update_marker_chy
+        )
 
     def _update_marker_chx(self, value):
-        self.marker.receiveXWaveform(value)
+        self._marker[0] = self._as_array(value)
+        self.marker.receiveXWaveform(self._marker[0])
+        self.marker.receiveYWaveform(self._marker[1])
 
     def _update_marker_chy(self, value):
-        self.marker.receiveYWaveform(value)
+        self._marker[1] = self._as_array(value)
+        self.marker.receiveXWaveform(self._marker[0])
+        self.marker.receiveYWaveform(self._marker[1])
 
     def _update_reftune(self, value):
         if value is not None:
@@ -2300,12 +2323,12 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
                     x = x[mask]
                     y = y[mask]
 
-            y = y / self._shift
             x = x / self._shift
+            # y = y / self._shift
 
         else:
             x = x - self._shift
-            y = y - self._shift
+            # y = y - self._shift
 
         self.curve.receiveXWaveform(x)
         self.curve.receiveYWaveform(y)
