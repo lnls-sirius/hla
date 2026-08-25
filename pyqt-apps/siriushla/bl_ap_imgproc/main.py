@@ -4,7 +4,7 @@ from datetime import datetime
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
-    QPushButton, QScrollArea
+    QPushButton, QScrollArea, QSpacerItem
 
 import qtawesome as qta
 
@@ -23,7 +23,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 
 from .util import PVS_IMGPROCCTRL, PVS_IMGPROCOVERVIEW, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
-    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS
+    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS, BLENBL_PVS
 from .image import DVFImageView
 from .blintlkctl import BLIntckCtrl
 
@@ -51,6 +51,7 @@ class BLImgProc(QWidget):
         self.open_beamline_btn = None
         self.enable_gamma_btn = None
         self.gamma_enabled_conn = None
+        self._setup_beamline_ctrl_sts()
         self._setupUi()
 
         self.timer = QTimer()
@@ -143,6 +144,9 @@ class BLImgProc(QWidget):
             wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
             wid = DVFImageView(self.device, pvname)
+            self._setup_colormap_by_pv(self.beamline_ctrl_sts, wid,
+                                       wid.Monochrome)
+            self._create_floating_label(self.beamline_ctrl_sts, wid)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
@@ -250,6 +254,8 @@ class BLImgProc(QWidget):
                     widlay.addWidget(col)
             else:
                 wid = self.create_box_group(title, pv_data[1])
+                if title == "Image": 
+                    self._setup_border_by_pv(self.beamline_ctrl_sts, wid)
             glay.addWidget(wid, *loc)
 
         glay.setColumnStretch(0, 3)
@@ -329,6 +335,36 @@ class BLImgProc(QWidget):
         error_bl = self.blpps.blintlk.error_log
         self.pydm_lbl.setText(error_bl)
 
+    def _setup_beamline_ctrl_sts(self):
+        pvname = BLENBL_PVS["Sts"]
+        self.beamline_ctrl_sts = SiriusConnectionSignal(pvname)
+
+    def _setup_colormap_by_pv(self, pvname, wid, map):
+        pvname.new_value_signal[int].connect(
+            lambda value: wid._set_colormap(int(value), map))
+
+    def _setup_border_by_pv(self, pvname, wid):
+        pvname.new_value_signal[int].connect(
+            lambda value: self._set_border_color(int(value), wid))
+
+    def _set_border_color(self, value, wid):
+        wid.setStyleSheet("" if value == 1 else "border: 4px solid #ebeb32;")
+
+    def _create_floating_label(self, pvname, parent):
+        self.floating_label = QLabel("", parent)
+        self.floating_label.setGeometry(20, 20, 800, 30)
+        self._setup_floating_label_by_pv(pvname)
+        
+    def _set_floating_label(self, value):
+        self.floating_label.setStyleSheet(
+            "" if value == 1 else "font-size: 22px; color: #FFF; border: 0px;")
+        self.floating_label.setText(
+            "" if value == 1 else "BEAMLINE OPTICS BEING ALIGNED - BEAM POSITION NOT RELIABLE")
+
+    def _setup_floating_label_by_pv(self, pvname):
+        pvname.new_value_signal[int].connect(
+            lambda value: self._set_floating_label(int(value)))
+
     def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
         lay = QHBoxLayout()
@@ -364,6 +400,25 @@ class BLImgProc(QWidget):
 
         return wid
 
+    def _setup_beamline_monitoring_widgets(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Beamline Monitoring")
+        wid.setMaximumHeight(200)
+
+        wid.setToolTip("If the LED is green, beamline optics is under standard conditions.\n"
+                       "If the LED is yellow, beamline optics is being aligned by CAX.")
+
+        self._beamline_enable_btn = PyDMStateButton(init_channel=BLENBL_PVS["Sel"])
+        lay.addWidget(self._beamline_enable_btn)
+
+        self.enabled_led = SiriusLedState(init_channel=BLENBL_PVS["Sts"])
+        self.enabled_led.setOffColor(SiriusLedState.Yellow)
+        lay.addWidget(self.enabled_led)
+
+        return wid
+
     def _setup_beamline_controls_widgets(self):
         wid = QGroupBox()
         lay = QVBoxLayout()
@@ -383,6 +438,12 @@ class BLImgProc(QWidget):
         lay.addWidget(widget)
 
         widget = self._setup_beamline_error_log()
+        lay.addWidget(widget)
+
+        widget = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Maximum)
+        lay.addItem(widget)
+
+        widget = self._setup_beamline_monitoring_widgets()
         lay.addWidget(widget)
 
         return wid
