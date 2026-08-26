@@ -254,13 +254,14 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_lifetime = QLabel(
             '<h3>Lifetime</h3>', self, alignment=Qt.AlignCenter)
         self.ld_lifetime.setStyleSheet('max-height: 2em;')
-        self.lb_lifetime = QLabel('0:00:00', self, alignment=Qt.AlignCenter)
+        lifetime_hr_pvname = _PVName(
+            'SI-Glob:AP-CurrInfo:LifetimeHour-Mon'
+        ).substitute(prefix=self.prefix)
+        self.lb_lifetime = SiriusLabel(self, lifetime_hr_pvname)
+        self.lb_lifetime.displayFormat = (
+            SiriusLabel.DisplayFormat.TimeDeltaHours
+        )
         self.lb_lifetime.setStyleSheet('QLabel{font-size: 45pt;}')
-        pvname = _PVName('SI-Glob:AP-CurrInfo:Lifetime-Mon')
-        pvname = pvname.substitute(prefix=self.prefix)
-        self.ch_lifetime = SiriusConnectionSignal(pvname)
-        self.ch_lifetime.new_value_signal[float].connect(
-            self.formatLifetimeLabel)
         box_lt = QWidget()
         lay_lt = QVBoxLayout(box_lt)
         lay_lt.setAlignment(Qt.AlignVCenter)
@@ -355,15 +356,6 @@ class SIGenStatusWindow(SiriusMainWindow):
         lay.setColumnStretch(1, 1)
         lay.setColumnStretch(2, 1)
         self.setCentralWidget(cwid)
-
-    @Slot(float)
-    def formatLifetimeLabel(self, value):
-        lt = 0 if _np.isnan(value) else value
-        H = int(lt // 3600)
-        m = int((lt % 3600) // 60)
-        s = int((lt % 3600) % 60)
-        lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
-        self.lb_lifetime.setText(lt_str)
 
     def _create_groupbox(self, title, widgets, orientation='V'):
         if not isinstance(widgets, list):

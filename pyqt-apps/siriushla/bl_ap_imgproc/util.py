@@ -256,3 +256,9 @@ PVS_DVF = {
 INTLK_PVS = {
     "gamma": "AS-Glob:MP-Summary:AlarmGammaShutter-Mon"
 }
+
+BLENBL_PVS = {
+    "Sel": "CAX:A:BeamLineCtrlEnbl-Sel",
+    "Sts": "CAX:A:BeamLineCtrlEnbl-Sts",
+    "Mon": "CAX:A:BeamLineCtrl-Mon"
+}
