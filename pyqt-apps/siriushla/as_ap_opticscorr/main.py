@@ -1391,7 +1391,7 @@ class SITuneCorrWindow(SiriusMainWindow):
         maxtuneerr_lbl = QLabel("Max. Tune Err.", self.wid_atcr)
         lay_atcr.addWidget(maxtuneerr_lbl, ln, 0, alignment=_qtal)
 
-        maxtunexerrpvn = "MaxTuneXErr-{}"
+        maxtunexerrpvn = "LoopMaxTuneXErr-{}"
         maxtunexerr_wid = SiriusSpinbox(
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=maxtunexerrpvn.format("SP")),
@@ -1402,7 +1402,7 @@ class SITuneCorrWindow(SiriusMainWindow):
             self.ioc_prefix.substitute(propty=maxtunexerrpvn.format("RB")),
         )
 
-        maxtuneyerrpvn = "MaxTuneYErr-{}"
+        maxtuneyerrpvn = "LoopMaxTuneYErr-{}"
         maxtuneyerr_wid = SiriusSpinbox(
             self.wid_atcr,
             self.ioc_prefix.substitute(propty=maxtuneyerrpvn.format("SP")),
@@ -2120,6 +2120,7 @@ class TuneSpectrumPlot(SiriusWaveformPlot):
 
     def _handle_source_change(self, value):
         src = self._enum_map.get(value, str(value))
+        print(f'Change {self.plane.upper()} SRC:', src)
         self._set_source(src)
 
     def _set_source(self, src):
