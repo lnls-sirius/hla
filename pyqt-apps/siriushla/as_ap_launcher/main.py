@@ -44,7 +44,7 @@ class MainLauncher(SiriusMainWindow):
         screen_idx = 3 if len(screens) == 8 else 0
         topleft = screens[screen_idx].geometry().topLeft()
         self.move(topleft.x(), topleft.y()+20)
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
 
         # menubar
         menubar = get_object(ismenubar=True)
