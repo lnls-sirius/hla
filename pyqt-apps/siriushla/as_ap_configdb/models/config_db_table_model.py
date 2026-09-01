@@ -99,7 +99,7 @@ class ConfigDbTableModel(QAbstractTableModel):
     def flags(self, index):
         """Override to make cells editable."""
         if not index.isValid():
-            return Qt.ItemIsEnabled
+            return Qt.ItemFlag.ItemIsEnabled
         return QAbstractItemModel.flags(self, index)
 
     def removeRows(self, row, count=1, index=QModelIndex()):

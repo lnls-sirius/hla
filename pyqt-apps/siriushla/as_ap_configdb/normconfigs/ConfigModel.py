@@ -217,7 +217,7 @@ class ConfigModel(QAbstractTableModel):
     def flags(self, index):
         """Override to make cells editable."""
         if not index.isValid():
-            return Qt.ItemIsEnabled
+            return Qt.ItemFlag.ItemIsEnabled
         return Qt.ItemFlags(
             QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
 

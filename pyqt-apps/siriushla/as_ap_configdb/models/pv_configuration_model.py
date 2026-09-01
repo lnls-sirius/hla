@@ -81,7 +81,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
     def flags(self, index):
         """Override to make cells editable."""
         if not index.isValid():
-            return Qt.ItemIsEnabled
+            return Qt.ItemFlag.ItemIsEnabled
         if index.column() in (2, ):
             return Qt.ItemFlags(
                 QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
