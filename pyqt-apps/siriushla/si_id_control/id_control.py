@@ -75,7 +75,7 @@ class IDControl(SiriusMainWindow):
         scarea = QScrollArea(self)
         scarea.setStyleSheet(
             '.QScrollArea{min-width: 30em;}')
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
         scr_ar_wid = QWidget()
         scr_ar_wid.setObjectName('scrollarea')

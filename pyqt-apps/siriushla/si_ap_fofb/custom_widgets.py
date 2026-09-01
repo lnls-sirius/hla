@@ -1047,7 +1047,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
 
     def _build_scroll_area(self, widget):
         area = QScrollArea(self)
-        area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        area.setSizeAdjustPolicy(QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         area.setWidgetResizable(True)
         area.setWidget(widget)
         widget.setObjectName('widget')

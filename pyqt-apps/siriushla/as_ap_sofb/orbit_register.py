@@ -68,7 +68,7 @@ class OrbitRegisters(QWidget):
 
         scr_ar = QScrollArea(self)
         gdl.addWidget(scr_ar, 0, 0, 1, 1)
-        scr_ar.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        scr_ar.setSizeAdjustPolicy(QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         scr_ar.setWidgetResizable(True)
 
         scr_ar_wid = QWidget()
