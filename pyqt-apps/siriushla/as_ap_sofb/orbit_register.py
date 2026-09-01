@@ -185,7 +185,7 @@ class OrbitRegister(QWidget):
         self.new_string_signal.connect(lbl.setText)
 
         menu = QMenu(btn)
-        btn.setContextMenuPolicy(Qt.CustomContextMenu)
+        btn.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         btn.setMenu(menu)
         btn.clicked.connect(btn.showMenu)
 

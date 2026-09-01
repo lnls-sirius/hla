@@ -58,14 +58,14 @@ class ConfigManagerWindow(SiriusMainWindow):
         self.table.setModel(self._model)
         self.table.setItemDelegate(self._delegate)
         # self.table.setSelectionBehavior(QAbstractItemView.SelectColumns)
-        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.table.customContextMenuRequested.connect(self._showHeaderMenu)
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
 
         # TableView Headers
         self.headers = self.table.horizontalHeader()
-        self.headers.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.headers.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.headers.customContextMenuRequested.connect(self._showHeaderMenu)
 
         self.central_widget.layout.addLayout(self.button_box)
