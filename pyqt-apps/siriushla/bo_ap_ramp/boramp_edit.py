@@ -992,7 +992,7 @@ class MultipolesRamp(QWidget):
             self.normalized_configs[float(k)] = v
 
     def _sortTable(self):
-        self.table.sortByColumn(1, Qt.AscendingOrder)
+        self.table.sortByColumn(1, Qt.SortOrder.AscendingOrder)
         for row in range(self.table.rowCount()):
             label = self.table.item(row, 0).text()
             time = float(self.table.item(row, 1).text())

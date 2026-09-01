@@ -83,10 +83,10 @@ class ConfigDbTableModel(QAbstractTableModel):
             QMessageBox.warning(self.parent(), 'Error', str(err))
         self.endResetModel()
 
-    def sort(self, column, order=Qt.AscendingOrder):
+    def sort(self, column, order=Qt.SortOrder.AscendingOrder):
         """Sort model by column."""
         col = self.horizontalHeader[column]
-        reverse = False if order == Qt.AscendingOrder else True
+        reverse = False if order == Qt.SortOrder.AscendingOrder else True
         self.beginResetModel()
         if col in ('config_type', 'name'):
             self._configs.sort(key=lambda x: x[col].lower(), reverse=reverse)

@@ -376,8 +376,8 @@ class ConfigurationManager(SiriusMainWindow):
         self.d_editor_model.setupModelData(config_type)
         self.editor.resizeColumnsToContents()
         self.d_editor.resizeColumnsToContents()
-        self.editor_model.sort(2, Qt.DescendingOrder)
-        self.d_editor_model.sort(2, Qt.DescendingOrder)
+        self.editor_model.sort(2, Qt.SortOrder.DescendingOrder)
+        self.d_editor_model.sort(2, Qt.SortOrder.DescendingOrder)
 
     @Slot()
     def _fill_tree(self):
