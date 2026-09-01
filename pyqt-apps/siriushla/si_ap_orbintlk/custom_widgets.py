@@ -407,7 +407,7 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
     def __init__(self, parent=None, prefix='', propty=''):
         """Init."""
         BaseObject.__init__(self, prefix)
-        QWidget.__init__(self, parent)
+        QDialog.__init__(self, parent)
         title = 'Monitored Devices'
         self.setObjectName('SIApp')
         self.setWindowTitle(title)
