@@ -11,7 +11,6 @@ import qtawesome as qta
 from pyqtgraph import PlotCurveItem, mkPen
 
 from pydm.widgets import PyDMEnumComboBox, PyDMPushButton
-from siriushla.common.cam_basler import PyDMImageViewBase
 from siriuspy.namesys import SiriusPVName
 
 from ..util import connect_window
@@ -21,6 +20,7 @@ from .spinbox import SiriusSpinbox
 from .state_button import PyDMStateButton
 from .label import SiriusLabel
 from .led import SiriusLedState
+from .image import PyDMImageViewBase
 
 
 class SiriusProcessImage(QWidget):
