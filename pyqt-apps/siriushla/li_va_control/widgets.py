@@ -2,7 +2,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox
 from qtpy.QtGui import QPainter, QBrush, QPen, QColor
-from ..widgets import PyDMLedMultiChannel
+from ..widgets import PyDMLedMultiChannel, PyDMLed
 
 
 class LedLegend(QWidget):
@@ -12,7 +12,7 @@ class LedLegend(QWidget):
         """."""
         super().__init__(parent=parent)
 
-        if shape != 2:
+        if shape != PyDMLed.ShapeMap.Round:
             size = [12, 12]
         else:
             size = [25, 10]
@@ -25,13 +25,13 @@ class LedLegend(QWidget):
 
     def getShape(self, painter, pos, size):
         """ Draw different shapes of led """
-        if self.shape == 1:
+        if self.shape == PyDMLed.ShapeMap.Circle:
             painter.drawEllipse(
                 pos[0], pos[1], size[0], size[1])
-        elif self.shape == 2:
+        elif self.shape == PyDMLed.ShapeMap.Round:
             painter.drawRoundedRect(
                 pos[0], pos[1], size[0], size[1], 3, 15)
-        elif self.shape == 3:
+        elif self.shape == PyDMLed.ShapeMap.Square:
             painter.drawRect(
                 pos[0], pos[1], size[0], size[1])
         return painter
