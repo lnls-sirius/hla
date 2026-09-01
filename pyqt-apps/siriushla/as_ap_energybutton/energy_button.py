@@ -1,6 +1,6 @@
 """Interface to set dipole energies with constant normalization."""
 
-from qtpy.QtCore import Slot, QVariant
+from qtpy.QtCore import Slot
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QPushButton, \
     QHBoxLayout, QLabel
 from qtpy.QtGui import QPalette, QColor
@@ -192,7 +192,7 @@ class EnergyButton(QWidget):
     def _read_fail(self, item):
         self._items_fail.append(item)
 
-    @Slot(str, QVariant)
+    @Slot(str, object)
     def _read_success(self, item, value):
         self._items_success.append((item, value))
 
