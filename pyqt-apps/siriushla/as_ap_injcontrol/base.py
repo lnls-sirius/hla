@@ -2,7 +2,7 @@
 import os as _os
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtSvg import QSvgWidget
+from qtpy.QtSvgWidgets import QSvgWidget
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, \
     QLabel, QPushButton, QCheckBox, QSizePolicy as QSzPlcy, QGroupBox, \
     QButtonGroup, QMenuBar
