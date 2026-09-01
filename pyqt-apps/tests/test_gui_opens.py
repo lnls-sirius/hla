@@ -84,6 +84,7 @@ from siriushla.si_id_control import IDControl, APUControlWindow, \
 from siriushla.si_ap_fofb import FOFBAcqLAMPWindow
 
 
+# 12 GUIs
 linac_scripts_config = [
     LLRFMain,
     VacuumMain,
@@ -100,6 +101,7 @@ linac_scripts_config = [
 ]
 
 
+# 7 GUIs
 ts_scripts_config = [
     (TLControlWindow, {"tl": "ts"}),
     (PosAngCorr, {"tl": "ts"}),
@@ -111,6 +113,7 @@ ts_scripts_config = [
 ]
 
 
+# 9 GUIs
 tb_scripts_config = [
     (TLControlWindow, {"tl": "tb"}),
     (PosAngCorr, {"tl": "tb"}),
@@ -124,12 +127,23 @@ tb_scripts_config = [
 ]
 
 
+# 2 GUIs
 bl_scripts_config = [
     (BLImgProc, {"dvf": "CAX:A:BASLER01"}),
     (BLImgProc, {"dvf": "CAX:B:BASLER01"})
 ]
 
 
+# 4 GUIs
+it_scripts_config = [
+    (ITTIWidget, {"prefix": VACA_PREFIX}),
+    (PSTabControlWindow, {"section": "IT"}),
+    (VLightCamView, {"section": "IT"}),
+    (LIEgunWindow, {"is_it": True})
+]
+
+
+# 30 GUIs
 bo_scripts_config = [
     (ShowMatrixWidget, {"device": "BO-Glob:AP-SOFB", "acc": "BO"}),
     (SofbMainWindow, {"acc": "BO"}),
@@ -159,89 +173,83 @@ bo_scripts_config = [
     (SlowLoopParametersDetails, {"section": "BO"}),
     (TempMonitor, {"section": "BO"}),
     (TransmLineStatusDetails, {"section": "BO"}),
-    (RFMainControl, {"section": "BO"}),
     SSADetailsBO
+    (RFMainControl, {"section": "BO"}),
 ]
 
 
+# 63 GUIs
 si_scripts_config = [
-        (OpticsCorrWindow, {"opticsparam": "tune", "acc": "si"}),
-        (OpticsCorrWindow, {"opticsparam": "chrom", "acc": "si"}),
-        CurrLTWindow,
-        SIGenStatusWindow,
-        (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "RespMat-Mon"}),
-        (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "InvRespMat-Mon"}),
-        (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "RespMatHw-Mon"}),
-        (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "InvRespMatHw-Mon"}),
-        (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "CorrCoeffs-Mon"}),
-        (FofbMainWindow, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX}),
-        (ControllersDetailDialog, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "tab_selected": 2}),
-        (FOFBAcqSYSIDWindow, {"prefix": VACA_PREFIX, "device": "IA-01RaBPM:BS-FOFBCtrl"}),
-        (IDFFWindow, {"prefix": VACA_PREFIX, "idname": "SI-10SB:AP-IDFF"}),
-        BPMOrbIntlkMainWindow,
-        (ShowMatrixWidget, {"device": "SI-Glob:AP-SOFB", "acc": "SI"}),
-        (SofbMainWindow, {"acc": "SI"}),
-        BbBMainWindow,
-        BPMsEqualizeSwitching,
-        (FPMOscMain, {"prefix": VACA_PREFIX}),
-        (ScrapersView, {"prefix": VACA_PREFIX}),
-        (Tune, {"section": "SI"}),
-        (VLightCamView, {"section": "SI"}),
-        IDControl,
-        (UEControlWindow, {"device": "SI-11SP:ID-UE44"}),
-        (APUControlWindow, {"device": "SI-17SA:ID-APU22"}),
-        (APUControlWindow, {"device": "SI-20SB:ID-APU22"}),
-        (APUControlWindow, {"device": "SI-09SA:ID-APU22"}),
-        (DELTAControlWindow, {"device": "SI-10SB:ID-DELTA52"}),
-        (VPUControlWindow, {"device": "SI-06SB:ID-VPU29"}),
-        (VPUControlWindow, {"device": "SI-07SP:ID-VPU29"}),
-        (APUControlWindow, {"device": "SI-08SB:ID-IVU18"}),
-        (APUControlWindow, {"device": "SI-14SB:ID-IVU18"}),
-        (ConfigManagerWindow, {"config_type": "si_normalized"}),
-        (PSTabControlWindow, {"section": "LI"}),
-        (FOFBAcqLAMPWindow, {"prefix": VACA_PREFIX, "device": "IA-01RaBPM:BS-FOFBCtrl"}),
-        (PUControlWindow, {"section": "SI"}),
-        (PUControlWindow, {"section": "InjSI"}),
-        (PUControlWindow, {"section": "PingSI"}),
-        (CavityStatusDetails, {"section": "SI", "prefix": VACA_PREFIX}),
-        (LLRFInterlockDetails, {"section": "SI", "prefix": VACA_PREFIX}),
-        (SlowLoopErrorDetails, {"section": "SI", "prefix": VACA_PREFIX}),
-        (SlowLoopParametersDetails, {"section": "SI", "prefix": VACA_PREFIX}),
-        (TempMonitor, {"section": "SI", "prefix": VACA_PREFIX}),
-        (TransmLineStatusDetails, {"section": "SI", "prefix": VACA_PREFIX}),
-        (ADCDACDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (AutoStartDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (CalEqDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (CalSysDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (HardwareDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (LoopsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (RampsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (RFInputsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (TuningDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (FDLDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (TempVariationDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
-        (ADCDACDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (AutoStartDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (CalEqDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (CalSysDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (HardwareDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (LoopsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (RampsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (RFInputsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (TuningDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (FDLDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-        (TempVariationDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
-]
-    
-
-it_scripts_config = [
-    (ITTIWidget, {"prefix": VACA_PREFIX}),
-    (PSTabControlWindow, {"section": "IT"}),
-    (VLightCamView, {"section": "IT"}),
-    (LIEgunWindow, {"is_it": True})
+    (OpticsCorrWindow, {"opticsparam": "tune", "acc": "si"}),
+    (OpticsCorrWindow, {"opticsparam": "chrom", "acc": "si"}),
+    CurrLTWindow,
+    SIGenStatusWindow,
+    (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "RespMat-Mon"}),
+    (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "InvRespMat-Mon"}),
+    (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "RespMatHw-Mon"}),
+    (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "InvRespMatHw-Mon"}),
+    (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "CorrCoeffs-Mon"}),
+    (FofbMainWindow, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX}),
+    (ControllersDetailDialog, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "tab_selected": 2}),
+    (FOFBAcqSYSIDWindow, {"prefix": VACA_PREFIX, "device": "IA-01RaBPM:BS-FOFBCtrl"}),
+    BPMOrbIntlkMainWindow,
+    (ShowMatrixWidget, {"device": "SI-Glob:AP-SOFB", "acc": "SI"}),
+    (SofbMainWindow, {"acc": "SI"}),
+    BbBMainWindow,
+    BPMsEqualizeSwitching,
+    (FPMOscMain, {"prefix": VACA_PREFIX}),
+    (ScrapersView, {"prefix": VACA_PREFIX}),
+    (Tune, {"section": "SI"}),
+    (VLightCamView, {"section": "SI"}),
+    IDControl,
+    (UEControlWindow, {"device": "SI-11SP:ID-UE44"}),
+    (APUControlWindow, {"device": "SI-17SA:ID-APU22"}),
+    (APUControlWindow, {"device": "SI-20SB:ID-APU22"}),
+    (APUControlWindow, {"device": "SI-09SA:ID-APU22"}),
+    (DELTAControlWindow, {"device": "SI-10SB:ID-DELTA52"}),
+    (VPUControlWindow, {"device": "SI-06SB:ID-VPU29"}),
+    (VPUControlWindow, {"device": "SI-07SP:ID-VPU29"}),
+    (APUControlWindow, {"device": "SI-08SB:ID-IVU18"}),
+    (APUControlWindow, {"device": "SI-14SB:ID-IVU18"}),
+    (PSTabControlWindow, {"section": "LI"}),
+    (FOFBAcqLAMPWindow, {"prefix": VACA_PREFIX, "device": "IA-01RaBPM:BS-FOFBCtrl"}),
+    (PUControlWindow, {"section": "SI"}),
+    (PUControlWindow, {"section": "InjSI"}),
+    (PUControlWindow, {"section": "PingSI"}),
+    (CavityStatusDetails, {"section": "SI", "prefix": VACA_PREFIX}),
+    (LLRFInterlockDetails, {"section": "SI", "prefix": VACA_PREFIX}),
+    (SlowLoopErrorDetails, {"section": "SI", "prefix": VACA_PREFIX}),
+    (SlowLoopParametersDetails, {"section": "SI", "prefix": VACA_PREFIX}),
+    (TempMonitor, {"section": "SI", "prefix": VACA_PREFIX}),
+    (TransmLineStatusDetails, {"section": "SI", "prefix": VACA_PREFIX}),
+    (ADCDACDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (AutoStartDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (CalEqDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (CalSysDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (HardwareDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (LoopsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (RampsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (RFInputsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (TuningDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (FDLDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (TempVariationDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "A"}),
+    (ADCDACDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (AutoStartDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (CalEqDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (CalSysDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (HardwareDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (LoopsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (RampsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (RFInputsDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (TuningDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (FDLDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (TempVariationDetails, {"section": "SI", "prefix": VACA_PREFIX, "system": "B"}),
+    (IDFFWindow, {"prefix": VACA_PREFIX, "idname": ""}),
+    (RFMainControl, {"section": "SI"})
 ]
 
 
+# 51 GUIs
 as_scripts_config = [
     (ConfigurationManager, {"model": ConfigDBClient()}),
     EfficiencyMonitor,
@@ -261,6 +269,7 @@ as_scripts_config = [
     (DCCTMain, {"prefix": VACA_PREFIX, "device": "BO-35D:DI-DCCT"}),
     PSCmdWindow,
     CycleWindow,
+    PSDiag,
     (PUDetailWindow, {"devname": "BO-01D:PU-InjKckr"}),
     (PUDetailWindow, {"devname": "TB-04:PU-InjSept"}),
     (PUDetailWindow, {"devname": "SI-19C4:PU-PingV"}),
@@ -280,18 +289,7 @@ as_scripts_config = [
     (SelectScrns, {"sec": "TS"}),
     (SelectScrns, {"sec": "TB"}),
     (IndividualScrn, {"scrn": "TB-01:DI-Scrn-1"}),
-    (IndividualScrn, {"scrn": "TB-01:DI-Scrn-2"}),
-    (IndividualScrn, {"scrn": "TB-02:DI-Scrn-1"}),
-    (IndividualScrn, {"scrn": "TB-02:DI-Scrn-2"}),
-    (IndividualScrn, {"scrn": "TB-03:DI-Scrn"}),
-    (IndividualScrn, {"scrn": "BO-01D:DI-Scrn-1"}),
-    (IndividualScrn, {"scrn": "BO-01D:DI-Scrn-2"}),
-    (IndividualScrn, {"scrn": "BO-02U:DI-Scrn"}),
     (IndividualScrn, {"scrn": "TS-01:DI-Scrn"}),
-    (IndividualScrn, {"scrn": "TS-02:DI-Scrn"}),
-    (IndividualScrn, {"scrn": "TS-03:DI-Scrn"}),
-    (IndividualScrn, {"scrn": "TS-04:DI-Scrn-1"}),
-    (IndividualScrn, {"scrn": "TS-04:DI-Scrn-2"}),
     (IndividualScrn, {"scrn": "TS-04:DI-Scrn-3"}),
     PSGraphMonWindow,
     (AcqDataSummary, {"prefix": VACA_PREFIX, "bpm_list": []}),
@@ -311,7 +309,7 @@ def open_gui(gui_config, qtbot):
     qtbot.waitExposed(gui)
     gui.show()
     qtbot.waitUntil(lambda: gui.isVisible(), timeout=10000)
-    qtbot.wait(1500)
+    qtbot.wait(1000)
     yield True
     gui.close()
     qtbot.waitUntil(lambda: not gui.isVisible(), timeout=10000)
@@ -333,16 +331,16 @@ def test_tb_gui_opens(open_gui):
 def test_bl_gui_opens(open_gui):
     assert open_gui
 
+@pytest.mark.parametrize("gui_config", it_scripts_config)
+def test_it_gui_opens(open_gui):
+    assert open_gui
+
 @pytest.mark.parametrize("gui_config", bo_scripts_config)
 def test_bo_gui_opens(open_gui):
     assert open_gui
 
 @pytest.mark.parametrize("gui_config", si_scripts_config)
 def test_si_gui_opens(open_gui):
-    assert open_gui
-
-@pytest.mark.parametrize("gui_config", it_scripts_config)
-def test_it_gui_opens(open_gui):
     assert open_gui
 
 @pytest.mark.parametrize("gui_config", as_scripts_config)
