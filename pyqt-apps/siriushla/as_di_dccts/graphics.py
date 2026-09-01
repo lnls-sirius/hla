@@ -154,7 +154,7 @@ class DCCTMonitor(QWidget):
         self.cb_timeaxis = QCheckBox('Use time axis', self)
         self.cb_timeaxis.setChecked(True)
         self.cb_timeaxis.stateChanged.connect(self.updateRawXAxis)
-        self.cb_timeaxis.setLayoutDirection(Qt.RightToLeft)
+        self.cb_timeaxis.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         lay.addWidget(self.cb_timeaxis, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.setRowStretch(2, 1)
 
