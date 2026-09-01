@@ -44,7 +44,7 @@ class MainWindow(SiriusMainWindow):
         return self._csorb.isring
 
     def setupui(self):
-        self.setWindowModality(Qt.WindowModal)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         self.setWindowTitle(self.acc + " - SOFB")
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)

@@ -52,7 +52,7 @@ class DetachableTabWidget(QTabWidget):
 
         # Create a new detached tab window
         detachedTab = DetachedTab(name, text, contentWidget, parent=self)
-        detachedTab.setWindowModality(Qt.NonModal)
+        detachedTab.setWindowModality(Qt.WindowModality.WindowModality.NonModal)
         detachedTab.setWindowIcon(icon)
         detachedTab.setGeometry(contentWidgetRect)
         detachedTab.onAttachSignal.connect(self.attachTabSlot)

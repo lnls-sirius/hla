@@ -56,7 +56,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
 
     def setupui(self):
         """."""
-        self.setWindowModality(Qt.WindowModal)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         self.setWindowTitle("SI - BPMs - Equalize Switching")
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
