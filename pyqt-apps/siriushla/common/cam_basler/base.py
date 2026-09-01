@@ -6,8 +6,8 @@ import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
     QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
-from pydm.widgets import PyDMImageView, PyDMPushButton, PyDMEnumComboBox, \
-    PyDMLineEdit
+from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, \
+    PyDMLineEdit, PyDMImageView
 from pydm.widgets.channel import PyDMChannel
 
 from siriushla.widgets import PyDMStateButton, SiriusLedState, SiriusLabel, \

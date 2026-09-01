@@ -6,7 +6,7 @@ from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QLabel, QGridLayout, QStackedWidget, \
     QSizePolicy, QPushButton
-from pydm.widgets import PyDMPushButton, PyDMImageView, PyDMLineEdit, \
+from pydm.widgets import PyDMPushButton, PyDMLineEdit, \
     enum_button
 import qtawesome as qta
 from .. import util as _util
@@ -15,6 +15,7 @@ from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, \
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN
 from .motorBtn import MotorBtn
+from siriushla.common.cam_basler import PyDMImageViewBase
 
 
 class GeneralFunctions():
@@ -113,7 +114,7 @@ class GeneralFunctions():
         group = QGroupBox()
         ss_vlay = QVBoxLayout()
 
-        image_wid = PyDMImageView(
+        image_wid = PyDMImageViewBase(
             image_channel=self.getPvName(device, screen['data']),
             width_channel=self.getPvName(device, screen['width']))
 
