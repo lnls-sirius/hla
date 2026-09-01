@@ -392,7 +392,7 @@ class TuneSpectraControls(QWidget):
             glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             # label
             self.lb_reg[i].setMouseTracking(True)
-            self.lb_reg[i].setTextInteractionFlags(Qt.TextEditorInteraction)
+            self.lb_reg[i].setTextInteractionFlags(Qt.TextInteractionFlag.TextEditorInteraction)
             self.lb_reg[i].setStyleSheet(
                 'min-height:1.29em; min-width: 20em; max-width: 20em;')
             glay_reg.addWidget(self.lb_reg[i], i, 2, alignment=Qt.AlignmentFlag.AlignLeft)

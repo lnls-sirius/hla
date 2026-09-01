@@ -39,7 +39,7 @@ class SiriusLabel(TextFormatter, PyDMWidget, QLabel):
         QLabel.__init__(self, parent, **kws)
         self.app = QApplication.instance()
         self.setTextFormat(Qt.PlainText)
-        self.setTextInteractionFlags(Qt.NoTextInteraction)
+        self.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
         self.setText("######")
         self._display_format_type = self.DisplayFormat.Default
         self._string_encoding = "utf_8"
