@@ -349,7 +349,7 @@ class HLTriggerDetailed(BaseWidget):
         text = '<' if show else '>'
         but.setText(text)
         tooltip = ('Hide' if show else 'Show') + but.toolTip()[4:]
-        self.sender().setToolTip(tooltip)
+        but.setToolTip(tooltip)
         parent = but.parent()
         while parent is not None:
             parent.adjustSize()
