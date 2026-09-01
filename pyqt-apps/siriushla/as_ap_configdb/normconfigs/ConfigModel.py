@@ -201,12 +201,12 @@ class ConfigModel(QAbstractTableModel):
             pass
         if role != Qt.ItemDataRole.DisplayRole:
             return object()
-        if orientation == Qt.Horizontal:
+        if orientation == Qt.Orientation.Horizontal:
             if not self._configurations[section].dirty:
                 return self._configurations[section].name
             else:
                 return self._configurations[section].name + "*"
-        elif orientation == Qt.Vertical:
+        elif orientation == Qt.Orientation.Vertical:
             if role == Qt.ItemDataRole.DisplayRole:
                 pvname = self._vertical_header[section]['name']
                 vheader = "{}".format(pvname)
@@ -239,7 +239,7 @@ class ConfigModel(QAbstractTableModel):
             # Update Value
             self._configurations[col].setValue(pvname, value)
             # Update view
-            self.headerDataChanged.emit(Qt.Horizontal, col, col)
+            self.headerDataChanged.emit(Qt.Orientation.Horizontal, col, col)
             self.dataChanged.emit(index, index)
             return True
         return False
@@ -354,7 +354,7 @@ class ConfigModel(QAbstractTableModel):
         idx1 = self.index(0, column)
         idx2 = self.index(self.rowCount() - 1, column)
         self.dataChanged.emit(idx1, idx2)
-        self.headerDataChanged.emit(Qt.Horizontal, column, column)
+        self.headerDataChanged.emit(Qt.Orientation.Horizontal, column, column)
 
     def renameConfiguration(self, column, new_name):
         """Change configuration name."""
@@ -449,7 +449,7 @@ class ConfigModel(QAbstractTableModel):
                     row, config_name, old_value, value, True)))
         # Update view
         self.headerDataChanged.emit(
-            Qt.Horizontal, index.column(), index.column())
+            Qt.Orientation.Horizontal, index.column(), index.column())
         self.dataChanged.emit(index, index)
 
     def cleanUndo(self, column):

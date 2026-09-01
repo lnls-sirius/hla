@@ -496,7 +496,7 @@ class IDFFWindow(SiriusMainWindow):
             self, section='SI', device='corrector-idff',
             subsection=self.dev_pref.sub,
             idffsubgroup=idffsubgroup,
-            orientation=Qt.Vertical)
+            orientation=Qt.Orientation.Vertical)
         for wid in widget.get_summary_widgets():
             detail_bt = wid.get_detail_button()
             psname = detail_bt.text()

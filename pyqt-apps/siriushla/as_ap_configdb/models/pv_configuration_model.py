@@ -58,7 +58,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role):
         """Return header."""
-        if orientation == Qt.Horizontal:
+        if orientation == Qt.Orientation.Horizontal:
             if section == 0:
                 return 'PV'
             elif section == 1:

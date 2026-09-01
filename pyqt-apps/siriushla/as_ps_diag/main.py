@@ -402,7 +402,7 @@ class LogTable(QTreeView, PyDMWidget):
         self._model.setHorizontalHeaderLabels(self.headerLabels)
         self.setModel(self._model)
         self.setUniformRowHeights(True)
-        self.setHeader(QHeaderView(Qt.Horizontal))
+        self.setHeader(QHeaderView(Qt.Orientation.Horizontal))
         for idx, width in enumerate(label2width.values()):
             self.header().resizeSection(idx, width)
         self.header().resizeSections(QHeaderView.Fixed)

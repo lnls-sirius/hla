@@ -15,7 +15,7 @@ class PyDMScrollBar(QDoubleScrollBar, TextFormatter, PyDMWritableWidget):
         The parent widget for the scroll bar
     init_channel : str, optional
         The channel to be used by the widget.
-    orientation : Qt.Horizontal, Qt.Vertical
+    orientation : Qt.Orientation.Horizontal, Qt.Orientation.Vertical
         Orientation of the scroll bar
     precision : int
         Precision to be use. Used to calculate size of the scroll bar step
@@ -26,7 +26,7 @@ class PyDMScrollBar(QDoubleScrollBar, TextFormatter, PyDMWritableWidget):
     connected_signal = Signal()
     disconnected_signal = Signal()
 
-    def __init__(self, parent=None, orientation=Qt.Horizontal,
+    def __init__(self, parent=None, orientation=Qt.Orientation.Horizontal,
                  init_channel=None):
         """Init."""
         QDoubleScrollBar.__init__(self, orientation, parent)

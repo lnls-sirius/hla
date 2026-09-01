@@ -65,9 +65,9 @@ class ConfigDbTableModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role):
         """Return header."""
-        if orientation == Qt.Horizontal and role == Qt.ItemDataRole.DisplayRole:
+        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self.horizontalHeader[section]
-        elif orientation == Qt.Vertical and role == Qt.ItemDataRole.DisplayRole:
+        elif orientation == Qt.Orientation.Vertical and role == Qt.ItemDataRole.DisplayRole:
             return section + 1
 
         return None

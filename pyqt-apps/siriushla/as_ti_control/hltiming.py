@@ -55,7 +55,7 @@ class TimingMain(SiriusMainWindow):
         globpars = self.setglobalparameters()
         gridlayout.addWidget(globpars, 0, 0)
 
-        splitter = QSplitter(Qt.Horizontal)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
         gridlayout.addWidget(splitter, 1, 0)
         events = self.setevents()
         events.setObjectName('events')

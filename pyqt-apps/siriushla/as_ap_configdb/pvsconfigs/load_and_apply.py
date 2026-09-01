@@ -265,7 +265,7 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
 
     def _setup_ui(self):
         # Set central widget
-        self._central_widget = QSplitter(Qt.Horizontal)
+        self._central_widget = QSplitter(Qt.Orientation.Horizontal)
         self._central_widget.setObjectName('CentralWidget')
         self.setCentralWidget(self._central_widget)
 

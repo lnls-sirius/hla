@@ -132,7 +132,7 @@ class JsonTreeModel(QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         """Return data stored in root item."""
-        if orientation == Qt.Horizontal and role == Qt.ItemDataRole.DisplayRole:
+        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self._rootItem.data(section)
 
         return None

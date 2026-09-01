@@ -337,7 +337,7 @@ class BasePSControlWidget(QWidget):
         self.pwrsupplies_layout = self._getSplitter()
         self.layout.addWidget(self.pwrsupplies_layout)
         if len(self.groups) == 3:
-            splitt_v = QSplitter(Qt.Vertical)
+            splitt_v = QSplitter(Qt.Orientation.Vertical)
 
         # Build power supply Layout
         # Create group boxes and pop. layout
@@ -411,8 +411,8 @@ class BasePSControlWidget(QWidget):
 
     def _getSplitter(self):
         if self._orientation == self.HORIZONTAL:
-            return QSplitter(Qt.Horizontal)
-        return QSplitter(Qt.Vertical)
+            return QSplitter(Qt.Orientation.Horizontal)
+        return QSplitter(Qt.Orientation.Vertical)
 
     def _getVisibleProps(self):
         """Default visible properties."""

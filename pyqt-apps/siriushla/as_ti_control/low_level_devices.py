@@ -110,7 +110,7 @@ class EVG(BaseWidget):
         conftab.addTab(self.intlkmap_wid, 'Interlock Map')
 
         # outtab
-        splitter = QSplitter(Qt.Horizontal)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
         splitter.setContentsMargins(0, 0, 0, 0)
         splitter.setHandleWidth(20)
         mylayout.addWidget(splitter, 3, 0, 1, 2)
@@ -2070,7 +2070,7 @@ class _EVR_EVE(BaseWidget):
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
         # outputs
-        splitter = QSplitter(Qt.Horizontal)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
         splitter.setContentsMargins(0, 0, 0, 0)
         splitter.setHandleWidth(20)
         self.my_layout.addWidget(splitter, 3, 0)

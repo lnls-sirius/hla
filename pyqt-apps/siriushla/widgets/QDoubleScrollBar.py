@@ -17,7 +17,7 @@ class QDoubleScrollBar(QScrollBar):
     sliderMoved = Signal(float)
     valueChanged = Signal(float)
 
-    def __init__(self, orientation=Qt.Horizontal, parent=None):
+    def __init__(self, orientation=Qt.Orientation.Horizontal, parent=None):
         """Init."""
         self._decimals = 0
         self._scale = 1
