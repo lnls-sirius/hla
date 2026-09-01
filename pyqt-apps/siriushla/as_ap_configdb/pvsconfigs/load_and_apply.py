@@ -229,7 +229,7 @@ class SelectConfigWidget(QWidget):
     @current_config_type.setter
     def current_config_type(self, config_type):
         # init with global_config, if it exists
-        index = self._type_cb.findText(config_type, Qt.MatchFixedString)
+        index = self._type_cb.findText(config_type, Qt.MatchFlag.MatchFixedString)
         if index >= 0:
             self._type_cb.setCurrentText(config_type)
 
