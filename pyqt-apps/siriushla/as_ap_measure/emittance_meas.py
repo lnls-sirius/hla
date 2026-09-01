@@ -18,6 +18,7 @@ from qtpy.QtCore import Qt, Slot
 
 from pyqtgraph import PlotCurveItem, mkPen
 
+from pydm.widgets import PyDMImageView
 from pydm.widgets.logdisplay import PyDMLogDisplay
 
 import mathphys.constants as _consts
@@ -27,7 +28,6 @@ from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
     QSpinBoxPlus, QDoubleSpinBoxPlus
-from siriushla.common.cam_basler import PyDMImageViewBase
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams.update({
@@ -607,7 +607,7 @@ def _fit_gaussian(x, y, amp=None, mu=None, sigma=None, y0=None):
     return p_opt
 
 
-class ImageView(PyDMImageViewBase):
+class ImageView(PyDMImageView):
 
     def __init__(self, callback, **kwargs):
         self.callback = callback

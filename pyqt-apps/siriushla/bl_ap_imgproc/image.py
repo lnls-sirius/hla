@@ -5,14 +5,14 @@ import numpy as _np
 from qtpy.QtGui import QColor
 from pyqtgraph import PlotCurveItem, mkPen
 
-from siriushla.common.cam_basler import PyDMImageViewBase
+from pydm.widgets import PyDMImageView
 
 from ..widgets import SiriusConnectionSignal
 
 from .util import PVS_IMGPROCCTRL
 
 
-class DVFImageView(PyDMImageViewBase):
+class DVFImageView(PyDMImageView):
     """Image Processing Window."""
 
     def __init__(self, device, pvname, parent=None):

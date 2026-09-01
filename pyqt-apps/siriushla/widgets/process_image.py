@@ -10,8 +10,8 @@ from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
 import qtawesome as qta
 from pyqtgraph import PlotCurveItem, mkPen
 
-from pydm.widgets import PyDMEnumComboBox, PyDMPushButton
-from siriushla.common.cam_basler import PyDMImageViewBase
+from pydm.widgets import PyDMImageView, PyDMEnumComboBox, PyDMPushButton
+
 from siriuspy.namesys import SiriusPVName
 
 from ..util import connect_window
@@ -33,7 +33,7 @@ class SiriusProcessImage(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        self.image_view = PyDMImageViewBase(
+        self.image_view = PyDMImageView(
             parent=self,
             image_channel=self._dev+':Image-RB',
             width_channel=self._dev+':Width-RB')
