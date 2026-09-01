@@ -1276,7 +1276,7 @@ class PSCmdWindow(SiriusMainWindow):
                 for psn in psname2check:
                     item2check = self.seltrees['PS']._item_map[psn]
                     if item2check.checkState(0) != state2set:
-                        item2check.setData(0, Qt.CheckStateRole, state2set)
+                        item2check.setData(0, Qt.ItemDataRole.CheckStateRole, state2set)
                 self.seltrees['PS'].tree.blockSignals(False)
 
         self._needs_update_setup = True

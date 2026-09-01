@@ -65,7 +65,7 @@ class QTreeItem(QTreeWidgetItem):
                     for chil in range(self.childCount()):
                         if not self.child(chil).isHidden():
                             self.child(chil).setData(
-                                column, Qt.CheckStateRole, value)
+                                column, Qt.ItemDataRole.CheckStateRole, value)
         else:
             super().setData(column, role, value)
 
@@ -95,7 +95,7 @@ class QTreeItem(QTreeWidgetItem):
         else:
             status = mystate
 
-        super().setData(column, Qt.CheckStateRole, status)
+        super().setData(column, Qt.ItemDataRole.CheckStateRole, status)
         if isinstance(self.parent(), QTreeItem):
             self.parent().childChecked(self, column, status)
 

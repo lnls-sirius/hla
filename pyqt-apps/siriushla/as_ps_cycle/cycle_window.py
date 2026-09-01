@@ -498,7 +498,7 @@ class CycleWindow(SiriusMainWindow):
             for psn in psname2check:
                 item2check = self.pwrsupplies_tree._item_map[psn]
                 if item2check.checkState(0) != state2set:
-                    item2check.setData(0, Qt.CheckStateRole, state2set)
+                    item2check.setData(0, Qt.ItemDataRole.CheckStateRole, state2set)
             self.pwrsupplies_tree.tree.blockSignals(False)
         else:
             if (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
@@ -511,7 +511,7 @@ class CycleWindow(SiriusMainWindow):
                 state2change = item2check.checkState(0)
                 if state2change != state2set:
                     self.pwrsupplies_tree.tree.blockSignals(True)
-                    item2check.setData(0, Qt.CheckStateRole, state2set)
+                    item2check.setData(0, Qt.ItemDataRole.CheckStateRole, state2set)
                     self.pwrsupplies_tree.tree.blockSignals(False)
 
         self._prepared.update(self._prepared_init_vals)
