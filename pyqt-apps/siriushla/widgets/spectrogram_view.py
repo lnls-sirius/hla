@@ -598,15 +598,16 @@ class SiriusSpectrogramView(
         new_image : np.ndarray
             The new image data.  This can be a flat 1D array, or a 2D array.
         """
-        if new_image is None or new_image.size == 0:
-            return
-        logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
-        self.image_waveform = new_image
-        if not self._image_height and self._image_width:
-            self._image_height = new_image.size/self._image_width
-        elif not self._image_width and self._image_height:
-            self._image_width = new_image.size/self._image_height
-        self.needs_redraw = True
+        if isinstance(new_image, np.ndarray):
+            if new_image is None or new_image.size == 0:
+                return
+            logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
+            self.image_waveform = new_image
+            if not self._image_height and self._image_width:
+                self._image_height = new_image.size/self._image_width
+            elif not self._image_width and self._image_height:
+                self._image_width = new_image.size/self._image_height
+            self.needs_redraw = True
 
     @Slot(np.ndarray)
     @Slot(float)

@@ -616,8 +616,9 @@ class ImageView(PyDMImageView):
 
     @Slot(np.ndarray)
     def image_value_changed(self, image):
-        image = self.callback(image, self._image_width)
-        super().image_value_changed(image)
+        if isinstance(image, np.ndarray):
+            image = self.callback(image, self._image_width)
+            super().image_value_changed(image)
 
 
 class ProcessImage(QWidget):

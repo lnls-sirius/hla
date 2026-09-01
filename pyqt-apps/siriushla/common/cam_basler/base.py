@@ -14,7 +14,15 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState, SiriusLabel, \
     SiriusSpinbox
 
 
-class SiriusImageView(PyDMImageView):
+class PyDMImageViewBase(PyDMImageView):
+
+    @Slot(np.ndarray)
+    def image_value_changed(self, image):
+        if isinstance(image, np.ndarray):
+            super().image_value_changed(image)
+
+
+class SiriusImageView(PyDMImageViewBase):
     """A PyDMImageView with methods to handle screens calibration grids."""
 
     receivedData = Signal()
