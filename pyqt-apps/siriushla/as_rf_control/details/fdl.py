@@ -38,12 +38,12 @@ class FDLDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QHBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         controls = QGroupBox('Controls', self)
         controls.setLayout(self._controlsLayout())
@@ -70,12 +70,12 @@ class FDLDetails(SiriusDialog):
 
         lay.addWidget(QLabel(
             '<h4>Perseus FDL Mode:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             0, 0)
         lay.addWidget(self.lb_mode, 0, 1)
         lay.addWidget(QLabel(
             '<h4>Force FDL Trigger (SW Interlock):</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             0, 3)
         lay.addWidget(self.bt_swtrig, 0, 4)
         lay.addWidget(self.led_swtrig, 0, 5)
@@ -88,12 +88,12 @@ class FDLDetails(SiriusDialog):
 
         lay.addWidget(QLabel(
             '<h4>IOC FDL Status:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             1, 0)
         lay.addWidget(self.lb_processing, 1, 1)
         lay.addWidget(QLabel(
             '<h4>Hardware Interlock:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             1, 3)
         lay.addWidget(self.led_hwtrig, 1, 5)
 
@@ -109,13 +109,13 @@ class FDLDetails(SiriusDialog):
 
         lay.addWidget(QLabel(
             '<h4>FDL Rearm:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
              2, 0)
         lay.addWidget(self.bt_rearm, 2, 1)
-        lay.addWidget(self.led_rearm, 2, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(self.led_rearm, 2, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(QLabel(
             '<h4>FDL ADCs Raw Data:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             2, 3)
         lay.addWidget(self.bt_raw, 2, 4)
         lay.addWidget(self.led_raw, 2, 5)
@@ -134,7 +134,7 @@ class FDLDetails(SiriusDialog):
         qty_lay_rb = QHBoxLayout()
         qty_lay_rb.setSpacing(1)
         qty_lay_rb.addWidget(QLabel(
-            '<h4>Qty:</h4>', alignment=Qt.AlignRight | Qt.AlignVCenter))
+            '<h4>Qty:</h4>', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter))
         qty_lay_rb.addWidget(self.lb_qty_rb)
 
         self.lb_size = SiriusLabel(
@@ -146,16 +146,16 @@ class FDLDetails(SiriusDialog):
         size_dur_lay = QHBoxLayout()
         size_dur_lay.addWidget(QLabel(
             '<h4>Size:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter))
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter))
         size_dur_lay.addWidget(self.lb_size)
         size_dur_lay.addWidget(QLabel(
             '<h4>Duration:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter))
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter))
         size_dur_lay.addWidget(self.lb_duration)
 
         lay.addWidget(QLabel(
             '<h4>FDL Frame QTY:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             3, 0)
         lay.addLayout(qty_lay_sp, 3, 1)
         lay.addLayout(qty_lay_rb, 3, 2)
@@ -188,7 +188,7 @@ class FDLDetails(SiriusDialog):
 
         lay.addWidget(QLabel(
             '<h4>Trigger Delay:</h4>', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter),
             4, 0)
         lay.addWidget(sb_unit, 4, 1)
         lay.addLayout(delay_lay, 4, 2)
@@ -247,7 +247,7 @@ class FDLDetails(SiriusDialog):
                 y_channel=chn_amp,
                 x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1
             )
             self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
         if signal[2]:
@@ -256,7 +256,7 @@ class FDLDetails(SiriusDialog):
                 y_channel=chn_phs,
                 x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1
             )
             self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)
 

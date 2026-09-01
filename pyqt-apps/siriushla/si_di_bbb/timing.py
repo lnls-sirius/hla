@@ -27,7 +27,7 @@ class BbBTimingWidget(QWidget):
 
     def _setupUi(self):
         ld_timing = QLabel(
-            '<h3>Timing</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Timing</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Feedback Timing
         ld_adcdelay = QLabel('ADC Delay [ps]', self)

@@ -15,7 +15,7 @@ class EnergySetterWindow(SiriusMainWindow):
         super().__init__(parent)
         self._setup_ui()
         self.setWindowTitle('Energy Button Application')
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setObjectName('ASApp')
 
     def _setup_ui(self):

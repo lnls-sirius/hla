@@ -43,12 +43,12 @@ class PVConfigurationTableModel(QAbstractTableModel):
         except IndexError:
             return 0
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         """Return data at index."""
         if not index.isValid():
             return None
 
-        if role != Qt.DisplayRole:
+        if role != Qt.ItemDataRole.DisplayRole:
             return None
 
         column = index.column()
@@ -58,7 +58,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role):
         """Return header."""
-        if orientation == Qt.Horizontal:
+        if orientation == Qt.Orientation.Horizontal:
             if section == 0:
                 return 'PV'
             elif section == 1:
@@ -81,13 +81,13 @@ class PVConfigurationTableModel(QAbstractTableModel):
     def flags(self, index):
         """Override to make cells editable."""
         if not index.isValid():
-            return Qt.ItemIsEnabled
+            return Qt.ItemFlag.ItemIsEnabled
         if index.column() in (2, ):
             return Qt.ItemFlags(
-                QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
+                QAbstractTableModel.flags(self, index) | Qt.ItemFlag.ItemIsEditable)
         return QAbstractTableModel.flags(self, index)
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
         """Set data."""
         if not index.isValid():
             return False

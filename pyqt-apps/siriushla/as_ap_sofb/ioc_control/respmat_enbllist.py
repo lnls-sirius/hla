@@ -87,7 +87,7 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
 
     def get_widgets(self):
         widgets = list()
-        sz_polc = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sz_polc = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         for idx in range(len(self.devnames[self.dev][0])):
             wid = QWidget(self.parent())
             led = SiriusLedAlert()

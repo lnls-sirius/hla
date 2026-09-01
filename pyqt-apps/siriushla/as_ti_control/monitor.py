@@ -92,8 +92,8 @@ class LLButton(QWidget):
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 2, 0, 2)
         lay.setSpacing(4)
-        lay.addWidget(QLabel(name, self, alignment=Qt.AlignCenter))
-        lay.addWidget(led, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel(name, self, alignment=Qt.AlignmentFlag.AlignCenter))
+        lay.addWidget(led, alignment=Qt.AlignmentFlag.AlignCenter)
 
 
 class HLButton(QWidget):
@@ -176,7 +176,7 @@ class MonitorLL(QGroupBox):
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(12)
         lay.setVerticalSpacing(20)
-        align = Qt.AlignHCenter | Qt.AlignTop
+        align = Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop
         lay.addWidget(g1, 0, 0, 1, len(g3), align)
         for i, g in enumerate(g2):
             lay.addWidget(g, 1, i, align)
@@ -212,11 +212,11 @@ class MonitorLL(QGroupBox):
         painter = QPainter()
         painter.begin(self)
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.setPen(Qt.blue)
+        painter.setPen(Qt.GlobalColor.blue)
         pen = painter.pen()
         pen.setWidth(2)
         painter.setPen(pen)
-        painter.setBrush(Qt.blue)
+        painter.setBrush(Qt.GlobalColor.blue)
         painter.translate(p1)
         painter.rotate(angle)
         pt = (p2-p1)
@@ -238,7 +238,7 @@ class MonitorWindow(QWidget):
 
     def _setupui(self):
         self.title = QLabel(
-            '<h2>Timing Monitor</h2>', alignment=Qt.AlignCenter)
+            '<h2>Timing Monitor</h2>', alignment=Qt.AlignmentFlag.AlignCenter)
         vl = QVBoxLayout(self)
         vl.addWidget(self.title)
         vl.addWidget(MonitorLL(self, prefix=self.prefix))

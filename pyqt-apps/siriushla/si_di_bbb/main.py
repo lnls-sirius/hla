@@ -34,8 +34,7 @@ class BbBMainWindow(SiriusMainWindow):
 
     def _setupUi(self):
         self._ld_bbb = QLabel(
-            '<h3>BbB Control Window</h3>', self, alignment=Qt.AlignCenter
-        )
+            '<h3>BbB Control Window</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self._but_fbe = QPushButton('FBE', self)
 

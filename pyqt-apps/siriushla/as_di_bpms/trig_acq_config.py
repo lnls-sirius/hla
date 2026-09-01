@@ -6,13 +6,13 @@ from siriushla.as_di_bpms.settings import BPMAdvancedSettings
 from siriushla.common.afc_acq_core.trig_acq_config import AcqBaseWindow
 
 
-class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
+class BPMBaseTriggeredAcquisition(AcqBaseWindow):
     """BPM Base Triggered Acquisition window."""
 
     def __init__(self, parent=None, prefix='', bpm=''):
         AcqBaseWindow.__init__(self, parent=parent, prefix=prefix, device=bpm)
-        BaseWidget.__init__(
-            self, parent=parent, prefix=prefix, bpm=bpm,
+        self.base_widget = BaseWidget(
+            parent=parent, prefix=prefix, bpm=bpm,
             data_prefix=self.ACQCORE,
         )
         self._setupUi()
@@ -20,8 +20,8 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
-            ' Acquisitions </h2>', alignment=Qt.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+            ' Acquisitions </h2>', alignment=Qt.AlignmentFlag.AlignCenter)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
         self.wid_trig = self._triggersWidget()
@@ -85,12 +85,12 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
         wid_ratesconf = QTabWidget(self)
         for rate in ['FOFB', 'TbT', 'FAcq']:
             items = BPMAdvancedSettings.get_acqrate_props(rate)
-            grpbx = self._create_formlayout_groupbox('', items)
+            grpbx = self.base_widget._create_formlayout_groupbox('', items)
             wid_ratesconf.addTab(grpbx, rate)
         tabwid.addTab(wid_ratesconf, 'Acq.Rate Config.')
 
         # data triggered settings
-        wid_datatrig = self._create_formlayout_groupbox(
+        wid_datatrig = self.base_widget._create_formlayout_groupbox(
             '', (
                 ('DataTrigChan-Sel', 'Type of Rate as Trigger'),
                 ('TriggerDataSel-SP', 'Channel'),
@@ -106,7 +106,7 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
         tabwid = QTabWidget(self)
         for rate in ['FOFB', 'TbT', 'FAcq']:
             items = BPMAdvancedSettings.get_acqrate_props(rate)
-            grpbx = self._create_formlayout_groupbox('', items)
+            grpbx = self.base_widget._create_formlayout_groupbox('', items)
             tabwid.addTab(grpbx, rate)
         return tabwid
 
@@ -133,8 +133,8 @@ class PBPMBaseTriggeredAcquisition(AcqBaseWindow):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
-            ' Acquisitions < /h2 >', alignment=Qt.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+            ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
         self.wid_trig = self._triggersWidget()

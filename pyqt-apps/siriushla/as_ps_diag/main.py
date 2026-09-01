@@ -61,7 +61,7 @@ class PSDiag(SiriusMainWindow):
         for i, lab in enumerate([
                 '', 'PS\nConn?', 'Power\nState', 'Interlock',
                 'OpMode\nSlowRef?', 'Current\nDiff']):
-            label = QLabel(lab, panel, alignment=Qt.AlignCenter)
+            label = QLabel(lab, panel, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet('min-width:3.4em; max-width:3.4em;')
             panel_lay.addWidget(label, 0, i)
 
@@ -78,7 +78,7 @@ class PSDiag(SiriusMainWindow):
                 for label, filt in lips2filters.items():
                     ps_label = QLabel(
                         label, panel,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                        alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                     psnames = PSSearch.get_psnames(filters=filt)
                     ps_c2v = dict()
                     ilk_c2v = dict()
@@ -152,7 +152,7 @@ class PSDiag(SiriusMainWindow):
                     f = sec+'-'+filt['sub']+':'+psnames[0].dis+'-'+filt['dev']
                     ps_label = QLabel(
                         label, panel,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                        alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                     psconn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=psconn_chs)
                     ps_led = MyLedMultiChannel(
@@ -187,8 +187,8 @@ class PSDiag(SiriusMainWindow):
                         panel_lay.addWidget(diff_led, i, 5)
 
                     i += 1
-            panel_lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored,
-                              QSzPlcy.MinimumExpanding), i, 0)
+            panel_lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored,
+                              QSzPlcy.Policy.MinimumExpanding), i, 0)
             i += 1
 
         # Current State and Log Tables
@@ -208,11 +208,11 @@ class PSDiag(SiriusMainWindow):
                 prefix=self._prefix, propty='OpMode-Sts'))
         self._status = LogTable(cw, channels, table_label2px, is_status=True)
         self._status.setObjectName('status_table')
-        self._status.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self._status.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self._status.updated.connect(self._filter_table)
         self._log = LogTable(cw, channels, table_label2px)
         self._log.setObjectName('log_table')
-        self._log.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self._log.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self._tables_stack = QStackedLayout()
         self._tables_stack.addWidget(self._status)
         self._tables_stack.addWidget(self._log)
@@ -237,11 +237,11 @@ class PSDiag(SiriusMainWindow):
             if name == 'Value':
                 le.setStyleSheet(
                     '#'+name+'{min-width:'+width+'px;}')
-                le.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Maximum)
+                le.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Maximum)
             else:
                 le.setStyleSheet(
                     '#'+name+'{min-width:'+width+'px; max-width:'+width+'px;}')
-                le.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+                le.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
         self._scrollup_pb = QPushButton('↟', cw)
         self._scrollup_pb.setObjectName('scrollup_pb')
@@ -260,12 +260,12 @@ class PSDiag(SiriusMainWindow):
         tables_lay.addWidget(self._search_psname, 0, 3)
         tables_lay.addWidget(self._search_property, 0, 4)
         tables_lay.addWidget(self._search_value, 0, 5)
-        tables_lay.addWidget(self._scrollup_pb, 0, 6, alignment=Qt.AlignRight)
+        tables_lay.addWidget(self._scrollup_pb, 0, 6, alignment=Qt.AlignmentFlag.AlignRight)
         tables_lay.addLayout(self._tables_stack, 1, 0, 1, 7)
-        tables_lay.addWidget(self._rb_status, 2, 0, alignment=Qt.AlignLeft)
-        tables_lay.addWidget(self._rb_log, 2, 1, alignment=Qt.AlignLeft)
+        tables_lay.addWidget(self._rb_status, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        tables_lay.addWidget(self._rb_log, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
         tables_lay.addWidget(self._scrolldown_pb, 2, 6,
-                             alignment=Qt.AlignRight)
+                             alignment=Qt.AlignmentFlag.AlignRight)
         tables = QWidget(cw)
         tables.setObjectName('tables')
         tables.setLayout(tables_lay)
@@ -280,7 +280,7 @@ class PSDiag(SiriusMainWindow):
 
         # Layout
         window_title = QLabel('<h2>Power Supplies Diagnostics</h2>', cw,
-                              alignment=Qt.AlignCenter)
+                              alignment=Qt.AlignmentFlag.AlignCenter)
         layout = QGridLayout()
         layout.setVerticalSpacing(20)
         layout.setHorizontalSpacing(5)
@@ -382,7 +382,46 @@ class PSDiag(SiriusMainWindow):
         self._filter_table()
 
 
-class LogTable(QTreeView, PyDMWidget):
+class PyDMLogTable(PyDMWidget):
+
+    def __init__(self, parent):
+        self.parent = parent
+        super().__init__()
+        
+    @Slot(bool)
+    def connection_changed(self, conn):
+        """Reimplement connection_changed to handle all channels."""
+        address = self.parent.sender().address
+        self.address2conn[address] = conn
+        allconn = True
+        for conn in self.address2conn.values():
+            allconn &= conn
+        self.setState(allconn)
+        self._connected = allconn
+
+    def alarm_severity_changed(self, new_alarm_severity):
+        """Reimplement alarm_severity_changed."""
+        if self.parent.sender():
+            pv_diff = _PVName(self.parent.sender().address)
+            val_diff = self.address2channels[pv_diff].value
+
+            pv_opmd = pv_diff.substitute(
+                propty_name='OpMode', propty_suffix='Sts')
+            val_opmd = self.address2channels[pv_opmd].value
+            is_slowref = val_opmd == _PSConst.States.SlowRef
+
+            new_value = {'logtype': 'WARN', 'psname': pv_diff.device_name,
+                         'propty': pv_diff.propty_name, 'value': str(val_diff)}
+            if new_alarm_severity in [_Sev.MINOR_ALARM, _Sev.MAJOR_ALARM] and \
+                    is_slowref:
+                self.parent.add_log(new_value)
+            elif self._is_status:
+                self.parent.remove_log(new_value)
+
+            super().alarm_severity_changed(new_alarm_severity)
+
+
+class LogTable(QTreeView):
     """Log Table."""
 
     updated = Signal()
@@ -391,10 +430,10 @@ class LogTable(QTreeView, PyDMWidget):
                  is_status=False):
         # QTableView.__init__(self, parent)
         QTreeView.__init__(self, parent)
-        PyDMWidget.__init__(self)
+        self.pydm_log_table = PyDMLogTable(parent=self)
 
         # setup table
-        self._is_status = is_status
+        self.pydm_log_table._is_status = is_status
         self._date_fmt = ' %Y/%m/%d '
         self._time_fmt = ' %H:%M:%S '
         self.headerLabels = label2width.keys()
@@ -402,7 +441,7 @@ class LogTable(QTreeView, PyDMWidget):
         self._model.setHorizontalHeaderLabels(self.headerLabels)
         self.setModel(self._model)
         self.setUniformRowHeights(True)
-        self.setHeader(QHeaderView(Qt.Horizontal))
+        self.setHeader(QHeaderView(Qt.Orientation.Horizontal))
         for idx, width in enumerate(label2width.values()):
             self.header().resizeSection(idx, width)
         self.header().resizeSections(QHeaderView.Fixed)
@@ -411,33 +450,21 @@ class LogTable(QTreeView, PyDMWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setItemDelegateForColumn(2, LogItemDelegate(self))
         self.setSelectionBehavior(QAbstractItemView.SelectItems)
-        self.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.setStyleSheet("gridline-color: #ffffff;")
 
         # set channels
-        self.address2conn = dict()
-        self.address2channels = dict()
+        self.pydm_log_table.address2conn = dict()
+        self.pydm_log_table.address2channels = dict()
         for address in channels:
-            self.address2conn[address] = False
+            self.pydm_log_table.address2conn[address] = False
             channel = SiriusConnectionSignal(
                 address=address,
-                connection_slot=self.connection_changed,
-                value_slot=self.value_changed,
-                severity_slot=self.alarm_severity_changed)
-            channel.connect()
-            self.address2channels[address] = channel
-            self._channels.append(channel)
-
-    @Slot(bool)
-    def connection_changed(self, conn):
-        """Reimplement connection_changed to handle all channels."""
-        address = self.sender().address
-        self.address2conn[address] = conn
-        allconn = True
-        for conn in self.address2conn.values():
-            allconn &= conn
-        self.setState(allconn)
-        self._connected = allconn
+                connection_slot=self.pydm_log_table.connection_changed,
+                value_slot=self.pydm_log_table.value_changed,
+                severity_slot=self.pydm_log_table.alarm_severity_changed)
+            self.pydm_log_table.address2channels[address] = channel
+            self.pydm_log_table._channels.append(channel)
 
     def add_log_slot(self, updated):
         new_value = self._get_newitem_data(updated)
@@ -446,7 +473,7 @@ class LogTable(QTreeView, PyDMWidget):
         self.add_log(new_value)
 
     def add_log(self, new_value):
-        if self._is_status:
+        if self.pydm_log_table._is_status:
             self.remove_log(new_value)
 
         datetime_now = _datetime.now()
@@ -456,7 +483,7 @@ class LogTable(QTreeView, PyDMWidget):
             new_value['logtype'], new_value['psname'],
             new_value['propty'], new_value['value'])]
         for item in item_data:
-            item.setTextAlignment(Qt.AlignCenter)
+            item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._model.insertRow(0, item_data)
         if self._model.rowCount() > 10000:
@@ -482,27 +509,6 @@ class LogTable(QTreeView, PyDMWidget):
                 continue
             self._model.removeRow(row)
         self.updated.emit()
-
-    def alarm_severity_changed(self, new_alarm_severity):
-        """Reimplement alarm_severity_changed."""
-        if self.sender():
-            pv_diff = _PVName(self.sender().address)
-            val_diff = self.address2channels[pv_diff].value
-
-            pv_opmd = pv_diff.substitute(
-                propty_name='OpMode', propty_suffix='Sts')
-            val_opmd = self.address2channels[pv_opmd].value
-            is_slowref = val_opmd == _PSConst.States.SlowRef
-
-            new_value = {'logtype': 'WARN', 'psname': pv_diff.device_name,
-                         'propty': pv_diff.propty_name, 'value': str(val_diff)}
-            if new_alarm_severity in [_Sev.MINOR_ALARM, _Sev.MAJOR_ALARM] and \
-                    is_slowref:
-                self.add_log(new_value)
-            elif self._is_status:
-                self.remove_log(new_value)
-
-            super().alarm_severity_changed(new_alarm_severity)
 
     def _get_newitem_data(self, updated):
         pv, value = updated

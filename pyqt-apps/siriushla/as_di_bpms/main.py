@@ -20,7 +20,7 @@ class BPMMain(BaseWidget):
 
     def setupui(self):
         self.layoutv = QVBoxLayout(self)
-        lab = QLabel('<h2>'+self.bpm+'</h2>', self, alignment=Qt.AlignCenter)
+        lab = QLabel('<h2>'+self.bpm+'</h2>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.layoutv.addWidget(lab)
         self.layoutv.addSpacing(30)
 

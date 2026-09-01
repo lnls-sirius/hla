@@ -67,7 +67,7 @@ class APUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._sb_phsspd, 1, 1)
         lay.addWidget(self._lb_phsspd, 1, 2)
         lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 2, 0)
         lay.addWidget(self._ld_ismov, 3, 0)
         lay.addLayout(hbox_motion, 3, 1, 1, 2)
         gbox.setStyleSheet(
@@ -76,7 +76,7 @@ class APUControlWindow(IDCommonControlWindow):
 
     def _statusWidget(self):
         self._ld_alarm = QLabel(
-            'Alarms', self, alignment=Qt.AlignCenter)
+            'Alarms', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._led_alarm = SiriusLedAlert(
             self, self.dev_pref.substitute(propty='Alarm-Mon'))
         self._pb_alarmdetail = QPushButton(
@@ -89,7 +89,7 @@ class APUControlWindow(IDCommonControlWindow):
             prefix=self._prefix, device=self._device)
 
         self._ld_intlk = QLabel(
-            'Interlocks', self, alignment=Qt.AlignCenter)
+            'Interlocks', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._led_intlkresume = PyDMLedMultiChannel(
             self, {self.dev_pref.substitute(propty='IntlkInStop-Mon'): 0,
                    self.dev_pref.substitute(propty='IntlkInEOpnGap-Mon'): 0,
@@ -104,7 +104,7 @@ class APUControlWindow(IDCommonControlWindow):
             prefix=self._prefix, device=self._device)
 
         self._ld_hwsys = QLabel(
-            'Hardware\n&LowLevel', self, alignment=Qt.AlignCenter)
+            'Hardware\n&LowLevel', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._led_hwsysresume = PyDMLedMultiChannel(
             self,
             {self.dev_pref.substitute(propty='StateHw-Mon'): {
@@ -124,7 +124,7 @@ class APUControlWindow(IDCommonControlWindow):
             prefix=self._prefix, device=self._device)
 
         self._ld_reset = QLabel(
-            'Reset', self, alignment=Qt.AlignCenter)
+            'Reset', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._pb_reset = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.sync'))
         self._pb_reset.setToolTip('Reset active alarms.')
@@ -159,7 +159,7 @@ class APUControlWindow(IDCommonControlWindow):
 
         gbox_ctrlmode = QGroupBox('Control Mode')
         lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
-        lay_ctrlmode.setAlignment(Qt.AlignCenter)
+        lay_ctrlmode.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay_ctrlmode.addWidget(self._led_ctrlmode)
         lay_ctrlmode.addWidget(self._lb_ctrlmode)
         return gbox_ctrlmode
@@ -204,11 +204,11 @@ class APUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._sb_speedlim, 0, 1)
         lay.addWidget(self._lb_speedlim, 0, 2)
         lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(self._ld_homeaxis, 2, 0)
-        lay.addWidget(self._pb_home, 2, 1, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(self._pb_home, 2, 1, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self._ld_standby, 3, 0)
-        lay.addWidget(self._pb_standby, 3, 1, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(self._pb_standby, 3, 1, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self._ld_lastcomm, 4, 0)
         lay.addWidget(self._lb_lastcomm, 4, 1, 1, 2)
         gbox.setStyleSheet(
@@ -271,7 +271,7 @@ class APUAlarmDetails(IDCommonDialog):
         lay = QGridLayout(self)
         lay.addWidget(
             QLabel('<h4>Alarms</h4>', self,
-                   alignment=Qt.AlignCenter), 0, 0, 1, 2)
+                   alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 2)
         lay.addWidget(self._ld_almaxctrl, 1, 0, 1, 2)
         lay.addWidget(self._ld_almflag, 2, 0)
         lay.addWidget(self._lb_almflag, 2, 1)
@@ -281,7 +281,7 @@ class APUAlarmDetails(IDCommonDialog):
         lay.addWidget(self._lb_almsttdw, 4, 1)
         lay.addWidget(self._ld_almsttcode, 5, 0)
         lay.addWidget(self._lb_almsttcode, 5, 1)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 6, 0)
         lay.addWidget(self._ld_almrack, 7, 0, 1, 2)
         lay.addWidget(self._ld_almestop, 8, 0)
         lay.addWidget(self._led_almestop, 8, 1)
@@ -326,7 +326,7 @@ class APUInterlockDetails(IDCommonDialog):
         self._ld_ilkogapopn = QLabel('Gap Opened\n(Output)', self)
         self._lb_ilkogapopn = SiriusLabel(
             self, self.dev_pref.substitute(propty='IntlkOutGapStt-Mon'))
-        self._lb_ilkogapopn.setAlignment(Qt.AlignCenter)
+        self._lb_ilkogapopn.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._ld_ilkopwr = QLabel('Power Enabled\n(Output)', self)
         self._led_ilkopwr = PyDMLed(
@@ -337,7 +337,7 @@ class APUInterlockDetails(IDCommonDialog):
         lay = QGridLayout(self)
         lay.addWidget(
             QLabel('<h4>Interlock status</h4>', self,
-                   alignment=Qt.AlignCenter), 0, 0, 1, 2)
+                   alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 2)
         lay.addWidget(self._ld_ilkistop, 1, 0)
         lay.addLayout(hbox_ilkistop, 1, 1)
         lay.addWidget(self._ld_ilkieopn, 2, 0)
@@ -366,7 +366,7 @@ class APUHardLLDetails(IDCommonDialog):
         self._led_stthw.onColor = PyDMLed.LightGreen
         self._led_stthw.setObjectName('led')
         self._led_stthw.setStyleSheet('#led{max-width: 1.29em;}')
-        self._led_stthw.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._led_stthw.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         self._lb_stthw = SiriusLabel(
             self, self.dev_pref.substitute(propty='StateHw-Mon'))
 
@@ -379,7 +379,7 @@ class APUHardLLDetails(IDCommonDialog):
         self._led_sttsys.onColor = PyDMLed.LightGreen
         self._led_sttsys.setObjectName('led')
         self._led_sttsys.setStyleSheet('#led{max-width: 1.29em;}')
-        self._led_sttsys.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._led_sttsys.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         self._lb_sttsys = SiriusLabel(
             self, self.dev_pref.substitute(propty='State-Mon'))
 
@@ -389,12 +389,12 @@ class APUHardLLDetails(IDCommonDialog):
         self._led_isopr.offColor = PyDMLed.Red
         self._led_isopr.onColor = PyDMLed.LightGreen
         self._led_isopr.setStyleSheet('max-width: 1.29em;')
-        self._led_isopr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._led_isopr.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
 
         lay_hwsys = QGridLayout(self)
         lay_hwsys.addWidget(
             QLabel('<h4>Hardware&&LowLevel</h4>', self,
-                   alignment=Qt.AlignCenter), 0, 0, 1, 3)
+                   alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 3)
         lay_hwsys.addWidget(self._ld_stthw, 2, 0)
         lay_hwsys.addWidget(self._led_stthw, 2, 1)
         lay_hwsys.addWidget(self._lb_stthw, 2, 2)

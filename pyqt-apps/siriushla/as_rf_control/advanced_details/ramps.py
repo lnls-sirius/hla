@@ -38,7 +38,7 @@ class RampsDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -50,7 +50,7 @@ class RampsDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         wid_controls = QWidget(self)
         wid_controls.setLayout(
@@ -71,7 +71,7 @@ class RampsDetails(SiriusDialog):
 
         # General
         lay_gen = QGridLayout()
-        lay_gen.setAlignment(Qt.AlignTop)
+        lay_gen.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_gen.setSpacing(9)
         gbox_gen = QGroupBox('General')
         gbox_gen.setLayout(lay_gen)
@@ -82,7 +82,7 @@ class RampsDetails(SiriusDialog):
             self, self.prefix+chs_dict['Ramp Enable']+'-Sel'), 0, 2)
         lay_gen.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['Ramp Enable']+'-Sts'),
-            0, 3, alignment=Qt.AlignHCenter)
+            0, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # # Ramp Down Disable
         lay_gen.addWidget(QLabel('Ramp Down Disable'), 1, 1)
@@ -90,14 +90,14 @@ class RampsDetails(SiriusDialog):
             self, self.prefix+chs_dict['Ramp Down Disable']+'-Sel'), 1, 2)
         lay_gen.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['Ramp Down Disable']+'-Sts'),
-            1, 3, alignment=Qt.AlignHCenter)
+            1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # # Ramp Ready
-        lay_gen.addWidget(QLabel('533', alignment=Qt.AlignCenter), 2, 0)
+        lay_gen.addWidget(QLabel('533', alignment=Qt.AlignmentFlag.AlignCenter), 2, 0)
         lay_gen.addWidget(QLabel(chs_dict['533'][0]), 2, 1)
         lay_gen.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['533'][1]),
-            2, 3, alignment=Qt.AlignCenter)
+            2, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # # Ramp Increase Rate and Top
         self._setupTextInputLine(lay_gen, chs_dict, '360', 3)
@@ -131,11 +131,11 @@ class RampsDetails(SiriusDialog):
             graph_amp.addYChannel(
                 y_channel=self.prefix+chs_dict[addr][1],
                 color=chs_dict[addr][2], name=chs_dict[addr][0],
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
         # Times
         lay_times = QGridLayout()
-        lay_times.setAlignment(Qt.AlignTop)
+        lay_times.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_times.setSpacing(9)
         gbox_times = QGroupBox('Times')
         gbox_times.setLayout(lay_times)
@@ -166,13 +166,13 @@ class RampsDetails(SiriusDialog):
         lb_total.rules = rule
 
         lay_times.addWidget(QLabel('Total'), len(addrs)+1, 1)
-        lay_times.addWidget(lb_total, len(addrs)+1, 2, alignment=Qt.AlignCenter)
+        lay_times.addWidget(lb_total, len(addrs)+1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_times.addWidget(QLabel(
-            '/410', alignment=Qt.AlignCenter), len(addrs)+1, 3)
+            '/410', alignment=Qt.AlignmentFlag.AlignCenter), len(addrs)+1, 3)
 
         # Top
         lay_top = QGridLayout()
-        lay_top.setAlignment(Qt.AlignTop)
+        lay_top.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_top.setSpacing(9)
         gbox_top = QGroupBox('Top Ramp')
         gbox_top.setLayout(lay_top)
@@ -184,7 +184,7 @@ class RampsDetails(SiriusDialog):
 
         # Bot
         lay_bot = QGridLayout()
-        lay_bot.setAlignment(Qt.AlignTop)
+        lay_bot.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_bot.setSpacing(9)
         gbox_bot = QGroupBox('Bottom Ramp')
         gbox_bot.setLayout(lay_bot)
@@ -196,7 +196,7 @@ class RampsDetails(SiriusDialog):
 
         # Slopes
         lay_slopes = QGridLayout()
-        lay_slopes.setAlignment(Qt.AlignTop)
+        lay_slopes.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_slopes.setSpacing(9)
         gbox_slopes = QGroupBox('Slopes')
         gbox_slopes.setLayout(lay_slopes)
@@ -219,23 +219,23 @@ class RampsDetails(SiriusDialog):
         label = SiriusLabel(self, self.prefix+chs_dict[key][1]+'-RB')
         label.showUnits = True
 
-        lay.addWidget(QLabel(key.split()[0], alignment=Qt.AlignCenter), row, 0)
+        lay.addWidget(QLabel(key.split()[0], alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
         lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
         lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, 2)
-        lay.addWidget(label, row, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(label, row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def _setupLabelLine(self, lay, chs_dict, key, row):
         label = SiriusLabel(self, self.prefix+chs_dict[key][1])
         label.showUnits = True
 
-        lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
+        lay.addWidget(QLabel(key, alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
         lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
-        lay.addWidget(label, row, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(label, row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def _diagnosticsRampLayout(self, chs_dict):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(20)
 
         lb_addrs_top = ['163', '162'] if self.section == 'BO' else ['162']
@@ -256,7 +256,7 @@ class RampsDetails(SiriusDialog):
 
     def _topOrBotRampLayout(self, chs_dict, lb_addrs, led_addrs):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
 
@@ -264,10 +264,10 @@ class RampsDetails(SiriusDialog):
         for addr in lb_addrs:
             lb = SiriusLabel(self, self.prefix+chs_dict[addr]['PV'])
             lb.showUnits = True
-            lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), row, 0)
+            lay.addWidget(QLabel(addr, alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
             lay.addWidget(QLabel(
                 chs_dict[addr]['Label'],
-                alignment=Qt.AlignLeft | Qt.AlignVCenter), row, 1)
+                alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter), row, 1)
             lay.addWidget(lb, row, 2)
             row += 1
 
@@ -275,32 +275,32 @@ class RampsDetails(SiriusDialog):
         column = 4 if lb_addrs != [] else 0
         for addr in led_addrs:
             lay.addWidget(QLabel(
-                addr, alignment=Qt.AlignCenter), alt_row, column)
+                addr, alignment=Qt.AlignmentFlag.AlignCenter), alt_row, column)
             lay.addWidget(QLabel(
                 chs_dict[addr]['Label'],
-                alignment=Qt.AlignLeft | Qt.AlignVCenter), alt_row, column+1)
+                alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter), alt_row, column+1)
             lay.addWidget(SiriusLedState(
                 self, self.prefix+chs_dict[addr]['PV']),
-                alt_row, column+2, alignment=Qt.AlignCenter)
+                alt_row, column+2, alignment=Qt.AlignmentFlag.AlignCenter)
             alt_row += 1
 
-        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
-        lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignCenter), row+1, 2)
-        lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignCenter), row+1, 3)
-        lay.addWidget(QLabel('Amp', alignment=Qt.AlignCenter), row+1, 4)
-        lay.addWidget(QLabel('Phase', alignment=Qt.AlignCenter), row+1, 5)
+        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
+        lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 2)
+        lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 3)
+        lay.addWidget(QLabel('Amp', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 4)
+        lay.addWidget(QLabel('Phase', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 5)
         lay.addItem(QSpacerItem(
-            12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row+1, 6)
+            12, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), row+1, 6)
         lay.addWidget(QLabel(
-            'Power', alignment=Qt.AlignCenter), row+1, 7, 1, 2)
+            'Power', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 7, 1, 2)
         row += 2
 
         for key, dic in chs_dict.items():
             if key not in lb_addrs and key not in led_addrs:
                 lay.addWidget(QLabel(
-                    key, alignment=Qt.AlignHCenter), row, 0)
+                    key, alignment=Qt.AlignmentFlag.AlignHCenter), row, 0)
                 lay.addWidget(QLabel(
-                    dic['Label'], alignment=Qt.AlignLeft), row, 1)
+                    dic['Label'], alignment=Qt.AlignmentFlag.AlignLeft), row, 1)
                 column = 2
                 for k, val in dic.items():
                     if k != 'Label' and val != '-':
@@ -310,7 +310,7 @@ class RampsDetails(SiriusDialog):
                         column += 1
                     elif val == '-':
                         lay.addWidget(QLabel(
-                            '-', alignment=Qt.AlignHCenter), row, column)
+                            '-', alignment=Qt.AlignmentFlag.AlignHCenter), row, column)
                         column += 1
                     if column == 6:
                         column += 1

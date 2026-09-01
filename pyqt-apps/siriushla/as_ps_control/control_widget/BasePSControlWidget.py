@@ -76,10 +76,10 @@ class PSContainer(QWidget):
             self._hide = QPushButton('', self)
             self._hide.setEnabled(False)
         self._hide.setObjectName('HideButton')
-        self._hide.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self._hide.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self._hide.setFlat(True)
 
-        self._layout.addWidget(self._hide, 0, 0, Qt.AlignCenter)
+        self._layout.addWidget(self._hide, 0, 0, Qt.AlignmentFlag.AlignCenter)
         self._layout.addWidget(self._widget, 0, 1)
         self._layout.addWidget(self._dclink_container, 1, 1)
 
@@ -331,13 +331,13 @@ class BasePSControlWidget(QWidget):
         self.layout.addLayout(hlay_filter)
 
         self.count_label = QLabel(parent=self)
-        self.count_label.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.count_label.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.layout.addWidget(self.count_label)
 
         self.pwrsupplies_layout = self._getSplitter()
         self.layout.addWidget(self.pwrsupplies_layout)
         if len(self.groups) == 3:
-            splitt_v = QSplitter(Qt.Vertical)
+            splitt_v = QSplitter(Qt.Orientation.Vertical)
 
         # Build power supply Layout
         # Create group boxes and pop. layout
@@ -392,12 +392,12 @@ class BasePSControlWidget(QWidget):
         w_lay.setSpacing(0)
         w_lay.setContentsMargins(0, 0, 0, 0)
         for widget in widget_group:
-            w_lay.addWidget(widget, alignment=Qt.AlignLeft)
+            w_lay.addWidget(widget, alignment=Qt.AlignmentFlag.AlignLeft)
         w_lay.addStretch()
 
         scr_area = QScrollArea(self)
-        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         scr_area.setWidgetResizable(True)
         scr_area.setFrameShape(QFrame.NoFrame)
         scr_area.setWidget(scr_area_wid)
@@ -405,14 +405,14 @@ class BasePSControlWidget(QWidget):
         wid = QGroupBox(title, self) if wid_type == 'groupbox' \
             else QWidget(self)
         gb_lay = QVBoxLayout(wid)
-        gb_lay.addWidget(header, alignment=Qt.AlignLeft)
+        gb_lay.addWidget(header, alignment=Qt.AlignmentFlag.AlignLeft)
         gb_lay.addWidget(scr_area)
         return wid
 
     def _getSplitter(self):
         if self._orientation == self.HORIZONTAL:
-            return QSplitter(Qt.Horizontal)
-        return QSplitter(Qt.Vertical)
+            return QSplitter(Qt.Orientation.Horizontal)
+        return QSplitter(Qt.Orientation.Vertical)
 
     def _getVisibleProps(self):
         """Default visible properties."""
@@ -474,7 +474,7 @@ class BasePSControlWidget(QWidget):
                 objs.extend(wid.findChildren(SummaryHeader))
                 for ob in objs:
                     chil = ob.findChildren(
-                        QWidget, options=Qt.FindDirectChildrenOnly)
+                        QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly)
                     for c in chil:
                         name = c.objectName()
                         if isinstance(ob, SummaryWidget) and name in props:

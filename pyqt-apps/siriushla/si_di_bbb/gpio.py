@@ -27,7 +27,7 @@ class BbBGPIOWidget(QWidget):
     def _setupUi(self):
         ld_gpio = QLabel(
             f'<h3>GPIO Settings ({self.dev_pref.device_name:s})</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         vlay1 = QVBoxLayout()
         vlay1.addWidget(self._setupFrontBackEndRegsWidget())
@@ -78,7 +78,7 @@ class BbBGPIOWidget(QWidget):
         ld_gpiobeat = QLabel('Back-end Atten.', self)
         sb_gpiobeat = SiriusSpinbox(self, self.dev_pref+':FBE_BE_ATT')
         # # Phases
-        ld_gpiophss = QLabel('<h4>Phases</h4>', self, alignment=Qt.AlignCenter)
+        ld_gpiophss = QLabel('<h4>Phases</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_gpiohph = SiriusLabel(self, self.dev_pref+':FBE_X_PHASE')
         lb_gpiovph = SiriusLabel(self, self.dev_pref+':FBE_Y_PHASE')
         lb_gpiolph = SiriusLabel(self, self.dev_pref+':FBE_Z_PHASE')
@@ -230,15 +230,15 @@ class BbBGPIOWidget(QWidget):
         si_gpioservodlt = SiriusScaleIndicator(
             self, self.dev_pref+':FBELT_SERVO_DELTA')
         ld_gpioservomax = QLabel(
-            '<h4>Max</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Max</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         sb_gpioservomax = SiriusSpinbox(
             self, self.dev_pref+':FBELT_SERVO_MAXDELTA')
 
         gbox_phsout = QGroupBox('Phase Servo Output', self)
         lay_phsout = QGridLayout(gbox_phsout)
         lay_phsout.addWidget(si_gpioservodlt, 0, 0, 2, 1)
-        lay_phsout.addWidget(ld_gpioservomax, 0, 1, alignment=Qt.AlignBottom)
-        lay_phsout.addWidget(sb_gpioservomax, 1, 1, alignment=Qt.AlignTop)
+        lay_phsout.addWidget(ld_gpioservomax, 0, 1, alignment=Qt.AlignmentFlag.AlignBottom)
+        lay_phsout.addWidget(sb_gpioservomax, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
         lay_phsout.setColumnStretch(0, 4)
         lay_phsout.setColumnStretch(1, 1)
 

@@ -34,13 +34,13 @@ class CalEqDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QGridLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(title_frame, 0, 0, 1, 3)
 
         row = 1
@@ -68,25 +68,25 @@ class CalEqDetails(SiriusDialog):
         lay_extra_pol = QGridLayout()
         lay_extra_pol.setVerticalSpacing(12)
         lay_extra_pol.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
         lay_extra_pol.addWidget(QLabel(
             'C0 + C1*F + C2*F^2 + C3*F^3 + C4*F^4',
-            alignment=Qt.AlignCenter), 1, 0, 1, 2)
+            alignment=Qt.AlignmentFlag.AlignCenter), 1, 0, 1, 2)
         
         lay_extra_rq = QGridLayout()
         lay_extra_rq.setVerticalSpacing(12)
         lay_extra_rq.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
         
         lay_extra_q0 = QGridLayout()
         lay_extra_q0.setVerticalSpacing(12)
         lay_extra_q0.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
 
         lay_extra_rsh = QGridLayout()
         lay_extra_rsh.setVerticalSpacing(12)
         lay_extra_rsh.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
 
         if self.section == 'SI':
             lb_rq = SiriusLabel(self, self.prefix+self.syst_dict['r/Q'])
@@ -99,38 +99,38 @@ class CalEqDetails(SiriusDialog):
             lb_q0.precision = 2
             lb_q0.displayFormat = DisplayFormat.Exponential
             lay_extra_rq.addWidget(QLabel(
-                'r/Q', alignment=Qt.AlignHCenter | Qt.AlignVCenter),
+                'r/Q', alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter),
                 1, 2, 1, 1)
-            lay_extra_rq.addWidget(lb_rq, 1, 3, 1, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay_extra_rq.addWidget(lb_rq, 1, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             lay_extra_q0.addWidget(QLabel(
-                'Q0', alignment=Qt.AlignHCenter | Qt.AlignVCenter),
+                'Q0', alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter),
                 1, 4, 1, 1)
-            lay_extra_q0.addWidget(lb_q0, 1, 5, 1, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay_extra_q0.addWidget(lb_q0, 1, 5, 1, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         else:
             lb_rsh = SiriusLabel(self, self.prefix+self.syst_dict['Rsh'])
             lb_rsh.showUnits = True
             lb_rsh.precisionFromPV = False
             lb_rsh.precision = 2
             lay_extra_rsh.addWidget(QLabel(
-                'Rsh (Ohm)', alignment=Qt.AlignHCenter | Qt.AlignVCenter),
+                'Rsh (Ohm)', alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter),
                 1, 1, 1, 1)
-            lay_extra_rsh.addWidget(lb_rsh, 1, 2, 1, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay_extra_rsh.addWidget(lb_rsh, 1, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
-        lay.addLayout(lay_extra_pol, row, column, alignment=Qt.AlignHCenter)
-        lay.addLayout(lay_extra_rq, row, column+1, alignment=Qt.AlignHCenter)
-        lay.addLayout(lay_extra_q0, row, column+2, alignment=Qt.AlignHCenter)
-        lay.addLayout(lay_extra_rsh, row, column+1, alignment=Qt.AlignHCenter)
+        lay.addLayout(lay_extra_pol, row, column, alignment=Qt.AlignmentFlag.AlignHCenter)
+        lay.addLayout(lay_extra_rq, row, column+1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        lay.addLayout(lay_extra_q0, row, column+2, alignment=Qt.AlignmentFlag.AlignHCenter)
+        lay.addLayout(lay_extra_rsh, row, column+1, alignment=Qt.AlignmentFlag.AlignHCenter)
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Header
         labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
             lay.addWidget(QLabel(
-                labels[i], alignment=Qt.AlignCenter), 0, i+1)
+                labels[i], alignment=Qt.AlignmentFlag.AlignCenter), 0, i+1)
 
         # Body
         row = 1
@@ -138,7 +138,7 @@ class CalEqDetails(SiriusDialog):
             if key != 'OFS':
                 column = 1
                 lay.addWidget(QLabel(
-                    f'<h4>{key}</h4>', alignment=Qt.AlignCenter), row, 0)
+                    f'<h4>{key}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
                 for i in range(len(labels)):
                     lb = SiriusLabel(
                         self, self.prefix+val+f'-RB.[{i}]')
@@ -152,21 +152,21 @@ class CalEqDetails(SiriusDialog):
         lb_ofs = SiriusLabel(self, self.prefix+chs_dict['OFS']+'-RB')
         lb_ofs.precisionFromPV = 0
         lb_ofs.precision = 2
-        lay.addWidget(QLabel('<h4>OFS</h4>', alignment=Qt.AlignCenter), row, 0)
-        lay.addWidget(lb_ofs, row, 1, 1, 5, alignment=Qt.AlignLeft)
+        lay.addWidget(QLabel('<h4>OFS</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
+        lay.addWidget(lb_ofs, row, 1, 1, 5, alignment=Qt.AlignmentFlag.AlignLeft)
 
         return lay
 
     def _vgapLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Headers
         labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 0, i)
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignmentFlag.AlignCenter), 0, i)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignmentFlag.AlignCenter), 2, i)
 
         # Bodies
         column = 0

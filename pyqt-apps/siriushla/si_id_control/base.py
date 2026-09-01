@@ -33,7 +33,7 @@ class IDCommonControlWindow(SiriusMainWindow):
     def _setupUi(self):
         self._label_title = QLabel(
             '<h3>'+self._device+' Control - '+self._beamline+'</h3 >', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self._label_title.setStyleSheet('max-height:1.29em;')
 
         vlay1 = QVBoxLayout()
@@ -159,11 +159,11 @@ class IDCommonSummaryHeader(IDCommonSummaryBase):
         layout = QHBoxLayout(self)
         for name, size in self.prop2width:
             text = name.replace(' ', '\n')
-            label = QLabel(text, self, alignment=Qt.AlignCenter)
+            label = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet(
                 'min-width:{0}em; max-width:{0}em;'
                 'font-weight:bold;'.format(str(size)))
-            label.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Preferred)
+            label.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Preferred)
             layout.addWidget(label)
 
 
@@ -185,12 +185,13 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
         orientation = 'v'
         if prop == 'Beamline':
             lbl = QLabel(
-                '<h4>'+self._beamline+'</h4>', self, alignment=Qt.AlignCenter)
+                '<h4>'+self._beamline+'</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             wids.append(lbl)
         elif prop == 'Device':
             btn = QPushButton(self._device, self)
             connect_newprocess(
-                btn, ['sirius-hla-si-id-control.py', '-dev', self._device])
+                btn, ['sirius-hla-si-id-control.py', '-dev', self._device],
+                parent=self)
             wids.append(btn)
         elif prop == 'Moving':
             led = SiriusLedState(
@@ -215,7 +216,7 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
             for name in self._idffnames:
                 led = SiriusLedState(
                     self, _PVName(name).substitute(propty='LoopState-Sts'))
-                led.shape = led.Square
+                led.shape = led.ShapeMap.Square
                 led.offColor = led.Red
                 lay.addWidget(led)
             wids.append(leds)
@@ -230,7 +231,7 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
             widget = QWidget(self)
             lay = QVBoxLayout() if orientation == 'v' else QHBoxLayout()
             lay.setContentsMargins(0, 0, 0, 0)
-            lay.setAlignment(Qt.AlignCenter)
+            lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.setSpacing(0)
             widget.setLayout(lay)
 

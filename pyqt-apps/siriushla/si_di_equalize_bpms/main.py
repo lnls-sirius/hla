@@ -56,7 +56,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
 
     def setupui(self):
         """."""
-        self.setWindowModality(Qt.WindowModal)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         self.setWindowTitle("SI - BPMs - Equalize Switching")
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
@@ -72,7 +72,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
 
         wid.layout().addWidget(
             QLabel(f'<h1>Equalize Switching </h1>', wid),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ctrls = self.get_acq_control_widget(wid)
         anly = self.get_analysis_control_widget(wid)
@@ -127,15 +127,15 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         lb_acqtimeout = QLabel('Timeout [s]', wid)
         lb_nrpoints = QLabel('Number of Points', wid)
 
-        lay.addWidget(lb_acqstrat, 0, 1, alignment=Qt.AlignRight)
+        lay.addWidget(lb_acqstrat, 0, 1, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.cb_acqstrat, 0, 2)
-        lay.addWidget(lb_invredgain, 1, 1, alignment=Qt.AlignRight)
+        lay.addWidget(lb_invredgain, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.sp_invredgain, 1, 2)
-        lay.addWidget(lb_acqtimeout, 2, 1, alignment=Qt.AlignRight)
+        lay.addWidget(lb_acqtimeout, 2, 1, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.sp_acqtimeout, 2, 2)
-        lay.addWidget(lb_nrpoints, 3, 1, alignment=Qt.AlignRight)
+        lay.addWidget(lb_nrpoints, 3, 1, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.sp_nrpoints, 3, 2)
-        lay.addWidget(pusb_start, 5, 1, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(pusb_start, 5, 1, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.setRowMinimumHeight(4, 20)
         lay.setColumnStretch(3, 2)
         lay.setColumnStretch(0, 2)
@@ -285,7 +285,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         pb_orb.clicked.connect(self._save_orbit)
 
         lay.addWidget(
-            QLabel('Config to change: '), 0, 0, alignment=Qt.AlignCenter)
+            QLabel('Config to change: '), 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.cb_orb, 0, 1)
         lay.addWidget(pb_orb, 0, 3)
         lay.setColumnStretch(2, 2)

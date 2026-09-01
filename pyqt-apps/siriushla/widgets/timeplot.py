@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt, Signal, Slot, QTimer, Property
 from qtpy.QtGui import QPalette
 from qtpy.QtWidgets import QInputDialog, QLabel, QApplication, QAction
 
-from pyqtgraph import ViewBox, mkBrush
+from pyqtgraph import ViewBox, mkBrush, AxisItem
 
 from pydm import utilities
 from pydm.widgets.timeplot import TimePlotCurveItem, PyDMTimePlot, \
@@ -55,7 +55,7 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             super().receiveNewValue(new_value)
 
     @Slot()
-    def redrawCurve(self):
+    def redrawCurve(self, min_x = None, max_x = None):
         """
         Rederive redrawCurve to use data only refered to timespan.
         """
@@ -66,8 +66,8 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             if idcs.size and idcs[0] != 0 and \
                     self.data_buffer[0, idcs[0]-1] != 0:
                 idcs = _np.r_[idcs[0]-1, idcs]
-            x = self.data_buffer[0, idcs].astype(_np.float_)
-            y = self.data_buffer[1, idcs].astype(_np.float_)
+            x = self.data_buffer[0, idcs].astype(_np.float64)
+            y = self.data_buffer[1, idcs].astype(_np.float64)
 
             if not self._plot_by_timestamps:
                 x -= now
@@ -98,6 +98,8 @@ class SiriusTimePlot(PyDMTimePlot):
 
     def __init__(self, *args, show_tooltip=False, **kws):
         super().__init__(*args, **kws)
+        new_axis = AxisItem(orientation='left')
+        self.plotItem.setAxisItems({'left': new_axis})
         self._filled_with_arch_data = dict()
         self._show_tooltip = show_tooltip
 
@@ -211,7 +213,7 @@ class SiriusTimePlot(PyDMTimePlot):
             return
 
         if self._plot_by_timestamps:
-            if self._update_mode == PyDMTimePlot.SynchronousMode:
+            if self._update_mode == PyDMTimePlot.AtFixedRate:
                 maxrange = max([curve.max_x() for curve in self._curves])
             else:
                 maxrange = time.time()
@@ -350,7 +352,7 @@ class SiriusTimePlot(PyDMTimePlot):
             font = QApplication.instance().font()
             font.setPointSize(font.pointSize() - 10)
             palette = QPalette()
-            palette.setColor(QPalette.WindowText, curve.color)
+            palette.setColor(QPalette.ColorRole.WindowText, curve.color)
             self.label_tooltip.setText(txt)
             self.label_tooltip.setFont(font)
             self.label_tooltip.setPalette(palette)

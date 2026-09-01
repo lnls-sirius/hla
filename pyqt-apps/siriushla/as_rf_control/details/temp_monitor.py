@@ -25,13 +25,13 @@ class TempMonitor(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setHorizontalSpacing(25)
         lay.setVerticalSpacing(15)
 
         self.title = QLabel(
             '<h3>RF Temperature Monitor</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.title, 0, 0)
 
         if len(self.chs['TempMon']) == 1:

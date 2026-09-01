@@ -30,7 +30,7 @@ class GeneralFunctions():
         if wid_type == 'label':
             widget = SiriusLabel(self, init_channel=pv_name)
             widget.showUnits = True
-            widget.setAlignment(Qt.AlignCenter)
+            widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
         elif wid_type == 'led':
             ch2vals = {pv_name: value}
             widget = PyDMLedMultiChannel(self)
@@ -46,7 +46,7 @@ class GeneralFunctions():
         elif wid_type == 'lineEdit':
             widget = PyDMLineEdit(
                 init_channel=pv_name)
-            widget.setAlignment(Qt.AlignCenter)
+            widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
             widget.showUnits = True
         elif wid_type == 'motorBtn':
             widget = MotorBtn(
@@ -62,7 +62,7 @@ class GeneralFunctions():
         bi_hlay = QHBoxLayout()
         bi_hlay.addWidget(
             QLabel(label),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         if label in ['Limit Mode', 'Motor Code', 'Counter', 'Sigma', 'Center']:
             wid_type = 'label'
         elif label == "Coefficient":
@@ -80,7 +80,7 @@ class GeneralFunctions():
         rbv_hlay = QHBoxLayout()
         title = QLabel(label)
         title.setMinimumWidth(75)
-        title.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
+        title.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
         rbv_hlay.addWidget(title)
         for item in range(1, -1, -1):
             pv_name = pv_prefix + channel[item]
@@ -96,16 +96,16 @@ class GeneralFunctions():
             if item != 0:
                 rbv_hlay.addWidget(
                     widget,
-                    alignment=Qt.AlignRight)
+                    alignment=Qt.AlignmentFlag.AlignRight)
                 if 'MaxSize' in channel[0]:
                     sep_label = QLabel("X")
                     sep_label.setFixedWidth(10)
                     rbv_hlay.addWidget(
                         sep_label,
-                        Qt.AlignCenter)
+                        Qt.AlignmentFlag.AlignCenter)
             else:
                 rbv_hlay.addWidget(
-                    widget, alignment=Qt.AlignLeft)
+                    widget, alignment=Qt.AlignmentFlag.AlignLeft)
         return rbv_hlay
 
     def setSingleScrn(self, device, screen):
@@ -166,7 +166,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
             self.prefix + self.device_name+":"+channel)
         self.active_screen.new_value_signal[int].connect(
             self.radioBtnClick)
-        selector.widgetType = 1
+        selector.widgetType = enum_button.WidgetType.RadioButton
         return selector
 
     def setScrnHeader(self, layout):
@@ -176,7 +176,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
             layout.addWidget(
                 QLabel('<h4>' + text + '</h4>'),
                 0, count,
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
             count += 1
         return layout
 
@@ -197,12 +197,12 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
                 self.setWidgetType(
                     wid_type, device, pv_name + pv_list[item]),
                 row, count,
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
             count += 1
         layout.addWidget(
             self.setWidgetType('led', device, pv_name + pv_list[0], value=1),
             row, count,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         return layout
 
     def setMotorsConfig(self):
@@ -211,7 +211,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         for label, channel in HEADER.items():
             mc_hlay.addWidget(
                 self.setWidgetType('pushBtn', "PRF:MOTOR", channel, label),
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
         return mc_hlay
 
     def setScrnPanel(self):
@@ -225,7 +225,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         am_glay.addWidget(
             self.selectionItem('PRF:OPI'),
             row, 0, 5, 1,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         for device in DEVICES:
             am_glay = self.setPanelInfo(
                 device, am_glay, row)
@@ -255,7 +255,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
             SiriusLabel(
                 init_channel=self.getPvName(
                     device, 'MOTOR:' + selection_info.get('selected'))),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         for pv_name, label in selection_info.get('content').items():
             label = self.getScrnSelBtns(device, label)
@@ -274,7 +274,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         zo_hlay = QHBoxLayout()
         zo_hlay.addWidget(
             QLabel(item["title"]),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         count = 0
         for label, pv_name in item["content"].items():
             widget = self.setWidgetType(
@@ -283,7 +283,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
                 widget.setStyleSheet("background-color:#ffff00;")
             zo_hlay.addWidget(
                 widget,
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
             count += 1
         return zo_hlay
 
@@ -342,7 +342,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
     def saveStack(self, stack, stack_type):
         ''' Save the stack for future item changes '''
         if stack_type == 0:
-            stack.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
+            stack.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding)
             self.stack_screens = stack
         elif stack_type == 1:
             self.stack_screen = stack
@@ -365,23 +365,23 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
                 si_glay.addLayout(
                     self.setRBVObj(device, item, title, 'CAM:'),
                     counter[0], counter[1],
-                    alignment=Qt.AlignHCenter)
+                    alignment=Qt.AlignmentFlag.AlignHCenter)
             elif title == 'LED':
                 si_glay.addLayout(
                     self.setLight(device, item, title),
                     counter[0], counter[1],
-                    alignment=Qt.AlignHCenter)
+                    alignment=Qt.AlignmentFlag.AlignHCenter)
             elif item == "RESET.PROC":
                 si_glay.addWidget(
                     self.setWidgetType(
                         'pushBtn', device, 'CAM:' + item, title),
                     counter[0], counter[1],
-                    alignment=Qt.AlignHCenter)
+                    alignment=Qt.AlignmentFlag.AlignHCenter)
             else:
                 si_glay.addLayout(
                     self.setBasicInfo(device, title, item),
                     counter[0], counter[1],
-                    alignment=Qt.AlignHCenter)
+                    alignment=Qt.AlignmentFlag.AlignHCenter)
 
             counter[0] += 1
             if counter[0] >= 2:
@@ -395,7 +395,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         ''' Build the header'''
         hd_hlay = QHBoxLayout()
         title = QLabel("<h2>" + self.window_title + "</h2>")
-        hd_hlay.addWidget(title, alignment=Qt.AlignCenter)
+        hd_hlay.addWidget(title, alignment=Qt.AlignmentFlag.AlignCenter)
         return hd_hlay
 
     def imageViewer(self):
@@ -403,7 +403,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         self.image_container.setPixmap(self.pixmap)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
-            QSizePolicy.Ignored, QSizePolicy.Ignored)
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         return self.image_container
 
     def _setupUi(self):
@@ -564,10 +564,10 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         info_group.setTitle("Projections Info")
         for title in ["Horizontal", "Vertical"]:
             lay_info.addWidget(
-                QLabel(title), 1, alignment=Qt.AlignHCenter)
+                QLabel(title), 1, alignment=Qt.AlignmentFlag.AlignHCenter)
             lay_info.addWidget(
                 self.setGraphInfo(device, GRAPH[title]['info']),
-                1, alignment=Qt.AlignTop)
+                1, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addWidget(info_group, 3, 3, 1, 1)
 
         return group

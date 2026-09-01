@@ -100,7 +100,7 @@ class BLImgProc(QWidget):
         if widget_type == 'label':
             wid = SiriusLabel(init_channel=pvname, keep_unit=True)
             wid.showUnits = units
-            wid.setAlignment(Qt.AlignCenter)
+            wid.setAlignment(Qt.AlignmentFlag.AlignCenter)
             wid.setMaximumHeight(50)
         elif widget_type == 'setpoint_readback_combo':
             sprb_type = ['enumcombo', 'label', True]
@@ -137,7 +137,7 @@ class BLImgProc(QWidget):
             wid = PyDMLogLabel(init_channel=pvname)
         elif widget_type == 'edit':
             wid = SiriusLineEdit(init_channel=pvname)
-            wid.setAlignment(Qt.AlignCenter)
+            wid.setAlignment(Qt.AlignmentFlag.AlignCenter)
         elif widget_type == 'switch':
             wid = PyDMStateButton(init_channel=pvname)
         elif widget_type == 'enumcombo':
@@ -149,7 +149,7 @@ class BLImgProc(QWidget):
             self._create_floating_label(self.beamline_ctrl_sts, wid)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
-            wid.setAlignment(Qt.AlignCenter)
+            wid.setAlignment(Qt.AlignmentFlag.AlignCenter)
         elif widget_type == 'spin':
             wid = SiriusSpinbox(init_channel=pvname)
         elif widget_type == 'cmd':
@@ -175,7 +175,7 @@ class BLImgProc(QWidget):
         for x in range(0, 2):
             widget = self.select_widget(
                 pv_list[x], sprb_type[x], units=False)
-            widget.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+            widget.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
             lay.addWidget(widget)
         return wid
 
@@ -210,10 +210,10 @@ class BLImgProc(QWidget):
         wid = self.select_widget(pv_name, wid_type)
         if wid_type not in ['log', 'image']:
             title_wid = QLabel(title + ': ')
-            title_wid.setAlignment(Qt.AlignRight)
+            title_wid.setAlignment(Qt.AlignmentFlag.AlignRight)
             hlay.addWidget(
-                title_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            hlay.addWidget(wid, alignment=Qt.AlignLeft)
+                title_wid, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            hlay.addWidget(wid, alignment=Qt.AlignmentFlag.AlignLeft)
         else:
             hlay.addWidget(wid)
 
@@ -431,7 +431,7 @@ class BLImgProc(QWidget):
         lay.addWidget(self.loading)
 
         widget = self._setup_gamma_control_widget()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(widget)
 
         widget = self._setup_enable_beamline_widgets()
@@ -455,7 +455,7 @@ class BLImgProc(QWidget):
 
         title = QLabel(
             '<h3>'+self.device+' Image Processing<h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         main_lay.addWidget(title)
 
         img_wid = self._setupTab(PVS_IMGPROCOVERVIEW)

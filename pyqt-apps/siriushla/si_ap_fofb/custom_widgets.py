@@ -83,9 +83,9 @@ class RefOrbWidget(BaseObject, QWidget):
 
     def _setupUi(self):
         lbl_combo = QLabel(
-            'Value: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Value: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.combo = QComboBox()
-        self.combo.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.combo.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.combo.setMaxVisibleItems(10)
         self._choose_reforb = [
             'Zero', 'SOFB SlowOrb', 'SOFB RefOrb',
@@ -211,7 +211,7 @@ class StatusDialog(SiriusDialog):
         lay = QGridLayout(self)
 
         label = QLabel(
-            '<h4>'+self.title+'</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>'+self.title+'</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label, 0, 0, 1, 3)
 
         for idx, desc in enumerate(self.labels):
@@ -234,7 +234,7 @@ class StatusDialog(SiriusDialog):
         if self.detail_button is not None:
             lay.addWidget(
                 self.detail_button, len(self.labels)+1, 1,
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
 
 
 class BPMSwModeWidget(BaseObject, QWidget):
@@ -261,7 +261,7 @@ class BPMSwModeWidget(BaseObject, QWidget):
 
     def _setupUi(self):
         lbl = QLabel(
-            'SwMode: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'SwMode: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         self.sel = QComboBox(self)
         self.sel.addItems(['switching', 'direct'])
@@ -349,14 +349,14 @@ class PSConfigWidget(BaseObject, QWidget):
     def _setupUi(self):
         self._label_name = QLabel('')
 
-        lbl_load = QLabel('Load:', self, alignment=Qt.AlignTop)
+        lbl_load = QLabel('Load:', self, alignment=Qt.AlignmentFlag.AlignTop)
         self._btn_load = CAPushButton('')
         self._btn_load.rules = self._enblrule
         self._btn_load.setIcon(qta.icon('mdi.cloud-upload-outline'))
         self._btn_load.setToolTip('Load PSConfig from ServConf')
         self._btn_load.clicked.connect(self._open_load_config_servconf)
 
-        lbl_save = QLabel('Save:', self, alignment=Qt.AlignTop)
+        lbl_save = QLabel('Save:', self, alignment=Qt.AlignmentFlag.AlignTop)
         self._btn_save = CAPushButton('')
         self._btn_save.setIcon(qta.icon('mdi.cloud-download-outline'))
         self._btn_save.setToolTip('Save PSConfig to ServConf')
@@ -427,7 +427,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         self._ch_synenls.new_value_signal[_np.ndarray].connect(
             self._update_refpacketloss)
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         tab = QTabWidget(self)
@@ -459,18 +459,18 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>BPMId</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>BPMId</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
 
         # table
         for idx, dcc in enumerate(self.dccnames):
             row = idx + 1
-            lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(dcc, self, alignment=Qt.AlignmentFlag.AlignCenter)
             pvn = _PVName(dcc).substitute(prefix=self.prefix) + 'BPMId-RB'
             plb = SiriusLabel(self, pvn)
             led = PyDMLedMultiChannel(self, {pvn: self.dccids[idx]})
@@ -484,21 +484,21 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>BPM Count</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>BPM Count</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(
-            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
 
         # table
         self.leds_sync, self.leds_dccsts = dict(), dict()
         for idx, dcc in enumerate(self.dccnames):
             row = idx + 1
-            lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(dcc, self, alignment=Qt.AlignmentFlag.AlignCenter)
             pvn = _PVName(dcc).substitute(prefix=self.prefix) + 'BPMCnt-Mon'
             plb = SiriusLabel(self, pvn)
             lay.addWidget(lbl, row, 0)
@@ -511,7 +511,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             if 'FOFBCtrl' in dcc:
                 led.offColor = led.Red
             self.leds_dccsts[dcc] = led
-            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
             if 'FMC' in dcc:
                 c2v = {pvn: FOFBCtrlDCC.DEF_FMC_BPMCNT}
@@ -539,24 +539,24 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         lpart_pvs = ['BPMId-RB', ] + [
             'LinkPartnerCH'+str(idx)+'-Mon' for idx in range(8)]
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         for idx, link in enumerate(lpart_pvs):
             col = idx + 1
             text = '<h4>' + link.split('-')[0] + '</h4>'
-            lbl = QLabel(text, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, 0, col)
 
         # table
         row = 1
         for dcc in self.dccnames:
-            lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(dcc, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, 0)
             for idx, link in enumerate(lpart_pvs):
                 col = idx + 1
@@ -583,7 +583,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         # title
         title = QLabel(
             '<h4>Reference Orbit [X, Y] in Hardware Units [nm]</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         # graph
         self.curve_hlref = dict()
@@ -618,10 +618,10 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                 if ctrl not in visisel:
                     cbx = QCheckBox(ctrl[3:5], self)
                     cbx.setChecked(True)
-                    cbx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+                    cbx.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
                     pal = cbx.palette()
-                    pal.setColor(QPalette.Base, coloro)
-                    pal.setColor(QPalette.Text, Qt.white)
+                    pal.setColor(QPalette.ColorRole.Window, coloro)
+                    pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
                     cbx.setPalette(pal)
                     visisel[ctrl] = cbx
                 visisel[ctrl].stateChanged.connect(curve.setVisible)
@@ -640,7 +640,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(title, 0, 0)
-        lay.addWidget(self.led_ref, 0, 1, alignment=Qt.AlignRight)
+        lay.addWidget(self.led_ref, 0, 1, alignment=Qt.AlignmentFlag.AlignRight)
         for idx, graph in enumerate(graph_refs.values()):
             lay.addWidget(graph, idx+1, 0)
         lay.addLayout(lay_sel, 1, 1, len(graph_refs), 1)
@@ -660,20 +660,20 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>TimeFrameLen</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>TimeFrameLen</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             0, 1)
 
         # table
         self._led_timeframelen = dict()
         for idx, dcc in enumerate(self.dccnames):
             row = idx + 1
-            lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(dcc, self, alignment=Qt.AlignmentFlag.AlignCenter)
             pvn = _PVName(dcc).substitute(prefix=self.prefix)
             pvn += 'TimeFrameLen-RB'
             plb = SiriusLabel(self, pvn)
@@ -698,15 +698,15 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>Threshold</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>Threshold</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(
-            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
 
         # table
         self.leds_odd = dict()
@@ -714,7 +714,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             row = idx + 1
             c2v = dict()
 
-            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(ctl, self, alignment=Qt.AlignmentFlag.AlignCenter)
             pvn = _PVName(ctl).substitute(
                 prefix=self.prefix, propty='MaxOrbDistortion-RB')
             c2v[pvn] = 0
@@ -728,7 +728,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             led = SiriusLedState(self, pvn)
             led.setObjectName('led_status')
             led.shape = led.ShapeMap.Square
-            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
             led = PyDMLedMultiChannel(self, c2v)
             self.leds_odd[ctl] = led
@@ -763,15 +763,15 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>MinBPMCount</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>MinBPMCount</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(
-            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
 
         # table
         self.leds_pld = dict()
@@ -779,7 +779,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             row = idx + 1
             c2v = dict()
 
-            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(ctl, self, alignment=Qt.AlignmentFlag.AlignCenter)
             pvn = _PVName(ctl).substitute(
                 prefix=self.prefix, propty='MinBPMCnt-RB')
             c2v[pvn] = 0
@@ -793,7 +793,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             led = SiriusLedState(self, pvn)
             led.setObjectName('led_status')
             led.shape = led.ShapeMap.Square
-            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
             led = PyDMLedMultiChannel(self, c2v)
             self.leds_pld[ctl] = led
@@ -824,24 +824,24 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>Interlock</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>Interlock</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
 
         # table
         for idx, dcc in enumerate(self.ctrlrs):
             row = idx + 1
-            lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(dcc, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, 0)
             pvn = _PVName(dcc).substitute(
                 prefix=self.prefix, propty='LoopIntlk-Mon')
             led = SiriusLedAlert(self, pvn)
             led.setObjectName('led_status')
-            lay.addWidget(led, row, 1, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         return self._build_scroll_area(wid)
 
@@ -849,20 +849,20 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         trigid = FamFOFBControllers.BPM_TRIGS_ID
         propties = ['RcvSrc-Sts', 'RcvInSel-RB']
 
         # header
-        devlbl = QLabel('<h4>BPM</h4>', self, alignment=Qt.AlignCenter)
+        devlbl = QLabel('<h4>BPM</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(devlbl, 0, 0, 2, 1)
         text = f'<h4>TRIGGER {trigid}</h4>'
-        lbl = QLabel(text, self, alignment=Qt.AlignCenter)
+        lbl = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lbl, 0, 1, 1, 2)
         for idx, prop in enumerate(propties):
             text = prop.split('-')[0]
-            lbl = QLabel(text, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, 1, idx+1)
 
         # table
@@ -879,7 +879,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             connect_window(
                 btn, win, parent=self, prefix=self.prefix, device=bpm,
                 names=_csbpm.LogTrigIntern._fields, trig_tp='_GEN')
-            lbl = QLabel(bpm, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(bpm, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lbl.setObjectName('lbl_bpmname')
             hwid = QWidget()
             hwid.setObjectName('wid')
@@ -907,22 +907,22 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(
-            QLabel('<h4>FOFBAcc.Enbl.</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>FOFBAcc.Enbl.</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             0, 1)
         lay.addWidget(
-            QLabel('<h4>BPMPos.Enbl.</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>BPMPos.Enbl.</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             0, 2)
 
         # table
         for idx, ctl in enumerate(self.ctrlrs):
             row = idx + 1
-            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(ctl, self, alignment=Qt.AlignmentFlag.AlignCenter)
             pvnacc = _PVName(ctl).substitute(
                 prefix=self.prefix, propty='SYSIDPRBSFOFBAccEn-Sts')
             ledacc = SiriusLedState(self, pvnacc)
@@ -935,8 +935,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             ledbpm.setObjectName('led_status')
             ledsum = PyDMLedMultiChannel(self, {pvnacc: 0, pvnbpm: 0})
             lay.addWidget(lbl, row, 0)
-            lay.addWidget(ledacc, row, 1, alignment=Qt.AlignTop)
-            lay.addWidget(ledbpm, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(ledacc, row, 1, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(ledbpm, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
             lay.addWidget(ledsum, row, 3)
 
         return self._build_scroll_area(wid)
@@ -948,28 +948,28 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             "there is a packet loss problem.")
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         for i in range(8):
             lay.addWidget(
                 QLabel(
-                    f'<h4>Error CH{i}</h4>', self, alignment=Qt.AlignCenter),
+                    f'<h4>Error CH{i}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
                 0, i+1)
 
         # table
         for dccidx, dcc in enumerate(['FMC', 'P2P']):
             for ctrlidx, ctl in enumerate(self.ctrlrs):
                 row = dccidx*len(self.ctrlrs) + ctrlidx + 1
-                lbl = QLabel(f"{ctl}:DCC{dcc}", self, alignment=Qt.AlignCenter)
+                lbl = QLabel(f"{ctl}:DCC{dcc}", self, alignment=Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(lbl, row, 0)
                 for i in range(8):
                     pvnerr = _PVName(ctl).substitute(
                         prefix=self.prefix, propty=f'DCC{dcc}FrameErrCntCH{i}-Mon')
                     lblerr = SiriusLabel(self, pvnerr)
-                    lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignTop)
+                    lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignmentFlag.AlignTop)
 
         return self._build_scroll_area(wid)
 
@@ -981,11 +981,11 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         pv_list_fru = ipmi_mngr_pvs.AFCv4_0_PV_LIST['FRU']
 
         head_lbl = QLabel(
-            '<h4>AFC Settings Details</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>AFC Settings Details</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_fru.addWidget(head_lbl, 0, 0, 2, 1)
 
         sr_lbl = QLabel(
-            '<h4>Soft Reset</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Soft Reset</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_fru.addWidget(sr_lbl, 0, 1, 2, 1)
 
         for idx, ctl in enumerate(self.ctrlrs):
@@ -1007,7 +1007,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                 pbt, Window, parent=self, prefix=self.prefix, display=ctl
             )
 
-            lbl = QLabel(f"IA-{ctl.sub}", self, alignment=Qt.AlignCenter)
+            lbl = QLabel(f"IA-{ctl.sub}", self, alignment=Qt.AlignmentFlag.AlignCenter)
             lbl.setStyleSheet(
                 'QLabel{border: none; background: transparent;}'
             )
@@ -1034,12 +1034,12 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             pv_name = pv_list_fru['SoftRstSts']
             label_mon = SiriusLabel(
                 self, f"IA-{ctl.sub}:{ipmi_mngr_pvs.DIS}-AMC-{2}:{pv_name}",
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
             label_mon.setStyleSheet(
                 'QLabel{border: none; background: transparent;}'
             )
 
-            lay_fru.addWidget(label_mon, row, 2, alignment=Qt.AlignLeft)
+            lay_fru.addWidget(label_mon, row, 2, alignment=Qt.AlignmentFlag.AlignLeft)
 
             row += 1
 
@@ -1047,7 +1047,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
 
     def _build_scroll_area(self, widget):
         area = QScrollArea(self)
-        area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        area.setSizeAdjustPolicy(QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         area.setWidgetResizable(True)
         area.setWidget(widget)
         widget.setObjectName('widget')

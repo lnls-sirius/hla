@@ -24,7 +24,7 @@ class ScrnCalibrationSettings(SiriusDialog):
 
     def _setupUi(self):
         label = QLabel('<h3>'+self.scrn_prefix+' Calibration</h3>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         positioning = QGroupBox('Positioning', self)
         positioning.setStyleSheet("""
@@ -50,13 +50,13 @@ class ScrnCalibrationSettings(SiriusDialog):
         vlay = QVBoxLayout()
         vlay.addWidget(label)
         vlay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
         vlay.addWidget(positioning)
         vlay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
         vlay.addWidget(LED)
         vlay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
         vlay.addWidget(Img)
         self.setLayout(vlay)
 
@@ -89,15 +89,15 @@ class ScrnCalibrationSettings(SiriusDialog):
 
         flay_pos = QFormLayout()
         flay_pos.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
         flay_pos.addRow(label_AcceptedErr, hbox_AcceptedErr)
         flay_pos.addRow(label_FluorScrnPos, hbox_FluorScrnPos)
         flay_pos.addRow(label_CalScrnPos, hbox_CalScrnPos)
         flay_pos.addRow(label_NoneScrnPos, hbox_NoneScrnPos)
         flay_pos.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_pos.setLabelAlignment(Qt.AlignRight)
-        flay_pos.setFormAlignment(Qt.AlignCenter)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
+        flay_pos.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_pos.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay_pos
 
     def _setupLEDLayout(self):
@@ -118,14 +118,14 @@ class ScrnCalibrationSettings(SiriusDialog):
 
         flay_LED = QFormLayout()
         flay_LED.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
         flay_LED.addRow(label_LedPwrLvl, hbox_LedPwrLvl)
         flay_LED.addRow(label_LedPwrScaleFactor, hbox_LedPwrScaleFactor)
         flay_LED.addRow(label_LedThold, hbox_LedThold)
         flay_LED.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_LED.setLabelAlignment(Qt.AlignRight)
-        flay_LED.setFormAlignment(Qt.AlignCenter)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
+        flay_LED.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_LED.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay_LED
 
     def _setupImageCalibLayout(self):
@@ -158,14 +158,14 @@ class ScrnCalibrationSettings(SiriusDialog):
 
         flay_Img = QFormLayout()
         flay_Img.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
         flay_Img.addRow(label_ImgScaleFactorX, hbox_ImgScaleFactorX)
         flay_Img.addRow(label_ImgScaleFactorY, hbox_ImgScaleFactorY)
         flay_Img.addRow(label_ImgCenterOffsetX, hbox_ImgCenterOffsetX)
         flay_Img.addRow(label_ImgCenterOffsetY, hbox_ImgCenterOffsetY)
         flay_Img.addRow(label_ImgThetaOffset, hbox_ImgThetaOffset)
         flay_Img.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_Img.setLabelAlignment(Qt.AlignRight)
-        flay_Img.setFormAlignment(Qt.AlignCenter)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding))
+        flay_Img.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_Img.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay_Img

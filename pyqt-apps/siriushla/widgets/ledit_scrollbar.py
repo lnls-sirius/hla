@@ -22,7 +22,7 @@ class PyDMLinEditScrollbar(QWidget):
 
         self.lineedit = SiriusLineEdit(
             parent=self, init_channel=init_channel)
-        self.lineedit.setAlignment(Qt.AlignCenter)
+        self.lineedit.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lineedit.setStyleSheet("SiriusLineEdit{min-height:1.29em;}")
         self.lineedit.setSizePolicy(QSzPol.Expanding, QSzPol.Preferred)
 

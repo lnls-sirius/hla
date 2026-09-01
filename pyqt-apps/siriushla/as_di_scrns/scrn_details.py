@@ -32,7 +32,7 @@ class ScrnSettingsDetails(SiriusMainWindow):
 
     def _setupUi(self):
         label = QLabel('<h3>'+self.scrn_prefix+' Settings</h3>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         gbox_general = QGroupBox('Low Level Devices Prefixes', self)
         gbox_general.setLayout(self._setupGeneralInfoLayout())
@@ -50,7 +50,7 @@ class ScrnSettingsDetails(SiriusMainWindow):
         lay.addWidget(label)
         lay.addWidget(gbox_general)
         lay.addWidget(gbox_cam)
-        lay.addWidget(bt_cal, alignment=Qt.AlignRight)
+        lay.addWidget(bt_cal, alignment=Qt.AlignmentFlag.AlignRight)
         self.centralwidget.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
@@ -69,8 +69,8 @@ class ScrnSettingsDetails(SiriusMainWindow):
         flay = QFormLayout()
         flay.addRow(label_MtrPrefix, self.lb_MtrPrefix)
         flay.addRow(label_CamPrefix, self.lb_CamPrefix)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay
 
     def _setupCamSettingsLayout(self):

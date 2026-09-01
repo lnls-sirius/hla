@@ -53,7 +53,7 @@ class LLRFMain(QWidget):
         self.image_container.installEventFilter(self)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
-            QSizePolicy.Ignored, QSizePolicy.Ignored)
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         self.image_container.setMinimumSize(950, 0)
         return self.image_container
 
@@ -81,12 +81,12 @@ class LLRFMain(QWidget):
             """Base Widget: 'title'  'PV information'"""
             bw_hlay = QHBoxLayout()
             bw_hlay.addWidget(
-                QLabel(title), alignment=Qt.AlignCenter)
+                QLabel(title), alignment=Qt.AlignmentFlag.AlignCenter)
 
             widget = self.formatLabel(pv_name, title)
             widget.showUnits = True
             bw_hlay.addWidget(
-                widget, alignment=Qt.AlignCenter)
+                widget, alignment=Qt.AlignmentFlag.AlignCenter)
 
             return bw_hlay
 
@@ -105,7 +105,7 @@ class LLRFMain(QWidget):
             bi_vlay.addWidget(
                 self.showChartBtn(
                     device, channel, chart_type),
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
 
         for basic_info in ["Power", "Phase"]:
             bi_vlay.addLayout(
@@ -191,7 +191,7 @@ class LLRFMain(QWidget):
 
         conlay = QGridLayout()
         conlay.addItem(
-            QSpacerItem(1, 12, QSizePolicy.Ignored, QSizePolicy.Fixed), 0, 0)
+            QSpacerItem(1, 12, QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed), 0, 0)
         for dev in DEVICES:
             grbox = QGroupBox(dev.label, self)
             lay = QGridLayout()

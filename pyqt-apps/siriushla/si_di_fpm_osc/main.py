@@ -31,7 +31,7 @@ class FPMOscMain(SiriusMainWindow):
             )
         )
         self._setup_ui()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setup_ui(self):
         cwid = QWidget()
@@ -40,7 +40,7 @@ class FPMOscMain(SiriusMainWindow):
 
         self.title = QLabel(
             '<h3> Filling Pattern Monitor ('+self.device+')</h3>',
-            alignment=Qt.AlignCenter
+            alignment=Qt.AlignmentFlag.AlignCenter
         )
 
         graph = SiriusWaveformPlot(parent=self)
@@ -98,7 +98,7 @@ class FPMOscMain(SiriusMainWindow):
         self.graph = graph
 
         self.lab_fid = QLabel("Fiducial Offset:", cwid)
-        self.lab_fid.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_fid.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.spb_fid = SiriusSpinbox(
             parent=cwid,
             init_channel=self.device.substitute(
@@ -114,7 +114,7 @@ class FPMOscMain(SiriusMainWindow):
         )
 
         self.lab_tim = QLabel("Update Interval:", cwid)
-        self.lab_tim.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_tim.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.spb_tim = SiriusSpinbox(
             parent=cwid,
             init_channel=self.device.substitute(
@@ -130,7 +130,7 @@ class FPMOscMain(SiriusMainWindow):
         self.lrb_tim.showUnits = True
 
         self.lab_cur = QLabel("Total Current:", cwid)
-        self.lab_cur.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_cur.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.lrb_cur = SiriusLabel(
             parent=cwid,
             init_channel='SI-Glob:AP-CurrInfo:Current-Mon'
@@ -138,7 +138,7 @@ class FPMOscMain(SiriusMainWindow):
         self.lrb_cur.showUnits = True
 
         self.lab_eqv = QLabel("Uni. Fill Equiv. Current:", cwid)
-        self.lab_eqv.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_eqv.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.lrb_eqv = SiriusLabel(
             parent=cwid,
             init_channel=self.device.substitute(
@@ -148,9 +148,9 @@ class FPMOscMain(SiriusMainWindow):
         self.lrb_eqv.showUnits = True
 
         self.lab_err = QLabel("Fill Pattern Error", cwid)
-        self.lab_err.setAlignment(Qt.AlignCenter)
+        self.lab_err.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lab_std = QLabel("STD:", cwid)
-        self.lab_std.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_std.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.lrb_std = SiriusLabel(
             parent=cwid,
             init_channel=self.device.substitute(
@@ -160,7 +160,7 @@ class FPMOscMain(SiriusMainWindow):
         self.lrb_std.showUnits = True
 
         self.lab_kld = QLabel("KL Div.:", cwid)
-        self.lab_kld.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_kld.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.lrb_kld = SiriusLabel(
             parent=cwid,
             init_channel=self.device.substitute(
@@ -248,7 +248,7 @@ class Details(QWidget):
         self.title = QLabel(
             '<h3> FPM Detailed View</h3>',
             self,
-            alignment=Qt.AlignCenter
+            alignment=Qt.AlignmentFlag.AlignCenter
         )
 
         graph = SiriusWaveformPlot(parent=self)
@@ -318,7 +318,7 @@ class Details(QWidget):
         cdta.setSymbolBrush((0, 0, 0))
 
         pen = mkPen(opts['color'], width=opts['lineWidth'])
-        pen.setStyle(2)
+        pen.setStyle(Qt.PenStyle.DashLine)
         self.curve_bun0 = InfiniteLine(pos=0.0, pen=pen, angle=90)
         graph.addItem(self.curve_bun0)
         self.curve_bun0.opts = {'pen': pen}
@@ -332,7 +332,7 @@ class Details(QWidget):
         self.graph = graph
 
         self.lab_tim = QLabel("Time Offset:", self)
-        self.lab_tim.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.lab_tim.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.lrb_tim = SiriusLabel(
             parent=self,
             init_channel=self.device.substitute(

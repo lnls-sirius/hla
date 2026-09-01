@@ -42,7 +42,7 @@ class VLightCamView(QWidget):
 
     def _setupUi(self):
         label = QLabel('<h2>'+self.device+' View</h2>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.cam_viewer = SiriusImageView(
             parent=self,
@@ -94,8 +94,8 @@ class VLightCamView(QWidget):
 
         flay_sts = QFormLayout()
         flay_sts.setSpacing(6)
-        flay_sts.setFormAlignment(Qt.AlignHCenter)
-        flay_sts.setLabelAlignment(Qt.AlignRight)
+        flay_sts.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
+        flay_sts.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         flay_sts.addRow(label_CamEnbl, hbox_CamEnbl)
         flay_sts.addRow(label_FrameCnt, hbox_FrameCnt)
         flay_sts.addRow(label_Conn, hbox_Conn)
@@ -126,8 +126,8 @@ class VLightCamView(QWidget):
 
         flay_ctrl = QFormLayout()
         flay_ctrl.setSpacing(6)
-        flay_ctrl.setFormAlignment(Qt.AlignHCenter)
-        flay_ctrl.setLabelAlignment(Qt.AlignRight)
+        flay_ctrl.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
+        flay_ctrl.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         flay_ctrl.addRow(label_AcqMode, hbox_AcqMode)
         flay_ctrl.addRow(label_AcqPeriod, hbox_AcqPeriod)
         flay_ctrl.addRow(label_ExpTime, hbox_ExpTime)
@@ -138,7 +138,7 @@ class VLightCamView(QWidget):
         self.pb_details.setObjectName('detail')
         self.pb_details.setStyleSheet(
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-        self.pb_details.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.pb_details.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         MyWindow = create_window_from_widget(
             BaslerCamSettings, title=self.device+' Settings Details',
             is_main=True)
@@ -150,5 +150,5 @@ class VLightCamView(QWidget):
         lay.setSpacing(20)
         lay.addLayout(flay_sts)
         lay.addLayout(flay_ctrl)
-        lay.addWidget(self.pb_details, alignment=Qt.AlignTop)
+        lay.addWidget(self.pb_details, alignment=Qt.AlignmentFlag.AlignTop)
         return lay

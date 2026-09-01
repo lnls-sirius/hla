@@ -102,9 +102,9 @@ class _BaseDetailWidget(QWidget):
 
         self.setObjectName(parent.objectName())
 
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
-        self.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
     @staticmethod
     def conv_time_string(value):
@@ -122,11 +122,11 @@ class _BaseDetailWidget(QWidget):
         self.pwrstate_label.setObjectName("pwrstate_label")
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.setHorizontalSpacing(4)
-        layout.addWidget(self.state_button, 0, 0, 1, 2, Qt.AlignHCenter)
-        layout.addWidget(self.pwrstate_led, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.pwrstate_label, 1, 1, Qt.AlignLeft)
+        layout.addWidget(self.state_button, 0, 0, 1, 2, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.pwrstate_led, 1, 0, Qt.AlignmentFlag.AlignRight)
+        layout.addWidget(self.pwrstate_label, 1, 1, Qt.AlignmentFlag.AlignLeft)
         return layout
 
     def _currentLayout(self, prec=None, has_refmon=True):
@@ -166,17 +166,17 @@ class _BaseDetailWidget(QWidget):
                 self.current_ref_val.precisionFromPV = True
 
         layout = QGridLayout()
-        layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(current_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_sp_wid, 0, 1)
-        layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(current_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_rb_val, 1, 1)
         if has_refmon:
-            layout.addWidget(current_ref_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(current_ref_label, 2, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(self.current_ref_val, 2, 1)
-            layout.addWidget(current_mon_label, 3, 0, Qt.AlignRight)
+            layout.addWidget(current_mon_label, 3, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(self.current_mon_val, 3, 1)
         else:
-            layout.addWidget(current_mon_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(current_mon_label, 2, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(self.current_mon_val, 2, 1)
         layout.setColumnStretch(2, 1)
         return layout
@@ -222,17 +222,17 @@ class _BaseDetailWidget(QWidget):
                 self.metric_ref_val.precFromPV = True
 
         layout = QGridLayout()
-        layout.addWidget(metric_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(metric_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.metric_sp_wid, 0, 1)
-        layout.addWidget(metric_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(metric_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.metric_rb_val, 1, 1)
         if has_refmon:
-            layout.addWidget(metric_ref_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(metric_ref_label, 2, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(self.metric_ref_val, 2, 1)
-            layout.addWidget(metric_mon_label, 3, 0, Qt.AlignRight)
+            layout.addWidget(metric_mon_label, 3, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(self.metric_mon_val, 3, 1)
         else:
-            layout.addWidget(metric_mon_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(metric_mon_label, 2, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(self.metric_mon_val, 2, 1)
         layout.setColumnStretch(3, 1)
         return layout
@@ -329,7 +329,7 @@ class PSDetailWidget(_BaseDetailWidget):
         # Group boxes that compose the widget
         self.frmwr_box = QGroupBox("Firmware && IOC")
         self.frmwr_box.setObjectName("version")
-        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.frmwr_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
         self.pwrstate_box = QGroupBox("PwrState")
@@ -403,10 +403,10 @@ class PSDetailWidget(_BaseDetailWidget):
             controls.addWidget(self.genparams_box, 4, 0, 1, 2)
 
         analogs = QVBoxLayout()
-        analogs.addWidget(self.current_box, Qt.AlignCenter)
+        analogs.addWidget(self.current_box, Qt.AlignmentFlag.AlignCenter)
         if self._metric:
-            analogs.addWidget(self.metric_box, Qt.AlignCenter)
-        analogs.addWidget(self.curve_tabs, Qt.AlignCenter)
+            analogs.addWidget(self.metric_box, Qt.AlignmentFlag.AlignCenter)
+        analogs.addWidget(self.curve_tabs, Qt.AlignmentFlag.AlignCenter)
 
         boxes_layout = QHBoxLayout()
         boxes_layout.addLayout(controls)
@@ -426,18 +426,18 @@ class PSDetailWidget(_BaseDetailWidget):
     def _frmwrLayout(self):
         self.version_label = QLabel('ARM & DSP')
         self.version_label.setObjectName("version_label")
-        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.version_cte = SiriusLabel(
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.displayFormat = \
             SiriusLabel.DisplayFormat.BSMPUDCVersion
         self.version_cte.setObjectName("version_cte_label")
-        self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_cte.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_boot_label = QLabel('IOC Boot')
         self.tstamp_boot_label.setObjectName("tstamp_label")
-        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_boot = QLabel('', self)
         self.tstamp_boot_ch = SiriusConnectionSignal(
@@ -445,12 +445,12 @@ class PSDetailWidget(_BaseDetailWidget):
         self.tstamp_boot_ch.new_value_signal[float].connect(
             self._tstamp_boot_met)
         self.tstamp_boot.setObjectName("tstamp_boot_label")
-        self.tstamp_boot.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstamp_label")
         self.tstamp_update_label.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Maximum)
+            QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_update = QLabel('', self)
         self.tstamp_update_ch = SiriusConnectionSignal(
@@ -458,15 +458,15 @@ class PSDetailWidget(_BaseDetailWidget):
         self.tstamp_update_ch.new_value_signal[float].connect(
             self._tstamp_update_met)
         self.tstamp_update.setObjectName("tstamp_update_label")
-        self.tstamp_update.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         layout = QGridLayout()
-        layout.addWidget(self.version_label, 0, 0, Qt.AlignHCenter)
-        layout.addWidget(self.version_cte, 0, 1, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_boot, 1, 1, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_update, 2, 1, Qt.AlignHCenter)
+        layout.addWidget(self.version_label, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.version_cte, 0, 1, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_boot, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_update, 2, 1, Qt.AlignmentFlag.AlignHCenter)
         return layout
 
     def _tstamp_update_met(self, value):
@@ -479,7 +479,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
     def _interlockLayout(self):
         # Widgets
-        self.soft_label = QLabel('Soft', self, alignment=Qt.AlignCenter)
+        self.soft_label = QLabel('Soft', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.soft_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         self.soft_intlk_bt.setObjectName('soft_intlk_bt')
         self.soft_intlk_bt.setStyleSheet(
@@ -491,7 +491,7 @@ class PSDetailWidget(_BaseDetailWidget):
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
 
-        self.hard_label = QLabel('Hard', self, alignment=Qt.AlignCenter)
+        self.hard_label = QLabel('Hard', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.hard_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         self.hard_intlk_bt.setObjectName('hard_intlk_bt')
         self.hard_intlk_bt.setStyleSheet(
@@ -506,7 +506,7 @@ class PSDetailWidget(_BaseDetailWidget):
         iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
                       if re.match('IntlkIIB.*Labels-Cte', k)]
         if iib_intlks:
-            self.iib_label = QLabel('IIB', self, alignment=Qt.AlignCenter)
+            self.iib_label = QLabel('IIB', self, alignment=Qt.AlignmentFlag.AlignCenter)
             self.iib_intlk_bt = QPushButton(
                 qta.icon('fa5s.list-ul'), '', self)
             self.iib_intlk_bt.setObjectName('iib_intlk_bt')
@@ -528,7 +528,7 @@ class PSDetailWidget(_BaseDetailWidget):
                        if re.match('AlarmsIIB.*Labels-Cte', k)])
         if alarms:
             self.alarm_label = QLabel(
-                'Alarms', self, alignment=Qt.AlignCenter)
+                'Alarms', self, alignment=Qt.AlignmentFlag.AlignCenter)
             self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
             self.alarm_bt.setObjectName('alarm_bt')
             self.alarm_bt.setStyleSheet(
@@ -555,7 +555,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # Build layout
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.soft_intlk_bt, 0, 0)
         layout.addWidget(self.soft_label, 0, 1)
         layout.addWidget(self.soft_intlk_led, 0, 2)
@@ -591,10 +591,10 @@ class PSDetailWidget(_BaseDetailWidget):
         ctrlmode_layout.addWidget(self.ctrlmode_label)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
-        layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignHCenter)
-        layout.addLayout(ctrlmode_layout, 2, 0, Qt.AlignHCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addLayout(ctrlmode_layout, 2, 0, Qt.AlignmentFlag.AlignHCenter)
         return layout
 
     def _ctrlLoopLayout(self):
@@ -614,8 +614,8 @@ class PSDetailWidget(_BaseDetailWidget):
         lay_sts.addWidget(self.ctrlloop_label)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.ctrlloop_btn, 0, 0, Qt.AlignHCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.ctrlloop_btn, 0, 0, Qt.AlignmentFlag.AlignHCenter)
         layout.addLayout(lay_sts, 1, 0)
         return layout
 
@@ -689,27 +689,27 @@ class PSDetailWidget(_BaseDetailWidget):
 
         parms = QWidget()
         lay_parms = QGridLayout(parms)
-        lay_parms.setAlignment(Qt.AlignTop)
-        lay_parms.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
-        lay_parms.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
-        lay_parms.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
+        lay_parms.setAlignment(Qt.AlignmentFlag.AlignTop)
+        lay_parms.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignmentFlag.AlignRight)
+        lay_parms.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignmentFlag.AlignCenter)
+        lay_parms.addWidget(self.cycle_type_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_type_sp_cb, 1, 1)
         lay_parms.addWidget(self.cycle_type_rb_label, 1, 2, 1, 2)
-        lay_parms.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_nr_sp_sb, 2, 1)
         lay_parms.addWidget(self.cycle_nr_rb_label, 2, 2, 1, 2)
-        lay_parms.addWidget(self.cycle_index_label, 3, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_index_label, 3, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_index_mon_label, 3, 2, 1, 2)
-        lay_parms.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_freq_sp_sb, 4, 1)
         lay_parms.addWidget(self.cycle_freq_rb_label, 4, 2, 1, 2)
-        lay_parms.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_ampl_sp_sb, 5, 1)
         lay_parms.addWidget(self.cycle_ampl_rb_label, 5, 2, 1, 2)
-        lay_parms.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_offset_sp_sb, 6, 1)
         lay_parms.addWidget(self.cycle_offset_rb_label, 6, 2, 1, 2)
-        lay_parms.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_auxparam_sp_le, 7, 1)
         lay_parms.addWidget(self.cycle_auxparam_rb_label, 7, 2)
         lay_parms.addWidget(self.cycle_auxparam_helpbut, 7, 3)
@@ -733,7 +733,7 @@ class PSDetailWidget(_BaseDetailWidget):
                 '#graph{max-height:15em; max-width:16.5em;}')
             self.curve_siggen.setLabel('left', text='Current [A]', color='gray')
             self.curve_siggen.setLabel('bottom', text='Time [s]', color='gray')
-            self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            self.curve_siggen.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
             self.curve_siggen.autoRangeX = True
             self.curve_siggen.autoRangeY = True
             self.curve_siggen.showXGrid = True
@@ -767,10 +767,10 @@ class PSDetailWidget(_BaseDetailWidget):
         idff_mode_led = SiriusLedState(self, idff_mode_sts)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setColumnStretch(2, 1)
-        layout.addWidget(idff_mode_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(idff_mode_btn, 0, 1, Qt.AlignHCenter)
+        layout.addWidget(idff_mode_label, 0, 0, Qt.AlignmentFlag.AlignRight)
+        layout.addWidget(idff_mode_btn, 0, 1, Qt.AlignmentFlag.AlignHCenter)
         layout.addWidget(idff_mode_led, 0, 2)
         return layout
 
@@ -780,9 +780,9 @@ class PSDetailWidget(_BaseDetailWidget):
         queue_size_rb_label = SiriusLabel(self, queue_size_ca)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setColumnStretch(3, 1)
-        layout.addWidget(queue_size_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(queue_size_rb_label, 0, 1)
 
         if 'DCLink' not in self._prefixed_psname:
@@ -795,7 +795,7 @@ class PSDetailWidget(_BaseDetailWidget):
             syncpulse_cmd_btn.setStyleSheet(
                 '#syncpulse{min-width:25px; max-width:32px; icon-size:20px;}')
 
-            layout.addWidget(syncpulse_cmd_lb, 1, 0, Qt.AlignRight)
+            layout.addWidget(syncpulse_cmd_lb, 1, 0, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(syncpulse_cmd_btn, 1, 1)
 
             pbaux = QPushButton(
@@ -821,7 +821,7 @@ class PSDetailWidget(_BaseDetailWidget):
         self.wfm_graph.setObjectName('graph')
         self.wfm_graph.setStyleSheet(
             '#graph{max-height:15em; max-width:16.5em;}')
-        self.wfm_graph.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_graph.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.wfm_graph.autoRangeX = True
         self.wfm_graph.autoRangeY = True
         self.wfm_graph.showXGrid = True
@@ -834,7 +834,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # nrpts label
         self.wfm_nrpts_lb = QLabel('Nrpts (SP|RB|Ref-Mon|Mon):', self)
-        self.wfm_nrpts_lb.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_nrpts_lb.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
         # checkbox layout
         hbox_show = QHBoxLayout()
@@ -880,9 +880,9 @@ class PSDetailWidget(_BaseDetailWidget):
             # change xdata to show time indices according to ScopeDuration-RB
             curvetype = 'scope' if propty == 'Wfm-Mon' else 'wfm'
             self._scopedur_ch_rb.new_value_signal[float].connect(
-                _part(self._wfmTimeData, propty))
+                _part(self._wfmTimeData, propty, self._scopedur_ch_rb))
             self._wfm_chs[suf].new_value_signal[_np.ndarray].connect(
-                _part(self._wfmTimeData, propty))
+                _part(self._wfmTimeData, propty, self._wfm_chs[suf]))
             # reimplement fourier transform to use ScopeFreq-RB
             curve._fourierTransform = _part(self._wfmFourierData, curvetype)
             self._wfm_curves[propty] = curve
@@ -896,7 +896,7 @@ class PSDetailWidget(_BaseDetailWidget):
             hbox_show.addWidget(cbx)
 
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.wfm_graph)
         layout.addWidget(self.wfm_nrpts_lb)
         layout.addLayout(hbox_show)
@@ -928,15 +928,15 @@ class PSDetailWidget(_BaseDetailWidget):
         self.scope_dur_rb_lb.showUnits = True
 
         layout_scope = QGridLayout()
-        layout_scope.setAlignment(Qt.AlignTop)
+        layout_scope.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout_scope.setContentsMargins(6, 6, 3, 3)
-        layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+        layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout_scope.addWidget(self.scope_src_rb_lb, 0, 3)
         layout_scope.addWidget(
-            self.scope_freq_label, 1, 0, 1, 2, Qt.AlignRight)
+            self.scope_freq_label, 1, 0, 1, 2, Qt.AlignmentFlag.AlignRight)
         layout_scope.addWidget(self.scope_freq_sp_sb, 1, 2)
         layout_scope.addWidget(self.scope_freq_rb_lb, 1, 3)
-        layout_scope.addWidget(self.scope_dur_label, 2, 0, 1, 2, Qt.AlignRight)
+        layout_scope.addWidget(self.scope_dur_label, 2, 0, 1, 2, Qt.AlignmentFlag.AlignRight)
         layout_scope.addWidget(self.scope_dur_sp_sb, 2, 2)
         layout_scope.addWidget(self.scope_dur_rb_lb, 2, 3)
 
@@ -951,18 +951,18 @@ class PSDetailWidget(_BaseDetailWidget):
                 self.scope_src_sp_sb.setVisible)
 
             self.scope_src_sp_sb.setVisible(False)
-            layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+            layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignmentFlag.AlignRight)
             layout_scope.addWidget(self.scope_src_sp_opt, 0, 1)
             layout_scope.addWidget(self.scope_src_sp_cb, 0, 2)
             layout_scope.addWidget(self.scope_src_sp_sb, 0, 2)
         except KeyError:
             layout_scope.addWidget(
-                self.scope_src_label, 0, 0, 1, 2, Qt.AlignRight)
+                self.scope_src_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignRight)
             layout_scope.addWidget(self.scope_src_sp_sb, 0, 2)
 
         self.scope_box = QGroupBox("Scope")
         self.scope_box.setObjectName("Scope")
-        self.scope_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.scope_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.scope_box.setLayout(layout_scope)
 
         # --- wfm groupbox ---
@@ -1014,43 +1014,43 @@ class PSDetailWidget(_BaseDetailWidget):
         wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
 
         layout_wfm = QGridLayout()
-        layout_wfm.setAlignment(Qt.AlignTop)
+        layout_wfm.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout_wfm.setContentsMargins(6, 6, 3, 3)
 
         layout_wfm.addWidget(
-            self.wfm_selected_label, 0, 0, Qt.AlignRight)
+            self.wfm_selected_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(self.wfm_selected_mon, 0, 1, 1, 2)
         layout_wfm.addWidget(
-            self.wfm_syncmode_label, 1, 0, Qt.AlignRight)
+            self.wfm_syncmode_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(self.wfm_syncmode_sel_cb, 1, 1)
         layout_wfm.addWidget(self.wfm_syncmode_sts_lb, 1, 2)
-        layout_wfm.addWidget(self.wfm_freq_label, 2, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_freq_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(self.wfm_freq_sp_sb, 2, 1)
         layout_wfm.addWidget(self.wfm_freq_rb_lb, 2, 2)
-        layout_wfm.addWidget(self.wfm_gain_label, 3, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_gain_label, 3, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(self.wfm_gain_sp_sb, 3, 1)
         layout_wfm.addWidget(self.wfm_gain_rb_lb, 3, 2)
-        layout_wfm.addWidget(self.wfm_offset_label, 4, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_offset_label, 4, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(self.wfm_offset_sp_sb, 4, 1)
         layout_wfm.addWidget(self.wfm_offset_rb_lb, 4, 2)
 
-        layout_wfm.addWidget(wfm_index_label, 5, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_index_label, 5, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(wfm_index_rb_label, 5, 1)
-        layout_wfm.addWidget(wfm_count_label, 6, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_count_label, 6, 0, Qt.AlignmentFlag.AlignRight)
         layout_wfm.addWidget(wfm_count_rb_label, 6, 1)
-        layout_wfm.addWidget(wfm_updateauto_label, 7, 0, Qt.AlignRight)
-        layout_wfm.addWidget(wfm_updateauto_btn, 7, 1, Qt.AlignHCenter)
+        layout_wfm.addWidget(wfm_updateauto_label, 7, 0, Qt.AlignmentFlag.AlignRight)
+        layout_wfm.addWidget(wfm_updateauto_btn, 7, 1, Qt.AlignmentFlag.AlignHCenter)
         layout_wfm.addWidget(wfm_updateauto_sts_led, 7, 2)
 
         self.wfm_box = QGroupBox("Wfm")
         self.wfm_box.setObjectName("Wfm")
-        self.wfm_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.wfm_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.wfm_box.setLayout(layout_wfm)
 
         # --- wfmlayout ---
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setContentsMargins(6, 6, 3, 3)
         layout.addWidget(self.scope_box, 1, 1)
         layout.addWidget(self.wfm_box, 2, 1)
@@ -1070,10 +1070,10 @@ class PSDetailWidget(_BaseDetailWidget):
         xlabel = 'Frequency [Hz]' if state else 'Time [s]'
         self.wfm_graph.setLabel('bottom', text=xlabel)
 
-    def _wfmTimeData(self, propty, value):
+    def _wfmTimeData(self, propty, sender, value):
         if value is None:
             return
-        channel = self.sender().address
+        channel = sender.address
         curve = self._wfm_curves[propty]
         if 'Duration' in channel:
             duration = value
@@ -1127,7 +1127,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
         # Group boxes that compose the widget
         self.frmwr_box = QGroupBox("IOC && Net")
         self.frmwr_box.setObjectName("version")
-        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.frmwr_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.pwrstate_box = QGroupBox("PwrState")
         self.pwrstate_box.setObjectName("power_state")
         self.interlock_box = QGroupBox("Interlock")
@@ -1162,13 +1162,13 @@ class LIPSDetailWidget(_BaseDetailWidget):
         controls.addWidget(self.interlock_box, 1, 1)
 
         analogs = QVBoxLayout()
-        analogs.addWidget(self.current_box, Qt.AlignCenter)
+        analogs.addWidget(self.current_box, Qt.AlignmentFlag.AlignCenter)
 
         if self._metric:
-            analogs.addWidget(self.metric_box, Qt.AlignCenter)
+            analogs.addWidget(self.metric_box, Qt.AlignmentFlag.AlignCenter)
             controls.addWidget(self.params_box, 2, 0, 1, 2)
         else:
-            analogs.addWidget(self.params_box, Qt.AlignCenter)
+            analogs.addWidget(self.params_box, Qt.AlignmentFlag.AlignCenter)
 
         boxes_layout = QHBoxLayout()
         boxes_layout.addLayout(controls)
@@ -1184,19 +1184,19 @@ class LIPSDetailWidget(_BaseDetailWidget):
     def _frmwrLayout(self):
         self.version_label = QLabel('Version')
         self.version_label.setObjectName("version_label")
-        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.version_cte = SiriusLabel(
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.setObjectName("version_cte_label")
-        self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_cte.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_boot_label = QLabel('IOC Boot')
         self.tstamp_boot_label.setObjectName("tstamp_label")
-        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_boot_cte = SiriusLabel(
             self, self._prefixed_psname + ":TimestampBoot-Cte")
         self.tstamp_boot_cte.setObjectName("tstamp_cte_label")
-        self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_boot_cte_ch = SiriusConnectionSignal(
             self._prefixed_psname + ":TimestampBoot-Cte")
         self.tstamp_boot_cte_ch.new_value_signal[float].connect(
@@ -1205,11 +1205,11 @@ class LIPSDetailWidget(_BaseDetailWidget):
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstampupdate_label")
         self.tstamp_update_label.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Maximum)
+            QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_update_mon = SiriusLabel(
             self, self._prefixed_psname + ":TimestampUpdate-Mon")
         self.tstamp_update_mon.setObjectName("tstampupdate_mon_label")
-        self.tstamp_update_mon.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_mon.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_update_mon_ch = SiriusConnectionSignal(
             self._prefixed_psname + ":TimestampUpdate-Mon")
         self.tstamp_update_mon_ch.new_value_signal[float].connect(
@@ -1217,21 +1217,21 @@ class LIPSDetailWidget(_BaseDetailWidget):
 
         self.conn_label = QLabel('Net Status')
         self.conn_label.setObjectName("net_label")
-        self.conn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.conn_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.conn_sts = SiriusLabel(
             self, self._prefixed_psname + ":Connected-Mon")
         self.conn_sts.setObjectName("net_cte_label")
-        self.conn_sts.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.conn_sts.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         layout = QGridLayout()
-        layout.addWidget(self.version_label, 0, 0, Qt.AlignHCenter)
-        layout.addWidget(self.version_cte, 0, 1, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_boot_cte, 1, 1, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignHCenter)
-        layout.addWidget(self.tstamp_update_mon, 2, 1, Qt.AlignHCenter)
-        layout.addWidget(self.conn_label, 3, 0, Qt.AlignHCenter)
-        layout.addWidget(self.conn_sts, 3, 1, Qt.AlignHCenter)
+        layout.addWidget(self.version_label, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.version_cte, 0, 1, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_cte, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.tstamp_update_mon, 2, 1, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.conn_label, 3, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.conn_sts, 3, 1, Qt.AlignmentFlag.AlignHCenter)
         return layout
 
     def _tstamp_update_mon_met(self, value):
@@ -1257,10 +1257,10 @@ class LIPSDetailWidget(_BaseDetailWidget):
             self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.setContentsMargins(6, 6, 3, 3)
         layout.addWidget(self.intlk_bt, 0, 0)
-        layout.addWidget(QLabel('Intlk', self, alignment=Qt.AlignCenter), 0, 1)
+        layout.addWidget(QLabel('Intlk', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         layout.addWidget(self.intlk_led, 0, 2)
         return layout
 
@@ -1278,11 +1278,11 @@ class LIPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname + ':BusVoltage-Mon')
 
         layout = QGridLayout()
-        layout.addWidget(temp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(temp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.temp_mon_label, 0, 1)
-        layout.addWidget(loadv_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(loadv_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.loadv_mon_label, 1, 1)
-        layout.addWidget(busv_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(busv_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.busv_mon_label, 2, 1)
         return layout
 
@@ -1367,9 +1367,9 @@ class DCLinkDetailWidget(PSDetailWidget):
         ctrlmode_layout.addWidget(self.ctrlmode_label)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.opmode_rb, 0, 0, Qt.AlignHCenter)
-        layout.addLayout(ctrlmode_layout, 1, 0, Qt.AlignHCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.opmode_rb, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addLayout(ctrlmode_layout, 1, 0, Qt.AlignmentFlag.AlignHCenter)
         return layout
 
 
@@ -1401,14 +1401,14 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         self.current_mon_val.precFromPV = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_sp_widget, 0, 1)
-        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_rb_val, 1, 1)
-        layout.addWidget(self.current_ref_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.current_ref_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_ref_val, 2, 1)
-        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_mon_val, 3, 1)
         layout.setColumnStretch(2, 1)
         return layout
@@ -1459,14 +1459,14 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_mon_val.showUnits = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.cap_bank_sp_label, 0, 0, Qt.AlignRight)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(self.cap_bank_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.cap_bank_sp_widget, 0, 1)
-        layout.addWidget(self.cap_bank_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.cap_bank_rb_val, 1, 1)
-        layout.addWidget(self.cap_bank_ref_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_ref_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.cap_bank_ref_val, 2, 1)
-        layout.addWidget(self.cap_bank_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_mon_label, 3, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.cap_bank_mon_val, 3, 1)
         layout.setColumnStretch(2, 1)
         return layout
@@ -1597,9 +1597,9 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.opmode_rb.setObjectName("opmode_rb_label")
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
-        layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignHCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignmentFlag.AlignHCenter)
         return layout
 
     def _currentRawLayout(self):
@@ -1618,14 +1618,14 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname+":CurrentRaw-Mon")
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(current_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_raw_sp, 0, 1)
-        layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(current_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_raw_rb, 1, 1)
-        layout.addWidget(current_ref_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(current_ref_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_raw_ref, 2, 1)
-        layout.addWidget(current_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(current_mon_label, 3, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_raw_mon, 3, 1)
         layout.setColumnStretch(2, 1)
         return layout
@@ -1651,12 +1651,12 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.voltage_mn.showUnits = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(voltage_sp_label, 0, 0, Qt.AlignRight)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(voltage_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_sp, 0, 1)
-        layout.addWidget(voltage_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(voltage_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_rb, 1, 1)
-        layout.addWidget(voltage_mn_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(voltage_mn_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_mn, 2, 1)
         layout.setColumnStretch(2, 1)
         return layout
@@ -1676,23 +1676,23 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.voltage_raw_mn.showUnits = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(voltage_sp_label, 0, 0, Qt.AlignRight)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(voltage_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_raw_sp, 0, 1)
-        layout.addWidget(voltage_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(voltage_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_raw_rb, 1, 1)
-        layout.addWidget(voltage_mn_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(voltage_mn_label, 2, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_raw_mn, 2, 1)
         layout.setColumnStretch(2, 1)
         return layout
 
     def _interlockLayout(self):
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         row = 0
         for pvn in ['AlarmsAmp', 'AlarmsAmpLtc']:
-            alarm_label = QLabel(pvn, self, alignment=Qt.AlignCenter)
+            alarm_label = QLabel(pvn, self, alignment=Qt.AlignmentFlag.AlignCenter)
             alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
             alarm_bt.setObjectName('alarm_bt')
             alarm_bt.setStyleSheet(
@@ -1727,14 +1727,14 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         # # loop parameters
         ctlmode_lb = QLabel(
-            'CurrLoopMode', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'CurrLoopMode', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.ctlmode_cb = PyDMEnumComboBox(
             self, self._prefixed_psname + ':CurrLoopMode-Sel')
         self.ctlmode_lb = SiriusLabel(
             self, self._prefixed_psname + ':CurrLoopMode-Sts')
 
         ctlkp_lb = QLabel(
-            'CurrLoopKp', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'CurrLoopKp', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.ctlkp_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrLoopKp-SP')
         self.ctlkp_sp.limitsFromChannel = False
@@ -1744,7 +1744,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname + ':CurrLoopKp-RB')
 
         ctlti_lb = QLabel(
-            'CurrLoopKi', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'CurrLoopKi', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.ctlti_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrLoopKi-SP')
         self.ctlti_sp.limitsFromChannel = False
@@ -1754,7 +1754,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname + ':CurrLoopKi-RB')
 
         cgain_lb = QLabel(
-            'CurrGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'CurrGain', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.cgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrGain-SP')
         self.cgain_sp.precisionFromPV = False
@@ -1768,7 +1768,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.cgain_rb.precision = 8
 
         coffs_lb = QLabel(
-            'CurrOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'CurrOffset', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.coffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrOffset-SP')
         self.coffs_sp.limitsFromChannel = False
@@ -1778,7 +1778,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname + ':CurrOffset-RB')
 
         vgain_lb = QLabel(
-            'VoltGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'VoltGain', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.vgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':VoltGain-SP')
         self.vgain_sp.precisionFromPV = False
@@ -1792,7 +1792,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.vgain_rb.precision = 8
 
         voffs_lb = QLabel(
-            'VoltOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'VoltOffset', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.voffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':VoltOffset-SP')
         self.voffs_sp.limitsFromChannel = False
@@ -1803,47 +1803,47 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widgetparms = QWidget()
         lay = QGridLayout(widgetparms)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(ctlmode_lb, 0, 0, Qt.AlignRight)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(ctlmode_lb, 0, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.ctlmode_cb, 0, 1)
         lay.addWidget(self.ctlmode_lb, 0, 2)
-        lay.addWidget(ctlkp_lb, 1, 0, Qt.AlignRight)
+        lay.addWidget(ctlkp_lb, 1, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.ctlkp_sp, 1, 1)
         lay.addWidget(self.ctlkp_rb, 1, 2)
-        lay.addWidget(ctlti_lb, 2, 0, Qt.AlignRight)
+        lay.addWidget(ctlti_lb, 2, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.ctlti_sp, 2, 1)
         lay.addWidget(self.ctlti_rb, 2, 2)
-        lay.addWidget(cgain_lb, 3, 0, Qt.AlignRight)
+        lay.addWidget(cgain_lb, 3, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.cgain_sp, 3, 1)
         lay.addWidget(self.cgain_rb, 3, 2)
-        lay.addWidget(coffs_lb, 4, 0, Qt.AlignRight)
+        lay.addWidget(coffs_lb, 4, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.coffs_sp, 4, 1)
         lay.addWidget(self.coffs_rb, 4, 2)
-        lay.addWidget(vgain_lb, 5, 0, Qt.AlignRight)
+        lay.addWidget(vgain_lb, 5, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.vgain_sp, 5, 1)
         lay.addWidget(self.vgain_rb, 5, 2)
-        lay.addWidget(voffs_lb, 6, 0, Qt.AlignRight)
+        lay.addWidget(voffs_lb, 6, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.voffs_sp, 6, 1)
         lay.addWidget(self.voffs_rb, 6, 2)
         tabctrl.addTab(widgetparms, 'Parameters')
 
         # # tests
         testlima_lb = QLabel(
-            'Limit A', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Limit A', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.testlima_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':TestLimA-SP')
         self.testlima_rb = SiriusLabel(
             self, self._prefixed_psname + ':TestLimA-RB')
 
         testlimb_lb = QLabel(
-            'Limit B', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Limit B', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.testlimb_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':TestLimB-SP')
         self.testlimb_rb = SiriusLabel(
             self, self._prefixed_psname + ':TestLimB-RB')
 
         testwaveper_lb = QLabel(
-            'Wave Period', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Wave Period', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.testwaveper_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':TestWavePeriod-SP')
         self.testwaveper_rb = SiriusLabel(
@@ -1851,14 +1851,14 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widgettest = QWidget()
         lay = QGridLayout(widgettest)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(testlima_lb, 0, 0, Qt.AlignRight)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(testlima_lb, 0, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.testlima_sp, 0, 1)
         lay.addWidget(self.testlima_rb, 0, 2)
-        lay.addWidget(testlimb_lb, 1, 0, Qt.AlignRight)
+        lay.addWidget(testlimb_lb, 1, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.testlimb_sp, 1, 1)
         lay.addWidget(self.testlimb_rb, 1, 2)
-        lay.addWidget(testwaveper_lb, 2, 0, Qt.AlignRight)
+        lay.addWidget(testwaveper_lb, 2, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.testwaveper_sp, 2, 1)
         lay.addWidget(self.testwaveper_rb, 2, 2)
         tabctrl.addTab(widgettest, 'Tests')
@@ -1875,7 +1875,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr.addChannel(
             y_channel=self._prefixed_psname + ':LAMPCurrentRefData',
             name='CurrentRef', color='green', lineWidth=1)
-        # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        # self.graph_curr.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
         self.graph_curr.showXGrid = True
@@ -1891,7 +1891,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_volt.addChannel(
             y_channel=self._prefixed_psname + ':LAMPVoltageData',
             name='Voltage', color='blue', lineWidth=1)
-        # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        # self.graph_volt.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.graph_volt.autoRangeX = True
         self.graph_volt.autoRangeY = True
         self.graph_volt.showXGrid = True
@@ -1926,7 +1926,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             cb_show.setStyleSheet('color: '+color+';')
             cb_show.stateChanged.connect(curve.setVisible)
             hbox_show.addWidget(cb_show)
-        self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.graph_chist.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.graph_chist.autoRangeX = True
         self.graph_chist.autoRangeY = True
         self.graph_chist.showXGrid = True
@@ -1952,13 +1952,13 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
     def _fofbctrlLayout(self):
         # controls
         fofbacc_lb = QLabel(
-            'Accumulator', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Accumulator', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbacc_mon = SiriusLabel(
             self, self._prefixed_psname + ':FOFBAcc-Mon')
-        self.fofbacc_mon.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.fofbacc_mon.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         fofbaccgain_lb = QLabel(
-            'Acc. Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Acc. Gain', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbaccgain_sp = PyDMLineEdit(
             self, self._prefixed_psname + ':FOFBAccGain-SP')
         self.fofbaccgain_sp.precisionFromPV = False
@@ -1969,14 +1969,14 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.fofbaccgain_rb.precision = 8
 
         fofbaccfreeze_lb = QLabel(
-            'Acc. Freeze', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Acc. Freeze', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbaccfreeze_sp = PyDMEnumComboBox(
             self, self._prefixed_psname + ':FOFBAccFreeze-Sel')
         self.fofbaccfreeze_rb = SiriusLabel(
             self, self._prefixed_psname + ':FOFBAccFreeze-Sts')
 
         fofbaccclear_lb = QLabel(
-            'Acc. Clear', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Acc. Clear', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbaccclear_bt = PyDMPushButton(
             parent=self, icon=qta.icon('mdi.sync'), pressValue=1,
             init_channel=self._prefixed_psname + ":FOFBAccClear-Cmd")
@@ -1986,7 +1986,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         fofbaccmaxsat_lb = QLabel(
             'Max. Sat. Current', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbaccmaxsat_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':FOFBAccSatMax-SP')
         self.fofbaccmaxsat_sp.precisionFromPV = False
@@ -1998,7 +1998,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         fofbaccminsat_lb = QLabel(
             'Min. Sat. Current', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbaccminsat_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':FOFBAccSatMin-SP')
         self.fofbaccminsat_sp.precisionFromPV = False
@@ -2010,7 +2010,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         fofbaccfiltgain_lb = QLabel(
             'Filter Gain', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbaccfiltgain_sp = PyDMLineEdit(
             self, self._prefixed_psname + ':FOFBAccFilterGain-SP')
         self.fofbaccfiltgain_rb = SiriusLabel(
@@ -2018,23 +2018,23 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widctrl = QWidget()
         lay = QGridLayout(widctrl)
-        lay.addWidget(fofbacc_lb, 0, 0, Qt.AlignRight)
+        lay.addWidget(fofbacc_lb, 0, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbacc_mon, 0, 1)
-        lay.addWidget(fofbaccgain_lb, 1, 0, Qt.AlignRight)
+        lay.addWidget(fofbaccgain_lb, 1, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbaccgain_sp, 1, 1)
         lay.addWidget(self.fofbaccgain_rb, 1, 2)
-        lay.addWidget(fofbaccfreeze_lb, 2, 0, Qt.AlignRight)
+        lay.addWidget(fofbaccfreeze_lb, 2, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbaccfreeze_sp, 2, 1)
         lay.addWidget(self.fofbaccfreeze_rb, 2, 2)
-        lay.addWidget(fofbaccclear_lb, 3, 0, Qt.AlignRight)
+        lay.addWidget(fofbaccclear_lb, 3, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbaccclear_bt, 3, 1)
-        lay.addWidget(fofbaccmaxsat_lb, 4, 0, Qt.AlignRight)
+        lay.addWidget(fofbaccmaxsat_lb, 4, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbaccmaxsat_sp, 4, 1)
         lay.addWidget(self.fofbaccmaxsat_rb, 4, 2)
-        lay.addWidget(fofbaccminsat_lb, 5, 0, Qt.AlignRight)
+        lay.addWidget(fofbaccminsat_lb, 5, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbaccminsat_sp, 5, 1)
         lay.addWidget(self.fofbaccminsat_rb, 5, 2)
-        lay.addWidget(fofbaccfiltgain_lb, 6, 0, Qt.AlignRight)
+        lay.addWidget(fofbaccfiltgain_lb, 6, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.fofbaccfiltgain_sp, 6, 1)
         lay.addWidget(self.fofbaccfiltgain_rb, 6, 2)
 
@@ -2045,7 +2045,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             colorrb = 'blue' if plane == 'X' else 'red'
             gph_fofbcoeffs[plane] = SiriusWaveformPlot()
             gph_fofbcoeffs[plane].setSizePolicy(
-                QSzPlcy.Maximum, QSzPlcy.Maximum)
+                QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
             gph_fofbcoeffs[plane].showLegend = True
             gph_fofbcoeffs[plane].autoRangeX = True
             gph_fofbcoeffs[plane].autoRangeY = True
@@ -2070,20 +2070,20 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self.show_coeff_rb.stateChanged.connect(
                 gph_fofbcoeffs[plane].curveAtIndex(1).setVisible)
         hbox_coeffshow = QHBoxLayout()
-        hbox_coeffshow.setAlignment(Qt.AlignCenter)
+        hbox_coeffshow.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbox_coeffshow.addWidget(self.show_coeff_sp)
         hbox_coeffshow.addWidget(self.show_coeff_rb)
 
         widcoeff = QWidget()
         lay = QVBoxLayout(widcoeff)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         for plane in ['X', 'Y']:
             lay.addWidget(gph_fofbcoeffs[plane])
         lay.addLayout(hbox_coeffshow)
 
         # filters
         gph_filt = SiriusWaveformPlot()
-        gph_filt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        gph_filt.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         gph_filt.showLegend = True
         gph_filt.autoRangeX = True
         gph_filt.autoRangeY = True
@@ -2107,13 +2107,13 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.show_filt_rb.stateChanged.connect(
             gph_filt.curveAtIndex(1).setVisible)
         hbox_filtshow = QHBoxLayout()
-        hbox_filtshow.setAlignment(Qt.AlignCenter)
+        hbox_filtshow.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbox_filtshow.addWidget(self.show_filt_sp)
         hbox_filtshow.addWidget(self.show_filt_rb)
 
         widfilt = QWidget()
         lay = QVBoxLayout(widfilt)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(gph_filt)
         lay.addLayout(hbox_filtshow)
 
@@ -2157,17 +2157,17 @@ class PSAuxMeasWidget(SiriusDialog):
 
     def _setupUi(self):
         text_psname = QLabel('<h3>' + self._psname[0] + '</h3>', self,
-                             alignment=Qt.AlignCenter)
+                             alignment=Qt.AlignmentFlag.AlignCenter)
 
         pswid = None
         if self.auxmeas:
             title_main = QLabel('<h3>Main Measures</h3>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
             pswid = self._setupPSWidget()
 
         if len(self.mod2dbase) > 1:
             title_iib = QLabel('<h3>IIB Measures</h3>', self,
-                               alignment=Qt.AlignCenter)
+                               alignment=Qt.AlignmentFlag.AlignCenter)
             lay_mod = QGridLayout()
             ncols = 4 if len(self.mod2dbase)*len(self._psname) > 4 else 2
             idx = 0
@@ -2202,7 +2202,7 @@ class PSAuxMeasWidget(SiriusDialog):
             dbase = self.mod2dbase['main']
             if dbase:
                 title_iib = QLabel('<h3>IIB Measures</h3>', self,
-                                   alignment=Qt.AlignCenter)
+                                   alignment=Qt.AlignmentFlag.AlignCenter)
                 modwid = self._setupModWidget(self._psname[0], 'main', dbase)
                 lay.addWidget(title_iib)
                 lay.addWidget(modwid)
@@ -2252,7 +2252,7 @@ class PSAuxMeasWidget(SiriusDialog):
     def _setupModWidget(self, psname, mod, dbase):
         wid = QWidget()
         lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         modname = mod
         if psname in self.auxdev2mod:
@@ -2260,7 +2260,7 @@ class PSAuxMeasWidget(SiriusDialog):
 
         if mod != 'main':
             self.title = QLabel('<h3>Mod'+modname+'</h3>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(self.title)
 
         flay = QFormLayout()
@@ -2301,12 +2301,12 @@ class PSParamsWidget(SiriusDialog):
         lay.setSpacing(15)
 
         text_psname = QLabel('<h3>' + self._psname + '</h3>', self,
-                             alignment=Qt.AlignCenter)
+                             alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(text_psname)
 
         scr_area = QScrollArea(self)
-        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         scr_area.setWidgetResizable(True)
         scr_area.setFrameShape(QFrame.NoFrame)
         scr_area_wid = QWidget()
@@ -2315,7 +2315,7 @@ class PSParamsWidget(SiriusDialog):
             '#scr_ar_wid {background-color: transparent;}')
         scr_area.setWidget(scr_area_wid)
         flay = QFormLayout(scr_area_wid)
-        flay.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         # Update
         text = 'Update Command'
@@ -2361,7 +2361,7 @@ class PSParamsWidget(SiriusDialog):
         table.setColumnCount(col_count)
         table.setObjectName('table')
         table.setStyleSheet('#table{max-width:24em; max-height: 3em;}')
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         table.horizontalHeader().setStyleSheet(
             "min-height:1em; max-height:1em;")
         table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)

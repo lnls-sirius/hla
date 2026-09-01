@@ -31,8 +31,8 @@ class LIModltrWindow(SiriusMainWindow):
 
         self._setupUi()
 
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget()
@@ -50,7 +50,7 @@ class LIModltrWindow(SiriusMainWindow):
     def _setupModltrWidget(self, dev):
         title = QLabel(
             '<h2>'+_PVName(dev).device_name+'</h2>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         wid_intlk = self._setupInterlockWidget(dev)
 
@@ -64,7 +64,7 @@ class LIModltrWindow(SiriusMainWindow):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.setHorizontalSpacing(20)
         lay.setVerticalSpacing(20)
         lay.addWidget(title, 0, 0, 1, 2)
@@ -114,7 +114,7 @@ class LIModltrWindow(SiriusMainWindow):
             led.offColor = led.Red
             lbl = QLabel(ilk)
             hbox = QHBoxLayout()
-            hbox.setAlignment(Qt.AlignLeft)
+            hbox.setAlignment(Qt.AlignmentFlag.AlignLeft)
             hbox.addWidget(led)
             hbox.addWidget(lbl)
             lay_ilks.addLayout(hbox, row, col)
@@ -129,19 +129,19 @@ class LIModltrWindow(SiriusMainWindow):
         connect_window(
             pb_check, ModIntlkDetailDialog, self,
             device=dev, prefix=self.prefix)
-        lay_ilks.addWidget(pb_check, 7, 1, alignment=Qt.AlignCenter)
+        lay_ilks.addWidget(pb_check, 7, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         wid = QFrame(self)
         wid.setStyleSheet(
             '.QFrame{border: 2px solid gray;}')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.setHorizontalSpacing(10)
-        lay.addWidget(led_ctrlmode, 0, 0, alignment=Qt.AlignCenter)
-        lay.addWidget(ld_ctrlmode, 0, 1, alignment=Qt.AlignLeft)
-        lay.addWidget(led_output, 1, 0, alignment=Qt.AlignCenter)
-        lay.addWidget(ld_output, 1, 1, alignment=Qt.AlignLeft)
-        lay.addWidget(pb_reset, 2, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(led_ctrlmode, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(ld_ctrlmode, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addWidget(led_output, 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(ld_output, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addWidget(pb_reset, 2, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addLayout(lay_ilks, 0, 2, 3, 1)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 4)
@@ -153,7 +153,7 @@ class LIModltrWindow(SiriusMainWindow):
 
     def _setupMainControlsWidget(self, dev):
         lb_RUN_STOP = QLabel(
-            '<h4>RUN_STOP</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>RUN_STOP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         led_RUN_STOP = SiriusLedState(self, dev + ':RUN_STOP')
         led_RUN_STOP.offColor = SiriusLedState.Red
         btn_STOP = PyDMPushButton(
@@ -175,10 +175,10 @@ class LIModltrWindow(SiriusMainWindow):
         gdl_RUN_STOP.addWidget(btn_STOP, 0, 0)
         gdl_RUN_STOP.addWidget(btn_RUN, 0, 1)
         gdl_RUN_STOP.addWidget(
-            led_RUN_STOP, 1, 0, 1, 2, alignment=Qt.AlignCenter)
+            led_RUN_STOP, 1, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lb_PREHEAT = QLabel(
-            '<h4>PREHEAT</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>PREHEAT</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         led_PREHEAT = SiriusLedState(self, dev + ':PREHEAT')
         led_PREHEAT.offColor = SiriusLedState.Red
         btn_PREHEAT_OFF = PyDMPushButton(
@@ -204,15 +204,15 @@ class LIModltrWindow(SiriusMainWindow):
         gdl_PREHEAT.addWidget(btn_PREHEAT_OFF, 0, 0)
         gdl_PREHEAT.addWidget(btn_PREHEAT_ON, 0, 1)
         gdl_PREHEAT.addWidget(
-            led_PREHEAT, 1, 0, 1, 2, alignment=Qt.AlignCenter)
+            led_PREHEAT, 1, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lb_Charge = QLabel(
-            '<h4>Charge</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Charge</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         pb_Charge = PyDMStateButton(
             self, dev + ':CHARGE')
 
         lb_TrigOut = QLabel(
-            '<h4>TrigOut</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>TrigOut</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         pb_TrigOut = PyDMStateButton(
             self, dev + ':TRIGOUT')
 
@@ -220,12 +220,12 @@ class LIModltrWindow(SiriusMainWindow):
         wid.setStyleSheet(
             '.QFrame{border: 2px solid gray;}')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.setHorizontalSpacing(30)
         lay.addWidget(lb_RUN_STOP, 0, 0)
-        lay.addLayout(gdl_RUN_STOP, 1, 0, alignment=Qt.AlignCenter)
+        lay.addLayout(gdl_RUN_STOP, 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_PREHEAT, 0, 1)
-        lay.addLayout(gdl_PREHEAT, 1, 1, alignment=Qt.AlignCenter)
+        lay.addLayout(gdl_PREHEAT, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_Charge, 0, 2)
         lay.addWidget(pb_Charge, 1, 2)
         lay.addWidget(lb_TrigOut, 0, 3)
@@ -233,24 +233,24 @@ class LIModltrWindow(SiriusMainWindow):
         return wid
 
     def _setupSetpointsWidget(self, dev):
-        lbl_sp = QLabel('<h4>Setpoint</h4>', self, alignment=Qt.AlignCenter)
-        lbl_rb = QLabel('<h4>Readback</h4>', self, alignment=Qt.AlignCenter)
-        lbl_kv = QLabel('kV', self, alignment=Qt.AlignCenter)
-        lbl_ma = QLabel('mA', self, alignment=Qt.AlignCenter)
+        lbl_sp = QLabel('<h4>Setpoint</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_rb = QLabel('<h4>Readback</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_kv = QLabel('kV', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_ma = QLabel('mA', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         sb_volt = SiriusSpinbox(self, dev+':WRITE_V')
         lb_volt = SiriusLabel(self, dev+':READV')
-        lb_volt.setAlignment(Qt.AlignCenter)
+        lb_volt.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         sb_curr = SiriusSpinbox(self, dev+':WRITE_I')
         lb_curr = SiriusLabel(self, dev+':READI')
-        lb_curr.setAlignment(Qt.AlignCenter)
+        lb_curr.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         wid = QFrame()
         wid.setStyleSheet(
             '.QFrame{border: 2px solid gray;}')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lbl_sp, 0, 0)
         lay.addWidget(lbl_rb, 0, 1)
         lay.addWidget(sb_volt, 1, 0)
@@ -277,7 +277,7 @@ class LIModltrWindow(SiriusMainWindow):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(pb_emerstop)
         return wid
 

@@ -113,16 +113,16 @@ class UEControlWindow(IDCommonControlWindow):
         group.setLayout(lay)
 
         lay.addWidget(
-            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(
-            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         lay.addWidget(
-            QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignCenter), 0, 3)
+            QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
 
         row = 1
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
@@ -167,7 +167,7 @@ class UEControlWindow(IDCommonControlWindow):
         ]
         pvname = self.dev_pref.substitute(propty=propty)
         lbl_alarm = QLabel(
-            'Alarm', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Alarm', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         led_alarm = SiriusLedAlert(self, pvname)
         pbt_alarm = QPushButton('', self)
         pbt_alarm.setIcon(qta.icon('fa5s.ellipsis-v'))
@@ -191,15 +191,15 @@ class UEControlWindow(IDCommonControlWindow):
         pvname_pwr = self.dev_pref.substitute(propty=propty_pwr)
         pwr_lbl = QLabel("Power Off")
         pwr_led = SiriusLedAlert(self, pvname_pwr)
-        warning_opr_lay.addWidget(pwr_lbl, 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        warning_opr_lay.addWidget(pwr_led, 0, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        warning_opr_lay.addWidget(pwr_lbl, 0, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        warning_opr_lay.addWidget(pwr_led, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
         propty_ko = 'KillOverride-Mon'
         pvname_ko = self.dev_pref.substitute(propty=propty_ko)
         ko_led = SiriusLedAlert(self, pvname_ko)
         ko_lbl = QLabel("Kill Override")
-        warning_opr_lay.addWidget(ko_lbl, 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        warning_opr_lay.addWidget(ko_led, 1, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        warning_opr_lay.addWidget(ko_lbl, 1, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        warning_opr_lay.addWidget(ko_led, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
         lay.addLayout(warning_opr_lay)
         lay.addStretch()
@@ -221,8 +221,8 @@ class UEControlWindow(IDCommonControlWindow):
         pvname = self.dev_pref.substitute(propty=propty)
         dev_lay = QGridLayout()
         dev_title = QLabel(f'<h4>{propty}</h4>',
-                            self, alignment=Qt.AlignCenter)
-        dev_lay.addWidget(dev_title, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+                            self, alignment=Qt.AlignmentFlag.AlignCenter)
+        dev_lay.addWidget(dev_title, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         for idx, lbl in enumerate(devsts_labels):
             sts_lbl = QLabel(lbl)
             irow = idx + 1
@@ -247,8 +247,8 @@ class UEControlWindow(IDCommonControlWindow):
         ir_lbl = QLabel("Is Remote")
         ir_led = SiriusLedState(self, pvname_ir)
         ir_led.offColor = SiriusLedState.Red
-        lay.addWidget(ir_lbl, 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay.addWidget(ir_led, 0, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        lay.addWidget(ir_lbl, 0, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        lay.addWidget(ir_led, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
         return gbox
 
@@ -262,7 +262,7 @@ class UEControlWindow(IDCommonControlWindow):
         row = 0
         for title, pv_info in self.SCANS_PVS.items():
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             scanlay.addWidget(label, row, 0)
 
@@ -345,7 +345,7 @@ class UEControlWindow(IDCommonControlWindow):
 
         hlay = QHBoxLayout()
         lb_glob = QLabel(
-            "Global Loop State:", alignment=Qt.AlignRight | Qt.AlignVCenter
+            "Global Loop State:", alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
         )
         idff_pref = _PVName(f"SI-{self.dev_pref.sub}:BS-IDFF")
         self.bt_idffglob = PyDMStateButton(
@@ -389,7 +389,7 @@ class UEControlWindow(IDCommonControlWindow):
     def _createLedState(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["StateMon"])
         led = SiriusLedState(self, init_channel=pvname)
-        lay.addWidget(led, row, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(led, row, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
     def _createParam(self, pv_info, lay, row):
         if "SP" in pv_info:
@@ -406,7 +406,7 @@ class UEControlWindow(IDCommonControlWindow):
             lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.setMinimumWidth(125)
             lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, col, 1, 1)
 
 
@@ -578,8 +578,8 @@ class UEDetails(IDCommonDialog):
                 lb_stsio = SiriusLabel(self, pvname)
                 lay_stsio = QHBoxLayout(wid_stsio)
                 lay_stsio.setContentsMargins(0, 0, 0, 0)
-                lay_stsio.addWidget(lb_stsio, alignment=Qt.AlignRight)
-                lay_stsio.addWidget(pbt_stsio, alignment=Qt.AlignLeft)
+                lay_stsio.addWidget(lb_stsio, alignment=Qt.AlignmentFlag.AlignRight)
+                lay_stsio.addWidget(pbt_stsio, alignment=Qt.AlignmentFlag.AlignLeft)
 
                 pvname = self.dev_pref.substitute(propty=f'{title}Temp-Mon')
                 lb_temp = SiriusLabel(self, pvname)

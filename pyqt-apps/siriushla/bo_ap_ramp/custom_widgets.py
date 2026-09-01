@@ -20,7 +20,7 @@ class MyTableWidget(QTableWidget):
         self.open_window_fun = open_window_fun
 
     def mousePressEvent(self, ev):
-        if ev.button() == Qt.RightButton:
+        if ev.button() == Qt.MouseButton.RightButton:
             self.show_menu_fun(ev.pos())
         super().mousePressEvent(ev)
 
@@ -44,21 +44,21 @@ class SpinBoxDelegate(QStyledItemDelegate):
         editor.setMinimum(self.mini)
         editor.setMaximum(self.maxi)
         editor.setDecimals(self.prec)
-        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        locale.setNumberOptions(locale.RejectGroupSeparator)
+        locale = QLocale(QLocale.English, territory=QLocale.UnitedStates)
+        locale.setNumberOptions(QLocale.RejectGroupSeparator)
         editor.setLocale(locale)
         return editor
 
     def setEditorData(self, spinBox, index):
         """Set editor data."""
-        value = index.model().data(index, Qt.EditRole)
+        value = index.model().data(index, Qt.ItemDataRole.EditRole)
         spinBox.setValue(float(value))
 
     def setModelData(self, spinBox, model, index):
         """Set model data."""
         spinBox.interpretText()
         value = spinBox.value()
-        model.setData(index, value, Qt.EditRole)
+        model.setData(index, value, Qt.ItemDataRole.EditRole)
 
     def updateEditorGeometry(self, spinBox, option, index):
         """Update editor geometry."""
@@ -83,8 +83,8 @@ class CustomTableWidgetItem(QTableWidgetItem):
     def __lt__(self, other):
         """Change default sort method to sort by numeric data."""
         if isinstance(other, CustomTableWidgetItem):
-            selfDataValue = float(self.data(Qt.EditRole))
-            otherDataValue = float(other.data(Qt.EditRole))
+            selfDataValue = float(self.data(Qt.ItemDataRole.EditRole))
+            otherDataValue = float(other.data(Qt.ItemDataRole.EditRole))
             return selfDataValue < otherDataValue
         else:
             return QTableWidgetItem.__lt__(self, other)

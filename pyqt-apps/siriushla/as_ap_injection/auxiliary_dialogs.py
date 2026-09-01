@@ -35,7 +35,7 @@ class BiasFBDetailDialog(SiriusDialog):
     def _setupUi(self):
         title = QLabel(
             '<h4>Bias Feedback Settings</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         # global parameters
         wid_global = self._setupGlobalParams()
@@ -65,14 +65,14 @@ class BiasFBDetailDialog(SiriusDialog):
 
     def _setupGlobalParams(self):
         ld_minv = QLabel(
-            'Min.:', self, alignment=Qt.AlignRight)
+            'Min.:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_minv = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='BiasFBMinVoltage-SP'))
         lb_minv = SiriusLabel(
             self, self._inj_prefix.substitute(propty='BiasFBMinVoltage-RB'))
         lb_minv.showUnits = True
         ld_maxv = QLabel(
-            'Max.:', self, alignment=Qt.AlignRight)
+            'Max.:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_maxv = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='BiasFBMaxVoltage-SP'))
         lb_maxv = SiriusLabel(
@@ -100,14 +100,14 @@ class BiasFBDetailDialog(SiriusDialog):
 
     def _setupModelParams(self):
         ld_modtyp = QLabel(
-            'Type:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Type:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         cb_modtyp = SiriusEnumComboBox(
             self, self._inj_prefix.substitute(propty='BiasFBModelType-Sel'))
         lb_modtyp = SiriusLabel(
             self, self._inj_prefix.substitute(propty='BiasFBModelType-Sts'))
 
         ld_modupd = QLabel(
-            'Update data:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Update data:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_modupd = PyDMStateButton(
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelUpdateData-Sel'))
@@ -124,12 +124,12 @@ class BiasFBDetailDialog(SiriusDialog):
         lay1.addStretch()
         lay1.addWidget(ld_modupd)
         lay1.addWidget(sb_modupd)
-        lay1.addWidget(led_modupd, alignment=Qt.AlignLeft)
+        lay1.addWidget(led_modupd, alignment=Qt.AlignmentFlag.AlignLeft)
         lay1.addStretch()
 
         gbox_autofit = QGroupBox('Auto Fit')
         ld_autofit = QLabel(
-            'Enable:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Enable:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         cb_autofit = PyDMStateButton(
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelAutoFitParams-Sel'))
@@ -137,7 +137,7 @@ class BiasFBDetailDialog(SiriusDialog):
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelAutoFitParams-Sts'))
         ld_autofitnp = QLabel(
-            'Every # pts.:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Every # pts.:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         cb_autofitnp = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelAutoFitEveryNrPts-SP'))
@@ -147,25 +147,25 @@ class BiasFBDetailDialog(SiriusDialog):
         glay_autofit = QGridLayout(gbox_autofit)
         glay_autofit.addWidget(ld_autofit, 0, 0)
         glay_autofit.addWidget(cb_autofit, 0, 1)
-        glay_autofit.addWidget(led_autofit, 0, 2, alignment=Qt.AlignLeft)
+        glay_autofit.addWidget(led_autofit, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         glay_autofit.addWidget(ld_autofitnp, 1, 0)
         glay_autofit.addWidget(cb_autofitnp, 1, 1)
         glay_autofit.addWidget(lb_autofitnp, 1, 2)
 
         ld_modmaxnp = QLabel(
-            'Max. # pts.:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Max. # pts.:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_modmaxnp = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelMaxNrPts-SP'))
         lb_modmaxnp = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelMaxNrPts-RB'),
-            alignment=Qt.AlignCenter)
-        slash = QLabel('/', self, alignment=Qt.AlignCenter)
-        slash.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            alignment=Qt.AlignmentFlag.AlignCenter)
+        slash = QLabel('/', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        slash.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         lb_modnp = SiriusLabel(
             self, self._inj_prefix.substitute(propty='BiasFBModelNrPts-Mon'),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         hlay_modmaxnp = QHBoxLayout()
         hlay_modmaxnp.setContentsMargins(0, 0, 0, 0)
         hlay_modmaxnp.addWidget(sb_modmaxnp)
@@ -175,7 +175,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
         ld_npafterfit = QLabel(
             '# pts. after last fit:', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         lb_npafterfit = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBModelNrPtsAfterFit-Mon'))
@@ -184,21 +184,21 @@ class BiasFBDetailDialog(SiriusDialog):
             self, label='Fit Now', pressValue=1,
             init_channel=self._inj_prefix.substitute(
                 propty='BiasFBModelFitParamsNow-Cmd'))
-        pb_fitnow.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        pb_fitnow.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         pb_fitnow.setDefault(False)
         pb_fitnow.setAutoDefault(False)
 
         lay2 = QGridLayout()
         lay2.setContentsMargins(0, 0, 0, 0)
-        lay2.setAlignment(Qt.AlignCenter)
-        lay2.addWidget(gbox_autofit, 0, 0, 2, 3, alignment=Qt.AlignCenter)
+        lay2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        lay2.addWidget(gbox_autofit, 0, 0, 2, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         lay2.addItem(
-            QSpacerItem(20, QSzPlcy.Minimum, QSzPlcy.Preferred), 0, 3)
+            QSpacerItem(20, 20, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Preferred), 0, 3)
         lay2.addWidget(ld_modmaxnp, 0, 4)
         lay2.addLayout(hlay_modmaxnp, 0, 5, 1, 2)
         lay2.addWidget(ld_npafterfit, 1, 4)
         lay2.addWidget(lb_npafterfit, 1, 5)
-        lay2.addWidget(pb_fitnow, 1, 6, alignment=Qt.AlignCenter)
+        lay2.addWidget(pb_fitnow, 1, 6, alignment=Qt.AlignmentFlag.AlignCenter)
 
         tab_models = QTabWidget(self)
         wid_linmod = self._setupLinearParams()
@@ -215,14 +215,14 @@ class BiasFBDetailDialog(SiriusDialog):
 
         wid = QGroupBox('Model settings')
         lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addLayout(lay1)
         lay.addLayout(lay2)
         lay.addWidget(tab_models)
         return wid
 
     def _setupLinearParams(self):
-        ld_ang = QLabel('Ang. Coeff.:', self, alignment=Qt.AlignRight)
+        ld_ang = QLabel('Ang. Coeff.:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_ang = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBLinModAngCoeff-SP'))
@@ -233,7 +233,7 @@ class BiasFBDetailDialog(SiriusDialog):
             self, self._inj_prefix.substitute(
                 propty='BiasFBLinModAngCoeff-Mon'))
 
-        ld_offset = QLabel('Offset Coeff.:', self, alignment=Qt.AlignRight)
+        ld_offset = QLabel('Offset Coeff.:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_offset = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBLinModOffCoeff-SP'))
@@ -246,7 +246,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_ang, 0, 0)
         lay.addWidget(sb_ang, 0, 1)
         lay.addWidget(lb_ang, 0, 2)
@@ -265,7 +265,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
     def _setupGPParams(self):
         ld_likehdvar = QLabel(
-            'Likelihood std.:', self, alignment=Qt.AlignRight)
+            'Likelihood std.:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_likehdvar = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModNoiseStd-SP'))
@@ -281,7 +281,7 @@ class BiasFBDetailDialog(SiriusDialog):
             propty='BiasFBGPModNoiseStdFit-Sts'))
 
         ld_kernvar = QLabel(
-            'Kernel std.:', self, alignment=Qt.AlignRight)
+            'Kernel std.:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_kernvar = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModKernStd-SP'))
@@ -297,7 +297,7 @@ class BiasFBDetailDialog(SiriusDialog):
             propty='BiasFBGPModKernStdFit-Sts'))
 
         ld_kernlenscl = QLabel(
-            'Kernel length scale:', self, alignment=Qt.AlignRight)
+            'Kernel length scale:', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_kernlenscl = SiriusSpinbox(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModKernLenScl-SP'))
@@ -319,7 +319,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_likehdvar, 0, 1)
         lay.addWidget(sb_likehdvar, 0, 2)
         lay.addWidget(lb_likehdvar, 0, 3)
@@ -396,7 +396,7 @@ class BiasFBDetailDialog(SiriusDialog):
                 propty='BiasFBGPModPredBias-Mon'),
             y_channel='FAKE:GP_Avg_plus_Std',
             name='extra1', color='gray',
-            lineWidth=2, lineStyle=Qt.DashLine)
+            lineWidth=2, lineStyle=Qt.PenStyle.DashLine)
         self.graph_pred.legend.removeItem('extra1')
         self._curve_gp_pred_avg_p_std = self.graph_pred.curveAtIndex(-1)
 
@@ -404,7 +404,7 @@ class BiasFBDetailDialog(SiriusDialog):
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredBias-Mon'),
             y_channel='FAKE:GP_Avg_minus_Std', name='extra2', color='gray',
-            lineWidth=2, lineStyle=Qt.DashLine)
+            lineWidth=2, lineStyle=Qt.PenStyle.DashLine)
         self.graph_pred.legend.removeItem('extra2')
         self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
 
@@ -424,14 +424,14 @@ class BiasFBDetailDialog(SiriusDialog):
                 propty='BiasFBModelDataBias-Mon'),
             y_channel=self._inj_prefix.substitute(
                 propty='BiasFBModelDataInjCurr-Mon'),
-            name='Model data', color='black', lineStyle=Qt.NoPen,
+            name='Model data', color='black', lineStyle=Qt.PenStyle.NoPen,
             symbol='o', symbolSize=6)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
 
         self.graph_pred.addChannel(
             x_channel='FAKE:Bias', y_channel='FAKE:InjCurr',
-            name='Last Inj.', color='red', lineStyle=Qt.NoPen,
+            name='Last Inj.', color='red', lineStyle=Qt.PenStyle.NoPen,
             symbol='o', symbolSize=8, redraw_mode=2)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
@@ -504,13 +504,13 @@ class TopUpSettingsDialog(SiriusDialog):
         self.setWindowTitle(
             'Injection Controls - Top Up Standby and Warm Up Settings')
         self._setupUi()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         title = QLabel(
             '<h4>Top Up Standby and Warm Up Settings</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         pvname = self._inj_prefix.substitute(propty='TopUpLIWarmUpEnbl-Sel')
         self._sb_tulienb = PyDMStateButton(self, pvname)
@@ -604,13 +604,13 @@ class PUModeSettingsDialog(SiriusDialog):
         self.setObjectName('ASApp')
         self.setWindowTitle('Injection Controls - PU Mode Settings')
         self._setupUi()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         title = QLabel(
             '<h4>PU Mode Settings</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         pvname = self._inj_prefix.substitute(propty='PUModeDeltaPosAng-SP')
         self._sb_dltposang = SiriusSpinbox(self, pvname)

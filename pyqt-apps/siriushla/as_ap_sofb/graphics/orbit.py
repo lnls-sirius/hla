@@ -229,14 +229,14 @@ class MultiTurnSumWidget(QWidget):
         self.spect.yaxis.setLabel('Time', units='s')
         self.spect.xaxis.setLabel('BPM Position', units='m')
         self.spect.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel(lbl_text + ' Orbit', self, alignment=Qt.AlignCenter)
+        lab = QLabel(lbl_text + ' Orbit', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
 
         vbl.addStretch()
         lab = QLabel(
-            'Average ' + lbl_text + ' vs Time', self, alignment=Qt.AlignCenter)
+            'Average ' + lbl_text + ' vs Time', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         hbl = QHBoxLayout()
         hbl.addStretch()
@@ -244,12 +244,12 @@ class MultiTurnSumWidget(QWidget):
         hbl.addStretch()
         if self.orbtype.startswith('sum'):
             hbl.addWidget(QLabel('  Eff [%] =', self))
-            ratio_avg = QLabel('000.0', self, alignment=Qt.AlignRight)
-            ratio_std = QLabel('000.0', self, alignment=Qt.AlignLeft)
-            hbl.addWidget(ratio_avg, alignment=Qt.AlignRight)
+            ratio_avg = QLabel('000.0', self, alignment=Qt.AlignmentFlag.AlignRight)
+            ratio_std = QLabel('000.0', self, alignment=Qt.AlignmentFlag.AlignLeft)
+            hbl.addWidget(ratio_avg, alignment=Qt.AlignmentFlag.AlignRight)
             hbl.addWidget(QLabel(
                 '<html><head/><body><p>&#177;</p></body></html>', self))
-            hbl.addWidget(ratio_std, alignment=Qt.AlignLeft)
+            hbl.addWidget(ratio_std, alignment=Qt.AlignmentFlag.AlignLeft)
             hbl.addStretch()
             self.ratio_sum_avg.connect(ratio_avg.setText)
             self.ratio_sum_std.connect(ratio_std.setText)
@@ -282,11 +282,11 @@ class MultiTurnSumWidget(QWidget):
         wid = QWidget(self)
         lab = QLabel(
             lbl_text + ' orbit at index:', wid,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         lab.setStyleSheet("font-weight: bold;")
         pdmlab = SiriusLabel(
             wid, self.devpref.substitute(propty='MTurnIdx-RB'))
-        pdmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        pdmlab.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         pdmlab.setStyleSheet('min-width:4em;')
         wid.setLayout(QHBoxLayout())
         wid.layout().addStretch()
@@ -315,7 +315,7 @@ class MultiTurnSumWidget(QWidget):
 
     def mouseDoubleClickEvent(self, ev):
         """."""
-        if ev.button() != Qt.LeftButton:
+        if ev.button() != Qt.MouseButton.LeftButton:
             return super().mouseDoubleClickEvent(ev)
         graph = self.graph_time
         curve = graph.curveAtIndex(0)
@@ -410,7 +410,7 @@ class Spectrogram(SiriusSpectrogramView):
 
     def mouseDoubleClickEvent(self, ev):
         """."""
-        if ev.button() == Qt.LeftButton:
+        if ev.button() == Qt.MouseButton.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
             if pos.y() > 0 and pos.y() <= self._image_item.height():
                 self.multiturnidx.send_value_signal[int].emit(int(pos.y()))
@@ -434,7 +434,7 @@ class SinglePassSumWidget(QWidget):
         """."""
         vbl = QVBoxLayout(self)
 
-        lab = QLabel('SinglePass Sum BPMs', self, alignment=Qt.AlignCenter)
+        lab = QLabel('SinglePass Sum BPMs', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 

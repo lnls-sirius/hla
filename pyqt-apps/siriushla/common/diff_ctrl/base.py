@@ -2,6 +2,7 @@
 """Scraper and Slit Monitor Base class."""
 
 import os as _os
+from pathlib import Path
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
@@ -54,7 +55,7 @@ class DiffCtrlDevMonitor(QWidget):
     def _setupUi(self):
         # status
         label_status = QLabel(
-            'Status: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Status: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         channels2values = {
             self.device.substitute(propty='ForceComplete-Mon'): 1,
             self.device.substitute(propty=self.neg_name+'DoneMov-Mon'): 1,
@@ -74,7 +75,7 @@ class DiffCtrlDevMonitor(QWidget):
             neg_label=self.neg_label, pos_label=self.pos_label)
 
         self.lb_descctrl1 = QLabel(
-            '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            '', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.sb_ctrl1 = SiriusSpinbox(self)
         self.sb_ctrl1.precisionFromPV = False
         self.sb_ctrl1.precision = 3
@@ -82,7 +83,7 @@ class DiffCtrlDevMonitor(QWidget):
         self.lb_ctrl1.precisionFromPV = False
         self.lb_ctrl1.precision = 3
         self.lb_descctrl2 = QLabel(
-            '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            '', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.sb_ctrl2 = SiriusSpinbox(self)
         self.sb_ctrl2.precisionFromPV = False
         self.sb_ctrl2.precision = 3
@@ -94,9 +95,14 @@ class DiffCtrlDevMonitor(QWidget):
             parent=self, label='Go to maximum aperture', pressValue=1,
             init_channel=self.device.substitute(propty='Home-Cmd'))
 
-        tmp_file = _substitute_in_file(
-            _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
-            self.orientation.lower()+'mon.ui', {'PREFIX': self.prefix})
+        file_path = _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' + \
+            self.orientation.lower()+'mon.ui'
+        ui_file = _substitute_in_file(
+            file_path, {'PREFIX': self.prefix})
+        path = Path(file_path)
+        tmp_file = str(path.with_name(f"temp_{path.name}"))
+        with open(tmp_file, "w") as file:
+            file.write(ui_file.getvalue())
         self.dev_widget = loadUi(tmp_file)
         self.dev_widget.setObjectName('dev')
         self.dev_widget_scrarea = QScrollArea()
@@ -106,13 +112,13 @@ class DiffCtrlDevMonitor(QWidget):
             '#dev{background-color:transparent;}')
         self.dev_widget_scrarea.setWidget(self.dev_widget)
         self.dev_widget_scrarea.setSizePolicy(
-            QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(label_status, 0, 0)
         lay.addWidget(self.multiled_status, 0, 1)
-        lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.lb_descctrl1, 1, 0)
         lay.addWidget(self.sb_ctrl1, 1, 1)
         lay.addWidget(self.lb_ctrl1, 1, 2)
@@ -159,8 +165,8 @@ class DiffCtrlView(QWidget):
         devname = 'Slits' if 'Slit' in self.DEVICE_PREFIX else 'Scrapers'
         title = QLabel(
             '<h3>' + self.sec + ' ' + devname + ' View</h3>',
-            alignment=Qt.AlignCenter)
-        title.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+            alignment=Qt.AlignmentFlag.AlignCenter)
+        title.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
 
         gbox_h = QGroupBox(self.DEVICE_PREFIX + 'H')
         self.dev_h = self.DEVICE_CLASS(self, prefix, self.DEVICE_PREFIX+'H')

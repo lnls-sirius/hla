@@ -33,8 +33,8 @@ class CurrLTWindow(SiriusMainWindow):
         self.setObjectName('SIApp')
         self.setWindowTitle('SI Current Info: Current and Lifetime')
         self._setupUi()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         self.label_title = QLabel('SI Current and Lifetime')
@@ -43,7 +43,7 @@ class CurrLTWindow(SiriusMainWindow):
             background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273,
                               x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
                               stop:1 rgba(213, 213, 213, 255));""")
-        self.label_title.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_title.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         self.settings = QWidget()
         vlay_sett = QVBoxLayout(self.settings)
@@ -80,7 +80,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self.label_title, 0, 0, 1, 2)
         lay.addLayout(self._setupGraphPanelLayout(), 1, 0)
         lay.addWidget(self.settings, 1, 1)
-        lay.addLayout(hbox_visi, 2, 0, 1, 2, alignment=Qt.AlignRight)
+        lay.addLayout(hbox_visi, 2, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.eff_graph, 3, 0, 1, 2)
         lay.setColumnStretch(0, 6)
         lay.setColumnStretch(1, 1)
@@ -88,7 +88,7 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupGraphPanelLayout(self):
         # Main Panel
         # # Labels
-        self._ld_current = QLabel('Current', self, alignment=Qt.AlignCenter)
+        self._ld_current = QLabel('Current', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._ld_current.setStyleSheet("font-weight:bold; max-height1.5em;")
         self._lb_current = SiriusLabel(
             self, self.devname.substitute(propty='Current-Mon'))
@@ -98,7 +98,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_lifetime = QLabel('Lifetime', self)
         self._ld_lifetime.setStyleSheet("font-weight:bold; max-height1.5em;")
-        self._ld_lifetime.setAlignment(Qt.AlignCenter)
+        self._ld_lifetime.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lifetime_pvname = self.devname.substitute(propty='LifetimeHour-Mon')
         self._lb_lifetime = SiriusLabel(self, lifetime_pvname)
         self._lb_lifetime.setStyleSheet("font-size:40px;")
@@ -204,11 +204,11 @@ class CurrLTWindow(SiriusMainWindow):
 
         self.graph.addYChannel(
             y_channel='FAKE:DCCTBuffer', axis='left', name='DCCTBuffer',
-            color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
+            color='blue', lineStyle=Qt.PenStyle.NoPen, symbolSize=10, symbol='o')
         self._curve_dcct_buff = self.graph.curveAtIndex(4)
         self.graph.addYChannel(
             y_channel='FAKE:BPMBuffer', axis='left', name='BPMBuffer',
-            color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
+            color='blue', lineStyle=Qt.PenStyle.NoPen, symbolSize=10, symbol='o')
         self._curve_bpm_buff = self.graph.curveAtIndex(5)
 
         self._curve_bpmsum.setVisible(False)
@@ -217,15 +217,15 @@ class CurrLTWindow(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 0)
         lay.addWidget(self._ld_current, 0, 1)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 2)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 3)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 3)
         lay.addWidget(self._ld_lifetime, 0, 4)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 5)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 5)
         lay.addWidget(self._lb_current, 1, 1)
         lay.addWidget(self._lb_lifetime, 1, 4)
         lay.addWidget(self.graph, 2, 0, 1, 6)
@@ -234,13 +234,13 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupCurrentSettingsWidget(self):
         self._ld_storedebeam = QLabel('Stored EBeam?', self)
         self._ld_storedebeam.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._led_storedebeam = SiriusLedState(
             self, self.devname.substitute(propty='StoredEBeam-Mon'))
 
         self._ld_dcctfault = QLabel('DCCT Fault Check:', self)
         self._ld_dcctfault.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._bt_dcctfault = PyDMStateButton(
             self, self.devname.substitute(propty='DCCTFltCheck-Sel'))
         self._bt_dcctfault.shape = PyDMStateButton.Rounded
@@ -249,18 +249,18 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_seldcct = QLabel('Select DCCT:', self)
         self._ld_seldcct.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_seldcct = PyDMEnumComboBox(
             self, self.devname.substitute(propty='DCCT-Sel'))
         self._lb_seldcct = SiriusLabel(
             self, self.devname.substitute(propty='DCCT-Sts'))
-        self._lb_seldcct.setAlignment(Qt.AlignCenter)
+        self._lb_seldcct.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._led_dcct13c4 = SiriusLedAlert(self, _PVName(
             'SI-13C4:DI-DCCT:ReliableMeas-Mon').substitute(prefix=self.prefix))
         self._lb_dcct13c4 = QLabel('DCCT 13C4', self)
         self._lb_dcct13c4.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._pb_13c4_detail = QPushButton(self)
         self._pb_13c4_detail.setObjectName('DCCT13C4_dtl')
         self._pb_13c4_detail.setStyleSheet(
@@ -271,20 +271,20 @@ class CurrLTWindow(SiriusMainWindow):
             prefix=self.prefix, device='SI-13C4:DI-DCCT')
         hlay_dcct13c4 = QHBoxLayout()
         hlay_dcct13c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct13c4.addWidget(self._led_dcct13c4)
         hlay_dcct13c4.addWidget(self._lb_dcct13c4)
         hlay_dcct13c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct13c4.addWidget(self._pb_13c4_detail)
         hlay_dcct13c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
 
         self._led_dcct14c4 = SiriusLedAlert(self, _PVName(
             'SI-14C4:DI-DCCT:ReliableMeas-Mon').substitute(prefix=self.prefix))
         self._lb_dcct14c4 = QLabel('DCCT 14C4', self)
         self._lb_dcct14c4.setAlignment(
-            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._pb_14c4_detail = QPushButton(self)
         self._pb_14c4_detail.setObjectName('DCCT14C4_dtl')
         self._pb_14c4_detail.setStyleSheet(
@@ -295,14 +295,14 @@ class CurrLTWindow(SiriusMainWindow):
             prefix=self.prefix, device='SI-14C4:DI-DCCT')
         hlay_dcct14c4 = QHBoxLayout()
         hlay_dcct14c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct14c4.addWidget(self._led_dcct14c4)
         hlay_dcct14c4.addWidget(self._lb_dcct14c4)
         hlay_dcct14c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct14c4.addWidget(self._pb_14c4_detail)
         hlay_dcct14c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
 
         gbox = QGroupBox('Current Settings and Status', self)
         lay = QGridLayout(gbox)
@@ -315,7 +315,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._cb_seldcct, 2, 1)
         lay.addWidget(self._lb_seldcct, 2, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 3, 0)
         lay.addLayout(hlay_dcct13c4, 4, 0, 1, 3)
         lay.addLayout(hlay_dcct14c4, 5, 0, 1, 3)
         lay.setColumnStretch(0, 2)
@@ -326,24 +326,24 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupLifetimeSettigsWidget(self):
         self._ld_calcmode = QLabel(
             'Calc Mode:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_calcmode = PyDMEnumComboBox(
             self, self.devname.substitute(propty='LtFitMode-Sel'))
         self._lb_calcmode = SiriusLabel(
             self, self.devname.substitute(propty='LtFitMode-Sts'))
-        self._lb_calcmode.setAlignment(Qt.AlignCenter)
+        self._lb_calcmode.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._ld_curroffset = QLabel(
             'Current\nOffset [mA]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._sb_curroffset = SiriusSpinbox(
             self, self.devname.substitute(propty='CurrOffset-SP'))
         self._lb_curroffset = SiriusLabel(
             self, self.devname.substitute(propty='CurrOffset-RB'))
-        self._lb_curroffset.setAlignment(Qt.AlignCenter)
+        self._lb_curroffset.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._ld_buffer = QLabel(
-            '<h4>Buffer</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Buffer</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self._pb_plussett = QPushButton('+', self)
         self._pb_plussett.setStyleSheet('max-height:0.9em; max-width:0.9em;')
@@ -351,7 +351,7 @@ class CurrLTWindow(SiriusMainWindow):
             self._handle_intvl_sett_visibility)
         self._ld_maxintvl = QLabel(
             'Max. Sampling\nInterval [s]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._ld_maxintvl.setToolTip(
             "Timestamp settings use 2 parameters to define the\n"
             "timestamp interval.\n\n"
@@ -368,12 +368,12 @@ class CurrLTWindow(SiriusMainWindow):
         self._sb_maxintvl.precisionFromPV = True
         self._lb_maxintvl = SiriusLabel(
             self, self.devname.substitute(propty='MaxSplIntvl-RB'))
-        self._lb_maxintvl.setAlignment(Qt.AlignCenter)
+        self._lb_maxintvl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_maxintvl.precisionFromPV = True
 
         self._ld_firstsmpl = QLabel(
             'First Time [s]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._ld_firstsmpl.setVisible(False)
         self._le_firstsmpl = PyDMLineEdit(
             self, self.devname.substitute(propty='FrstSplTime-SP'))
@@ -398,7 +398,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_lastsmpl = QLabel(
             'Last Time [s]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._ld_lastsmpl.setToolTip(
             "If 'Last Time' == -1, use current timestamp.")
         self._ld_lastsmpl.setVisible(False)
@@ -425,7 +425,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_smplintvl = QLabel(
             'Samples\nInterval [s]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._lb_smplintvl_dcct = SiriusLabel(
             self, self.devname.substitute(propty='SplIntvl-Mon'))
         self._lb_smplintvl_bpm = SiriusLabel(
@@ -434,18 +434,18 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_intvlbtwspl = QLabel(
             'Interval Between\nSamples [s]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._sb_intvlbtwspl = SiriusSpinbox(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-SP'))
         self._sb_intvlbtwspl.precisionFromPV = True
         self._lb_intvlbtwspl = SiriusLabel(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-RB'))
-        self._lb_intvlbtwspl.setAlignment(Qt.AlignCenter)
+        self._lb_intvlbtwspl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_intvlbtwspl.precisionFromPV = True
 
         self._ld_bufautoreset = QLabel(
             'Auto Reset:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_bufautoreset = PyDMEnumComboBox(
             self, self.devname.substitute(propty='BuffAutoRst-Sel'))
         self._lb_bufautoreset = SiriusLabel(
@@ -453,7 +453,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_bufdcurr = QLabel(
             'Auto Reset Delta\nCurrent [mA]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._sb_bufdcurr = SiriusSpinbox(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-SP'))
         self._lb_bufdcurr = SiriusLabel(
@@ -461,13 +461,13 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_bufsize = QLabel(
             'Size:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._lb_bufsize_dcct = SiriusLabel(
             self, self.devname.substitute(propty='BuffSize-Mon'))
-        self._lb_bufsize_dcct.setAlignment(Qt.AlignCenter)
+        self._lb_bufsize_dcct.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_bufsize_bpm = SiriusLabel(
             self, self.devname.substitute(propty='BuffSizeBPM-Mon'))
-        self._lb_bufsize_bpm.setAlignment(Qt.AlignCenter)
+        self._lb_bufsize_bpm.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_bufsize_bpm.setVisible(False)
         self._pb_bufreset = PyDMPushButton(
             self, label='', icon=qta.icon('mdi.delete-empty'), pressValue=1,
@@ -480,13 +480,13 @@ class CurrLTWindow(SiriusMainWindow):
             self, self.devname.substitute(propty='BuffSizeTot-Mon'))
         self._lb_bufsizetot_dcct.setStyleSheet(
             "min-width:5em; max-width:5em;")
-        self._lb_bufsizetot_dcct.setAlignment(Qt.AlignCenter)
+        self._lb_bufsizetot_dcct.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_bufsizetot_dcct.precision = 0
         self._lb_bufsizetot_bpm = SiriusLabel(
             self, self.devname.substitute(propty='BuffSizeTotBPM-Mon'))
         self._lb_bufsizetot_bpm.setStyleSheet(
             "min-width:5em; max-width:5em;")
-        self._lb_bufsizetot_bpm.setAlignment(Qt.AlignCenter)
+        self._lb_bufsizetot_bpm.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_bufsizetot_bpm.precision = 0
         self._lb_bufsizetot_bpm.setVisible(False)
         glay_bufsize = QGridLayout()
@@ -510,7 +510,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_curroffset, 1, 1)
         lay.addWidget(self._lb_curroffset, 1, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 2, 1)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 2, 1)
         lay.addWidget(self._ld_buffer, 3, 0, 1, 3)
         lay.addLayout(hlay_maxintvl, 4, 0)
         lay.addWidget(self._sb_maxintvl, 4, 1)
@@ -530,7 +530,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_intvlbtwspl, 10, 1)
         lay.addWidget(self._lb_intvlbtwspl, 10, 2)
         lay.addItem(
-            QSpacerItem(20, 5, QSzPlcy.Minimum, QSzPlcy.Fixed), 11, 1)
+            QSpacerItem(20, 5, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 11, 1)
         lay.addWidget(self._ld_bufautoreset, 12, 0)
         lay.addWidget(self._cb_bufautoreset, 12, 1)
         lay.addWidget(self._lb_bufautoreset, 12, 2)
@@ -538,7 +538,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_bufdcurr, 13, 1)
         lay.addWidget(self._lb_bufdcurr, 13, 2)
         lay.addItem(
-            QSpacerItem(20, 5, QSzPlcy.Minimum, QSzPlcy.Fixed), 14, 1)
+            QSpacerItem(20, 5, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 14, 1)
         lay.addWidget(self._ld_bufsize, 15, 0)
         lay.addLayout(glay_bufsize, 15, 1, 1, 2)
         return gbox
@@ -546,7 +546,7 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupGraphSettingsWidget(self):
         self._ld_ltfrom = QLabel(
             'Show lifetime from:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_ltfrom = QComboBox()
         self._cb_ltfrom.addItem('DCCT')
         self._cb_ltfrom.addItem('BPM')
@@ -555,7 +555,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_showsmpl = QLabel(
             'Show samples: ', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_showsmpl = QCheckBox(self)
         self._cb_showsmpl.setChecked(True)
         self._cb_showsmpl.stateChanged.connect(self._handle_samples_visibility)
@@ -563,13 +563,13 @@ class CurrLTWindow(SiriusMainWindow):
         gbox = QGroupBox('Graphs Settings', self)
         lay = QGridLayout(gbox)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 0)
         lay.addWidget(self._ld_ltfrom, 0, 1)
         lay.addWidget(self._cb_ltfrom, 0, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 3)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 3)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Minimum, QSzPlcy.Expanding),
+            QSpacerItem(1, 1, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding),
             1, 1, 1, 2)
         lay.addWidget(self._ld_showsmpl, 2, 1)
         lay.addWidget(self._cb_showsmpl, 2, 2)

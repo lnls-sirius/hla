@@ -38,7 +38,7 @@ class Graph(SiriusWaveformPlot):
         self.plotItem.getAxis('left').setLabel('Current [A]', color='gray')
 
     def mouseDoubleClickEvent(self, ev):
-        if ev.button() == Qt.LeftButton:
+        if ev.button() == Qt.MouseButton.LeftButton:
             posx = self.curveAtIndex(0).xData
             vb = self.plotItem.getViewBox()
             pos = vb.mapSceneToView(ev.pos())
@@ -60,8 +60,8 @@ class GraphWidget(QWidget):
         self._delta = delta
         self.curves = []
         self.setupui()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.chans = [_ConnSig(_PVName(ps).substitute(
             prefix=_VACA_PREFIX, propty='Wfm-Mon')) for ps in pslist]
         for idx, chan in enumerate(self.chans):
@@ -71,7 +71,7 @@ class GraphWidget(QWidget):
     def setupui(self):
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(
-            QLabel('<h2>'+self.name+'</h2>'), alignment=Qt.AlignCenter)
+            QLabel('<h2>'+self.name+'</h2>'), alignment=Qt.AlignmentFlag.AlignCenter)
         self.graph = Graph(self)
         self.graph.setShowLegend(self._legend)
         self.graph.maxRedrawRate = 1/2

@@ -13,10 +13,10 @@ def _create_spinboxplus(qt_type):
         def __init__(self, *args, **kwargs):
             """Initialize object."""
             super().__init__(*args, **kwargs)
-            locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-            locale.setNumberOptions(locale.RejectGroupSeparator)
+            locale = QLocale(QLocale.English, territory=QLocale.UnitedStates)
+            locale.setNumberOptions(QLocale.RejectGroupSeparator)
             self.setLocale(locale)
-            self.setFocusPolicy(Qt.StrongFocus)
+            self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
             self.step_exponent = 0
             self.app = QApplication.instance()
 
@@ -29,8 +29,8 @@ def _create_spinboxplus(qt_type):
 
         def keyPressEvent(self, evt):
             ctrl_hold = self.app.queryKeyboardModifiers() == Qt.ControlModifier
-            if ctrl_hold and (evt.key() in (Qt.Key_Left, Qt.Key_Right)):
-                self.step_exponent += 1 if evt.key() == Qt.Key_Left else -1
+            if ctrl_hold and (evt.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right)):
+                self.step_exponent += 1 if evt.key() == Qt.Key.Key_Left else -1
                 if isinstance(self, QSpinBox):
                     self.step_exponent = max(0, self.step_exponent)
                 else:

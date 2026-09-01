@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPainter, QPolygon, QColor, \
+from qtpy.QtWidgets import QWidget
+from qtpy.QtGui import QPainter, QPolygon, QColor, \
     QBrush, QFont
-from PyQt5.QtCore import Qt, QPoint
+from qtpy.QtCore import Qt, QPoint
 
 
 class PolygonWidget(QWidget):
@@ -50,13 +50,13 @@ class PolygonWidget(QWidget):
 
         text_rect = painter.boundingRect(
             0, 0, self.full_width, self.full_height,
-            Qt.AlignCenter, self.text)
+            Qt.AlignmentFlag.AlignCenter, self.text)
         text_x = center_x - text_rect.width() / 2
         text_y = center_y - text_rect.height() / 2
 
         painter.drawText(
             text_x, text_y, text_rect.width(), text_rect.height(),
-            Qt.AlignCenter, self.text)
+            Qt.AlignmentFlag.AlignCenter, self.text)
 
         super().paintEvent(event)
 
@@ -73,7 +73,7 @@ class RotatedQLabel(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setPen(Qt.black)
+        painter.setPen(Qt.GlobalColor.black)
         painter.translate(self.width()/2, self.height()/2)
         painter.rotate(self.rotation)
         painter.drawText(0, 0, self.text)

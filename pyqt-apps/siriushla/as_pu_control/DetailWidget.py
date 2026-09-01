@@ -35,7 +35,7 @@ class PUDetailWidget(QWidget):
                 max-width: 8em;
             }
         """)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _create_pvs(self):
         """Create variables with pvs that'll be used."""
@@ -154,7 +154,7 @@ class PUDetailWidget(QWidget):
         self.reset_bt.setStyleSheet(
             '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         interlock_layout.addWidget(
-            self.reset_bt, i+1, 0, 1, 2, alignment=Qt.AlignHCenter)
+            self.reset_bt, i+1, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         return interlock_layout
 
@@ -195,8 +195,8 @@ class PUDetailWidget(QWidget):
         mon_label.showUnits = True
 
         lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignHCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         lay.addRow('SP:', sp_widget)
         lay.addRow('RB:', rb_label)
         lay.addRow('Mon:', mon_label)
@@ -214,8 +214,8 @@ class PUDetailWidget(QWidget):
         mon_label.showUnits = True
 
         lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignHCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         lay.addRow('SP:', sp_widget)
         lay.addRow('RB:', rb_label)
         lay.addRow('Mon:', mon_label)

@@ -51,8 +51,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.setWindowTitle(self.title)
         self.setObjectName(self.acc+'App')
         self._setupUi()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         label = QLabel('<h3>'+self.title+'</h3>', self)
@@ -100,12 +100,12 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.setCentralWidget(cwt)
         if self.acc == 'SI':
             vlay1 = QVBoxLayout()
-            vlay1.setAlignment(Qt.AlignTop)
+            vlay1.setAlignment(Qt.AlignmentFlag.AlignTop)
             vlay1.addWidget(self.wid_optics)
             vlay1.addWidget(self.gb_fams)
             lay = QGridLayout(cwt)
             lay.addWidget(label, 0, 0, 1, 2)
-            lay.addLayout(vlay1, 1, 0, alignment=Qt.AlignTop)
+            lay.addLayout(vlay1, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
             lay.addWidget(self.gb_iocctrl, 1, 1)
             lay.addWidget(self.gb_status, 2, 0, 1, 2)
             lay.setColumnStretch(0, 1)
@@ -135,12 +135,12 @@ class OpticsCorrWindow(SiriusMainWindow):
         return lay
 
     def _setupOpticsParamLayout(self):
-        self.lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignCenter)
-        self.lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignCenter)
-        self.lb_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
-        self.lb_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter)
+        self.lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.lb_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.lb_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_mon = QLabel(
-            '<h4>Estimative</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Estimative</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.sb_paramx = SiriusSpinbox(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('X', 'SP')))
@@ -209,7 +209,7 @@ class OpticsCorrWindow(SiriusMainWindow):
             self.lb_mon.setText('Implem.\nEstimative')
             self.lb_mon.setStyleSheet('font-weight: bold;')
             self.lb_calcmon = QLabel(
-                'Calcd.\nEstimative', self, alignment=Qt.AlignCenter)
+                'Calcd.\nEstimative', self, alignment=Qt.AlignmentFlag.AlignCenter)
             self.lb_calcmon.setStyleSheet('font-weight: bold;')
 
             self.lb_prmcalcmonx = SiriusLabel(
@@ -228,8 +228,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         return lay
 
     def _setupDigMonLayout(self):
-        lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignCenter)
-        lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignCenter)
+        lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tunex = SiriusLabel(self, 'SI-Glob:DI-Tune-H:TuneFrac-Mon')
         self.lb_tuney = SiriusLabel(self, 'SI-Glob:DI-Tune-V:TuneFrac-Mon')
 
@@ -245,23 +245,23 @@ class OpticsCorrWindow(SiriusMainWindow):
     def _setupFamiliesLayout(self):
         lay = QGridLayout()
 
-        lb_family = QLabel('<h4>Family</h4>', self, alignment=Qt.AlignCenter)
+        lb_family = QLabel('<h4>Family</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_family.setStyleSheet('max-height:1.29em;')
         lay.addWidget(lb_family, 0, 1)
 
         lb_rbdesc = QLabel('<h4>'+self.intstrength+'-RB</h4>', self,
-                           alignment=Qt.AlignCenter)
+                           alignment=Qt.AlignmentFlag.AlignCenter)
         lb_rbdesc.setStyleSheet('max-height:1.29em;')
         lay.addWidget(lb_rbdesc, 0, 2)
 
         if self.param == 'tune':
             lb_refdesc = QLabel('<h4>RefKL-Mon</h4>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
             lb_refdesc.setStyleSheet('max-height:1.29em;')
             lay.addWidget(lb_refdesc, 0, 3)
 
         lb_lastddesc = QLabel('<h4>'+self.intstrength_calcdesc+'</h4>', self,
-                              alignment=Qt.AlignCenter)
+                              alignment=Qt.AlignmentFlag.AlignCenter)
         lb_lastddesc.setStyleSheet('max-height:1.29em;')
         lay.addWidget(lb_lastddesc, 0, 4)
 
@@ -281,7 +281,7 @@ class OpticsCorrWindow(SiriusMainWindow):
                 pbt, _PSDetailWindow, parent=self, psname=dev_name)
             lay.addWidget(pbt, row, 0)
 
-            lb_name = QLabel(fam, self, alignment=Qt.AlignCenter)
+            lb_name = QLabel(fam, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lb_name, row, 1)
 
             lb_rb = SiriusLabel(self, pref_name.substitute(
@@ -306,7 +306,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.led_sts = _StatusLed(self, self.ioc_prefix.substitute(
             propty='Status-Mon'))
         lay.addWidget(lb_sts, 0, 0)
-        lay.addWidget(self.led_sts, 0, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(self.led_sts, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
         lb_conf = QLabel('<h4>Configuration</h4>')
         self.bt_dtls = QPushButton(qta.icon('fa5s.list-ul'), '', self)
@@ -315,7 +315,7 @@ class OpticsCorrWindow(SiriusMainWindow):
             acc=self.acc, opticsparam=self.param,
             prefix=self.prefix, fams=self.fams)
         lay.addWidget(lb_conf, 2, 0, 1, 2)
-        lay.addWidget(self.bt_dtls, 2, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self.bt_dtls, 2, 2, alignment=Qt.AlignmentFlag.AlignRight)
 
         lb_cname = QLabel('Name', self)
         self.le_cname = _ConfigLineEdit(
@@ -488,7 +488,7 @@ class OpticsCorrWindow(SiriusMainWindow):
                 '#save{min-width:25px; max-width:25px; icon-size:20px;}')
             lay.addWidget(lb_meas_conf_save, row+7, 0)
             lay.addWidget(
-                self.bt_meas_conf_save, row+7, 1, alignment=Qt.AlignLeft)
+                self.bt_meas_conf_save, row+7, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
             lay.addItem(
                 QSpacerItem(1, 20, QSzPly.Ignored, QSzPly.Fixed), row+8, 0)

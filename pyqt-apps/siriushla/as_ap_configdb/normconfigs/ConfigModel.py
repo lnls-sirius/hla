@@ -1,6 +1,6 @@
 """Configuration window model definition."""
 import re
-from qtpy.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
+from qtpy.QtCore import Qt, QAbstractTableModel, QModelIndex
 from qtpy.QtWidgets import QItemDelegate, QDoubleSpinBox
 from qtpy.QtGui import QColor
 from siriuspy.clientconfigdb import ConfigDBClient
@@ -149,7 +149,7 @@ class ConfigDelegate(QItemDelegate):
 
         Set cell data as float.
         """
-        value = index.model().data(index, Qt.DisplayRole)
+        value = index.model().data(index, Qt.ItemDataRole.DisplayRole)
         editor.setValue(float(value.value()))
 
 
@@ -184,44 +184,44 @@ class ConfigModel(QAbstractTableModel):
         """Return the number of configurations currently open."""
         return len(self._configurations)
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         """Set data of the table (override)."""
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             pvname = self._vertical_header[index.row()]['name']
             pvtype = self._vertical_header[index.row()]['type']
             if pvtype == float:
-                return QVariant("{:8.5f}".format(
-                    self._configurations[index.column()].values[pvname]))
+                return "{:8.5f}".format(
+                    self._configurations[index.column()].values[pvname])
             else:
                 raise NotImplementedError
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
+    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
         """Set headers of the table (override)."""
-        if role == Qt.TextAlignmentRole:
+        if role == Qt.ItemDataRole.TextAlignmentRole:
             pass
-        if role != Qt.DisplayRole:
-            return QVariant()
-        if orientation == Qt.Horizontal:
+        if role != Qt.ItemDataRole.DisplayRole:
+            return object()
+        if orientation == Qt.Orientation.Horizontal:
             if not self._configurations[section].dirty:
-                return QVariant(self._configurations[section].name)
+                return self._configurations[section].name
             else:
-                return QVariant(self._configurations[section].name + "*")
-        elif orientation == Qt.Vertical:
-            if role == Qt.DisplayRole:
+                return self._configurations[section].name + "*"
+        elif orientation == Qt.Orientation.Vertical:
+            if role == Qt.ItemDataRole.DisplayRole:
                 pvname = self._vertical_header[section]['name']
                 vheader = "{}".format(pvname)
-                return QVariant(vheader)
+                return vheader
 
-        return QVariant(int(section + 1))
+        return int(section + 1)
 
     def flags(self, index):
         """Override to make cells editable."""
         if not index.isValid():
-            return Qt.ItemIsEnabled
+            return Qt.ItemFlag.ItemIsEnabled
         return Qt.ItemFlags(
-            QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
+            QAbstractTableModel.flags(self, index) | Qt.ItemFlag.ItemIsEditable)
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
         """Set cell data."""
         row = index.row()
         col = index.column()
@@ -239,7 +239,7 @@ class ConfigModel(QAbstractTableModel):
             # Update Value
             self._configurations[col].setValue(pvname, value)
             # Update view
-            self.headerDataChanged.emit(Qt.Horizontal, col, col)
+            self.headerDataChanged.emit(Qt.Orientation.Horizontal, col, col)
             self.dataChanged.emit(index, index)
             return True
         return False
@@ -354,7 +354,7 @@ class ConfigModel(QAbstractTableModel):
         idx1 = self.index(0, column)
         idx2 = self.index(self.rowCount() - 1, column)
         self.dataChanged.emit(idx1, idx2)
-        self.headerDataChanged.emit(Qt.Horizontal, column, column)
+        self.headerDataChanged.emit(Qt.Orientation.Horizontal, column, column)
 
     def renameConfiguration(self, column, new_name):
         """Change configuration name."""
@@ -449,7 +449,7 @@ class ConfigModel(QAbstractTableModel):
                     row, config_name, old_value, value, True)))
         # Update view
         self.headerDataChanged.emit(
-            Qt.Horizontal, index.column(), index.column())
+            Qt.Orientation.Horizontal, index.column(), index.column())
         self.dataChanged.emit(index, index)
 
     def cleanUndo(self, column):

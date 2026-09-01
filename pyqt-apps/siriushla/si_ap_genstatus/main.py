@@ -44,26 +44,26 @@ class SIGenStatusWindow(SiriusMainWindow):
     def _setupUi(self):
         # machine shift
         self.ld_machsht = QLabel(
-            '<h3>Shift: </h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Shift: </h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_machsht = MachShiftLabel(self, prefix=self.prefix)
         self.lb_machsht.label.setStyleSheet('QLabel{font-size: 45pt;}')
 
         # injection mode
         self.ld_injmode = QLabel(
-            '<h3>Inj.Mode: </h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Inj.Mode: </h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         injctrl_dev = _PVName('AS-Glob:AP-InjCtrl')
         injctrl_dev = injctrl_dev.substitute(prefix=self.prefix)
         pvname = injctrl_dev.substitute(propty='Mode-Sts')
-        self.lb_injmode = SiriusLabel(self, pvname, alignment=Qt.AlignCenter)
+        self.lb_injmode = SiriusLabel(self, pvname, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_injmode.setStyleSheet('QLabel{font-size: 45pt;}')
         topupwids = list()
 
         self.ld_tunxt = QLabel(
-            '<h3>Next Inj.: </h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Next Inj.: </h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tunxt = SiriusLabel(
             self, injctrl_dev.substitute(propty='TopUpNextInj-Mon'))
         self.lb_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
-        self.lb_tunxt.setAlignment(Qt.AlignCenter)
+        self.lb_tunxt.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lb_tunxt.setStyleSheet('QLabel{font-size: 45pt;}')
         box_tunxt = QWidget()
         lay_tunxt = QVBoxLayout(box_tunxt)
@@ -73,10 +73,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         topupwids.append(box_tunxt)
 
         self.ld_tusts = QLabel(
-            '<h3>Status: </h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Status: </h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tusts = SiriusLabel(
             self, injctrl_dev.substitute(propty='TopUpState-Sts'))
-        self.lb_tusts.setAlignment(Qt.AlignCenter)
+        self.lb_tusts.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lb_tusts.setStyleSheet('QLabel{font-size: 45pt;}')
         box_tusts = QWidget()
         lay_tusts = QVBoxLayout(box_tusts)
@@ -86,10 +86,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         topupwids.append(box_tusts)
 
         self.ld_tuperd = QLabel(
-            '<h3>Period: </h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Period: </h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tuperd = SiriusLabel(
             self, injctrl_dev.substitute(propty='TopUpPeriod-RB'),
-            keep_unit=True, alignment=Qt.AlignCenter)
+            keep_unit=True, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tuperd.showUnits = True
         self.lb_tuperd.setStyleSheet('QLabel{font-size: 45pt;}')
         box_tuperd = QWidget()
@@ -100,10 +100,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         topupwids.append(box_tuperd)
 
         self.ld_tunrpu = QLabel(
-            '<h3>Nr.Pulses: </h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Nr.Pulses: </h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tunrpu = SiriusLabel(
             self, injctrl_dev.substitute(propty='TopUpNrPulses-RB'),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_tunrpu.showUnits = True
         self.lb_tunrpu.setStyleSheet('QLabel{font-size: 45pt;}')
         box_tunrpu = QWidget()
@@ -228,12 +228,12 @@ class SIGenStatusWindow(SiriusMainWindow):
 
         # current
         self.ld_curr = QLabel(
-            '<h3>Current [mA]</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Current [mA]</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.ld_curr.setStyleSheet('max-height: 2em;')
         pvname = _PVName('SI-Glob:AP-CurrInfo:Current-Mon')
         pvname = pvname.substitute(prefix=self.prefix)
         self.lb_curr = SiriusLabel(self, pvname)
-        self.lb_curr.setAlignment(Qt.AlignCenter)
+        self.lb_curr.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lb_curr.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';font-size: 45pt;}')
         pvname = _PVName('SI-Glob:AP-CurrInfo:StoredEBeam-Mon')
@@ -246,13 +246,13 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.frm_curr.add_widget(self.lb_curr)
         box_curr = QWidget()
         lay_curr = QVBoxLayout(box_curr)
-        lay_curr.setAlignment(Qt.AlignVCenter)
+        lay_curr.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         lay_curr.addWidget(self.ld_curr)
         lay_curr.addWidget(self.frm_curr)
 
         # lifetime
         self.ld_lifetime = QLabel(
-            '<h3>Lifetime</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Lifetime</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.ld_lifetime.setStyleSheet('max-height: 2em;')
         lifetime_hr_pvname = _PVName(
             'SI-Glob:AP-CurrInfo:LifetimeHour-Mon'
@@ -264,7 +264,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.lb_lifetime.setStyleSheet('QLabel{font-size: 45pt;}')
         box_lt = QWidget()
         lay_lt = QVBoxLayout(box_lt)
-        lay_lt.setAlignment(Qt.AlignVCenter)
+        lay_lt.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         lay_lt.addWidget(self.ld_lifetime)
         lay_lt.addWidget(self.lb_lifetime)
 
@@ -299,7 +299,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         curr_pvname = curr_pvname.substitute(prefix=self.prefix)
         self.curr_graph.addYChannel(
             y_channel=curr_pvname, name='Current',
-            color='blue', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='blue', lineStyle=Qt.PenStyle.SolidLine, lineWidth=2)
         self.curve = self.curr_graph.curveAtIndex(0)
         self.curve.setFillLevel(0)
         self.curve.setBrush(QBrush(QGradient(QGradient.ColdEvening)))
@@ -316,7 +316,7 @@ class SIGenStatusWindow(SiriusMainWindow):
 
         hlay1 = QHBoxLayout()
         hlay1.setSpacing(30)
-        hlay1.setAlignment(Qt.AlignVCenter)
+        hlay1.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         hlay1.addWidget(box_curr)
         hlay1.addWidget(box_lt)
         hlay1.addWidget(self.tune_mon)
@@ -365,7 +365,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             'QGroupBox{font-size: 12pt; font-weight: bold;}')
 
         lay = QVBoxLayout(gbox) if orientation == 'V' else QHBoxLayout(gbox)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for idx, wid in enumerate(widgets):
             lay.addWidget(wid)
             lay.setStretch(idx, 1)

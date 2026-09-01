@@ -14,7 +14,7 @@ class MatplotlibCanvas(FigureCanvas):
         figure = figure or Figure()
         super().__init__(figure)
         self.setParent(parent)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.updateGeometry()
 
     def changeEvent(self, event):

@@ -61,7 +61,7 @@ class TLControlWindow(BaseWindow):
              ('', 0),
              ('', 1.29), ('CV', 5), ('Kick-SP', 5), ('Kick-Mon', 5),
              ('', 0)))
-        headerline.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        headerline.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         lay.addWidget(headerline)
 
         for scrn_idx, devices in enumerate(self._devices):

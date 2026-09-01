@@ -27,12 +27,12 @@ class SlowLoopErrorDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(20)
 
         self.title = QLabel(
             '<h3>Slow Loop Control Error Details</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.title)
 
         if self.section == 'SI':
@@ -43,23 +43,23 @@ class SlowLoopErrorDetails(SiriusDialog):
 
     def _setupDetails(self, lay, key, chs_dict):
         if key:
-            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addWidget(QLabel(
-                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignCenter))
+                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter))
 
         lay_llrf = QHBoxLayout()
-        lay_llrf.setAlignment(Qt.AlignTop)
+        lay_llrf.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_llrf.setSpacing(0)
 
         lay_table = QGridLayout()
-        lay_table.setAlignment(Qt.AlignVCenter)
+        lay_table.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         lay_table.setSpacing(9)
         lay_table.addWidget(QLabel(
-            '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 1, 0)
+            '<h4>Reference<h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
         lay_table.addWidget(QLabel(
-            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+            '<h4>Input</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 2, 0)
         lay_table.addWidget(QLabel(
-            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
+            '<h4>Error</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 3, 0)
 
         # I
         lb_iref = SiriusLabel(self, self.prefix+chs_dict['IRef'])
@@ -69,7 +69,7 @@ class SlowLoopErrorDetails(SiriusDialog):
         lb_ierr = SiriusLabel(self, self.prefix+chs_dict['IErr'])
         lb_ierr.showUnits = True
         lay_table.addWidget(QLabel(
-            '<h4>I</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            '<h4>I</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay_table.addWidget(lb_iref, 1, 1)
         lay_table.addWidget(lb_iinp, 2, 1)
         lay_table.addWidget(lb_ierr, 3, 1)
@@ -82,13 +82,13 @@ class SlowLoopErrorDetails(SiriusDialog):
         lb_qerr = SiriusLabel(self, self.prefix+chs_dict['QErr'])
         lb_qerr.showUnits = True
         lay_table.addWidget(QLabel(
-            '<h4>Q</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            '<h4>Q</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         lay_table.addWidget(lb_qref, 1, 2)
         lay_table.addWidget(lb_qinp, 2, 2)
         lay_table.addWidget(lb_qerr, 3, 2)
 
         lay_llrf.addLayout(lay_table)
-        lay_llrf.addItem(QSpacerItem(15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored))
+        lay_llrf.addItem(QSpacerItem(15, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored))
 
         # Graphs
         self.setupGraphFasor(lay_llrf, chs_dict)

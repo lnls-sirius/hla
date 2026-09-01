@@ -61,7 +61,7 @@ class SelectScrns(QWidget):
         self.setLayout(vlay)
 
         lab = QLabel('<h2>' + self._sec + ' Screens List</h2>',
-                     alignment=Qt.AlignCenter)
+                     alignment=Qt.AlignmentFlag.AlignCenter)
         vlay.addWidget(lab)
 
         for scrn in self.scrn_list:
