@@ -330,20 +330,20 @@ class DipoleRamp(QWidget):
                 t_item.setBackground(QBrush(dark_orchid))
                 t_item.setTextAlignment(Qt.AlignCenter)
                 t_item.setFlags(Qt.ItemIsEnabled)
-                t_item.setData(Qt.DisplayRole, 'Interval [ms]')
+                t_item.setData(Qt.ItemDataRole.DisplayRole, 'Interval [ms]')
                 e_item.setBackground(QBrush(dark_orchid))
                 e_item.setTextAlignment(Qt.AlignCenter)
                 e_item.setFlags(Qt.ItemIsEnabled)
-                e_item.setData(Qt.DisplayRole, 'E Range [GeV]')
+                e_item.setData(Qt.ItemDataRole.DisplayRole, 'E Range [GeV]')
                 np_item.setBackground(QBrush(dark_orchid))
                 np_item.setTextAlignment(Qt.AlignCenter)
-                np_item.setData(Qt.DisplayRole, ' ')
+                np_item.setData(Qt.ItemDataRole.DisplayRole, ' ')
             elif vlabel in ['RampUp', 'RampDown']:
                 label_item.setBackground(QBrush(light_orchid))
                 t_item.setBackground(QBrush(white))
                 e_item.setBackground(QBrush(white))
                 np_item.setBackground(QBrush(light_orchid))
-                np_item.setData(Qt.DisplayRole, '-')
+                np_item.setData(Qt.ItemDataRole.DisplayRole, '-')
             else:
                 label_item.setBackground(QBrush(light_blue))
                 t_item.setBackground(QBrush(white))
@@ -368,7 +368,7 @@ class DipoleRamp(QWidget):
 
         try:
             new_value = float(self.table.item(row, column).data(
-                Qt.DisplayRole))
+                Qt.ItemDataRole.DisplayRole))
             if self.table_map['rows'][row] == 'Start':
                 old_value = self.ramp_config.ps_ramp_start_energy
                 self.ramp_config.ps_ramp_start_energy = new_value
@@ -681,16 +681,16 @@ class DipoleRamp(QWidget):
                 energy = self.ramp_config.ps_ramp_rampdown_smooth_energy
 
             if time is not None:
-                t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
-                e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+                t_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(time))
+                e_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.4f}'.format(energy))
 
         for row in range(8):  # before smoothing areas section
             D = self.ramp_config.ps_ramp_duration
             N = self.ramp_config.ps_ramp_wfm_nrpoints_fams
-            T = float(self.table.item(row, 1).data(Qt.DisplayRole))
+            T = float(self.table.item(row, 1).data(Qt.ItemDataRole.DisplayRole))
             value = round(T*N/D)
             item = self.table.item(row, 3)  # index column
-            item.setData(Qt.DisplayRole, str(value))
+            item.setData(Qt.ItemDataRole.DisplayRole, str(value))
 
         self.l_rampup1v.setText('RmpU1\n{: .3f} [GeV/s]'.format(
             self.ramp_config.ps_ramp_rampup1_slope))
@@ -707,15 +707,15 @@ class DipoleRamp(QWidget):
         t_item = self.table.item(row, 1)  # time column
         e_item = self.table.item(row, 2)  # energy column
         energy = self.ramp_config.ps_waveform_interp_energy(inj_time)
-        t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(inj_time))
-        e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+        t_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(inj_time))
+        e_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.4f}'.format(energy))
 
         row = 4  # Ejection
         t_item = self.table.item(row, 1)  # time column
         e_item = self.table.item(row, 2)  # energy column
         energy = self.ramp_config.ps_waveform_interp_energy(eje_time)
-        t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(eje_time))
-        e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+        t_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(eje_time))
+        e_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.4f}'.format(energy))
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -1006,7 +1006,7 @@ class MultipolesRamp(QWidget):
             old_norm_configs = _dcopy(self.normalized_configs)
             old_value = self.table_map['rows'][row]
             new_value = float(self.table.item(row, column).data(
-                Qt.DisplayRole))
+                Qt.ItemDataRole.DisplayRole))
             self.ramp_config.ps_normalized_configs_change_time(
                 old_value, new_value)
             self.table_map['rows'][row] = new_value
@@ -1222,9 +1222,9 @@ class MultipolesRamp(QWidget):
         nconfig_idd = self.table_map['rows'][row]
         if nconfig_idd in ['Injection', 'Ejection']:
             return
-        label = self.table.item(row, 0).data(Qt.DisplayRole)
-        time = float(self.table.item(row, 1).data(Qt.DisplayRole))
-        energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
+        label = self.table.item(row, 0).data(Qt.ItemDataRole.DisplayRole)
+        time = float(self.table.item(row, 1).data(Qt.ItemDataRole.DisplayRole))
+        energy = float(self.table.item(row, 2).data(Qt.ItemDataRole.DisplayRole))
         return row, col, label, time, energy
 
     def _verifyWarnings(self):
@@ -1405,20 +1405,20 @@ class MultipolesRamp(QWidget):
             elif idd in self.normalized_configs.keys():
                 time = idd
                 label = self.normalized_configs[idd]['label']
-                label_item.setData(Qt.DisplayRole, str(label))
+                label_item.setData(Qt.ItemDataRole.DisplayRole, str(label))
                 energy = self.ramp_config.ps_waveform_interp_energy(time)
-            t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
-            e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+            t_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(time))
+            e_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.4f}'.format(energy))
 
         for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
             N1 = self.ramp_config.ps_ramp_wfm_nrpoints_fams
             N2 = self.ramp_config.ps_ramp_wfm_nrpoints_corrs
-            T = float(self.table.item(row, 1).data(Qt.DisplayRole))
+            T = float(self.table.item(row, 1).data(Qt.ItemDataRole.DisplayRole))
             value1 = round(T*N1/D)
             value2 = round(T*N2/D)
             item = self.table.item(row, 3)  # index column
-            item.setData(Qt.DisplayRole, str(value1) + ' / ' + str(value2))
+            item.setData(Qt.ItemDataRole.DisplayRole, str(value1) + ' / ' + str(value2))
         self._sortTable()
 
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -1656,7 +1656,7 @@ class RFRamp(QWidget):
 
         try:
             new_value = float(self.table.item(row, column).data(
-                Qt.DisplayRole))
+                Qt.ItemDataRole.DisplayRole))
             if self.table_map['rows'][row] == 'Start':
                 if self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_bottom_voltage
@@ -1838,24 +1838,24 @@ class RFRamp(QWidget):
                 time = self.ramp_config.rf_ramp_rampdown_stop_time
                 vgap = self.ramp_config.rf_ramp_bottom_voltage
                 ph = self.ramp_config.rf_ramp_bottom_phase
-            t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
-            Vgap_item.setData(Qt.DisplayRole, '{0:.3f}'.format(vgap))
-            Ph_item.setData(Qt.DisplayRole, '{0:.3f}'.format(ph))
+            t_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(time))
+            Vgap_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(vgap))
+            Ph_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(ph))
 
         for column, label in self.table_map['columns'].items():
             for row in self.table_map['rows'].keys():
                 if label == 'E [GeV]':
                     t_item = self.table.item(row, 1)
-                    time = float(t_item.data(Qt.DisplayRole))
+                    time = float(t_item.data(Qt.ItemDataRole.DisplayRole))
                     energy = self.ramp_config.ps_waveform_interp_energy(time)
                     e_item = self.table.item(row, column)
-                    e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+                    e_item.setData(Qt.ItemDataRole.DisplayRole, '{0:.4f}'.format(energy))
                 # elif label == 'Φs [°]':
                 #     t_item = self.table.item(row, 1)
-                #     time = float(t_item.data(Qt.DisplayRole))
+                #     time = float(t_item.data(Qt.ItemDataRole.DisplayRole))
                 #     value = self._calc_syncphase(time)
                 #     item = self.table.item(row, column)
-                #     item.setData(Qt.DisplayRole, '{0:.3f}'.format(value))
+                #     item.setData(Qt.ItemDataRole.DisplayRole, '{0:.3f}'.format(value))
 
         rampupv = ((self.ramp_config.rf_ramp_top_voltage -
                     self.ramp_config.rf_ramp_bottom_voltage) /
@@ -1921,14 +1921,14 @@ class _UndoRedoTableCell(QUndoCommand):
         global _flag_stack_next_command
         _flag_stack_next_command = False
         self.table.item(self.row, self.column).setData(
-            Qt.DisplayRole, str(self.old_data))
+            Qt.ItemDataRole.DisplayRole, str(self.old_data))
 
     def redo(self):
         global _flag_stack_next_command, _flag_stacking
         if not _flag_stacking:
             _flag_stack_next_command = False
             self.table.item(self.row, self.column).setData(
-                Qt.DisplayRole, str(self.new_data))
+                Qt.ItemDataRole.DisplayRole, str(self.new_data))
         else:
             _flag_stacking = False
 

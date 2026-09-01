@@ -24,5 +24,5 @@ class PVConfigurationDelegate(QItemDelegate):
 
         Set cell data as float.
         """
-        value = index.model().data(index, Qt.DisplayRole)
+        value = index.model().data(index, Qt.ItemDataRole.DisplayRole)
         editor.setValue(value)

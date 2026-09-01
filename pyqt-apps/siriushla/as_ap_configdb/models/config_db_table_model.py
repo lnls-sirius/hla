@@ -41,12 +41,12 @@ class ConfigDbTableModel(QAbstractTableModel):
         """Return number of columns."""
         return len(self.horizontalHeader)
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         """Return data at index."""
         if not index.isValid():
             return None
 
-        if role != Qt.DisplayRole:
+        if role != Qt.ItemDataRole.DisplayRole:
             return None
 
         columnName = self.horizontalHeader[index.column()]
@@ -65,9 +65,9 @@ class ConfigDbTableModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role):
         """Return header."""
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+        if orientation == Qt.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self.horizontalHeader[section]
-        elif orientation == Qt.Vertical and role == Qt.DisplayRole:
+        elif orientation == Qt.Vertical and role == Qt.ItemDataRole.DisplayRole:
             return section + 1
 
         return None

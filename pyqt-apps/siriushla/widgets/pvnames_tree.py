@@ -488,7 +488,7 @@ class PVNameTree(QWidget):
 
     def checked_items(self):
         """Return checked items."""
-        return [item.data(0, Qt.DisplayRole) for item in self._leafs
+        return [item.data(0, Qt.ItemDataRole.DisplayRole) for item in self._leafs
                 if item.checkState(0) == Qt.CheckState.Checked]
 
     def sizeHint(self):

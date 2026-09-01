@@ -149,7 +149,7 @@ class ConfigDelegate(QItemDelegate):
 
         Set cell data as float.
         """
-        value = index.model().data(index, Qt.DisplayRole)
+        value = index.model().data(index, Qt.ItemDataRole.DisplayRole)
         editor.setValue(float(value.value()))
 
 
@@ -184,9 +184,9 @@ class ConfigModel(QAbstractTableModel):
         """Return the number of configurations currently open."""
         return len(self._configurations)
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         """Set data of the table (override)."""
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             pvname = self._vertical_header[index.row()]['name']
             pvtype = self._vertical_header[index.row()]['type']
             if pvtype == float:
@@ -195,11 +195,11 @@ class ConfigModel(QAbstractTableModel):
             else:
                 raise NotImplementedError
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
+    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
         """Set headers of the table (override)."""
         if role == Qt.TextAlignmentRole:
             pass
-        if role != Qt.DisplayRole:
+        if role != Qt.ItemDataRole.DisplayRole:
             return object()
         if orientation == Qt.Horizontal:
             if not self._configurations[section].dirty:
@@ -207,7 +207,7 @@ class ConfigModel(QAbstractTableModel):
             else:
                 return self._configurations[section].name + "*"
         elif orientation == Qt.Vertical:
-            if role == Qt.DisplayRole:
+            if role == Qt.ItemDataRole.DisplayRole:
                 pvname = self._vertical_header[section]['name']
                 vheader = "{}".format(pvname)
                 return vheader

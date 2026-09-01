@@ -43,12 +43,12 @@ class PVConfigurationTableModel(QAbstractTableModel):
         except IndexError:
             return 0
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         """Return data at index."""
         if not index.isValid():
             return None
 
-        if role != Qt.DisplayRole:
+        if role != Qt.ItemDataRole.DisplayRole:
             return None
 
         column = index.column()

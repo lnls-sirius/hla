@@ -1258,7 +1258,7 @@ class PSCmdWindow(SiriusMainWindow):
     # ---------- update setup ----------
 
     def _handle_checked_items_changed(self, item):
-        devname = PVName(item.data(0, Qt.DisplayRole))
+        devname = PVName(item.data(0, Qt.ItemDataRole.DisplayRole))
         if not _re.match('.*-.*:.*-.*', devname):
             return
         state2set = item.checkState(0)

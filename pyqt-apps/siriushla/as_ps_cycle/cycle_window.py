@@ -484,7 +484,7 @@ class CycleWindow(SiriusMainWindow):
         return pwrsupplies
 
     def _handle_checked_items_changed(self, item):
-        psname = PVName(item.data(0, Qt.DisplayRole))
+        psname = PVName(item.data(0, Qt.ItemDataRole.DisplayRole))
         if not _re.match('.*-.*:.*-.*', psname):
             return
 
@@ -616,7 +616,7 @@ class CycleWindow(SiriusMainWindow):
 
     def _open_ps_detail(self, item):
         if self.sender() == self.progress_list:
-            text_split = item.data(Qt.DisplayRole).split(' ')
+            text_split = item.data(Qt.ItemDataRole.DisplayRole).split(' ')
             psname = ''
             for text in text_split:
                 if _re.match('.*-.*:.*-.*', text):
