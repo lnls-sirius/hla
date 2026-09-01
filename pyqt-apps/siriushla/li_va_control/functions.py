@@ -71,7 +71,7 @@ class BaseFunctionsInterface():
                     keep_unit=keep_unit)
             if precision and pv_name[-1] != 's':
                 widget.displayFormat = _DisplayFormat.Exponential
-            widget.setAlignment(Qt.AlignCenter)
+            widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
             widget.setStyleSheet(
                 "min-width:4em;max-width:5em;max-height:1em;")
         return widget
@@ -117,7 +117,7 @@ class BaseFunctionsInterface():
             background-color:"""+color+";"
         widget.setStyleSheet(styled)
         widget.showUnits = True
-        widget.setAlignment(Qt.AlignCenter)
+        widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
         if any(x in pv_name for x in ["RdPrs", "ReadP"]) \
                 and pv_name[-1] != 's':
             widget.precisionFromPV = False
@@ -186,16 +186,16 @@ class BaseFunctionsInterface():
         wid, lay = self.getLayoutWidget("H")
         lay.setContentsMargins(0, 1, 0, 1)
         if title != "":
-            label = QLabel(title, alignment=Qt.AlignCenter)
+            label = QLabel(title, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet("min-width:5em;")
             lay.addWidget(label)
         lay.addWidget(
             self.getWidget(control, wid_type, kp_unit, precision),
-            alignment=Qt.AlignRight)
+            alignment=Qt.AlignmentFlag.AlignRight)
         widget = self.getWidget(readback, sec_wid, kp_unit, precision)
         lay.addWidget(
             widget,
-            alignment=Qt.AlignLeft)
+            alignment=Qt.AlignmentFlag.AlignLeft)
         return wid
 
     def getProgressBar(self, pv_name, limit, color=COLORS['purple']):
@@ -226,7 +226,7 @@ class BaseFunctionsInterface():
         if orient == "H":
             lay.addWidget(
                 self.setWindowBtn(cat, id_num),
-                alignment=Qt.AlignLeft)
+                alignment=Qt.AlignmentFlag.AlignLeft)
         else:
             group.setObjectName("group")
             group.setStyleSheet(
@@ -261,7 +261,7 @@ class BaseFunctionsInterface():
         wid, lay = self.getLayoutWidget()
         lay.addWidget(
             QLabel('<b>'+legend+'</b>'),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         row = 1
         for item in LEGEND[legend]:
             column = 0
@@ -272,13 +272,13 @@ class BaseFunctionsInterface():
                         self, shape,
                         item['color'].name()),
                     row, column, 1, 1,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 column = 1
 
             lay.addWidget(
                 QLabel(item['text']),
                 row, column, 1, 1,
-                alignment=Qt.AlignLeft)
+                alignment=Qt.AlignmentFlag.AlignLeft)
             row += 1
         return wid
 
@@ -333,7 +333,7 @@ class BaseFunctionsInterface():
             if show_title:
                 lay.addWidget(
                     headerWidget(title, alternative),
-                    pos[0], pos[1], 1, 3, alignment=Qt.AlignCenter)
+                    pos[0], pos[1], 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
             pos[0] += 1
             for sp_gen in data["No."][gen % 3]:
                 if title == "No.":
@@ -342,7 +342,7 @@ class BaseFunctionsInterface():
                         text = str(sp_gen)
                     widget = QLabel('<strong>'+text+'</strong>')
                     widget.setStyleSheet("min-width: 2em;")
-                    widget.setAlignment(Qt.AlignCenter)
+                    widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 else:
                     pv_suf = self.getSufixes(obj_data)
                     if alternative:
@@ -356,7 +356,7 @@ class BaseFunctionsInterface():
                         obj_data, pv_suf, num, sp_gen, sec_wid='label')
                 lay.addWidget(
                     widget, pos[0], pos[1],
-                    1, 1, alignment=Qt.AlignCenter)
+                    1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
                 pos[0] += 1
             pos[1] += 3
             pos[0] = 0
@@ -400,11 +400,11 @@ class BaseFunctionsInterface():
             if info_type == 'current' and orient == 'H':
                 lay.addWidget(
                     self.getProgressBar(name, [0, 200]),
-                    alignment=Qt.AlignCenter)
+                    alignment=Qt.AlignmentFlag.AlignCenter)
             wid = self.setupUnitView(
                 name, info['color'])
             lay.addWidget(
-                wid, alignment=Qt.AlignCenter)
+                wid, alignment=Qt.AlignmentFlag.AlignCenter)
         return lay
 
 

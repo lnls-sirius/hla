@@ -39,7 +39,7 @@ class IDControl(SiriusMainWindow):
         self.setCentralWidget(cwid)
 
         label = QLabel('<h3>ID Control Window</h3>',
-                       self, alignment=Qt.AlignCenter)
+                       self, alignment=Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(
             'QLabel{min-height: 3em; max-height: 3em; min-width: 75em;}')
 

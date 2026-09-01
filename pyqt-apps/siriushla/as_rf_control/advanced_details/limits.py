@@ -43,7 +43,7 @@ class LimitsDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QGridLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(title_frame, 0, 0, 1, 4)
 
         row = 1
@@ -52,7 +52,7 @@ class LimitsDetails(SiriusDialog):
             lb_val.showUnits = True
 
             lay.addWidget(QLabel(key), row, 0)
-            lay.addWidget(QLabel(val[0]), row, 1, alignment=Qt.AlignCenter)
+            lay.addWidget(QLabel(val[0]), row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(SiriusSpinbox(
                 self, self.prefix+val[1]+'-SP'), row, 2)
             lay.addWidget(lb_val, row, 3)
@@ -73,6 +73,6 @@ class LimitsDetails(SiriusDialog):
         lb = SiriusLabel(self, self.prefix+pv+ending)
         lb.showUnits = True
 
-        lay.addWidget(QLabel(label, alignment=Qt.AlignCenter), row, 1)
+        lay.addWidget(QLabel(label, alignment=Qt.AlignmentFlag.AlignCenter), row, 1)
         lay.addWidget(SiriusLineEdit(self, self.prefix+pv+ending), row, 2)
         lay.addWidget(lb, row, 3)

@@ -51,7 +51,7 @@ class RaBPMMonitor(SiriusMainWindow):
 
     def _setupUi(self):
         self.title = QLabel(
-            '<h3>RaBPM Monitor</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>RaBPM Monitor</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         self.monitor = self._setupMonitorWidget()
@@ -76,7 +76,7 @@ class RaBPMMonitor(SiriusMainWindow):
         # create labels with subsector description
         for sec, row in {'SI': 0, 'BO': 21}.items():
             txt = sec + ' Subsector' + ('' if sec == 'SI' else ' (N)')
-            label = QLabel(f'<h4>{txt}</h4>', self, alignment=Qt.AlignCenter)
+            label = QLabel(f'<h4>{txt}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setObjectName('sec')
             label.setStyleSheet('#sec{border: 1px solid gray;}')
             grid.addWidget(label, row, 0)
@@ -98,7 +98,7 @@ class RaBPMMonitor(SiriusMainWindow):
 
                 # group label
                 lbl = QLabel(
-                    group.replace(' ', '\n'), self, alignment=Qt.AlignCenter)
+                    group.replace(' ', '\n'), self, alignment=Qt.AlignmentFlag.AlignCenter)
                 lbl.setObjectName('cont')
 
                 # subgroup labels
@@ -110,7 +110,7 @@ class RaBPMMonitor(SiriusMainWindow):
                 for dtxt in descs:
                     dlay.addWidget(
                         QLabel(dtxt.replace(' ', '\n'), self,
-                               alignment=Qt.AlignCenter))
+                               alignment=Qt.AlignmentFlag.AlignCenter))
 
                 # group header widgets
                 wid = QWidget()
@@ -138,7 +138,7 @@ class RaBPMMonitor(SiriusMainWindow):
 
             # add SI subsector header
             label = QLabel(
-                '<h4>'+rabpm+'</h4>', self, alignment=Qt.AlignCenter)
+                '<h4>'+rabpm+'</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setObjectName('siheader')
             label.setStyleSheet('#siheader{border: 1px solid gray;}')
             grid.addWidget(label, 0, col)
@@ -155,7 +155,7 @@ class RaBPMMonitor(SiriusMainWindow):
                     lay = QVBoxLayout(wid)
                 lay.setSpacing(2)
                 lay.setContentsMargins(0, 1 if 'BO' in group else 0, 0, 0)
-                lay.setAlignment(Qt.AlignHCenter)
+                lay.setAlignment(Qt.AlignmentFlag.AlignHCenter)
                 group2lay[group] = lay
                 grid.addWidget(
                     wid, data['row'] + 1, col, len(data['slots']), 1)
@@ -197,7 +197,7 @@ class RaBPMMonitor(SiriusMainWindow):
 
                 # add BO subsector header
                 label = QLabel(
-                    f'<h4>{bobpm_n:02}</h4>', self, alignment=Qt.AlignCenter)
+                    f'<h4>{bobpm_n:02}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
                 label.setObjectName('boheader')
                 label.setStyleSheet('#boheader{border: 1px solid gray;}')
                 grid.addWidget(label, 21, col)
@@ -225,22 +225,22 @@ class RaBPMMonitor(SiriusMainWindow):
         for dev, sts in dev2info.items():
             # device title
             lbl = QLabel(
-                f' • {dev}:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                f' • {dev}:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             hlay_leg.addWidget(lbl)
 
             # left description
             if len(sts) == 2:
                 dsc = QLabel(
-                    sts[0], self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    sts[0], self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 hlay_leg.addWidget(dsc)
                 sts = sts[-1]
 
             # leds
             wid = self._get_legend_widget(dev)
-            hlay_leg.addWidget(wid, alignment=Qt.AlignCenter)
+            hlay_leg.addWidget(wid, alignment=Qt.AlignmentFlag.AlignCenter)
 
             # right description
-            dsc = QLabel(sts, self, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+            dsc = QLabel(sts, self, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             hlay_leg.addWidget(dsc)
             hlay_leg.addStretch()
         hlay_leg.addStretch()
@@ -303,7 +303,7 @@ class RaBPMMonitor(SiriusMainWindow):
         monwid = QWidget()
         lay = QHBoxLayout(monwid)
         lay.setContentsMargins(6, 5, 6, 5)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.setSpacing(0)
         for wid in wids:
             lay.addWidget(wid)
@@ -318,7 +318,7 @@ class RaBPMMonitor(SiriusMainWindow):
         else:
             wid = QWidget()
             lay = QHBoxLayout(wid)
-            lay.setAlignment(Qt.AlignCenter)
+            lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.setSpacing(0)
             for _ in ['rffe', 'bpm']:
                 led = QLed(self)

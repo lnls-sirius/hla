@@ -30,7 +30,7 @@ class TransmLineStatusDetails(SiriusDialog):
 
         self.title = QLabel(
             '<h4>Transm. Line - Detailed Status</h4>',
-            self, alignment=Qt.AlignHCenter)
+            self, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.title, 0, 0, 1, 4)
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
 
@@ -47,7 +47,7 @@ class TransmLineStatusDetails(SiriusDialog):
         if key:
             lay.addWidget(QLabel(
                 f'<h4>{key}<h4>', self,
-                alignment=Qt.AlignRight), row, offset)
+                alignment=Qt.AlignmentFlag.AlignRight), row, offset)
             row += 1
 
         for widget_id, pvname in chs_dict['label_led'].items():
@@ -68,7 +68,7 @@ class TransmLineStatusDetails(SiriusDialog):
             hlay.addWidget(si_led_wid)
 
             lay.addWidget(QLabel(
-                widget_id, self, alignment=Qt.AlignRight), row, offset)
+                widget_id, self, alignment=Qt.AlignmentFlag.AlignRight), row, offset)
             lay.addWidget(wid, row, offset+1)
             row += 1
 
@@ -88,7 +88,7 @@ class TransmLineStatusDetails(SiriusDialog):
         hlay.addWidget(si_led_wid)
 
         lay.addWidget(QLabel(
-            'Circulator T In: ', self, alignment=Qt.AlignRight), row, offset)
+            'Circulator T In: ', self, alignment=Qt.AlignmentFlag.AlignRight), row, offset)
         lay.addWidget(wid, row, offset + 1)
         row += 1
 
@@ -99,7 +99,7 @@ class TransmLineStatusDetails(SiriusDialog):
                 si_lbl_wid.showUnits = True
                 si_lbl_wid.setStyleSheet('qproperty-alignment: AlignLeft;')
                 lay.addWidget(QLabel(
-                    widget_id, self, alignment=Qt.AlignRight), row, offset)
+                    widget_id, self, alignment=Qt.AlignmentFlag.AlignRight), row, offset)
                 lay.addWidget(si_lbl_wid, row, offset+1)
                 row += 1
 
@@ -112,7 +112,7 @@ class TransmLineStatusDetails(SiriusDialog):
                 si_led_wid = SiriusLedAlert(
                     self, self.prefix+pvname)
                 lay.addWidget(QLabel(
-                    f'{widget_id}: ', self, alignment=Qt.AlignRight),
+                    f'{widget_id}: ', self, alignment=Qt.AlignmentFlag.AlignRight),
                     row, offset)
                 lay.addWidget(si_led_wid, row, offset+1)
                 row += 1

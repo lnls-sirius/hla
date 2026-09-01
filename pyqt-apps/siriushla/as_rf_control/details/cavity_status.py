@@ -38,7 +38,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_temp1 = QFormLayout()
         lay_temp1.setHorizontalSpacing(9)
         lay_temp1.setVerticalSpacing(9)
-        lay_temp1.setLabelAlignment(Qt.AlignRight)
+        lay_temp1.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         lay_temp1.setFormAlignment(Qt.AlignTop)
         lb_temp1 = QLabel('Cell and Coupler\nTemperatures\nPT100', self)
         lb_temp1.setStyleSheet(
@@ -62,7 +62,7 @@ class CavityStatusDetails(SiriusDialog):
             led.setToolTip(tooltip)
             self.led_cells[self.prefix+cell[0]] = led
             hbox = QHBoxLayout()
-            hbox.setAlignment(Qt.AlignLeft)
+            hbox.setAlignment(Qt.AlignmentFlag.AlignLeft)
             hbox.addWidget(lbl)
             hbox.addWidget(led)
             lay_temp1.addRow('Cell '+str(idx + 1)+': ', hbox)
@@ -82,7 +82,7 @@ class CavityStatusDetails(SiriusDialog):
             'Interlock limits: \n'
             'Min: '+str(lims_coup[0])+'°C, Max: '+str(lims_coup[1])+'°C')
         hb_coup = QHBoxLayout()
-        hb_coup.setAlignment(Qt.AlignLeft)
+        hb_coup.setAlignment(Qt.AlignmentFlag.AlignLeft)
         hb_coup.addWidget(lb_coup)
         hb_coup.addWidget(self.led_coup)
         lay_temp1.addRow('Coupler: ', hb_coup)
@@ -91,8 +91,8 @@ class CavityStatusDetails(SiriusDialog):
         lay_temp2 = QFormLayout()
         lay_temp2.setHorizontalSpacing(9)
         lay_temp2.setVerticalSpacing(9)
-        lay_temp2.setLabelAlignment(Qt.AlignRight)
-        lay_temp2.setFormAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_temp2.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay_temp2.setFormAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         lb_temp2 = QLabel('Cell\nTemperatures\nThermostats', self)
         lb_temp2.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -107,8 +107,8 @@ class CavityStatusDetails(SiriusDialog):
         lay_dtemp = QFormLayout()
         lay_dtemp.setHorizontalSpacing(9)
         lay_dtemp.setVerticalSpacing(9)
-        lay_dtemp.setLabelAlignment(Qt.AlignRight)
-        lay_dtemp.setFormAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_dtemp.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay_dtemp.setFormAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         lb_dtemp = QLabel('Disc\nTemperatures\nThermostats', self)
         lb_dtemp.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -123,7 +123,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_flwrt = QFormLayout()
         lay_flwrt.setHorizontalSpacing(9)
         lay_flwrt.setVerticalSpacing(9)
-        lay_flwrt.setLabelAlignment(Qt.AlignRight)
+        lay_flwrt.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         lay_flwrt.setFormAlignment(Qt.AlignTop)
         lb_flwrf = QLabel('Flow Switches', self)
         lb_flwrf.setStyleSheet(
@@ -143,7 +143,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_vac = QFormLayout()
         lay_vac.setHorizontalSpacing(9)
         lay_vac.setVerticalSpacing(9)
-        lay_vac.setLabelAlignment(Qt.AlignRight)
+        lay_vac.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         lay_vac.setFormAlignment(Qt.AlignTop)
         lb_vac = QLabel('Vacuum', self)
         lb_vac.setStyleSheet(
@@ -203,7 +203,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']
                     ['RF Stop 1']['led'])
 
-        lay.addWidget(lbl_rfs1, 2, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_rfs1, 2, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_rfs1cm1, 2, 1)
         lay.addWidget(led_rfs1cm1, 2, 2)
         lay.addWidget(slbl_rfs1cm2, 2, 3)
@@ -227,7 +227,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']
                     ['RF Stop 2']['led'])
 
-        lay.addWidget(lbl_rfs2, 3, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_rfs2, 3, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_rfs2cm1, 3, 1)
         lay.addWidget(led_rfs2cm1, 3, 2)
         lay.addWidget(slbl_rfs2cm2, 3, 3)
@@ -251,7 +251,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']
                     ['RF Stop 3']['led'])
 
-        lay.addWidget(lbl_rfs3, 4, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_rfs3, 4, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_rfs3cm1, 4, 1)
         lay.addWidget(led_rfs3cm1, 4, 2)
         lay.addWidget(slbl_rfs3cm2, 4, 3)
@@ -275,7 +275,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']
                     ['Heater Stop']['led'])
 
-        lay.addWidget(lbl_hs, 5, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_hs, 5, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_hscm1, 5, 1)
         lay.addWidget(led_hscm1, 5, 2)
         lay.addWidget(slbl_hscm2, 5, 3)
@@ -299,7 +299,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']
                     ['Cryo Supply Stop']['led'])
 
-        lay.addWidget(lbl_css, 6, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_css, 6, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_csscm1, 6, 1)
         lay.addWidget(led_csscm1, 6, 2)
         lay.addWidget(slbl_csscm2, 6, 3)
@@ -323,7 +323,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']
                     ['Cryo Return Stop']['led'])
 
-        lay.addWidget(lbl_crs, 7, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_crs, 7, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_crscm1, 7, 1)
         lay.addWidget(led_crscm1, 7, 2)
         lay.addWidget(slbl_crscm2, 7, 3)
@@ -331,7 +331,7 @@ class CavityStatusDetails(SiriusDialog):
 
         lay.addWidget(self._horizontal_separator(), 8, 0, 1, 7)
         lbl_vb = QLabel('<h4>Valve Box</h4>', self)
-        lay.addWidget(lbl_vb, 9, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_vb, 9, 0, alignment=Qt.AlignmentFlag.AlignRight)
 
         lbl_rfs4_vb = QLabel('RF Stop 4', self)
         slbl_rfs4cm1 = SiriusLabel(
@@ -351,7 +351,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
                     ['RF Stop 4']['led'])
 
-        lay.addWidget(lbl_rfs4_vb, 10, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_rfs4_vb, 10, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_rfs4cm1, 10, 1)
         lay.addWidget(led_rfs4cm1, 10, 2)
         lay.addWidget(slbl_rfs4cm2, 10, 3)
@@ -375,7 +375,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
                     ['Heater Stop']['led'])
 
-        lay.addWidget(lbl_hs_vb, 11, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_hs_vb, 11, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_hsvbcm1, 11, 1)
         lay.addWidget(led_hsvbcm1, 11, 2)
         lay.addWidget(slbl_hsvbcm2, 11, 3)
@@ -399,7 +399,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
                     ['Cryo Supply Stop']['led'])
 
-        lay.addWidget(lbl_css_vb, 12, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_css_vb, 12, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_cssvbcm1, 12, 1)
         lay.addWidget(led_cssvbcm1, 12, 2)
         lay.addWidget(slbl_cssvbcm2, 12, 3)
@@ -423,7 +423,7 @@ class CavityStatusDetails(SiriusDialog):
             self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
                     ['Cryo Return Stop']['led'])
 
-        lay.addWidget(lbl_crs_vb, 13, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_crs_vb, 13, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_crsvbcm1, 13, 1)
         lay.addWidget(led_crsvbcm1, 13, 2)
         lay.addWidget(slbl_crsvbcm2, 13, 3)
@@ -436,7 +436,7 @@ class CavityStatusDetails(SiriusDialog):
         led_es = SiriusLedAlert(
             self, self.chs['Cryo Module']['External Stop']['led'])
 
-        lay.addWidget(lbl_es, 15, 1, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_es, 15, 1, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(slbl_es, 15, 2)
         lay.addWidget(led_es, 15, 3)
 

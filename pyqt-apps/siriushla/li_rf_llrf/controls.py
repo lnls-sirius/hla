@@ -56,8 +56,8 @@ class ControlBox(QWidget):
         row = 0
         labb = QLabel('Setpoint', self)
         labc = QLabel('Readback', self)
-        lay1.addWidget(labb, row, 1, alignment=Qt.AlignCenter)
-        lay1.addWidget(labc, row, 2, alignment=Qt.AlignCenter)
+        lay1.addWidget(labb, row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay1.addWidget(labc, row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         pb_param = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
         pb_param.setToolTip('Open Parameter Setting Window')
@@ -67,7 +67,7 @@ class ControlBox(QWidget):
         _util.connect_window(
             pb_param, DeviceParamSettingWindow, parent=self,
             device=self.device, main_dev=self.main_dev, prefix=self.prefix)
-        lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignLeft)
+        lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignmentFlag.AlignLeft)
 
         props = (
             ('State', 'STREAM'), ('Trigger', 'EXTERNAL_TRIGGER_ENABLE'),
@@ -96,8 +96,8 @@ class ControlBox(QWidget):
                 dpiqc = DeltaIQPhaseCorrButton(
                     self, self.dev, main_dev=self.main_dev, delta=90, prefix=self.prefix)
                 lay1.addWidget(laba, row, 0)
-                lay1.addWidget(dniqc, row, 1, alignment=Qt.AlignCenter)
-                lay1.addWidget(dpiqc, row, 2, alignment=Qt.AlignCenter)
+                lay1.addWidget(dniqc, row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+                lay1.addWidget(dpiqc, row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
             else:
                 sppv = basename + ':SET_' + prop
                 rbpv = basename + ':GET_' + prop

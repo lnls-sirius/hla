@@ -23,7 +23,7 @@ class ParamsSettings(BaseWidget):
     def setupui(self):
         vbl = QVBoxLayout(self)
         lab = QLabel('<h2>' + self.bpm + ' Settings</h2>')
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         vbl.addWidget(lab)
         vbl.addSpacing(10)
 
@@ -158,7 +158,7 @@ class BPMAdvancedSettings(BaseWidget):
     def setupui(self):
         gdl = QGridLayout(self)
         lab = QLabel('<h2>' + self.bpm + ' Advanced Settings</h2>')
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 4)
 
         conflist = (
@@ -304,7 +304,7 @@ class PolySettings(BaseWidget):
         gdl = QGridLayout(wid)
 
         lab = QLabel('<h2>' + self.bpm + ' ACQ Polynomials</h2>')
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lab, 0, 0)
 
         for idx, coeff in enumerate(['X', 'Y', 'Q', 'SUM']):
@@ -375,7 +375,7 @@ class RFFEAdvancedSettings(BaseWidget):
     def setupui(self):
         gdl = QGridLayout(self)
         lab = QLabel('<h2>' + self.bpm + ':RFFE Advanced Settings</h2>')
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 2)
 
         grpbx = self._create_formlayout_groupbox('General', (
@@ -408,7 +408,7 @@ class BPMHardwareSettings(BaseWidget):
 
         lab = QLabel(
             '<h2>'+self.bpm+' FMC250 Settings</h2>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lab, 0, 0, 1, 2)
 
         vlay0 = QVBoxLayout()
@@ -481,7 +481,7 @@ class PBPMHardwareSettings(BaseWidget):
 
         lab = QLabel(
             '<h2>'+self.bpm+' Hardware Settings</h2>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lab, 0, 0, 1, 2)
 
         lay.addWidget(self._setupFMCPICOWidget(), 1, 0)

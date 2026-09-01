@@ -53,7 +53,7 @@ class GraphMonitorWidget(QWidget):
         lay.setAlignment(Qt.AlignTop)
 
         label = QLabel(
-            '<h3>'+intlktype+'</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>'+intlktype+'</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label, 0, 0)
 
         if intlktype == 'Min.Sum. Threshold':
@@ -148,7 +148,7 @@ class GraphProptySelWidget(QWidget):
         self._cb_intlk.currentTextChanged.connect(
             self._set_plotopt_items)
 
-        self._label_comp = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_comp = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon = qta.icon('mdi.circle-outline')
         pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)))
         self._label_comp.setPixmap(pixmap)
@@ -203,7 +203,7 @@ class GraphLegendWidget(QWidget):
     def _setupUi(self):
         self._label_leg = QLabel('Legend: ', self)
 
-        self._label_symcur = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_symcur = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_cur = qta.icon(
             'fa5s.window-minimize', offset=(0.0, -0.4), rotated=-45,
             color='red' if self._plan == 'Y' else 'blue')
@@ -225,21 +225,21 @@ class GraphLegendWidget(QWidget):
         self._label_symlim.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         self._label_lablim = QLabel(self._plan+' Thres RB')
 
-        self._label_sym0 = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_sym0 = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_s0 = qta.icon('mdi.cards-diamond-outline')
         pixmap = icon_s0.pixmap(icon_s0.actualSize(QSize(20, 20)))
         self._label_sym0.setPixmap(pixmap)
         self._label_sym0.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         self._label_lab0 = QLabel(self._plan+' Min/Max Intlk Mon')
 
-        self._label_sym1 = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_sym1 = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_s1 = qta.icon('mdi.circle-outline')
         pixmap = icon_s1.pixmap(icon_s1.actualSize(QSize(20, 20)))
         self._label_sym1.setPixmap(pixmap)
         self._label_sym0.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         self._label_lab1 = QLabel('X | Y Intlk Mon')
 
-        self._label_symnok = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_symnok = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_nok = qta.icon('mdi.square', color='red')
         pixmap_nok = icon_nok.pixmap(icon_nok.actualSize(QSize(20, 20)))
         self._label_symnok.setPixmap(pixmap_nok)

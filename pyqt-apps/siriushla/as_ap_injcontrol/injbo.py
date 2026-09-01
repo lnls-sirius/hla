@@ -123,7 +123,7 @@ class InjBOControlWindow(BaseWindow):
 
         for col, title, axis in ((0, 'Horizontal', 'X'), (1, 'Vertical', 'Y')):
             lb_pos = QLabel('<h4>Δ'+axis.lower()+'</h4>', self,
-                            alignment=Qt.AlignRight)
+                            alignment=Qt.AlignmentFlag.AlignRight)
             lb_pos.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
             pos_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-SP'))
@@ -134,7 +134,7 @@ class InjBOControlWindow(BaseWindow):
             pos_rb.showUnits = True
             pos_rb.setObjectName('pos_rb_'+axis.lower())
             lb_ang = QLabel('<h4>Δ'+axis.lower()+'\'</h4>', self,
-                            alignment=Qt.AlignRight)
+                            alignment=Qt.AlignmentFlag.AlignRight)
             lb_ang.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
             ang_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-SP'))
@@ -158,13 +158,13 @@ class InjBOControlWindow(BaseWindow):
         util.connect_window(self.pb_posang_settings, CorrParamsDetailWindow,
                             parent=self, tl='TB', prefix=self.prefix)
         lay_posang.addWidget(self.pb_posang_settings, 3, 0, 1, 2,
-                             alignment=Qt.AlignRight)
+                             alignment=Qt.AlignmentFlag.AlignRight)
 
         lay_posangref = QGridLayout()
         lay_posangref.setHorizontalSpacing(9)
         lay_posangref.setVerticalSpacing(9)
         lay_posangref.addWidget(QLabel('<h4>Reference Kicks</h4>', self,
-                                       alignment=Qt.AlignCenter), 0, 0, 1, 7)
+                                       alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 7)
         for corr in ('CH1', 'CH2', 'CV1', 'CV2'):
             lb_corr = SiriusLabel(
                 self, posang_prefix.substitute(propty=corr+'-Cte'))

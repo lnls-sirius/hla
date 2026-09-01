@@ -39,7 +39,7 @@ class BbBPwrAmpsWidget(QWidget):
 
     def _setupSerialAmpWidget(self):
         ld_serial = QLabel(
-            '<h3>Serial/USB amplifier</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Serial/USB amplifier</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_lctrl = QLabel('Line Control', self)
         bt_lctrl = PyDMStateButton(self, self.dev_pref+':SERIAL_CTRL_LINE')
@@ -49,25 +49,25 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_pwrfreq = QLabel(
             'Power Meter Calibration Frequency',
-            self, alignment=Qt.AlignCenter)
+            self, alignment=Qt.AlignmentFlag.AlignCenter)
         le_pwrfreq = PyDMLineEdit(self, self.dev_pref+':SERIAL_CALFREQ')
         le_pwrfreq.showUnits = True
 
         gbox_ctrl = QGroupBox(self)
         lay_ctrl = QGridLayout(gbox_ctrl)
-        lay_ctrl.addWidget(ld_lctrl, 0, 0, alignment=Qt.AlignRight)
-        lay_ctrl.addWidget(bt_lctrl, 0, 1, alignment=Qt.AlignLeft)
-        lay_ctrl.addWidget(ld_rfctrl, 0, 2, alignment=Qt.AlignRight)
-        lay_ctrl.addWidget(bt_rfctrl, 0, 3, alignment=Qt.AlignLeft)
-        lay_ctrl.addWidget(ld_pwrfreq, 1, 0, 1, 2, alignment=Qt.AlignRight)
-        lay_ctrl.addWidget(le_pwrfreq, 1, 2, 1, 2, alignment=Qt.AlignLeft)
+        lay_ctrl.addWidget(ld_lctrl, 0, 0, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_ctrl.addWidget(bt_lctrl, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_ctrl.addWidget(ld_rfctrl, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_ctrl.addWidget(bt_rfctrl, 0, 3, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_ctrl.addWidget(ld_pwrfreq, 1, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_ctrl.addWidget(le_pwrfreq, 1, 2, 1, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay_ctrl.setColumnStretch(0, 1)
         lay_ctrl.setColumnStretch(1, 1)
         lay_ctrl.setColumnStretch(2, 1)
         lay_ctrl.setColumnStretch(3, 1)
 
         ld_fwrpwr = QLabel(
-            '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Forward Power</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_fwrpwr = SiriusScaleIndicator(self, self.dev_pref+':SERIAL_FWD')
         si_fwrpwr.indicatorColor = QColor('blue')
         si_fwrpwr.barIndicator = True
@@ -76,7 +76,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_fwrpwr.setStyleSheet('#fwrpwr{min-height:6em; min-width:8em;}')
 
         ld_revpwr = QLabel(
-            '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Reverse Power</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_revpwr = SiriusScaleIndicator(self, self.dev_pref+':SERIAL_REV')
         si_revpwr.indicatorColor = QColor('red')
         si_revpwr.barIndicator = True
@@ -104,7 +104,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addItem(
             QSpacerItem(10, 1, QSzPlcy.MinimumExpanding, QSzPlcy.Fixed), 0, 0)
         lay.addWidget(ld_serial, 0, 1)
@@ -119,11 +119,11 @@ class BbBPwrAmpsWidget(QWidget):
         unit_label = str(unit)
         ld_mmdb15 = QLabel(
             '<h3>Milmega DB-15 '+unit_label+'</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         ld_mmdesc = QLabel(
             'Milmega via DB-15 custom cable\nand '
             '8 channel ADC (unit '+unit_label+')',
-            self, alignment=Qt.AlignCenter)
+            self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_rfsts = QLabel('RF Status', self)
         led_rfsts = PyDMLed(
@@ -164,7 +164,7 @@ class BbBPwrAmpsWidget(QWidget):
         lay_ctrl.addWidget(le_offset, 3, 1, 1, 2)
 
         ld_fwrpwr = QLabel(
-            '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Forward Power</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_fwrpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_FWD')
         si_fwrpwr.barIndicator = True
@@ -174,7 +174,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_fwrpwr.setStyleSheet('#fwrpwr{min-height:6em; min-width:8em;}')
 
         ld_revpwr = QLabel(
-            '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Reverse Power</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_revpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_REV')
         si_revpwr.barIndicator = True
@@ -192,7 +192,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
         lay.addWidget(ld_mmdb15)
         lay.addWidget(ld_mmdesc)
         lay.addWidget(gbox_ctrl)
@@ -203,11 +203,11 @@ class BbBPwrAmpsWidget(QWidget):
         unit_label = str(unit)
         ld_mczt102 = QLabel(
             '<h3>Mini-Circuits Zt-102 '+unit_label+'</h3>',
-            self, alignment=Qt.AlignCenter)
+            self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_mcdesc = QLabel(
             'Mini-Circuits ZT-102 DE-9\nmonitoring '
             'interface (unit '+unit_label+')', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_fault = QLabel('RF Status', self)
         led_fault = PyDMLed(self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
@@ -243,7 +243,7 @@ class BbBPwrAmpsWidget(QWidget):
         lay_ctrl.addWidget(le_revloss, 3, 1, 1, 2)
 
         ld_fwrpwr = QLabel(
-            '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Forward Power</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_fwrpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_FWD')
         si_fwrpwr.barIndicator = True
@@ -253,7 +253,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_fwrpwr.setStyleSheet('#fwrpwr{min-height:6em; min-width:8em;}')
 
         ld_revpwr = QLabel(
-            '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Reverse Power</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_revpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_REV')
         si_revpwr.barIndicator = True
@@ -271,7 +271,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
         lay.addWidget(ld_mczt102)
         lay.addWidget(ld_mcdesc)
         lay.addWidget(gbox_ctrl)
@@ -282,7 +282,7 @@ class BbBPwrAmpsWidget(QWidget):
         pref = self.dev_pref.substitute(dev='BbBAmp'+self._device.idx, idx='')
 
         ld_main = QLabel(
-            '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         conf = SiriusPushButton(
             self, init_channel=pref+':Rst-Cmd', pressValue=1, releaseValue=0)
@@ -313,7 +313,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
         lay.addWidget(ld_main, 0, 0, 1, 3)
         lay.addLayout(conf_lay, 1, 0, 1, 3)
         lay.addWidget(ld_enbl, 2, 0)

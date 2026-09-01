@@ -38,7 +38,7 @@ class BOMonitor(SiriusMainWindow):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         label = QLabel('<h4>Booster Charge</h4>',
-                       self, alignment=Qt.AlignCenter)
+                       self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # timeplot
         self.timeplot = SiriusTimePlot(parent=self, background='w')
@@ -65,9 +65,9 @@ class BOMonitor(SiriusMainWindow):
         glay_aux.setHorizontalSpacing(20)
         glay_aux.setVerticalSpacing(10)
         glay_aux.addWidget(
-            QLabel('Show curves: ', self), 0, 0, alignment=Qt.AlignCenter)
+            QLabel('Show curves: ', self), 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         glay_aux.addWidget(
-            QLabel('Offset [nC]: ', self), 2, 0, alignment=Qt.AlignCenter)
+            QLabel('Offset [nC]: ', self), 2, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         for i, e in enumerate(self._energies):
             pvname = self._ioc_prefix.substitute(propty='Charge'+e+'-Mon')
             self._channels[e] = SiriusConnectionSignal(address=pvname)
@@ -87,7 +87,7 @@ class BOMonitor(SiriusMainWindow):
             cb.stateChanged.connect(curve.setVisible)
             self._cb_show[e] = cb
 
-            lb = QLabel('', self, alignment=Qt.AlignCenter)
+            lb = QLabel('', self, alignment=Qt.AlignmentFlag.AlignCenter)
             self._pvs_labels[e] = lb
 
             sb = QDoubleSpinBoxPlus(self)
@@ -100,9 +100,9 @@ class BOMonitor(SiriusMainWindow):
             sb.editingFinished.connect(self._update_offset)
             self._cb_offsets[e] = sb
 
-            glay_aux.addWidget(cb, 0, i+1, alignment=Qt.AlignCenter)
-            glay_aux.addWidget(lb, 1, i+1, alignment=Qt.AlignCenter)
-            glay_aux.addWidget(sb, 2, i+1, alignment=Qt.AlignCenter)
+            glay_aux.addWidget(cb, 0, i+1, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_aux.addWidget(lb, 1, i+1, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_aux.addWidget(sb, 2, i+1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.pb_offset = QPushButton('Update offset', self)
         self.pb_offset.clicked.connect(self._set_current_values_2_offset)

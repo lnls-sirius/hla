@@ -31,7 +31,7 @@ class SlowLoopParametersDetails(SiriusDialog):
 
         self.title = QLabel(
             '<h3>Slow Loop Control Parameters Details</h3>', self,
-            alignment=Qt.AlignCenter
+            alignment=Qt.AlignmentFlag.AlignCenter
         )
         lay.addWidget(self.title)
 
@@ -45,7 +45,7 @@ class SlowLoopParametersDetails(SiriusDialog):
         if key:
             lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
             lay.addWidget(QLabel(
-                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignLeft))
+                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignmentFlag.AlignLeft))
 
         lay_llrf = QGridLayout()
         lay_llrf.setAlignment(Qt.AlignTop)
@@ -70,28 +70,28 @@ class SlowLoopParametersDetails(SiriusDialog):
             self, self.prefix+chs_dict['KP']+'-RB')
 
         lay_llrf.addWidget(
-            QLabel('<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>SP/RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             0, 2, 1, 2)
         lay_llrf.addWidget(
-            QLabel('<h4>PI Limit</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>PI Limit</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             1, 0, 1, 2)
         lay_llrf.addWidget(
-            QLabel('<h4>Ki</h4>', self, alignment=Qt.AlignCenter), 2, 0, 1, 2)
+            QLabel('<h4>Ki</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 2, 0, 1, 2)
         lay_llrf.addWidget(
-            QLabel('<h4>Kp</h4>', self, alignment=Qt.AlignCenter), 3, 0, 1, 2)
-        lay_llrf.addWidget(sb_pilimit, 1, 2, alignment=Qt.AlignRight)
-        lay_llrf.addWidget(lb_pilimit, 1, 3, alignment=Qt.AlignLeft)
-        lay_llrf.addWidget(sb_ki, 2, 2, alignment=Qt.AlignRight)
-        lay_llrf.addWidget(lb_ki, 2, 3, alignment=Qt.AlignLeft)
-        lay_llrf.addWidget(sb_kp, 3, 2, alignment=Qt.AlignRight)
-        lay_llrf.addWidget(lb_kp, 3, 3, alignment=Qt.AlignLeft)
+            QLabel('<h4>Kp</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 3, 0, 1, 2)
+        lay_llrf.addWidget(sb_pilimit, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_llrf.addWidget(lb_pilimit, 1, 3, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_llrf.addWidget(sb_ki, 2, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_llrf.addWidget(lb_ki, 2, 3, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_llrf.addWidget(sb_kp, 3, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_llrf.addWidget(lb_kp, 3, 3, alignment=Qt.AlignmentFlag.AlignLeft)
 
         lay_input = QGridLayout()
         lay_input.addWidget(
-            QLabel('<h4>Loop Input</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>Loop Input</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             1, 0, 1, 2)
-        lay_input.addWidget(cb_inpsel, 2, 0, alignment=Qt.AlignRight)
-        lay_input.addWidget(lb_inpsel, 2, 1, alignment=Qt.AlignLeft)
+        lay_input.addWidget(cb_inpsel, 2, 0, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_input.addWidget(lb_inpsel, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
         lay_input.setRowStretch(0, 2)
         lay_input.setRowStretch(3, 2)
         lay_llrf.addLayout(lay_input, 1, 4, 3, 2)

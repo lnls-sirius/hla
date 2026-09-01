@@ -220,7 +220,7 @@ class BOTuneSpectrogramControls(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        self.lb_title = QLabel(self.title, self, alignment=Qt.AlignCenter)
+        self.lb_title = QLabel(self.title, self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.spectrogram = BOTuneSpectrogram(
             self, self.prefix, self.orientation
@@ -264,17 +264,17 @@ class BOTuneSpectrogramControls(QWidget):
         hbox_ctrls.setSpacing(6)
         hbox_ctrls.addWidget(self.cb_show_roi)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('Plot Index:'), alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.sb_idx2plot, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.lb_idx2plot, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(QLabel('Plot Index:'), alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.sb_idx2plot, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.lb_idx2plot, alignment=Qt.AlignmentFlag.AlignLeft)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('Buff.:'), alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.sb_buffsz, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.lb_buffsz, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.pb_resetbuff, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(QLabel('Buff.:'), alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.sb_buffsz, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.lb_buffsz, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.pb_resetbuff, alignment=Qt.AlignmentFlag.AlignLeft)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('X Axis:'), alignment=Qt.AlignRight)
-        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
+        hbox_ctrls.addWidget(QLabel('X Axis:'), alignment=Qt.AlignmentFlag.AlignRight)
+        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignmentFlag.AlignRight)
 
         pal = self.palette()
         pal.setColor(QPalette.ColorRole.Window, self.background)

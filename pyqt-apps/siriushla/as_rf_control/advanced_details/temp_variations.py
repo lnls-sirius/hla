@@ -42,7 +42,7 @@ class TempVariationDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         wid_temp_var = QWidget(self)
         wid_temp_var.setMinimumSize(1300, 500)
@@ -156,19 +156,19 @@ class TempVariationDetails(SiriusDialog):
         interval = 'Interval A' if self.system == "A" else 'Interval B'
 
         interval_time_lbl = QLabel(f'<h4>{interval}</h4>',
-                                   alignment=Qt.AlignCenter)
+                                   alignment=Qt.AlignmentFlag.AlignCenter)
         interval_time_sp = SiriusLineEdit(self,
                                        init_channel=self.prefix+chs_dict[interval])
         interval_time_rb = SiriusLabel(self,
                                        init_channel=self.prefix+chs_dict[interval])
 
-        lay_interval.addWidget(interval_time_lbl, 0, 0, alignment=Qt.AlignCenter)
-        lay_interval.addWidget(interval_time_sp, 0, 1, alignment=Qt.AlignCenter)
-        lay_interval.addWidget(interval_time_rb, 0, 2, alignment=Qt.AlignCenter)
+        lay_interval.addWidget(interval_time_lbl, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_interval.addWidget(interval_time_sp, 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_interval.addWidget(interval_time_rb, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         main_layout.addWidget(gbox_temp, 1, 0)
         main_layout.addWidget(gbox_delta, 1, 1)
-        main_layout.addWidget(gbox_interval, 0, 0, alignment=Qt.AlignLeft)
+        main_layout.addWidget(gbox_interval, 0, 0, alignment=Qt.AlignmentFlag.AlignLeft)
 
         return main_layout
 

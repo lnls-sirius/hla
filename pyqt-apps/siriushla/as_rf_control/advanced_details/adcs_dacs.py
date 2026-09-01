@@ -40,7 +40,7 @@ class ADCDACDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QGridLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(title_frame, 0, 0, 1, 9)
 
         for k, sub_dict in self.syst_dict.items():
@@ -59,7 +59,7 @@ class ADCDACDetails(SiriusDialog):
                     lay.addWidget(QLabel(val[0]), row, offset, 1, 2)
                     lay.addWidget(pb_enbl, row, offset+2)
                     lay.addWidget(led_enbl, row, offset+3,
-                        alignment=Qt.AlignCenter)
+                        alignment=Qt.AlignmentFlag.AlignCenter)
                 elif key == 'Cryogenic Load Leveler':
                     lay.addWidget(QLabel(key), row, offset, 1, 2)
                     row += 1
@@ -70,7 +70,7 @@ class ADCDACDetails(SiriusDialog):
                         lay.addWidget(QLabel(v[0]), row, offset+1)
                         lay.addWidget(SiriusEnumComboBox(
                             self, self.prefix+v[1]+'-Sel'),
-                            row, offset+2, alignment=Qt.AlignCenter)
+                            row, offset+2, alignment=Qt.AlignmentFlag.AlignCenter)
                         lay.addWidget(lb_gain, row, offset+3)
                         row += 1
                 else:

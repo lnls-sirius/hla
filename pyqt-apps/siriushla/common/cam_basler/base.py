@@ -479,7 +479,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
-        sp.setAlignment(Qt.AlignCenter)
+        sp.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(sp)
         label = SiriusLabel(parent, prefix.substitute(
             propty_name=propty, propty_suffix='RB'))
@@ -489,7 +489,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
                 'hval', str(height)))
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'enbldisabl':
         statebutton = PyDMStateButton(parent, prefix.substitute(
@@ -527,7 +527,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
                 'hval', str(height)))
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'enum':
         combobox = PyDMEnumComboBox(parent, prefix.substitute(
@@ -546,7 +546,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                 min-width:wvalem; max-width:wvalem; min-height:hvalem;
                 max-height:hvalem;""".replace('wval', str(width)).replace(
                     'hval', str(height)))
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'mon':
         label = SiriusLabel(parent, prefix.substitute(
@@ -556,7 +556,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'cte':
         label = SiriusLabel(parent, prefix.substitute(
@@ -566,7 +566,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'rb':
         label = SiriusLabel(parent, prefix.substitute(
@@ -576,7 +576,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
     if label is not None:
@@ -610,5 +610,5 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         pb.setStyleSheet(stylesheet)
         layout.addWidget(pb)
 
-    layout.setAlignment(Qt.AlignVCenter)
+    layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
     return layout

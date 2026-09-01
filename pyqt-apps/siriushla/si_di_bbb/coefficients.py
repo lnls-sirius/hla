@@ -48,7 +48,7 @@ class BbBCoefficientsWidget(QWidget):
         gbox_coefedit = self._setupCoefficientsEditWidget()
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(15)
         lay.addWidget(gbox_coefedit, 0, 0, 1, 2)
@@ -113,22 +113,18 @@ class BbBCoefficientsWidget(QWidget):
         )
 
         ld_fractune = QLabel(
-            '<h4> Marker:</h4>', wid, alignment=Qt.AlignLeft | Qt.AlignVCenter
-        )
+            '<h4> Marker:</h4>', wid, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         ld_ftval = QLabel(
-            'Frequency [0-1]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter
-        )
-        sb_ftval = SiriusSpinbox(wid, self.dev_pref + ':FTF_TUNE')
+            'Frequency [0-1]', wid, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        sb_ftval = SiriusSpinbox(wid, self.dev_pref+':FTF_TUNE')
         ld_ftgain = QLabel(
-            'Gain [dB]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter
-        )
-        lb_ftgain = Label(wid, self.dev_pref + ':FTF_GTUNE')
+            'Gain [dB]', wid, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        lb_ftgain = Label(wid, self.dev_pref+':FTF_GTUNE')
         lb_ftgain.precisionFromPV = False
         lb_ftgain.precision = 2
         ld_ftphs = QLabel(
-            'Phase [°]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter
-        )
-        lb_ftphs = Label(wid, self.dev_pref + ':FTF_PTUNE')
+            'Phase [°]', wid, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        lb_ftphs = Label(wid, self.dev_pref+':FTF_PTUNE')
         lb_ftphs.precisionFromPV = False
         lb_ftphs.precision = 2
 
@@ -160,8 +156,8 @@ class BbBCoefficientsWidget(QWidget):
         return wid
 
     def _setupCoeffSettingsWidget(self):
-        ld_coefchoo = QLabel('Choose Set', self, alignment=Qt.AlignRight)
-        cb_coefchoo = PyDMEnumComboBox(self, self.dev_pref + ':LDSET')
+        ld_coefchoo = QLabel('Choose Set', self, alignment=Qt.AlignmentFlag.AlignRight)
+        cb_coefchoo = PyDMEnumComboBox(self, self.dev_pref+':LDSET')
 
         pb_coefload = PyDMPushButton(
             parent=self,
@@ -181,16 +177,18 @@ class BbBCoefficientsWidget(QWidget):
         pb_coefvrfy.setStyleSheet('icon-size:20px;')
 
         ld_gen = QLabel(
-            '<h4>Generate Coefficients</h4>', self, alignment=Qt.AlignCenter
-        )
-        ld_gengain = QLabel('Gain [0-1]', self, alignment=Qt.AlignRight)
-        sb_gengain = SiriusSpinbox(self, self.dev_pref + ':FLT_GAIN')
-        ld_genphs = QLabel('Phase [°]', self, alignment=Qt.AlignRight)
-        sb_genphs = SiriusSpinbox(self, self.dev_pref + ':FLT_PHASE')
-        ld_genfreq = QLabel('Frequency [0-1]', self, alignment=Qt.AlignRight)
-        sb_genfreq = SiriusSpinbox(self, self.dev_pref + ':FLT_FREQ')
-        ld_genntap = QLabel('Number of taps', self, alignment=Qt.AlignRight)
-        sb_genntap = SiriusSpinbox(self, self.dev_pref + ':FLT_TAPS')
+            '<h4>Generate Coefficients</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_gengain = QLabel(
+            'Gain [0-1]', self, alignment=Qt.AlignmentFlag.AlignRight)
+        sb_gengain = SiriusSpinbox(self, self.dev_pref+':FLT_GAIN')
+        ld_genphs = QLabel('Phase [°]', self, alignment=Qt.AlignmentFlag.AlignRight)
+        sb_genphs = SiriusSpinbox(self, self.dev_pref+':FLT_PHASE')
+        ld_genfreq = QLabel(
+            'Frequency [0-1]', self, alignment=Qt.AlignmentFlag.AlignRight)
+        sb_genfreq = SiriusSpinbox(self, self.dev_pref+':FLT_FREQ')
+        ld_genntap = QLabel(
+            'Number of taps', self, alignment=Qt.AlignmentFlag.AlignRight)
+        sb_genntap = SiriusSpinbox(self, self.dev_pref+':FLT_TAPS')
 
         wid = QWidget(self)
         lay_genset = QGridLayout(wid)

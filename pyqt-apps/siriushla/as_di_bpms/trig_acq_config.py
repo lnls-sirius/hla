@@ -20,7 +20,7 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
-            ' Acquisitions </h2>', alignment=Qt.AlignCenter)
+            ' Acquisitions </h2>', alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
@@ -133,7 +133,7 @@ class PBPMBaseTriggeredAcquisition(AcqBaseWindow):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
-            ' Acquisitions < /h2 >', alignment=Qt.AlignCenter)
+            ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()

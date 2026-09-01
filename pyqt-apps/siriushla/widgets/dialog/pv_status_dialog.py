@@ -43,10 +43,10 @@ class StatusDetailDialog(SiriusDialog):
     def _setupUi(self):
         if self.title:
             label = QLabel('<h4>'+self.title+'</h4>',
-                           self, alignment=Qt.AlignCenter)
+                           self, alignment=Qt.AlignmentFlag.AlignCenter)
         else:
             label = QLabel('<h4>'+self.pvname.device_name+'</h4>',
-                           self, alignment=Qt.AlignCenter)
+                           self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay = QGridLayout(self)
         lay.addWidget(label, 0, 0, 1, 2)
         self._fillLabels()

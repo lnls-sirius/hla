@@ -58,7 +58,7 @@ class BbBGeneralSettingsWidget(QWidget):
 
     def _setupUi(self):
         ld_maindev = QLabel(
-            '<h3>General Settings</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>General Settings</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # # Delay Lines
         ld_adcclock = QLabel('ADC Clock', self)
@@ -93,10 +93,10 @@ class BbBGeneralSettingsWidget(QWidget):
         lay_delaylines.addWidget(fr_dacclock, 3, 1)
 
         # # Thresholds and offsets
-        ld_lvl = QLabel('<h4>Level</h4>', self, alignment=Qt.AlignCenter)
-        ld_enbl = QLabel('<h4>Enbl</h4>', self, alignment=Qt.AlignCenter)
-        ld_v = QLabel('<h4>V</h4>', self, alignment=Qt.AlignCenter)
-        ld_edge = QLabel('<h4>Edge</h4>', self, alignment=Qt.AlignCenter)
+        ld_lvl = QLabel('<h4>Level</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_enbl = QLabel('<h4>Enbl</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_v = QLabel('<h4>V</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_edge = QLabel('<h4>Edge</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_fid = QLabel('Fiducial', self)
         cb_fidlvl = PyDMEnumComboBox(self, self.dev_pref+':LEVEL_FID')
@@ -217,76 +217,76 @@ class BbBSlowDACsWidget(QWidget):
 
     def _setupUi(self):
         ld_dacs = QLabel(
-            '<h3>AD5644 DACs</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>AD5644 DACs</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        ld_dacch0 = QLabel('0', self, alignment=Qt.AlignCenter)
+        ld_dacch0 = QLabel('0', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch0.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch0 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH0')
         sb_dacch0.showUnits = True
         fr_dacch0 = SiriusFrame(self, self.dev_pref+':AD5644CH0_SUBWR')
         fr_dacch0.add_widget(sb_dacch0)
 
-        ld_dacch1 = QLabel('1', self, alignment=Qt.AlignCenter)
+        ld_dacch1 = QLabel('1', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch1.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch1 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH1')
         sb_dacch1.showUnits = True
         fr_dacch1 = SiriusFrame(self, self.dev_pref+':AD5644CH1_SUBWR')
         fr_dacch1.add_widget(sb_dacch1)
 
-        ld_dacch2 = QLabel('2', self, alignment=Qt.AlignCenter)
+        ld_dacch2 = QLabel('2', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch2.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch2 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH2')
         sb_dacch2.showUnits = True
         fr_dacch2 = SiriusFrame(self, self.dev_pref+':AD5644CH2_SUBWR')
         fr_dacch2.add_widget(sb_dacch2)
 
-        ld_dacch3 = QLabel('3', self, alignment=Qt.AlignCenter)
+        ld_dacch3 = QLabel('3', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch3.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch3 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH3')
         sb_dacch3.showUnits = True
         fr_dacch3 = SiriusFrame(self, self.dev_pref+':AD5644CH3_SUBWR')
         fr_dacch3.add_widget(sb_dacch3)
 
-        ld_dacref0 = QLabel('Ref\n0-3', self, alignment=Qt.AlignCenter)
+        ld_dacref0 = QLabel('Ref\n0-3', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacref0.setStyleSheet('font-weight: bold; max-width: 3em;')
         cb_dacref0 = PyDMEnumComboBox(self, self.dev_pref+':AD5644REF0_BO')
 
-        ld_dacch4 = QLabel('4', self, alignment=Qt.AlignCenter)
+        ld_dacch4 = QLabel('4', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch4.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch4 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH4')
         sb_dacch4.showUnits = True
         fr_dacch4 = SiriusFrame(self, self.dev_pref+':AD5644CH4_SUBWR')
         fr_dacch4.add_widget(sb_dacch4)
 
-        ld_dacch5 = QLabel('5', self, alignment=Qt.AlignCenter)
+        ld_dacch5 = QLabel('5', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch5.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch5 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH5')
         sb_dacch5.showUnits = True
         fr_dacch5 = SiriusFrame(self, self.dev_pref+':AD5644CH5_SUBWR')
         fr_dacch5.add_widget(sb_dacch5)
 
-        ld_dacch6 = QLabel('6', self, alignment=Qt.AlignCenter)
+        ld_dacch6 = QLabel('6', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch6.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch6 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH6')
         sb_dacch6.showUnits = True
         fr_dacch6 = SiriusFrame(self, self.dev_pref+':AD5644CH6_SUBWR')
         fr_dacch6.add_widget(sb_dacch6)
 
-        ld_dacch7 = QLabel('7', self, alignment=Qt.AlignCenter)
+        ld_dacch7 = QLabel('7', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacch7.setStyleSheet('font-weight: bold; max-width: 3em;')
         sb_dacch7 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH7')
         sb_dacch7.showUnits = True
         fr_dacch7 = SiriusFrame(self, self.dev_pref+':AD5644CH7_SUBWR')
         fr_dacch7.add_widget(sb_dacch7)
 
-        ld_dacref1 = QLabel('Ref\n4-7', self, alignment=Qt.AlignCenter)
+        ld_dacref1 = QLabel('Ref\n4-7', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_dacref1.setStyleSheet('font-weight: bold; max-width: 3em;')
         cb_dacref1 = PyDMEnumComboBox(self, self.dev_pref+':AD5644REF1_BO')
 
         cb_dacmode = PyDMEnumComboBox(self, self.dev_pref+':AD5644TEST_BO')
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(15)
         lay.addWidget(ld_dacs, 0, 1, 1, 5)
@@ -327,66 +327,66 @@ class BbBADCWidget(QWidget):
 
     def _setupUi(self):
         ld_adc = QLabel(
-            '<h3>8-Channel ADC</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>8-Channel ADC</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_adcch0 = QLabel(
-            '<h4>Channel 0</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 0</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch0 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH0')
         si_adcch0.showUnits = True
         si_adcch0.setObjectName('ch0')
         si_adcch0.setStyleSheet('#ch0{min-height:6em; min-width:8em;}')
 
         ld_adcch1 = QLabel(
-            '<h4>Channel 1</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 1</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch1 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH1')
         si_adcch1.showUnits = True
         si_adcch1.setObjectName('ch1')
         si_adcch1.setStyleSheet('#ch1{min-height:6em; min-width:8em;}')
 
         ld_adcch2 = QLabel(
-            '<h4>Channel 2</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 2</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch2 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH2')
         si_adcch2.showUnits = True
         si_adcch2.setObjectName('ch2')
         si_adcch2.setStyleSheet('#ch2{min-height:6em; min-width:8em;}')
 
         ld_adcch3 = QLabel(
-            '<h4>Channel 3</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 3</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch3 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH3')
         si_adcch3.showUnits = True
         si_adcch3.setObjectName('ch3')
         si_adcch3.setStyleSheet('#ch3{min-height:6em; min-width:8em;}')
 
         ld_adcch4 = QLabel(
-            '<h4>Channel 4</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 4</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch4 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH4')
         si_adcch4.showUnits = True
         si_adcch4.setObjectName('ch4')
         si_adcch4.setStyleSheet('#ch4{min-height:6em; min-width:8em;}')
 
         ld_adcch5 = QLabel(
-            '<h4>Channel 5</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 5</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch5 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH5')
         si_adcch5.showUnits = True
         si_adcch5.setObjectName('ch5')
         si_adcch5.setStyleSheet('#ch5{min-height:6em; min-width:8em;}')
 
         ld_adcch6 = QLabel(
-            '<h4>Channel 6</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 6</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch6 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH6')
         si_adcch6.showUnits = True
         si_adcch6.setObjectName('ch6')
         si_adcch6.setStyleSheet('#ch6{min-height:6em; min-width:8em;}')
 
         ld_adcch7 = QLabel(
-            '<h4>Channel 7</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Channel 7</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         si_adcch7 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH7')
         si_adcch7.showUnits = True
         si_adcch7.setObjectName('ch7')
         si_adcch7.setStyleSheet('#ch7{min-height:6em; min-width:8em;}')
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(15)
         lay.addWidget(ld_adc, 0, 0, 1, 4)
@@ -422,24 +422,24 @@ class BbBInterlock(QWidget):
 
     def _setupUi(self):
         ld_intlk = QLabel(
-            '<h3>Interlock Controls</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Interlock Controls</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        ld_sp = QLabel('Setpoint', self, alignment=Qt.AlignCenter)
+        ld_sp = QLabel('Setpoint', self, alignment=Qt.AlignmentFlag.AlignCenter)
         # ld_sp.setStyleSheet('font-weight: bold; max-width: 3em;')
-        ld_cyc = QLabel('RF/4 Cycles', self, alignment=Qt.AlignCenter)
+        ld_cyc = QLabel('RF/4 Cycles', self, alignment=Qt.AlignmentFlag.AlignCenter)
         # ld_cyc.setStyleSheet('font-weight: bold; max-width: 3em;')
 
         ld_sat = QLabel('Saturation Time', self)
         sb_sat = SiriusSpinbox(self, self.dev_pref+':ILOCK_TSAT')
         sb_sat.showUnits = True
         lb_sat = SiriusLabel(self, self.dev_pref+':ILOCK_TSAT_T2C')
-        lb_sat.setAlignment(Qt.AlignCenter)
+        lb_sat.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         ld_tim = QLabel('Timeout', self)
         sb_tim = SiriusSpinbox(self, self.dev_pref+':ILOCK_TOUT')
         sb_tim.showUnits = True
         lb_tim = SiriusLabel(self, self.dev_pref+':ILOCK_TOUT_T2C')
-        lb_tim.setAlignment(Qt.AlignCenter)
+        lb_tim.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         pvn = self.dev_pref+':ILOCK_TRIPPED'
         lb_sts = SiriusLabel(self, init_channel=pvn)
@@ -463,7 +463,7 @@ class BbBInterlock(QWidget):
         wd_sts.layout().addStretch()
 
         ld_sens = QLabel(
-            '<h3>Sensitivity Controls</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Sensitivity Controls</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_tun = QLabel('Fractional Tune', self)
         sb_tun = SiriusSpinbox(self, self.dev_pref+':ILOCK_TUNE')
@@ -502,7 +502,7 @@ class BbBInterlock(QWidget):
         pb_ld.setStyleSheet("icon-size:20px;")
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
         lay.addWidget(ld_intlk, 0, 0, 1, 5)
         lay.addWidget(ld_sp, 1, 1)
         lay.addWidget(ld_cyc, 1, 2)

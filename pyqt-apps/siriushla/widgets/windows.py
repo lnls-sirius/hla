@@ -34,7 +34,7 @@ def _create_siriuswindow(qt_type):
             if isinstance(self, SiriusMainWindow):
                 self.label_version = QLabel(
                     'siriushla version: ' + get_package_version(),
-                    self, alignment=Qt.AlignRight)
+                    self, alignment=Qt.AlignmentFlag.AlignRight)
                 self.label_version.setStyleSheet('font-size: 6pt;')
                 self.conn_but = QPushButton('Show Connections...', self)
                 self.conn_but.clicked.connect(self.show_connections)

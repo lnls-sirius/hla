@@ -30,7 +30,7 @@ class ModIntlkDetailDialog(SiriusDialog):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self._device.device_name+'</h2>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
@@ -45,7 +45,7 @@ class ModIntlkDetailDialog(SiriusDialog):
 
     def _setupModSignalWidget(self):
         self.lb_modsig = QLabel(
-            '<h3>Modulator Signal</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Modulator Signal</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_modsig.setStyleSheet('QLabel{min-height: 2em;}')
 
         gb_sig1 = QFrame(self)
@@ -267,11 +267,11 @@ class ModIntlkDetailDialog(SiriusDialog):
     def _setupExtIntlkSignalWidget(self):
         self.lb_extsig = QLabel(
             '<h3>External Interlock Signal</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_extsig.setStyleSheet('QLabel{min-height: 2em;}')
 
         lbl_lvilk = QLabel(
-            '<h4>LV_Interlock</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>LV_Interlock</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         led_lvilk = SiriusLedState(self, self._mod_prefix+':LV_Interlock')
         led_lvilk.offColor = led_lvilk.Red
 
@@ -301,7 +301,7 @@ class ModIntlkDetailDialog(SiriusDialog):
             }""")
         lay_lvilk = QGridLayout(wid_lvilk)
         lay_lvilk.setAlignment(Qt.AlignTop)
-        lay_lvilk.addWidget(led_lvilk, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay_lvilk.addWidget(led_lvilk, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_lvilk.addWidget(lbl_lvilk, 1, 0, 1, 2)
         lay_lvilk.addWidget(led_lv1, 2, 0)
         lay_lvilk.addWidget(lbl_lv1, 2, 1)
@@ -313,7 +313,7 @@ class ModIntlkDetailDialog(SiriusDialog):
         lay_lvilk.addWidget(lbl_lv4, 5, 1)
 
         lbl_hvilk = QLabel(
-            '<h4>HV_Interlock</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>HV_Interlock</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         led_hvilk = SiriusLedState(self, self._mod_prefix+':HV_Interlock')
         led_hvilk.offColor = led_hvilk.Red
 
@@ -351,7 +351,7 @@ class ModIntlkDetailDialog(SiriusDialog):
             }""")
         lay_hvilk = QGridLayout(wid_hvilk)
         lay_hvilk.setAlignment(Qt.AlignTop)
-        lay_hvilk.addWidget(led_hvilk, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay_hvilk.addWidget(led_hvilk, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_hvilk.addWidget(lbl_hvilk, 1, 0, 1, 2)
         lay_hvilk.addWidget(led_hv1, 2, 0)
         lay_hvilk.addWidget(lbl_hv1, 2, 1)
@@ -367,7 +367,7 @@ class ModIntlkDetailDialog(SiriusDialog):
         lay_hvilk.addWidget(lbl_hv6, 7, 1)
 
         lbl_trilk = QLabel(
-            '<h4>TR_Interlock</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>TR_Interlock</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         led_trilk = SiriusLedState(self, self._mod_prefix+':TR_Interlock')
         led_trilk.offColor = led_trilk.Red
 
@@ -413,7 +413,7 @@ class ModIntlkDetailDialog(SiriusDialog):
             }""")
         lay_trilk = QGridLayout(wid_trilk)
         lay_trilk.setAlignment(Qt.AlignTop)
-        lay_trilk.addWidget(led_trilk, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay_trilk.addWidget(led_trilk, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_trilk.addWidget(lbl_trilk, 1, 0, 1, 2)
         lay_trilk.addWidget(led_tr1, 2, 0)
         lay_trilk.addWidget(lbl_tr1, 2, 1)
@@ -477,5 +477,5 @@ class ModEmerStopDialog(SiriusDialog):
         lay.setHorizontalSpacing(20)
         lay.setVerticalSpacing(20)
         lay.addWidget(self._lb_desc, 0, 0, 1, 2)
-        lay.addWidget(self._pb_yes, 1, 0, alignment=Qt.AlignCenter)
-        lay.addWidget(self._pb_exit, 1, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self._pb_yes, 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(self._pb_exit, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)

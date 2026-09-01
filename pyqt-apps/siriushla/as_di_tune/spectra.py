@@ -392,7 +392,7 @@ class TuneSpectraControls(QWidget):
                 'min-height:1.29em; color:' + self.colors[i] + ';'
             )
             self.cb_reg[i].stateChanged.connect(_part(self._show_curve, i))
-            glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignLeft)
+            glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignmentFlag.AlignLeft)
             # buttons
             self.bt_reg[i].setStyleSheet('min-width:5em; max-width:5em;')
             menu = QMenu()
@@ -403,20 +403,19 @@ class TuneSpectraControls(QWidget):
             menu.addAction(
                 'Clear', _part(self._clear_register, i))
             self.bt_reg[i].setMenu(menu)
-            glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignLeft)
+            glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             # label
             self.lb_reg[i].setMouseTracking(True)
             self.lb_reg[i].setTextInteractionFlags(Qt.TextEditorInteraction)
             self.lb_reg[i].setStyleSheet(
-                'min-height:1.29em; min-width: 20em; max-width: 20em;'
-            )
-            glay_reg.addWidget(self.lb_reg[i], i, 2, alignment=Qt.AlignLeft)
+                'min-height:1.29em; min-width: 20em; max-width: 20em;')
+            glay_reg.addWidget(self.lb_reg[i], i, 2, alignment=Qt.AlignmentFlag.AlignLeft)
             glay_reg.addItem(
                 QSpacerItem(i, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), i, 3
             )
             # save button
             self.bt_save[i].clicked.connect(_part(self._export_data, i))
-            glay_reg.addWidget(self.bt_save[i], i, 4, alignment=Qt.AlignRight)
+            glay_reg.addWidget(self.bt_save[i], i, 4, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.pb_showregs = QPushButton('^', self)
         self.pb_showregs.setObjectName('showregs')
@@ -429,14 +428,14 @@ class TuneSpectraControls(QWidget):
         hbox_ctrls = QHBoxLayout()
         hbox_ctrls.setContentsMargins(0, 0, 0, 0)
         hbox_ctrls.setSpacing(6)
-        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignmentFlag.AlignLeft)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
-        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
+        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignmentFlag.AlignRight)
+        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignmentFlag.AlignRight)
         hbox_ctrls.addItem(QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored))
-        hbox_ctrls.addWidget(self.pb_showregs, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.pb_showregs, alignment=Qt.AlignmentFlag.AlignLeft)
 
         lay = QVBoxLayout(self)
         lay.setSpacing(10)

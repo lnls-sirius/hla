@@ -41,7 +41,7 @@ class SSADetailsSI(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QHBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>SSA 0{self.num} Details</h4>', alignment=Qt.AlignCenter))
+            f'<h4>SSA 0{self.num} Details</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -74,7 +74,7 @@ class SSADetailsSI(SiriusDialog):
         self.sink_count = 1
         for i in range(1, 5):
             lay_racks.addWidget(QLabel(
-                f'<h4>Rack {i}</h4>', alignment=Qt.AlignCenter), row, column)
+                f'<h4>Rack {i}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, column)
             lay_racks.addLayout(self._setupRackLay(
                 str(i), self.syst_dict['Rack']), row+1, column)
             column += 1
@@ -90,21 +90,21 @@ class SSADetailsSI(SiriusDialog):
             self, self._substitute_pv_macros(
                 self.prefix+self.syst_dict['Runtime']))
         lb_run.showUnits = True
-        lay.addWidget(QLabel('Runtime', alignment=Qt.AlignRight), 3, 0)
+        lay.addWidget(QLabel('Runtime', alignment=Qt.AlignmentFlag.AlignRight), 3, 0)
         lay.addWidget(lb_run, 3, 1)
-        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), 3, 2)
-        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), 3, 3)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignmentFlag.AlignCenter), 3, 2)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignmentFlag.AlignCenter), 3, 3)
 
         # Pre Amp
         lb_preamp = SiriusLabel(
             self, self.prefix+self.syst_dict[f'Pre Amp{self.num}'][0])
         lb_preamp.showUnits = True
-        lay.addWidget(QLabel('Pre Amp', alignment=Qt.AlignRight), 4, 0)
+        lay.addWidget(QLabel('Pre Amp', alignment=Qt.AlignmentFlag.AlignRight), 4, 0)
         lay.addWidget(lb_preamp, 4, 1)
-        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), 4, 2)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignmentFlag.AlignCenter), 4, 2)
         lay.addWidget(SiriusLedAlert(
             self, self.prefix+self.syst_dict[f'Pre Amp{self.num}'][1]),
-            4, 3, alignment=Qt.AlignCenter)
+            4, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # In and Out Pwr
         lbs = ['In Pwr Fwd', 'In Pwr Rev', 'Out Pwr Fwd', 'Out Pwr Rev']
@@ -116,12 +116,12 @@ class SSADetailsSI(SiriusDialog):
             lb_hw = SiriusLabel(self, self._substitute_pv_macros(
                 self.prefix+self.syst_dict[lb][1]))
             lb_hw.showUnits = True
-            lay.addWidget(QLabel(lb, alignment=Qt.AlignRight), row_general, 0)
+            lay.addWidget(QLabel(lb, alignment=Qt.AlignmentFlag.AlignRight), row_general, 0)
             lay.addWidget(lb_pwr, row_general, 1)
             lay.addWidget(lb_hw, row_general, 2)
             lay.addWidget(SiriusLedAlert(self,
                 self._substitute_pv_macros(self.prefix+self.syst_dict[lb][2])),
-                row_general, 3, alignment=Qt.AlignCenter)
+                row_general, 3, alignment=Qt.AlignmentFlag.AlignCenter)
             row_general += 1
 
         # Out Temp
@@ -131,10 +131,10 @@ class SSADetailsSI(SiriusDialog):
         lb_out_temp.showUnits = True
         lb_out_temp.precisionFromPV = False
         lb_out_temp.precision = 2
-        lay.addWidget(QLabel('Out Temperature', alignment=Qt.AlignRight), row_general, 0)
+        lay.addWidget(QLabel('Out Temperature', alignment=Qt.AlignmentFlag.AlignRight), row_general, 0)
         lay.addWidget(lb_out_temp, row_general, 1)
-        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), row_general, 2)
-        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), row_general, 3)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignmentFlag.AlignCenter), row_general, 2)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignmentFlag.AlignCenter), row_general, 3)
         row_general += 1
 
         # Currents
@@ -163,7 +163,7 @@ class SSADetailsSI(SiriusDialog):
         row_alerts = 0
         column = 0
         for _, ls in self.syst_dict['Alerts'].items():
-            lay_alerts.addWidget(QLabel(ls[0], alignment=Qt.AlignCenter),
+            lay_alerts.addWidget(QLabel(ls[0], alignment=Qt.AlignmentFlag.AlignCenter),
                 row_alerts, column)
             lay_alerts.addWidget(SiriusLedAlert(
                 self, self.prefix+self._substitute_pv_macros(ls[1])),
@@ -189,7 +189,7 @@ class SSADetailsSI(SiriusDialog):
         graph_hs, lay_cboxes = self._setup_heat_sink_graph()
 
         lay.addWidget(QLabel(
-            '<h4>Heat Sinks Temperatures</h4>', alignment=Qt.AlignCenter))
+            '<h4>Heat Sinks Temperatures</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
         lay.addLayout(lay_cboxes)
         lay.addWidget(graph_hs)
 
@@ -197,7 +197,7 @@ class SSADetailsSI(SiriusDialog):
         graph_temp, lay_cboxes = self._setup_rack_temp_graph()
 
         lay.addWidget(QLabel(
-            '<h4>Rack Temperatures</h4>', alignment=Qt.AlignCenter))
+            '<h4>Rack Temperatures</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
         lay.addLayout(lay_cboxes)
         lay.addWidget(graph_temp)
 
@@ -223,7 +223,7 @@ class SSADetailsSI(SiriusDialog):
         wid_other = QWidget()
         lay_other = QGridLayout()
         lay_other.setSpacing(9)
-        lay_other.setAlignment(Qt.AlignCenter)
+        lay_other.setAlignment(Qt.AlignmentFlag.AlignCenter)
         wid_other.setLayout(lay_other)
 
         lbs = ['Temp A', 'Temp B', 'Voltage', 'Current']
@@ -232,8 +232,8 @@ class SSADetailsSI(SiriusDialog):
                 self.prefix+chs_dict[lb], rack_num))
             lb_val.showUnits = True
             lay_other.addWidget(QLabel(
-                lb, alignment=Qt.AlignCenter), i, 0)
-            lay_other.addWidget(lb_val, i, 1, alignment=Qt.AlignCenter)
+                lb, alignment=Qt.AlignmentFlag.AlignCenter), i, 0)
+            lay_other.addWidget(lb_val, i, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Status
         led_status = SiriusLedState(
@@ -243,8 +243,8 @@ class SSADetailsSI(SiriusDialog):
         led_status.setOnColor(PyDMLed.DarkGreen)
 
         lay_other.addWidget(QLabel(
-            'Status AC', alignment=Qt.AlignCenter), i+1, 0)
-        lay_other.addWidget(led_status, i+1, 1, alignment=Qt.AlignCenter)
+            'Status AC', alignment=Qt.AlignmentFlag.AlignCenter), i+1, 0)
+        lay_other.addWidget(led_status, i+1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         tab_wid.addTab(wid_other, 'Other')
         lay.addWidget(tab_wid, 0, 0, 1, 2)
@@ -256,8 +256,8 @@ class SSADetailsSI(SiriusDialog):
         lay.setSpacing(9)
         lay.setAlignment(Qt.AlignTop)
 
-        lay.addWidget(QLabel('TMS', alignment=Qt.AlignCenter), 0, 2)
-        lay.addWidget(QLabel('PT-100', alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel('TMS', alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
+        lay.addWidget(QLabel('PT-100', alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
 
         row = 1
         for _ in range(2):
@@ -279,13 +279,13 @@ class SSADetailsSI(SiriusDialog):
 
                 lay.addWidget(QLabel(
                     f'HeatSink {self.sink_count}{s}',
-                    alignment=Qt.AlignRight | Qt.AlignVCenter), row, 0)
-                lay.addWidget(lb_temp, row, 1, alignment=Qt.AlignCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), row, 0)
+                lay.addWidget(lb_temp, row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(SiriusLedAlert(
                     self, self._substitute_pv_macros(
                         self.prefix+chs_dict['Tms'], suffix)),
-                    row, 2, alignment=Qt.AlignCenter)
-                lay.addWidget(led_pt100, row, 3, alignment=Qt.AlignCenter)
+                    row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+                lay.addWidget(led_pt100, row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
                 row += 1
             self.sink_count += 1
@@ -439,7 +439,7 @@ class SSADetailsBO(SiriusDialog):
         title_frame = RFTitleFrame(self)
         lay_title = QHBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            '<h4>SSA Details</h4>', alignment=Qt.AlignCenter))
+            '<h4>SSA Details</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -470,9 +470,9 @@ class SSADetailsBO(SiriusDialog):
         lay_temp = QGridLayout()
         gbox_temp.setLayout(lay_temp)
         lay_temp.addWidget(QLabel(
-            '<h4>TMS</h4>', alignment=Qt.AlignCenter), 1, 2)
+            '<h4>TMS</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 1, 2)
         lay_temp.addWidget(QLabel(
-            '<h4>PT-100</h4>', alignment=Qt.AlignCenter), 1, 3)
+            '<h4>PT-100</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 1, 3)
 
         for i in range(1, 7):
             lb_temp = SiriusLabel(
@@ -488,13 +488,13 @@ class SSADetailsBO(SiriusDialog):
             led_pt100 = PyDMLedMultiChannel(self, pt_100_channels)
 
             lay_temp.addWidget(QLabel(
-                f'<h4>HeatSink {i}</h4>', alignment=Qt.AlignCenter), i+1, 0)
-            lay_temp.addWidget(lb_temp, i+1, 1, alignment=Qt.AlignCenter)
+                f'<h4>HeatSink {i}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), i+1, 0)
+            lay_temp.addWidget(lb_temp, i+1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
             lay_temp.addWidget(SiriusLedAlert(
                 self, self._substitute_pv_macros(
                     self.prefix+self.syst_dict['HeatSink']['TMS'], i)),
-                i+1, 2, alignment=Qt.AlignCenter)
-            lay_temp.addWidget(led_pt100, i+1, 3, alignment=Qt.AlignCenter)
+                i+1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+            lay_temp.addWidget(led_pt100, i+1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
             row = i+2
 
         lb_temp = SiriusLabel(
@@ -502,12 +502,12 @@ class SSADetailsBO(SiriusDialog):
         lb_temp.showUnits = True
 
         lay_temp.addWidget(QLabel(
-            '<h4>PreAmp 01</h4>', alignment=Qt.AlignCenter), row, 0)
-        lay_temp.addWidget(lb_temp, row, 1, alignment=Qt.AlignCenter)
-        lay_temp.addWidget(QLabel('-', alignment=Qt.AlignCenter), row, 2)
+            '<h4>PreAmp 01</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
+        lay_temp.addWidget(lb_temp, row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_temp.addWidget(QLabel('-', alignment=Qt.AlignmentFlag.AlignCenter), row, 2)
         lay_temp.addWidget(SiriusLedState(
             self, self.prefix+self.syst_dict['PreAmp']['PT-100']),
-            row, 3, alignment=Qt.AlignCenter)
+            row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(gbox_temp, 0, 0, 1, 3)
 
         # AC Panel
@@ -522,29 +522,29 @@ class SSADetailsBO(SiriusDialog):
 
         lay_ac.addWidget(QLabel(
             '<h4>AC/DC Panel Interlock</h4>',
-            alignment=Qt.AlignRight | Qt.AlignVCenter), 0, 0)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 0, 0)
         lay_ac.addWidget(SiriusLedAlert(
             self, self.prefix+self.syst_dict['AC']['Intlk']),
-            0, 1, alignment=Qt.AlignCenter)
+            0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_ac.addWidget(QLabel(
             '<h4>Control Mode</h4>',
-            alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 1, 0)
         lay_ac.addWidget(SiriusLabel(
             self, self.prefix+self.syst_dict['AC']['Ctrl']),
-            1, 1, alignment=Qt.AlignCenter)
+            1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_ac.addWidget(QLabel(
             '<h4>300 Vdc Enable</h4>',
-            alignment=Qt.AlignRight | Qt.AlignVCenter), 2, 0)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 2, 0)
         lay_ac.addWidget(SiriusLedState(
             self, self.prefix+self.syst_dict['AC']['300Vdc']),
-            2, 1, alignment=Qt.AlignCenter)
+            2, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_ac.addWidget(QLabel(
             '<h4>AC/DC Voltage</h4>',
-            alignment=Qt.AlignRight | Qt.AlignVCenter), 3, 0)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 3, 0)
         lay_ac.addWidget(lb_volt, 3, 1)
         lay_ac.addWidget(QLabel(
             '<h4>AC/DC Current</h4>',
-            alignment=Qt.AlignRight | Qt.AlignVCenter), 4, 0)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 4, 0)
         lay_ac.addWidget(lb_curr, 4, 1)
         lay.addWidget(gbox_ac, 1, 0, 3, 1)
 
@@ -558,14 +558,14 @@ class SSADetailsBO(SiriusDialog):
             system='')
 
         lay.addWidget(QLabel(
-            '<h4>Rotameter Flow</h4>', alignment=Qt.AlignCenter), 1, 1)
+            '<h4>Rotameter Flow</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 1, 1)
         lay.addWidget(SiriusLedAlert(
             self, self.prefix+self.syst_dict['Rot']),
-            1, 2, alignment=Qt.AlignCenter)
+            1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(QLabel(
-            '<h4>Power</h4>', alignment=Qt.AlignCenter), 2, 1)
+            '<h4>Power</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 2, 1)
         lay.addWidget(lb_pwr, 2, 2)
-        lay.addWidget(pb_curr, 3, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(pb_curr, 3, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         return lay
 
@@ -612,7 +612,7 @@ class SSADetailsBO(SiriusDialog):
             self.curves_hs[name] = graph_hs.curveAtIndex(i)
 
         lay.addWidget(QLabel(
-            '<h4>Heat Sinks Temperatures</h4>', alignment=Qt.AlignCenter))
+            '<h4>Heat Sinks Temperatures</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
         lay.addLayout(lay_cboxes)
         lay.addWidget(graph_hs)
 

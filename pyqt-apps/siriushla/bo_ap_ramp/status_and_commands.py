@@ -105,7 +105,7 @@ class StatusAndCommands(QGroupBox):
             'icon-size: 35px 35px;')
 
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.setSpacing(10)
         lay.addStretch()
         lay.addWidget(self.bt_prepare_ps)

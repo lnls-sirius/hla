@@ -44,7 +44,7 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         label = QLabel('<h3>Efficiency Monitor</h3>',
-                       self, alignment=Qt.AlignCenter)
+                       self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # timeplot
         timespan = 30*60  # [s]
@@ -98,8 +98,8 @@ class EfficiencyMonitor(SiriusMainWindow):
             lb.showUnits = True
             self._pvs_labels[pvn] = lb
 
-            lay_lbls.addWidget(cb, alignment=Qt.AlignLeft)
-            lay_lbls.addWidget(lb, alignment=Qt.AlignCenter)
+            lay_lbls.addWidget(cb, alignment=Qt.AlignmentFlag.AlignLeft)
+            lay_lbls.addWidget(lb, alignment=Qt.AlignmentFlag.AlignCenter)
             lay_lbls.addStretch()
 
         lay = QGridLayout(cw)

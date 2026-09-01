@@ -208,7 +208,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
-        title = QLabel(self.title, self, alignment=Qt.AlignCenter)
+        title = QLabel(self.title, self, alignment=Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("font-weight: bold;")
         title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
@@ -247,16 +247,16 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._spin_scl.setMaximum(+100.00)
             lay_lims.addWidget(self._spin_scl, row, 1)
         else:
-            self._head_value = QLabel('Value', self, alignment=Qt.AlignCenter)
+            self._head_value = QLabel('Value', self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay_lims.addWidget(self._head_value, 0, 1)
-            self._head_send = QLabel('Apply', self, alignment=Qt.AlignCenter)
+            self._head_send = QLabel('Apply', self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay_lims.addWidget(self._head_send, 0, 2)
 
             self._spins, self._checks = dict(), dict()
             for lsp in self.lim_sp:
                 row += 1
                 text = lsp.split('-')[0].split('Lim')[0]+' [nm]: '
-                label = QLabel(text, self, alignment=Qt.AlignRight)
+                label = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignRight)
                 lay_lims.addWidget(label, row, 0)
                 spin = QSpinBox(self)
                 self._spins[lsp] = spin
@@ -266,7 +266,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
                 lay_lims.addWidget(spin, row, 1)
                 check = QCheckBox(self)
                 self._checks[lsp] = check
-                lay_lims.addWidget(check, row, 2, alignment=Qt.AlignCenter)
+                lay_lims.addWidget(check, row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
             row += 1
             self._label_reforb = QLabel(

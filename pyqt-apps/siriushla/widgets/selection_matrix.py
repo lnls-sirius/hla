@@ -85,7 +85,7 @@ class SelectionMatrixWidget(QWidget):
         lay = QGridLayout(self)
 
         if self.title:
-            lab = QLabel(self.title, self, alignment=Qt.AlignCenter)
+            lab = QLabel(self.title, self, alignment=Qt.AlignmentFlag.AlignCenter)
             lab.setStyleSheet("font-weight: bold;")
             lay.addWidget(lab, 0, 0, 1, 1)
 

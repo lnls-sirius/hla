@@ -41,7 +41,7 @@ class BaseWidget(QWidget):
             chan1 = self.get_pvname(propty)
             if not_enum:
                 wid = SiriusSpinbox(self, init_channel=chan1)
-                wid.setAlignment(Qt.AlignCenter)
+                wid.setAlignment(Qt.AlignmentFlag.AlignCenter)
             else:
                 wid = SiriusEnumComboBox(self, init_channel=chan1)
             wid.setStyleSheet(style)
@@ -50,12 +50,12 @@ class BaseWidget(QWidget):
         label = SiriusLabel(
             parent=self, init_channel=self.get_pvname(pv2))
         label.setStyleSheet(style)
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setObjectName(pv2.replace('-', ''))
         label.showUnits = show_unit
         layout.addWidget(label)
 
-        layout.setAlignment(Qt.AlignVCenter)
+        layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         return layout
 
     def _create_small_group(
@@ -63,10 +63,10 @@ class BaseWidget(QWidget):
         group = QGroupBox(name, parent) if name else QWidget(parent)
         lay = QVBoxLayout(group) if align_ver else QHBoxLayout(group)
         if align_ver:
-            lay.setAlignment(Qt.AlignCenter)
+            lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for wid in wids:
             lay.addWidget(wid)
-            lay.setAlignment(wid, Qt.AlignCenter)
+            lay.setAlignment(wid, Qt.AlignmentFlag.AlignCenter)
         if no_marg:
             lay.setContentsMargins(0, 0, 0, 0)
         return group
@@ -152,7 +152,7 @@ class BaseList(CustomGroupBox):
         header = QWidget()
         headerlay = QHBoxLayout(header)
         headerlay.setContentsMargins(0, 0, 0, 0)
-        self.my_layout.addWidget(header, alignment=Qt.AlignLeft)
+        self.my_layout.addWidget(header, alignment=Qt.AlignmentFlag.AlignLeft)
         objs = self.getLine(header=True)
         for prop, obj in objs:
             name = obj.objectName()
@@ -198,7 +198,7 @@ class BaseList(CustomGroupBox):
                         min-width:{1:.1f}em; max-width: {1:.1f}em;
                     }}""".format(name, self._MIN_WIDs[prop]))
                 hlay.addWidget(obj)
-            lay.addWidget(lwid, alignment=Qt.AlignLeft)
+            lay.addWidget(lwid, alignment=Qt.AlignmentFlag.AlignLeft)
 
     def getLine(self, device=None, header=False):
         objects = list()
@@ -216,7 +216,7 @@ class BaseList(CustomGroupBox):
         lay = QVBoxLayout(widget)
         lay.setSpacing(6)
         lay.setContentsMargins(0, 6, 0, 6)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         fun = self._createObjs if not header else self._headerLabel
         for obj in fun(device, prop):
             lay.addWidget(obj)
@@ -278,7 +278,7 @@ class BaseList(CustomGroupBox):
 
     def _headerLabel(self, device, prop):
         lbl = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
-        lbl.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignTop)
         return (lbl, )
 
     def _createObjs(self, device, prop):

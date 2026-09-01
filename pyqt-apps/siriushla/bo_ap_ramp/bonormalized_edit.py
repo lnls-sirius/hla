@@ -72,9 +72,9 @@ class BONormEdit(SiriusMainWindow):
     def _setupUi(self):
         self.label_description = QLabel(
             '<h2>'+self.norm_config['label']+'</h2>', self)
-        self.label_description.setAlignment(Qt.AlignCenter)
+        self.label_description.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_time = QLabel('<h2>T = '+str(self.time)+'ms</h2>', self)
-        self.label_time.setAlignment(Qt.AlignCenter)
+        self.label_time.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.strengths = self._setupStrengthWidget()
         self.orbit = self._setupOrbitWidget()
@@ -185,8 +185,8 @@ class BONormEdit(SiriusMainWindow):
         gbox.setStyleSheet('#strengths{min-width:20em;}')
         glay = QGridLayout()
         glay.addWidget(scrollarea, 0, 0, 1, 2)
-        glay.addWidget(self.cb_checklims, 1, 0, alignment=Qt.AlignLeft)
-        glay.addWidget(self.bt_graph, 1, 1, alignment=Qt.AlignRight)
+        glay.addWidget(self.cb_checklims, 1, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        glay.addWidget(self.bt_graph, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
         gbox.setLayout(glay)
         return gbox
 
@@ -195,7 +195,7 @@ class BONormEdit(SiriusMainWindow):
         self.bt_get_kicks.clicked.connect(self._handleGetKicksFromSOFB)
 
         label_correctH = QLabel('Correct H', self,
-                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+                                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.sb_correctH = QDoubleSpinBoxPlus(self)
         self.sb_correctH.setValue(self._deltas['factorH'])
         self.sb_correctH.setDecimals(1)
@@ -207,7 +207,7 @@ class BONormEdit(SiriusMainWindow):
         labelH = QLabel('%', self)
 
         label_correctV = QLabel('Correct V', self,
-                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+                                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.sb_correctV = QDoubleSpinBoxPlus(self)
         self.sb_correctV.setValue(self._deltas['factorV'])
         self.sb_correctV.setDecimals(1)

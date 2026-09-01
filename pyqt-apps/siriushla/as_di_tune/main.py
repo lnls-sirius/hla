@@ -39,11 +39,8 @@ class Tune(SiriusMainWindow):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
-        label = QLabel(
-            '<h2>' + self.section + ' Tune<h2>',
-            self,
-            alignment=Qt.AlignHCenter,
-        )
+        label = QLabel('<h2>'+self.section+' Tune<h2>', self,
+                       alignment=Qt.AlignmentFlag.AlignHCenter)
         label.setObjectName('label')
         label.setStyleSheet('#label{min-height: 1.29em; max-height: 1.29em;}')
 
@@ -170,7 +167,7 @@ class Tune(SiriusMainWindow):
         )
         self.pb_showsett.released.connect(self._handle_settings_vis)
         hbox_vis = QHBoxLayout()
-        hbox_vis.addWidget(self.pb_showsett, alignment=Qt.AlignLeft)
+        hbox_vis.addWidget(self.pb_showsett, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.setStyleSheet(
             '#specH, #specV {min-width:40em; min-height: 18em;}'

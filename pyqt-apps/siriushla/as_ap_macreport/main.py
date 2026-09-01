@@ -44,7 +44,7 @@ class MacReportWindow(SiriusMainWindow):
         self.setCentralWidget(cwid)
 
         title = QLabel('<h3>Machine Reports</h3>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         self._timesel_gbox = self._setupTimePeriodSelWidget()
         self._timesel_gbox.setObjectName('timesel_gbox')
@@ -85,8 +85,8 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self._progress_list, 1, 1, 1, 2,
                       alignment=Qt.AlignBottom)
         lay.addWidget(self._reports_wid, 2, 0, 1, 3)
-        lay.addWidget(self._pb_showpvsd, 4, 0, alignment=Qt.AlignLeft)
-        lay.addWidget(self._pb_showraw, 4, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self._pb_showpvsd, 4, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addWidget(self._pb_showraw, 4, 2, alignment=Qt.AlignmentFlag.AlignRight)
 
         self._updateUserShiftStats(setup=True)
         self._updateStoredCurrentStats(setup=True)
@@ -123,7 +123,7 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.dt_start, 0, 1)
         lay.addWidget(ld_tstop, 1, 0)
         lay.addWidget(self.dt_stop, 1, 1)
-        lay.addWidget(self.pb_search, 2, 1, alignment=Qt.AlignRight)
+        lay.addWidget(self.pb_search, 2, 1, alignment=Qt.AlignmentFlag.AlignRight)
         return wid
 
     def _setupUserShiftStatsWidget(self):

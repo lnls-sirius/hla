@@ -61,7 +61,7 @@ class PSDiag(SiriusMainWindow):
         for i, lab in enumerate([
                 '', 'PS\nConn?', 'Power\nState', 'Interlock',
                 'OpMode\nSlowRef?', 'Current\nDiff']):
-            label = QLabel(lab, panel, alignment=Qt.AlignCenter)
+            label = QLabel(lab, panel, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet('min-width:3.4em; max-width:3.4em;')
             panel_lay.addWidget(label, 0, i)
 
@@ -78,7 +78,7 @@ class PSDiag(SiriusMainWindow):
                 for label, filt in lips2filters.items():
                     ps_label = QLabel(
                         label, panel,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                        alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                     psnames = PSSearch.get_psnames(filters=filt)
                     ps_c2v = dict()
                     ilk_c2v = dict()
@@ -152,7 +152,7 @@ class PSDiag(SiriusMainWindow):
                     f = sec+'-'+filt['sub']+':'+psnames[0].dis+'-'+filt['dev']
                     ps_label = QLabel(
                         label, panel,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                        alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                     psconn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=psconn_chs)
                     ps_led = MyLedMultiChannel(
@@ -260,12 +260,12 @@ class PSDiag(SiriusMainWindow):
         tables_lay.addWidget(self._search_psname, 0, 3)
         tables_lay.addWidget(self._search_property, 0, 4)
         tables_lay.addWidget(self._search_value, 0, 5)
-        tables_lay.addWidget(self._scrollup_pb, 0, 6, alignment=Qt.AlignRight)
+        tables_lay.addWidget(self._scrollup_pb, 0, 6, alignment=Qt.AlignmentFlag.AlignRight)
         tables_lay.addLayout(self._tables_stack, 1, 0, 1, 7)
-        tables_lay.addWidget(self._rb_status, 2, 0, alignment=Qt.AlignLeft)
-        tables_lay.addWidget(self._rb_log, 2, 1, alignment=Qt.AlignLeft)
+        tables_lay.addWidget(self._rb_status, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        tables_lay.addWidget(self._rb_log, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
         tables_lay.addWidget(self._scrolldown_pb, 2, 6,
-                             alignment=Qt.AlignRight)
+                             alignment=Qt.AlignmentFlag.AlignRight)
         tables = QWidget(cw)
         tables.setObjectName('tables')
         tables.setLayout(tables_lay)
@@ -280,7 +280,7 @@ class PSDiag(SiriusMainWindow):
 
         # Layout
         window_title = QLabel('<h2>Power Supplies Diagnostics</h2>', cw,
-                              alignment=Qt.AlignCenter)
+                              alignment=Qt.AlignmentFlag.AlignCenter)
         layout = QGridLayout()
         layout.setVerticalSpacing(20)
         layout.setHorizontalSpacing(5)
@@ -456,7 +456,7 @@ class LogTable(QTreeView, PyDMWidget):
             new_value['logtype'], new_value['psname'],
             new_value['propty'], new_value['value'])]
         for item in item_data:
-            item.setTextAlignment(Qt.AlignCenter)
+            item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._model.insertRow(0, item_data)
         if self._model.rowCount() > 10000:

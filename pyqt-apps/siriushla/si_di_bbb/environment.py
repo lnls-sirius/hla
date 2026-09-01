@@ -79,64 +79,64 @@ class BbBEnvironmMonWidget(QWidget):
         lay_graphs.addWidget(graph_fpgavolt, 1, 4, 1, 2)
 
         ld_fpgatemp = QLabel(
-            '<h4>FPGA temp</h4>', self, alignment=Qt.AlignRight)
+            '<h4>FPGA temp</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_fpgatemp = SiriusLabel(self, self.dev_pref+':TEMP_FPGA')
         lb_fpgatemp.showUnits = True
 
         ld_pcbtemp = QLabel(
-            '<h4>PCB temp</h4>', self, alignment=Qt.AlignRight)
+            '<h4>PCB temp</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_pcbtemp = SiriusLabel(self, self.dev_pref+':TEMP_AMB')
         lb_pcbtemp.showUnits = True
 
         ld_exttemp1 = QLabel(
-            '<h4>External temp 1</h4>', self, alignment=Qt.AlignRight)
+            '<h4>External temp 1</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_exttemp1 = SiriusLabel(self, self.dev_pref+':TEMP_EXT1')
         lb_exttemp1.showUnits = True
 
         ld_exttemp2 = QLabel(
-            '<h4>External temp 2</h4>', self, alignment=Qt.AlignRight)
+            '<h4>External temp 2</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_exttemp2 = SiriusLabel(self, self.dev_pref+':TEMP_EXT2')
         lb_exttemp2.showUnits = True
 
         ld_bulkvolt = QLabel(
-            '<h4>Bulk Supply</h4>', self, alignment=Qt.AlignRight)
+            '<h4>Bulk Supply</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_bulkvolt = SiriusLabel(self, self.dev_pref+':VBULK')
         lb_bulkvolt.showUnits = True
 
         ld_digivolt = QLabel(
-            '<h4>Digital 3.3V</h4>', self, alignment=Qt.AlignRight)
+            '<h4>Digital 3.3V</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_digivolt = SiriusLabel(self, self.dev_pref+':VCC')
         lb_digivolt.showUnits = True
 
         ld_fpgavolt = QLabel(
-            '<h4>FPGA core supply</h4>', self, alignment=Qt.AlignRight)
+            '<h4>FPGA core supply</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_fpgavolt = SiriusLabel(self, self.dev_pref+':VINT')
         lb_fpgavolt.showUnits = True
 
         ld_anal3p3volt = QLabel(
-            '<h4>Analog 3.3V</h4>', self, alignment=Qt.AlignRight)
+            '<h4>Analog 3.3V</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_anal3p3volt = SiriusLabel(self, self.dev_pref+':VMON33')
         lb_anal3p3volt.showUnits = True
 
         ld_cputemp = QLabel(
-            '<h4>CPU temp</h4>', self, alignment=Qt.AlignRight)
+            '<h4>CPU temp</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_cputemp = SiriusLabel(self, self.dev_pref+':HWMON_CPU_TEMP')
         lb_cputemp.showUnits = True
 
         ld_cpufan = QLabel(
-            '<h4>CPU fan</h4>', self, alignment=Qt.AlignRight)
+            '<h4>CPU fan</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_cpufan = SiriusLabel(
             self, self.dev_pref+':HWMON_CPU_FAN', keep_unit=True)
         lb_cpufan.showUnits = True
 
         ld_chassisfan = QLabel(
-            '<h4>Chassis fan</h4>', self, alignment=Qt.AlignRight)
+            '<h4>Chassis fan</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_chassisfan = SiriusLabel(
             self, self.dev_pref+':HWMON_CHASSIS_FAN', keep_unit=True)
         lb_chassisfan.showUnits = True
 
         ld_anal5volt = QLabel(
-            '<h4>Analog 5V</h4>', self, alignment=Qt.AlignRight)
+            '<h4>Analog 5V</h4>', self, alignment=Qt.AlignmentFlag.AlignRight)
         lb_anal5volt = SiriusLabel(self, self.dev_pref+':VMON5')
         lb_anal5volt.showUnits = True
 

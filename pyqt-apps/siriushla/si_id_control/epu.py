@@ -155,7 +155,7 @@ class EPUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._ld_stopall, row+3, 0)
         lay.addWidget(self._pb_stopall, row+3, 1)
         lay.addWidget(self._ld_ismov, row+4, 0)
-        lay.addWidget(self._led_ismov, row+4, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(self._led_ismov, row+4, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
@@ -194,13 +194,13 @@ class EPUControlWindow(IDCommonControlWindow):
         gbox = QGroupBox('Status')
         gbox.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         lay = QGridLayout(gbox)
-        lay.addWidget(self._led_isbusy, 0, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_isbusy, 0, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self._ld_isbusy, 0, 1)
-        lay.addWidget(self._pb_dtlsts, 0, 2, alignment=Qt.AlignRight)
-        lay.addWidget(self._led_status, 1, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._pb_dtlsts, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        lay.addWidget(self._led_status, 1, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self._ld_status, 1, 1)
         lay.addWidget(self._log, 2, 0, 1, 3)
-        lay.addWidget(self._bt_logclear, 3, 0, 1, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(self._bt_logclear, 3, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         return gbox
 
     def _auxCommandsWidget(self):
@@ -233,7 +233,7 @@ class EPUControlWindow(IDCommonControlWindow):
             lay.addWidget(lb_phsspdlim, row, 2)
             lay.addWidget(ld_pwrenbl, row+1, 0)
             lay.addWidget(pb_pwrenbl, row+1, 1)
-            lay.addWidget(led_pwrsts, row+1, 2, alignment=Qt.AlignLeft)
+            lay.addWidget(led_pwrsts, row+1, 2, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addItem(
                 QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row+2, 0)
             row += 3
@@ -252,7 +252,7 @@ class EPUControlWindow(IDCommonControlWindow):
         led_pwrsts = PyDMLedMultiChannel(self, channels2values=c2v)
         lay.addWidget(ld_pwrenbl, row, 0)
         lay.addWidget(pb_pwrenbl, row, 1)
-        lay.addWidget(led_pwrsts, row, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(led_pwrsts, row, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         row += 1
 
         ld_clrerr = QLabel('Clear Drive Errors', self)

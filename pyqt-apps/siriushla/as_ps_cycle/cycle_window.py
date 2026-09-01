@@ -106,7 +106,7 @@ class CycleWindow(SiriusMainWindow):
 
         # commands
         lb_prep_ti = QLabel('<h4>Prepare Timing</h4>', self,
-                            alignment=Qt.AlignCenter)
+                            alignment=Qt.AlignmentFlag.AlignCenter)
         ti_ch = [PVName(name).substitute(prefix=VACA_PREFIX)
                  for name in self._timing.get_pvnames_by_psnames()]
         self.ticonn_led = PyDMLedMultiConn(self, channels=ti_ch)
@@ -131,7 +131,7 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_timing_lb.setPixmap(self._pixmap_not)
 
         lb_prep_ps = QLabel('<h4>Prepare PS</h4>', self,
-                            alignment=Qt.AlignCenter)
+                            alignment=Qt.AlignmentFlag.AlignCenter)
         self.psconn_led = PyDMLedMultiConn(self)
 
         self.set_ps_idffmode_off_bt = QPushButton(
@@ -191,7 +191,7 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_ps_opmode_lb.setPixmap(self._pixmap_not)
 
         lb_cycle = QLabel('<h4>Cycle</h4>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.cycle_trims_bt = QPushButton('8. Cycle Trims', self)
         self.cycle_trims_bt.setToolTip(
@@ -214,7 +214,7 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.setEnabled(False)
 
         lb_rest_ti = QLabel('<h4>Restore Timing</h4>', self,
-                            alignment=Qt.AlignCenter)
+                            alignment=Qt.AlignmentFlag.AlignCenter)
         self.restore_timing_bt = QPushButton(
             '9. Restore Timing Initial State', self)
         self.restore_timing_bt.setToolTip(
@@ -280,8 +280,8 @@ class CycleWindow(SiriusMainWindow):
         self.clearhist_bt.clicked.connect(self._clear_lastcomm)
         lay_lc = QHBoxLayout()
         lay_lc.setContentsMargins(0, 0, 0, 0)
-        lay_lc.addWidget(self.label_lastcomm, alignment=Qt.AlignLeft)
-        lay_lc.addWidget(self.clearhist_bt, alignment=Qt.AlignRight)
+        lay_lc.addWidget(self.label_lastcomm, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_lc.addWidget(self.clearhist_bt, alignment=Qt.AlignmentFlag.AlignRight)
         lay_lc.setStretch(0, 10)
         lay_lc.setStretch(1, 1)
 
@@ -311,7 +311,7 @@ class CycleWindow(SiriusMainWindow):
         layout.setVerticalSpacing(10)
         layout.setHorizontalSpacing(10)
         layout.addWidget(QLabel('<h3>PS Cycle</h3>', self,
-                                alignment=Qt.AlignCenter), 0, 0, 1, 3)
+                                alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 3)
         layout.addWidget(gb_tree, 1, 0)
         layout.addWidget(gb_commsts, 1, 1)
         layout.addLayout(lay_log, 1, 2)

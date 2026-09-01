@@ -42,7 +42,7 @@ class HardwareDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
         lay.addWidget(title_frame, 0, 0, 1, 5)
 
         # FPGA Temps
@@ -76,17 +76,17 @@ class HardwareDetails(SiriusDialog):
         pb_init = SiriusPushButton(
             self, self.prefix+self.syst_dict['FPGA Init'], 'Init')
         lay_pll.addWidget(QLabel(
-            'Clock Src', alignment=Qt.AlignRight | Qt.AlignVCenter), 0, 0)
-        lay_pll.addWidget(cb_clock, 0, 1, alignment=Qt.AlignCenter)
+            'Clock Src', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 0, 0)
+        lay_pll.addWidget(cb_clock, 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_pll.addWidget(QLabel(
-            'Loop Trigger', alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
+            'Loop Trigger', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 1, 0)
         lay_pll.addWidget(pb_trig, 1, 1)
         lay_pll.addWidget(QLabel(
-            'PLL', alignment=Qt.AlignRight | Qt.AlignVCenter), 2, 0)
-        lay_pll.addWidget(led_pll, 2, 1, alignment=Qt.AlignCenter)
+            'PLL', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 2, 0)
+        lay_pll.addWidget(led_pll, 2, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_pll.addWidget(QLabel(
-            'Init', alignment=Qt.AlignRight | Qt.AlignVCenter), 3, 0)
-        lay_pll.addWidget(pb_init, 3, 1, alignment=Qt.AlignCenter)
+            'Init', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 3, 0)
+        lay_pll.addWidget(pb_init, 3, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Cavity Type
         gbox_type = QGroupBox(self)
@@ -161,7 +161,7 @@ class HardwareDetails(SiriusDialog):
             if key == 'Firmware':
                 lb_value.displayFormat = DisplayFormat.Hex
 
-            lay.addWidget(QLabel(key, alignment=Qt.AlignRight), row, 0)
+            lay.addWidget(QLabel(key, alignment=Qt.AlignmentFlag.AlignRight), row, 0)
             lay.addWidget(lb_value, row, 1)
             row += 1
             if isFPGA and key.split()[-1] == 'Min':
@@ -175,5 +175,5 @@ class HardwareDetails(SiriusDialog):
                 led = SiriusLedAlert(self, pv, bit)
             else:
                 led = SiriusLedState(self, pv, bit)
-            lay.addWidget(led, bit, 0, alignment=Qt.AlignHCenter)
+            lay.addWidget(led, bit, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
             lay.addWidget(QLabel(labels[bit]), bit, 1)

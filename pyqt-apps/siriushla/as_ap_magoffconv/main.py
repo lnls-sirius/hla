@@ -45,13 +45,13 @@ class MagOffConvApp(SiriusMainWindow):
         self._matype_cb.currentIndexChanged.connect(
             self._fill_normalizer_layout)
         hlmatype = QHBoxLayout()
-        hlmatype.setAlignment(Qt.AlignLeft)
+        hlmatype.setAlignment(Qt.AlignmentFlag.AlignLeft)
         hlmatype.addWidget(matype_label)
         hlmatype.addWidget(self._matype_cb)
 
         # Layout to enter normalizer data
         self._lb_current = QLabel('Current [A]: ')
-        lb_arrow = QLabel('↔', self, alignment=Qt.AlignCenter)
+        lb_arrow = QLabel('↔', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_arrow.setStyleSheet('min-width:1.2em; max-width:1.2em;')
         self._lb_strength = QLabel('Strength: ')
         self._lb_energy = QLabel('Dipole Energy [GeV]: ')
@@ -76,7 +76,7 @@ class MagOffConvApp(SiriusMainWindow):
                 sb.setVisible(False)
 
         norm_lay = QGridLayout()
-        norm_lay.setAlignment(Qt.AlignLeft)
+        norm_lay.setAlignment(Qt.AlignmentFlag.AlignLeft)
         norm_lay.setHorizontalSpacing(5)
         norm_lay.addItem(
             QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
@@ -101,7 +101,7 @@ class MagOffConvApp(SiriusMainWindow):
         layout.setSpacing(20)
         layout.addWidget(
             QLabel('<h2>Offline Strength/Current Converter</h2>',
-                   self, alignment=Qt.AlignCenter))
+                   self, alignment=Qt.AlignmentFlag.AlignCenter))
         layout.addLayout(hlmatype)
         layout.addWidget(self.norm_gb)
         cw = QWidget(self)

@@ -71,7 +71,7 @@ class GraphWidget(QWidget):
     def setupui(self):
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(
-            QLabel('<h2>'+self.name+'</h2>'), alignment=Qt.AlignCenter)
+            QLabel('<h2>'+self.name+'</h2>'), alignment=Qt.AlignmentFlag.AlignCenter)
         self.graph = Graph(self)
         self.graph.setShowLegend(self._legend)
         self.graph.maxRedrawRate = 1/2

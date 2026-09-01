@@ -86,15 +86,15 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignTop)
 
         row = 0
-        lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignCenter)
-        lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignCenter)
+        lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_sett, row, 1)
         lay.addWidget(lb_actl, row, 2)
 
         row += 1
         lim_label = '0~4095' if self.dev.nickname == 'SHB' else '0~1023'
-        lb_lim1 = QLabel(lim_label, self, alignment=Qt.AlignCenter)
-        lb_unit = QLabel('clk', self, alignment=Qt.AlignCenter)
+        lb_lim1 = QLabel(lim_label, self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_unit = QLabel('clk', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_lim1, row, 1)
         lay.addWidget(lb_unit, row, 2)
 
@@ -111,7 +111,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
 
             if name == 'Trigger' and self.dev.nickname == 'SHB':
                 row += 1
-                lb_lim2 = QLabel('0~1023', self, alignment=Qt.AlignCenter)
+                lb_lim2 = QLabel('0~1023', self, alignment=Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(lb_lim2, row, 1)
 
         return wid
@@ -122,13 +122,13 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignTop)
 
         row = 0
-        lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignCenter)
-        lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignCenter)
+        lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_sett, row, 1)
         lay.addWidget(lb_actl, row, 2)
 
         row += 1
-        lb_lim = QLabel('0~1023', self, alignment=Qt.AlignCenter)
+        lb_lim = QLabel('0~1023', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_lim, row, 1)
 
         for prop in ['KP', 'KI']:
@@ -185,13 +185,13 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignTop)
 
         row = 0
-        lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignCenter)
-        lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignCenter)
+        lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_sett, row, 2)
         lay.addWidget(lb_actl, row, 4)
 
         row += 1
-        lb_lim = QLabel('-180.0°~+180.0°', self, alignment=Qt.AlignCenter)
+        lb_lim = QLabel('-180.0°~+180.0°', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_lim, row, 2, 1, 3)
 
         for name, prop in props:
@@ -267,8 +267,8 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignTop)
 
         row = 0
-        lb_lim = QLabel('0~63', self, alignment=Qt.AlignCenter)
-        lb_unit = QLabel('dB', self, alignment=Qt.AlignCenter)
+        lb_lim = QLabel('0~63', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_unit = QLabel('dB', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_lim, row, 1)
         lay.addWidget(lb_unit, row, 2)
 
@@ -314,7 +314,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignTop)
 
         row = 0
-        lb_lim = QLabel('(0.00~200.00)', self, alignment=Qt.AlignCenter)
+        lb_lim = QLabel('(0.00~200.00)', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_lim, row, 1)
 
         for name, prop in props:

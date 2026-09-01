@@ -47,7 +47,7 @@ class PSGraphMonWindow(SiriusMainWindow):
         aux_label = '' if not self._filters \
             else ' - '+self._filters['sec']+' '+self._filters['dev']
         self._label = QLabel('<h3>PS Graph Monitor'+aux_label+'</h3>',
-                             self, alignment=Qt.AlignCenter)
+                             self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.propty_sel = PSGraphProptySelWidget(self)
         self.propty_sel.change_matype(self._magfunc, self._pstype)

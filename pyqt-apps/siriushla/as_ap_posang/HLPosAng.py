@@ -267,7 +267,7 @@ class PosAngCorr(SiriusMainWindow):
             lb_name = QLabel(corr, self)
             le_sp = PyDMSpinboxScrollbar(
                 self, corr.substitute(prefix=self._prefix, propty='Kick-SP'))
-            le_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_sp.spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             le_sp.scrollbar.limitsFromPV = True
             lb_rb = SiriusLabel(self, corr.substitute(
                 prefix=self._prefix, propty='Kick-RB'), keep_unit=True)
@@ -278,7 +278,7 @@ class PosAngCorr(SiriusMainWindow):
 
             lay.addWidget(pbt, idx, 0, alignment=Qt.AlignTop)
             lay.addWidget(
-                lb_name, idx, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
+                lb_name, idx, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
             lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignTop)
             lay.addWidget(lb_rb, idx, 3, alignment=Qt.AlignTop)
             lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignTop)
@@ -314,7 +314,7 @@ class PosAngCorr(SiriusMainWindow):
         lb_kckr_mn.showUnits = True
         lay.addWidget(pb_kckr, idx+2, 0, alignment=Qt.AlignTop)
         lay.addWidget(
-            lb_kckr_name, idx+2, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
+            lb_kckr_name, idx+2, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
         lay.addWidget(lb_kckr_sp, idx+2, 2, alignment=Qt.AlignTop)
         lay.addWidget(lb_kckr_rb, idx+2, 3, alignment=Qt.AlignTop)
         lay.addWidget(lb_kckr_mn, idx+2, 4, alignment=Qt.AlignTop)
@@ -333,7 +333,7 @@ class PosAngCorr(SiriusMainWindow):
                 self, pref+'LA-RF:LLRF:KLY2:SET_AMP')
             le_kly2_sp.spinbox.precisionFromPV = False
             le_kly2_sp.spinbox.precision = 2
-            le_kly2_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_kly2_sp.spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             le_kly2_sp.scrollbar.limitsFromPV = True
             lb_kly2_rb = SiriusLabel(
                 self, pref+'LA-RF:LLRF:KLY2:GET_AMP', keep_unit=True)
@@ -341,7 +341,7 @@ class PosAngCorr(SiriusMainWindow):
             lb_kly2_rb.precision = 2
             lb_kly2_rb.showUnits = True
             lay.addWidget(lb_kly2_name, idx+4, 1,
-                          alignment=Qt.AlignLeft | Qt.AlignTop)
+                          alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
             lay.addWidget(le_kly2_sp, idx+4, 2, alignment=Qt.AlignTop)
             lay.addWidget(lb_kly2_rb, idx+4, 3, alignment=Qt.AlignTop)
         return lay
@@ -424,14 +424,14 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
     def _setupUi(self):
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
-                                  alignment=Qt.AlignCenter)
+                                  alignment=Qt.AlignmentFlag.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
             self, self.posang_prefix.substitute(propty='ConfigName-SP'))
         self.pydmlabel_configname = SiriusLabel(
             self, self.posang_prefix.substitute(propty='ConfigName-RB'))
 
         label_matrix_x = QLabel('<h4>Matrix X</h4>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_matrix_x = SiriusWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatX-Mon'))
         self.table_matrix_x.setObjectName('table_matrix_x')
@@ -454,7 +454,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         columns = 2 if self._tl == 'TB' else 4
         width = 12 if self._tl == 'TB' else 24
         label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_matrix_y = SiriusWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatY-Mon'))
         self.table_matrix_y.setObjectName('table_matrix_y')

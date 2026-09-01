@@ -41,7 +41,7 @@ class CalSysDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -79,21 +79,21 @@ class CalSysDetails(SiriusDialog):
             'QComboBox{max-width: 4em; font-weight: bold;}')
         cb_units.currentTextChanged.connect(self._handle_labels_units)
 
-        lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignCenter),
+        lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 1)
         lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2)
-        lay.addWidget(QLabel('<h4>UnCal</h4>', alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel('<h4>UnCal</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
         lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
-        lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignCenter),
+        lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 5)
         lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
-        lay.addWidget(QLabel('<h4>Cal</h4>', alignment=Qt.AlignCenter), 0, 7)
+        lay.addWidget(QLabel('<h4>Cal</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 7)
         lay.addWidget(cb_units, 0, 8)
 
         self.cals_dbm = []
         self.cals_w = []
         for i in range(1, 17):
-            lb_ch = QLabel(f'Ch{i}', alignment=Qt.AlignCenter)
+            lb_ch = QLabel(f'Ch{i}', alignment=Qt.AlignmentFlag.AlignCenter)
             lb_ch.setStyleSheet(f'color:{self.syst_dict[f"Ch{i}"]["Color"]};')
 
             lb_label = SiriusLabel(
@@ -133,14 +133,14 @@ class CalSysDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignCenter),
+        lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 1, 1, 2)
         lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
-        lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignCenter),
+        lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 4, 1, 2)
 
         for i in range(1, 17):
-            lb_ch = QLabel(f'Ch{i}', alignment=Qt.AlignCenter)
+            lb_ch = QLabel(f'Ch{i}', alignment=Qt.AlignmentFlag.AlignCenter)
             lb_ch.setStyleSheet(f'color:{self.syst_dict[f"Ch{i}"]["Color"]};')
 
             lb_label = SiriusLabel(
@@ -173,7 +173,7 @@ class CalSysDetails(SiriusDialog):
         self.cb_units.currentTextChanged.connect(
             self._handle_curves_units)
         lay_table.addWidget(
-            QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay_table.addWidget(self.cb_units, 0, 2)
 
         self.graph = SiriusTimePlot(self)

@@ -148,11 +148,11 @@ class AcqBaseWindow(SiriusMainWindow):
             label='Stop', pressValue=1)
         self.lb_status = SiriusLabel(
             self, self._get_pvname('Status-Mon'), keep_unit=True)
-        self.lb_status.setAlignment(Qt.AlignCenter)
+        self.lb_status.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lb_status.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         self.lb_count = SiriusLabel(
             self, self._get_pvname('Count-Mon'), keep_unit=True)
-        self.lb_count.setAlignment(Qt.AlignCenter)
+        self.lb_count.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.lb_count.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         dlay_cmd = QGridLayout()
         dlay_cmd.setContentsMargins(0, 0, 0, 0)

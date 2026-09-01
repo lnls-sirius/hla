@@ -292,7 +292,7 @@ if __name__ == "__main__":
                     led.setOnColor(colorsdict[color])
                     led.setOffColor(QColor(90, 90, 90))
                     led.setShape(shape)
-                    _l.addWidget(led, row, col, Qt.AlignCenter)
+                    _l.addWidget(led, row, col, Qt.AlignmentFlag.AlignCenter)
                     self.leds.append(led)
 
             self.toggleLeds()

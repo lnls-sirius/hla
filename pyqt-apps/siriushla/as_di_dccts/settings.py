@@ -33,7 +33,7 @@ class DCCTSettings(QWidget):
     def _setupUi(self):
         lay = QVBoxLayout()
         lay.addWidget(QLabel('<h3>Settings</h3>', self,
-                             alignment=Qt.AlignHCenter | Qt.AlignBottom))
+                             alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignBottom))
         lay.setStretch(0, 1)
 
         # Measure
@@ -41,7 +41,7 @@ class DCCTSettings(QWidget):
         self.led_ReliableMeas = SiriusLedAlert(
             self, self.dcct_prefix.substitute(propty='ReliableMeas-Mon'))
 
-        l_curr = QLabel('Current [mA]: ', self, alignment=Qt.AlignRight)
+        l_curr = QLabel('Current [mA]: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.label_current = SiriusLabel(
             self, self.dcct_prefix.substitute(propty='Current-Mon'))
         self.led_StoredEBeam = SiriusLedState(
@@ -114,11 +114,11 @@ class DCCTSettings(QWidget):
 
         gbox_gen = QGroupBox('Measure')
         glay_gen = QGridLayout(gbox_gen)
-        glay_gen.setAlignment(Qt.AlignVCenter)
+        glay_gen.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         glay_gen.addWidget(l_curr, 0, 0)
         glay_gen.addLayout(hlay_current, 0, 1)
         glay_gen.addWidget(l_reliablemeas, 1, 0)
-        glay_gen.addWidget(self.led_ReliableMeas, 1, 1, alignment=Qt.AlignLeft)
+        glay_gen.addWidget(self.led_ReliableMeas, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
         glay_gen.addWidget(l_enbl, 2, 0)
         glay_gen.addLayout(hlay_enbl, 2, 1)
         glay_gen.addWidget(l_meastrig, 3, 0)
@@ -130,7 +130,7 @@ class DCCTSettings(QWidget):
         glay_gen.addLayout(hlay_measmode, 5, 1)
         glay_gen.addLayout(glay_mode, 6, 0, 1, 2)
         glay_gen.addWidget(self.pb_details, 7, 0, 1, 2,
-                           alignment=Qt.AlignRight)
+                           alignment=Qt.AlignmentFlag.AlignRight)
         gbox_gen.setStyleSheet("""
             .QLabel{
                 qproperty-alignment: 'AlignVCenter | AlignRight';
@@ -237,7 +237,7 @@ class DCCTSettingsDetails(QWidget):
         lay = QGridLayout()
         lay.addWidget(
             QLabel('<h3>'+self.device+' Settings Details</h3>', self,
-                   alignment=Qt.AlignCenter), 0, 0, 1, 2)
+                   alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 2)
         lay.addWidget(self.gbox_reliablemeas, 1, 0)
         lay.addWidget(self.gbox_generalsettings, 2, 0)
         lay.addWidget(self.gbox_config, 3, 0)
@@ -311,7 +311,7 @@ class DCCTSettingsDetails(QWidget):
             self, self.dcct_prefix.substitute(propty='TrgIsMissing-Mon'))
         hlay_trigmiss = QHBoxLayout()
         hlay_trigmiss.addWidget(self.led_TrgMiss)
-        hlay_trigmiss.setAlignment(Qt.AlignLeft)
+        hlay_trigmiss.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
@@ -361,8 +361,8 @@ class DCCTSettingsDetails(QWidget):
         hlay_measmode.addWidget(self.pydmlabel_MeasMode)
 
         flay_generalsettings = QFormLayout()
-        flay_generalsettings.setLabelAlignment(Qt.AlignRight)
-        flay_generalsettings.setFormAlignment(Qt.AlignCenter)
+        flay_generalsettings.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_generalsettings.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         flay_generalsettings.addRow(l_enbl, hlay_enbl)
         flay_generalsettings.addRow(l_meastrig, hlay_meastrig)
         flay_generalsettings.addRow(l_trigmiss, hlay_trigmiss)
@@ -449,8 +449,8 @@ class DCCTSettingsDetails(QWidget):
         hlay_rellvl.addWidget(pushbutton_RelAcq)
 
         flay_modesettings = QFormLayout()
-        flay_modesettings.setLabelAlignment(Qt.AlignRight)
-        flay_modesettings.setFormAlignment(Qt.AlignHCenter)
+        flay_modesettings.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_modesettings.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay_modesettings.addRow(l_smpcnt, hlay_smpcnt)
         flay_modesettings.addRow(l_measperiod, hlay_measperiod)
         flay_modesettings.addRow(l_measupdateperiod, label_MeasUpdatePeriod)
@@ -547,8 +547,8 @@ class DCCTSettingsDetails(QWidget):
 
         gbox_test = QGroupBox('Configurations')
         lay = QFormLayout(gbox_test)
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addRow('Enable test current: ', hlay_test)
         lay.addRow('Download Configurations: ', self.bt_dl)
         return gbox_test

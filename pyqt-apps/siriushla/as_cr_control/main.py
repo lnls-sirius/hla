@@ -81,7 +81,7 @@ class CryoControl(SiriusMainWindow):
             if isRotated:
                 return RotatedQLabel(text, config["rotation"])
         lbl = QLabel(text)
-        lbl.setAlignment(Qt.AlignCenter)
+        lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return lbl
 
     def handle_label_highlight(self, config, lbl):
@@ -124,7 +124,7 @@ class CryoControl(SiriusMainWindow):
             return pydm_line
         pydm_lbl = SiriusLabel(
             init_channel=pvname)
-        pydm_lbl.setAlignment(Qt.AlignCenter)
+        pydm_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return pydm_lbl
 
     def add_label_egu(self, pvname, lay, line, isEditable=False):
@@ -135,7 +135,7 @@ class CryoControl(SiriusMainWindow):
         lay.addWidget(wid, line, 0, 1, 1)
         pydm_lbl = SiriusLabel(
             init_channel=pvname+".EGU")
-        pydm_lbl.setAlignment(Qt.AlignCenter)
+        pydm_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(pydm_lbl, line, 1, 1, 1)
 
         return lay
@@ -186,7 +186,7 @@ class CryoControl(SiriusMainWindow):
 
     def set_group_title(self, title, glay):
         lbl = QLabel(title)
-        lbl.setAlignment(Qt.AlignCenter)
+        lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         glay.addWidget(lbl, 0, 0, 1, 2)
 
     def add_pvs(self):
@@ -226,7 +226,7 @@ class CryoControl(SiriusMainWindow):
 
             titleWid = QLabel(title)
             titleWid.setMinimumWidth(150)
-            titleWid.setAlignment(Qt.AlignCenter)
+            titleWid.setAlignment(Qt.AlignmentFlag.AlignCenter)
             glay.addWidget(titleWid, *pos)
 
             pos[1] += 1

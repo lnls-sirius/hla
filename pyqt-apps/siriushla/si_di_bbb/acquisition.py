@@ -72,18 +72,18 @@ class _BbBModalAnalysis(QWidget):
         ld_sel = QLabel('Acq. Mode', self)
         cb_sel = PyDMEnumComboBox(self, self.prop_pref+'MD_SMODE')
 
-        ld_sbnd = QLabel('Sideband', self, alignment=Qt.AlignRight)
+        ld_sbnd = QLabel('Sideband', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_sbnd = SiriusSpinbox(self, self.prop_pref+'MD_FTUNE')
         sb_sbnd.showUnits = True
 
-        ld_span = QLabel('Span', self, alignment=Qt.AlignRight)
+        ld_span = QLabel('Span', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_span = SiriusSpinbox(self, self.prop_pref+'MD_FSPAN')
         sb_span.showUnits = True
 
-        ld_mode = QLabel('Mode', self, alignment=Qt.AlignRight)
+        ld_mode = QLabel('Mode', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_mode = SiriusSpinbox(self, self.prop_pref+'MD_MSEL')
 
-        ld_avg = QLabel('Sample Avg', self, alignment=Qt.AlignRight)
+        ld_avg = QLabel('Sample Avg', self, alignment=Qt.AlignmentFlag.AlignRight)
         sb_avg = SiriusSpinbox(self, self.prop_pref+'MD_AVG')
 
         gb_ctrl = QGroupBox('Acquisition control', self)
@@ -102,11 +102,11 @@ class _BbBModalAnalysis(QWidget):
         lay_ctrl.addWidget(sb_avg, 3, 2)
 
         # Markers
-        ld_mnum = QLabel('Mode #', self, alignment=Qt.AlignRight)
-        ld_mamp = QLabel('Mode Amp.', self, alignment=Qt.AlignRight)
-        ld_peak = QLabel('Value', self, alignment=Qt.AlignRight)
-        ld_pfrq = QLabel('Freq.', self, alignment=Qt.AlignRight)
-        ld_tune = QLabel('Tune', self, alignment=Qt.AlignRight)
+        ld_mnum = QLabel('Mode #', self, alignment=Qt.AlignmentFlag.AlignRight)
+        ld_mamp = QLabel('Mode Amp.', self, alignment=Qt.AlignmentFlag.AlignRight)
+        ld_peak = QLabel('Value', self, alignment=Qt.AlignmentFlag.AlignRight)
+        ld_pfrq = QLabel('Freq.', self, alignment=Qt.AlignmentFlag.AlignRight)
+        ld_tune = QLabel('Tune', self, alignment=Qt.AlignmentFlag.AlignRight)
 
         wid_mkr = _BbBAcqMarkerConfig(
             self,
@@ -138,7 +138,7 @@ class _BbBModalAnalysis(QWidget):
 
         ld_name = QLabel(
             '<h2>'+self.acq_type+' Modal Analysis</h2>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(QHBoxLayout())
         wid = QWidget(self)
@@ -297,7 +297,7 @@ class _BbBAcqBase(QWidget):
         lay_dtacq.addWidget(bt_modal, 9, 0, 1, 2)
 
         ld_acqtyp = QLabel(
-            '<h4>Acq Type</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Acq Type</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         cb_acqtyp = PyDMEnumComboBox(
             self, self.dev_pref+':'+self.TYPE+'_POSTSEL')
 
@@ -430,16 +430,16 @@ class _BbBAcqBase(QWidget):
         cb_acqsing = PyDMEnumComboBox(
             self, self.dev_pref+':'+self.TYPE+'_ACQ_SINGLE')
 
-        ld_mean = QLabel('Mean', self, alignment=Qt.AlignCenter)
+        ld_mean = QLabel('Mean', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_mean = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_MEANVAL')
 
-        ld_rms = QLabel('RMS', self, alignment=Qt.AlignCenter)
+        ld_rms = QLabel('RMS', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_rms = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_RMSVAL')
 
-        ld_ampp2p = QLabel('Amp P-P', self, alignment=Qt.AlignCenter)
+        ld_ampp2p = QLabel('Amp P-P', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_ampp2p = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_AMP_PP')
 
-        ld_maxrms = QLabel('Max RMS', self, alignment=Qt.AlignCenter)
+        ld_maxrms = QLabel('Max RMS', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_maxrms = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_MAXRMSVAL')
 
         ld_bunpatt = QLabel('Bunch\npattern', self)
@@ -471,10 +471,10 @@ class _BbBAcqBase(QWidget):
         lay_acqctrl.addWidget(le_bunpatt, 2, 4, 1, 3)
 
         # Markers
-        ld_mode = QLabel('Configuration', self, alignment=Qt.AlignCenter)
-        ld_val = QLabel('Value', self, alignment=Qt.AlignCenter)
-        ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignCenter)
-        ld_tune = QLabel('Tune', self, alignment=Qt.AlignCenter)
+        ld_mode = QLabel('Configuration', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_val = QLabel('Value', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_tune = QLabel('Tune', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         btn_mkr1 = QPushButton('Marker 1', self)
         window = create_window_from_widget(
@@ -627,7 +627,7 @@ class BbBAcqSB(QWidget):
         lay_trig.addWidget(cb_trgbrarm, 3, 1)
 
         ld_phtrkctrl = QLabel(
-            '<h4>Controls</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Controls</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_bunnr = QLabel('Bunch Number', self)
         sb_bunnr = SiriusSpinbox(self, self.dev_pref+':SB_BUNCH_ID')
@@ -685,7 +685,7 @@ class BbBAcqSB(QWidget):
         lay_phtrkctrl.addWidget(cb_mod, 10, 1)
 
         ld_phtrkdata = QLabel(
-            '<h4>Data</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Data</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_mag = QLabel('Magnitude', self)
         lb_mag = SiriusLabel(self, self.dev_pref+':PHTRK_MAG')
@@ -826,16 +826,16 @@ class BbBAcqSB(QWidget):
         ld_acqsing = QLabel('Acq. Mode', self)
         cb_acqsing = PyDMEnumComboBox(self, self.dev_pref+':SB_ACQ_SINGLE')
 
-        ld_mean = QLabel('Mean', self, alignment=Qt.AlignCenter)
+        ld_mean = QLabel('Mean', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_mean = SiriusLabel(self, self.dev_pref+':SB_MEANVAL')
 
-        ld_rms = QLabel('RMS', self, alignment=Qt.AlignCenter)
+        ld_rms = QLabel('RMS', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_rms = SiriusLabel(self, self.dev_pref+':SB_RMSVAL')
 
-        ld_ampp2p = QLabel('Amp P-P', self, alignment=Qt.AlignCenter)
+        ld_ampp2p = QLabel('Amp P-P', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_ampp2p = SiriusLabel(self, self.dev_pref+':SB_AMP_PP')
 
-        ld_bunid = QLabel('Bunch ID', self, alignment=Qt.AlignCenter)
+        ld_bunid = QLabel('Bunch ID', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_bunid = SiriusLabel(self, self.dev_pref+':SB_RAW_BUNCH_ID')
 
         gbox_acqctrl = QGroupBox('Acquisition control', self)
@@ -871,11 +871,11 @@ class BbBAcqSB(QWidget):
             device=self._device,
             acq_type='SB_M1'
         )
-        ld_marker = QLabel('Configuration', self, alignment=Qt.AlignCenter)
-        ld_mkfreq = QLabel('Frequency', self, alignment=Qt.AlignCenter)
-        ld_mktune = QLabel('Tune', self, alignment=Qt.AlignCenter)
-        ld_mkmag = QLabel('Magnitude', self, alignment=Qt.AlignCenter)
-        ld_mkphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
+        ld_marker = QLabel('Configuration', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_mkfreq = QLabel('Frequency', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_mktune = QLabel('Tune', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_mkmag = QLabel('Magnitude', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_mkphs = QLabel('Phase', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lb_mkfreq = SiriusLabel(self, self.dev_pref+':SB_M1_FREQ')
         lb_mkfreq.showUnits = True
@@ -891,13 +891,13 @@ class BbBAcqSB(QWidget):
         lay.addWidget(ld_marker, 0, 0)
         lay.addWidget(btn_mkr1, 1, 0)
         lay.addWidget(ld_mkfreq, 0, 1)
-        lay.addWidget(lb_mkfreq, 1, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_mkfreq, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(ld_mktune, 0, 2)
-        lay.addWidget(lb_mktune, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_mktune, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(ld_mkmag, 0, 3)
-        lay.addWidget(lb_mkmag, 1, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_mkmag, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(ld_mkphs, 0, 4)
-        lay.addWidget(lb_mkphs, 1, 4, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_mkphs, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.setRowStretch(0, 2)
         lay.setRowStretch(3, 2)
 

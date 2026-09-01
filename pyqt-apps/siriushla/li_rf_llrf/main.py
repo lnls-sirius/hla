@@ -81,12 +81,12 @@ class LLRFMain(QWidget):
             """Base Widget: 'title'  'PV information'"""
             bw_hlay = QHBoxLayout()
             bw_hlay.addWidget(
-                QLabel(title), alignment=Qt.AlignCenter)
+                QLabel(title), alignment=Qt.AlignmentFlag.AlignCenter)
 
             widget = self.formatLabel(pv_name, title)
             widget.showUnits = True
             bw_hlay.addWidget(
-                widget, alignment=Qt.AlignCenter)
+                widget, alignment=Qt.AlignmentFlag.AlignCenter)
 
             return bw_hlay
 
@@ -105,7 +105,7 @@ class LLRFMain(QWidget):
             bi_vlay.addWidget(
                 self.showChartBtn(
                     device, channel, chart_type),
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
 
         for basic_info in ["Power", "Phase"]:
             bi_vlay.addLayout(

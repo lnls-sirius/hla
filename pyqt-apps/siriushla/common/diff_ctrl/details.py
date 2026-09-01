@@ -31,7 +31,7 @@ class DiffCtrlDetails(SiriusDialog):
 
         label = QLabel(
             '<h3>'+self.dev_prefix+' Control Details</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label, 0, 0)
 
         gbox_general = QGroupBox('Low Level Devices Prefixes', self)
@@ -82,8 +82,8 @@ class DiffCtrlDetails(SiriusDialog):
         flay = QFormLayout()
         flay.addRow(label_negmtrctrlpref, self.lb_negmtrctrlpref)
         flay.addRow(label_posmtrctrlpref, self.lb_posmtrctrlpref)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay
 
     def _setupDetailedStatusLayout(self):
@@ -118,8 +118,8 @@ class DiffCtrlDetails(SiriusDialog):
         flay.addRow(label_negdonemov, self.led_negdonemov)
         flay.addRow(label_posdonemov, self.led_posdonemov)
         flay.addRow(label_convok, self.led_convok)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay
 
     def _setupPositionsLayout(self):
@@ -156,8 +156,8 @@ class DiffCtrlDetails(SiriusDialog):
         flay.addRow(self.pb_negdonemov)
         flay.addRow(self.pb_posdonemov)
         flay.addRow(label_forcecomplete, self.led_forcecomplete)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay
 
     def _setupLimitsLayout(self):

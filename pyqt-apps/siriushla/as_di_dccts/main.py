@@ -38,7 +38,7 @@ class DCCTMain(SiriusMainWindow):
 
     def _setupUi(self):
         self.title = QLabel('<h3>'+self.device+'</h3>',
-                            alignment=Qt.AlignCenter)
+                            alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.curr_graph = DCCTMonitor(self, self.prefix, self.device)
         self.settings = DCCTSettings(self, self.prefix, self.device)
@@ -120,7 +120,7 @@ class SISelectDCCT(QWidget):
         self.setLayout(vlay)
 
         lab = QLabel('<h2>Sirius DCCT List</h2>',
-                     alignment=Qt.AlignCenter)
+                     alignment=Qt.AlignmentFlag.AlignCenter)
         vlay.addWidget(lab)
 
         for dcct in self.dcct_list:

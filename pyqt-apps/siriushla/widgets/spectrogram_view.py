@@ -116,7 +116,7 @@ class _GradientLegend(GraphicsWidget):
         labelHeight = 0
         for val in self.labels.values():
             b = p.boundingRect(QRectF(0, 0, 0, 0),
-                               Qt.AlignLeft | Qt.AlignVCenter, str(val))
+                               Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, str(val))
             labelWidth = max(labelWidth, b.width())
             labelHeight = max(labelHeight, b.height())
 
@@ -153,7 +153,7 @@ class _GradientLegend(GraphicsWidget):
         for key, val in self.labels.items():
             y = y1_grad + key * (y2_grad-y1_grad)
             p.drawText(QRectF(tx, y - lh/2.0, lw, lh),
-                       Qt.AlignLeft | Qt.AlignVCenter, str(val))
+                       Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, str(val))
 
         self.setMinimumWidth(labelWidth + 2*textPadding + 20)
 

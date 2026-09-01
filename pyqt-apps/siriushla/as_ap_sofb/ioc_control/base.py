@@ -66,7 +66,7 @@ class BaseWidget(BaseObject, QWidget):
         if rules is not None:
             pdm_spbx.rules = rules
         pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='RB'))
-        pdm_lbl.setAlignment(Qt.AlignCenter)
+        pdm_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(pdm_spbx)
         lay.addWidget(pdm_lbl)
         wid.sp_wid = pdm_spbx
@@ -90,7 +90,7 @@ class BaseWidget(BaseObject, QWidget):
         if rules is not None:
             pdm_cbbx.rules = rules
         pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='Sts'))
-        pdm_lbl.setAlignment(Qt.AlignCenter)
+        pdm_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(pdm_cbbx)
         lay.addWidget(pdm_lbl)
         wid.sp_wid = pdm_cbbx

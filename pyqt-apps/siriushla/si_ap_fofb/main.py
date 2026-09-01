@@ -95,7 +95,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
     def _setupStatusWidget(self):
         # correctors
         lbl_corr = QLabel(
-            'Correctors: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Correctors: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         led_corr = SiriusLedAlert(
             self, self.devpref.substitute(propty='CorrStatus-Mon'))
@@ -123,7 +123,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         # controllers
         lbl_ctrl = QLabel(
-            'Controllers: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Controllers: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         led_ctrl = SiriusLedAlert(
             self, self.devpref.substitute(propty='CtrlrStatus-Mon'))
@@ -172,7 +172,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         wid = QGroupBox('Status')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lbl_corr, 0, 0)
         lay.addWidget(led_corr, 0, 1)
         lay.addWidget(sts_corr, 0, 2)
@@ -193,14 +193,14 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
     def _setupLoopWidget(self):
         ld_enbl = QLabel(
-            'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_enbl = PyDMStateButton(
             self, self.devpref.substitute(propty='LoopState-Sel'))
         lb_enbl = SiriusLedState(
             self, self.devpref.substitute(propty='LoopState-Sts'))
 
         ld_gain_h = QLabel(
-            'Gain H: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Gain H: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_gain_h = SiriusSpinbox(
             self, self.devpref.substitute(propty='LoopGainH-SP'))
         lb_gain_h = SiriusLabel(
@@ -209,7 +209,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(propty='LoopGainH-Mon'))
 
         ld_gain_v = QLabel(
-            'Gain V: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Gain V: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_gain_v = SiriusSpinbox(
             self, self.devpref.substitute(propty='LoopGainV-SP'))
         lb_gain_v = SiriusLabel(
@@ -219,9 +219,9 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         wid = QGroupBox('Loop')
         lay = QGridLayout(wid)
-        lay.addWidget(QLabel('<h4>SP</h4>'), 0, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(QLabel('<h4>RB</h4>'), 0, 2, alignment=Qt.AlignCenter)
-        lay.addWidget(QLabel('<h4>Mon</h4>'), 0, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel('<h4>SP</h4>'), 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(QLabel('<h4>RB</h4>'), 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(QLabel('<h4>Mon</h4>'), 0, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(ld_enbl, 1, 0)
         lay.addWidget(sb_enbl, 1, 1)
         lay.addWidget(lb_enbl, 1, 2)
@@ -238,7 +238,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
     def _setupAuxCommWidget(self):
         ld_orbdist = QLabel(
             'Orbit Dist. Detec.: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_orbdist = PyDMStateButton(
             self, self.devpref.substitute(
                 propty='LoopMaxOrbDistortionEnbl-Sel'))
@@ -300,7 +300,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 for row, dev in enumerate(['CH', 'CV']):
                     lbl = QLabel(
                         dev+' Sat. Limit [A]: ', self,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                        alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                     pref = self.devpref
                     spw = SiriusSpinbox(
                         self, pref.substitute(propty=dev+'AccSatMax-SP'))
@@ -312,7 +312,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 lbl = QLabel(
                     'Curr. Ramp Down Dur. [s]: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 pref = self.devpref
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='CorrSetCurrZeroDuration-SP'))
@@ -324,7 +324,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 lbl = QLabel(
                     'Decimation [count]: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 pref = self.devpref
                 visrule = (
                     '[{"name": "VisRule", "property": "Visible", ' +
@@ -348,7 +348,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 rbw = SiriusLabel(
                     self, pref.substitute(propty='FOFBAccDecimation-RB'))
                 rbw.setStyleSheet('min-width: 4em;')
-                rbw.setAlignment(Qt.AlignCenter)
+                rbw.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 lblprc = CALabel(')')
                 lblprc.rules = visrule.replace('==', '!=')
                 hbox = QHBoxLayout()
@@ -363,7 +363,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 glay2.addLayout(hbox, 3, 1, 1, 2)
 
                 ld_psconfig = QLabel(
-                    'PS Config. Matrix: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    'PS Config. Matrix: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 wid_psconfig = PSConfigWidget(self, self.device, prefix=self.prefix)
                 glay2.addWidget(ld_psconfig, 4, 0)
                 glay2.addWidget(wid_psconfig, 4, 1, 2, 2)
@@ -377,7 +377,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 pref = self.devpref
                 lbl = QLabel(
                     'TimeFrameLen: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='TimeFrameLen-SP'))
                 rbw = SiriusLabel(
@@ -388,7 +388,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 lbl = QLabel(
                     'Consider EnblList in Sync: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 pvn = pref.substitute(propty='CtrlrSyncUseEnblList-Sel')
                 sbt = PyDMStateButton(self, pvn)
                 sbt.rules = self._enblrule
@@ -399,7 +399,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 lbl = QLabel(
                     'Orbit Dist. Thres. [um]: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='LoopMaxOrbDistortion-SP'))
                 rbw = SiriusLabel(
@@ -410,7 +410,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 lbl = QLabel(
                     'Enable Orbit Dist. Detec.: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 pvn = pref.substitute(propty='LoopMaxOrbDistortionEnbl-Sel')
                 sbt = PyDMStateButton(self, pvn)
                 led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
@@ -420,7 +420,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 lbl = QLabel(
                     'Enable Packet Loss Detec.: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 pvn = pref.substitute(propty='LoopPacketLossDetecEnbl-Sel')
                 sbt = PyDMStateButton(self, pvn)
                 led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
@@ -509,7 +509,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         wid = QWidget()
         lay = QVBoxLayout(wid)
         lay.addWidget(loglabel)
-        lay.addWidget(bt_clear, alignment=Qt.AlignCenter)
+        lay.addWidget(bt_clear, alignment=Qt.AlignmentFlag.AlignCenter)
 
         dockwid = QDockWidget(self)
         dockwid.setObjectName('SIApp')

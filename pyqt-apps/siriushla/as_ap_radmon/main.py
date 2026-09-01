@@ -120,7 +120,7 @@ class RadTotDoseMonitor(QWidget):
     def _setupUi(self):
         # timeplot
         self.title_plot = QLabel(
-            'Total Dose Rate (γ + n) [µSv/h]', self, alignment=Qt.AlignCenter)
+            'Total Dose Rate (γ + n) [µSv/h]', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title_plot.setStyleSheet(
             'QLabel{font-size: 52pt; font-weight: bold;}')
 
@@ -160,7 +160,7 @@ class RadTotDoseMonitor(QWidget):
 
         # panel
         self.title_grid = QLabel(
-            'Integrated Dose in 4h [µSv]', self, alignment=Qt.AlignCenter)
+            'Integrated Dose in 4h [µSv]', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title_grid.setStyleSheet(
             'QLabel{font-size: 52pt; font-weight: bold;}')
         self.lb_warn = QLabel('Restart\nwindow')
@@ -216,7 +216,7 @@ class RadTotDoseMonitor(QWidget):
             frame.add_widget(cbx)
             frame.add_widget(lbl)
 
-            desc = QLabel(local, self, alignment=Qt.AlignCenter)
+            desc = QLabel(local, self, alignment=Qt.AlignmentFlag.AlignCenter)
             desc.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
             desc.setStyleSheet(
                 'QLabel{background-color:black; color:white;font-size:26pt;}')

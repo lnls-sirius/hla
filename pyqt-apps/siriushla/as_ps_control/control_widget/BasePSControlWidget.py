@@ -79,7 +79,7 @@ class PSContainer(QWidget):
         self._hide.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self._hide.setFlat(True)
 
-        self._layout.addWidget(self._hide, 0, 0, Qt.AlignCenter)
+        self._layout.addWidget(self._hide, 0, 0, Qt.AlignmentFlag.AlignCenter)
         self._layout.addWidget(self._widget, 0, 1)
         self._layout.addWidget(self._dclink_container, 1, 1)
 
@@ -392,7 +392,7 @@ class BasePSControlWidget(QWidget):
         w_lay.setSpacing(0)
         w_lay.setContentsMargins(0, 0, 0, 0)
         for widget in widget_group:
-            w_lay.addWidget(widget, alignment=Qt.AlignLeft)
+            w_lay.addWidget(widget, alignment=Qt.AlignmentFlag.AlignLeft)
         w_lay.addStretch()
 
         scr_area = QScrollArea(self)
@@ -405,7 +405,7 @@ class BasePSControlWidget(QWidget):
         wid = QGroupBox(title, self) if wid_type == 'groupbox' \
             else QWidget(self)
         gb_lay = QVBoxLayout(wid)
-        gb_lay.addWidget(header, alignment=Qt.AlignLeft)
+        gb_lay.addWidget(header, alignment=Qt.AlignmentFlag.AlignLeft)
         gb_lay.addWidget(scr_area)
         return wid
 

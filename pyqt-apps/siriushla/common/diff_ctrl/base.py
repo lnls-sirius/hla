@@ -55,7 +55,7 @@ class DiffCtrlDevMonitor(QWidget):
     def _setupUi(self):
         # status
         label_status = QLabel(
-            'Status: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Status: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         channels2values = {
             self.device.substitute(propty='ForceComplete-Mon'): 1,
             self.device.substitute(propty=self.neg_name+'DoneMov-Mon'): 1,
@@ -75,7 +75,7 @@ class DiffCtrlDevMonitor(QWidget):
             neg_label=self.neg_label, pos_label=self.pos_label)
 
         self.lb_descctrl1 = QLabel(
-            '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            '', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.sb_ctrl1 = SiriusSpinbox(self)
         self.sb_ctrl1.precisionFromPV = False
         self.sb_ctrl1.precision = 3
@@ -83,7 +83,7 @@ class DiffCtrlDevMonitor(QWidget):
         self.lb_ctrl1.precisionFromPV = False
         self.lb_ctrl1.precision = 3
         self.lb_descctrl2 = QLabel(
-            '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            '', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.sb_ctrl2 = SiriusSpinbox(self)
         self.sb_ctrl2.precisionFromPV = False
         self.sb_ctrl2.precision = 3
@@ -118,7 +118,7 @@ class DiffCtrlDevMonitor(QWidget):
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(label_status, 0, 0)
         lay.addWidget(self.multiled_status, 0, 1)
-        lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.lb_descctrl1, 1, 0)
         lay.addWidget(self.sb_ctrl1, 1, 1)
         lay.addWidget(self.lb_ctrl1, 1, 2)
@@ -165,7 +165,7 @@ class DiffCtrlView(QWidget):
         devname = 'Slits' if 'Slit' in self.DEVICE_PREFIX else 'Scrapers'
         title = QLabel(
             '<h3>' + self.sec + ' ' + devname + ' View</h3>',
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         title.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
         gbox_h = QGroupBox(self.DEVICE_PREFIX + 'H')

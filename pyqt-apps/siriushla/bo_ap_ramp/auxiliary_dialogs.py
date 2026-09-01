@@ -80,7 +80,7 @@ class InsertNormalizedConfig(SiriusDialog):
         lay = QVBoxLayout()
         lay.addWidget(
             QLabel('<h4>Insert a Normalized Configuration</h4>', self),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.rb_interp)
         lay.addWidget(self.rb_confsrv)
         lay.addWidget(self.rb_create)
@@ -150,7 +150,7 @@ class DuplicateNormConfig(SiriusDialog):
         lay.setVerticalSpacing(15)
         lay.addWidget(
             QLabel('<h4>Duplicate Normalized Configuration</h4>', self),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(
             QLabel('Choose a label and a time to insert\n'
                    'the new configuration:', self), 1, 0, 1, 2)
@@ -211,7 +211,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         glay.setVerticalSpacing(15)
         glay.setHorizontalSpacing(10)
         label = QLabel('<h4>Delete a Normalized Configuration</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         glay.addWidget(label, 0, 0, 1, 2)
         glay.addWidget(self.sb_confignumber, 2, 0)
         glay.addWidget(self.l_configid, 2, 1)
@@ -279,13 +279,13 @@ class OpticsAdjustSettings(SiriusDialog):
 
     def _setupTuneSettings(self):
         l_tuneconfig = QLabel('<h3>Tune Variation Config</h3>', self)
-        l_tuneconfig.setAlignment(Qt.AlignCenter)
+        l_tuneconfig.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.le_tuneconfig = _ConfigLineEdit(
             parent=self, config_type='bo_tunecorr_params')
         self.le_tuneconfig.textChanged.connect(self._showTuneConfigData)
 
         label_tunemat = QLabel('<h4>Matrix</h4>', self)
-        label_tunemat.setAlignment(Qt.AlignCenter)
+        label_tunemat.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_tunemat = QTableWidget(self)
         self.table_tunemat.setObjectName('tunemat')
         self.table_tunemat.setStyleSheet("""
@@ -311,7 +311,7 @@ class OpticsAdjustSettings(SiriusDialog):
                                          QSzPlcy.Preferred)
 
         label_nomKL = QLabel('<h4>Nominal KL</h4>')
-        label_nomKL.setAlignment(Qt.AlignCenter)
+        label_nomKL.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_nomKL = QTableWidget(self)
         self.table_nomKL.setObjectName('nomKL')
         self.table_nomKL.setStyleSheet("""
@@ -351,13 +351,13 @@ class OpticsAdjustSettings(SiriusDialog):
 
     def _setupChromSettings(self):
         l_chromconfig = QLabel('<h3>Chromaticity Variation Config</h3>', self)
-        l_chromconfig.setAlignment(Qt.AlignCenter)
+        l_chromconfig.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.le_chromconfig = _ConfigLineEdit(
             parent=self, config_type='bo_chromcorr_params')
         self.le_chromconfig.textChanged.connect(self._showChromConfigData)
 
         l_chrommat = QLabel('<h4>Matrix</h4>', self)
-        l_chrommat.setAlignment(Qt.AlignCenter)
+        l_chrommat.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_chrommat = QTableWidget(self)
         self.table_chrommat.setObjectName('chrommat')
         self.table_chrommat.setStyleSheet("""
@@ -383,7 +383,7 @@ class OpticsAdjustSettings(SiriusDialog):
                                           QSzPlcy.Preferred)
 
         l_nomSL = QLabel('<h4>Nominal SL</h4>')
-        l_nomSL.setAlignment(Qt.AlignCenter)
+        l_nomSL.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_nomSL = QTableWidget(self)
         self.table_nomSL.setObjectName('nomSL')
         self.table_nomSL.setStyleSheet("""
@@ -409,9 +409,9 @@ class OpticsAdjustSettings(SiriusDialog):
                                        QSzPlcy.Preferred)
 
         l_nomchrom = QLabel('<h4>Nominal Chrom</h4>')
-        l_nomchrom.setAlignment(Qt.AlignCenter)
+        l_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_nomchrom = QLabel()
-        self.label_nomchrom.setAlignment(Qt.AlignCenter)
+        self.label_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         lay = QVBoxLayout()
         lay.addWidget(l_chromconfig)
@@ -602,7 +602,7 @@ class ShowCorrectorKicks(SiriusDialog):
             self.kicks[dev] = _np.array([corr2kicks[n] for n in names])
 
         label_ch = QLabel('<h3>Horizontal</h3>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
         self.graph_ch = _GraphKicks(
             parent=self,
             xdata=_np.array(self.consts.ch_pos),
@@ -612,7 +612,7 @@ class ShowCorrectorKicks(SiriusDialog):
             color='blue')
 
         label_cv = QLabel('<h3>Vertical</h3>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
         self.graph_cv = _GraphKicks(
             parent=self,
             xdata=_np.array(self.consts.cv_pos),
@@ -622,18 +622,18 @@ class ShowCorrectorKicks(SiriusDialog):
             color='red')
 
         lb_stats = QLabel('<h4>Statistics: </h4>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_statsdata = QLabel(
             'X: {:7.3f} ± {:7.3f} urad\n'
             'Y: {:7.3f} ± {:7.3f} urad'.format(
                 _np.mean(self.kicks['CH']), _np.std(self.kicks['CH']),
                 _np.mean(self.kicks['CV']), _np.std(self.kicks['CV'])),
-            self,  alignment=Qt.AlignCenter)
+            self,  alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
         lay.addWidget(QLabel('<h3>'+str(self.time)+'</h3>', self,
-                             alignment=Qt.AlignCenter))
+                             alignment=Qt.AlignmentFlag.AlignCenter))
         lay.addWidget(label_ch)
         lay.addWidget(self.graph_ch)
         lay.addWidget(label_cv)

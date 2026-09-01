@@ -42,7 +42,7 @@ class ACPanelDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QGridLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
 
         lay.addWidget(title_frame, 0, 0, 1, 7)
         lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
@@ -51,7 +51,7 @@ class ACPanelDetails(SiriusDialog):
         row = 3
         for i in range(1, 4):
             lay.addWidget(QLabel(
-                f'<h4>Phase {i}</h4>', alignment=Qt.AlignCenter), row, 0)
+                f'<h4>Phase {i}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
             column = 1
             for _, val in self.syst_dict['Phs'].items():
                 lb = SiriusLabel(
@@ -62,11 +62,11 @@ class ACPanelDetails(SiriusDialog):
             row += 1
 
         lay.addWidget(QLabel(
-            '<h4>Current</h4>', alignment=Qt.AlignCenter), 2, 1)
+            '<h4>Current</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 2, 1)
         lay.addWidget(QLabel(
-            '<h4>Voltage</h4>', alignment=Qt.AlignCenter), 2, 2)
+            '<h4>Voltage</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 2, 2)
         lay.addWidget(QLabel(
-            '<h4>THD</h4>', alignment=Qt.AlignCenter), 2, 3)
+            '<h4>THD</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 2, 3)
         lay.addItem(QSpacerItem(9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 2, 4)
 
         # Line Voltage
@@ -76,7 +76,7 @@ class ACPanelDetails(SiriusDialog):
             lb.showUnits = True
             lay.addWidget(QLabel(
                 f'<h4>Line Voltage {key}</h4>',
-                alignment=Qt.AlignCenter), row, 5)
+                alignment=Qt.AlignmentFlag.AlignCenter), row, 5)
             lay.addWidget(lb, row, 6)
             row += 1
 
@@ -94,7 +94,7 @@ class ACPanelDetails(SiriusDialog):
             self, self._substitute_macros(self.prefix+self.syst_dict['CurrN']))
         lb_curr.showUnits = True
         grid_lay.addWidget(QLabel(
-            '<h4>Current N</h4>', alignment=Qt.AlignCenter), row, 0)
+            '<h4>Current N</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
         grid_lay.addWidget(lb_curr, row, 1)
         row += 1
 
@@ -103,7 +103,7 @@ class ACPanelDetails(SiriusDialog):
             self, self._substitute_macros(self.prefix+self.syst_dict['Freq']))
         lb_freq.showUnits = True
         grid_lay.addWidget(QLabel(
-            '<h4>Frequency</h4>', alignment=Qt.AlignCenter), row, 0)
+            '<h4>Frequency</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
         grid_lay.addWidget(lb_freq, row, 1)
         row += 1
 
@@ -113,7 +113,7 @@ class ACPanelDetails(SiriusDialog):
                 self.prefix+self.syst_dict['Pwr Factor']))
         lb_pwr.showUnits = True
         grid_lay.addWidget(QLabel(
-            '<h4>Power Factor</h4>', alignment=Qt.AlignCenter), row, 0)
+            '<h4>Power Factor</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
         grid_lay.addWidget(lb_pwr, row, 1)
 
         # Power S, Power P and Power Q
@@ -122,7 +122,7 @@ class ACPanelDetails(SiriusDialog):
             lb = SiriusLabel(self, self._substitute_macros(self.prefix+val))
             lb.showUnits = True
             grid_lay.addWidget(QLabel(
-                f'<h4>Power {key}</h4>', alignment=Qt.AlignCenter), row, 2)
+                f'<h4>Power {key}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), row, 2)
             grid_lay.addWidget(lb, row, 3)
             row += 1
 

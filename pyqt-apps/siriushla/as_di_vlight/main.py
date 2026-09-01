@@ -42,7 +42,7 @@ class VLightCamView(QWidget):
 
     def _setupUi(self):
         label = QLabel('<h2>'+self.device+' View</h2>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.cam_viewer = SiriusImageView(
             parent=self,
@@ -94,8 +94,8 @@ class VLightCamView(QWidget):
 
         flay_sts = QFormLayout()
         flay_sts.setSpacing(6)
-        flay_sts.setFormAlignment(Qt.AlignHCenter)
-        flay_sts.setLabelAlignment(Qt.AlignRight)
+        flay_sts.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
+        flay_sts.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         flay_sts.addRow(label_CamEnbl, hbox_CamEnbl)
         flay_sts.addRow(label_FrameCnt, hbox_FrameCnt)
         flay_sts.addRow(label_Conn, hbox_Conn)
@@ -126,8 +126,8 @@ class VLightCamView(QWidget):
 
         flay_ctrl = QFormLayout()
         flay_ctrl.setSpacing(6)
-        flay_ctrl.setFormAlignment(Qt.AlignHCenter)
-        flay_ctrl.setLabelAlignment(Qt.AlignRight)
+        flay_ctrl.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
+        flay_ctrl.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         flay_ctrl.addRow(label_AcqMode, hbox_AcqMode)
         flay_ctrl.addRow(label_AcqPeriod, hbox_AcqPeriod)
         flay_ctrl.addRow(label_ExpTime, hbox_ExpTime)

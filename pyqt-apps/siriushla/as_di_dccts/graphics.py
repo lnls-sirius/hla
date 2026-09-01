@@ -73,13 +73,13 @@ class DCCTMonitor(QWidget):
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setHorizontalSpacing(0)
-        lay.addWidget(self.pb_vis, 0, 0, alignment=Qt.AlignTop | Qt.AlignLeft)
+        lay.addWidget(self.pb_vis, 0, 0, alignment=Qt.AlignTop | Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(self.currhist, 0, 1)
         lay.addWidget(self.rawreads, 0, 1)
 
     def _setupTimeHistory(self):
         self.label_currhist = QLabel(
-            '<h3>Current History</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Current History</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.timegraph = SiriusTimePlot(self)
         self.timegraph.timeSpan = 600
@@ -107,7 +107,7 @@ class DCCTMonitor(QWidget):
 
     def _setupRawReadings(self):
         self.label_waveread = QLabel(
-            '<h3>Current Raw Readings</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Current Raw Readings</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.wavegraph = SiriusWaveformPlot(self)
         channel = 'FAKE:Readings'
@@ -155,7 +155,7 @@ class DCCTMonitor(QWidget):
         self.cb_timeaxis.setChecked(True)
         self.cb_timeaxis.stateChanged.connect(self.updateRawXAxis)
         self.cb_timeaxis.setLayoutDirection(Qt.RightToLeft)
-        lay.addWidget(self.cb_timeaxis, 2, 0, alignment=Qt.AlignLeft)
+        lay.addWidget(self.cb_timeaxis, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.setRowStretch(2, 1)
 
         l_smoothmethod = QLabel('Method: ', self)
@@ -353,7 +353,7 @@ class EffMonitor(QWidget):
 
     def _setupUi(self):
         label = QLabel('<h3>'+self._label+' Efficiency</h3>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.graph = SiriusTimePlot(self)
         self.graph.timeSpan = 1000  # [s]

@@ -83,7 +83,7 @@ class PSCmdWindow(SiriusMainWindow):
         self.setCentralWidget(self.central_widget)
 
         self.title = QLabel(
-            '<h3>Power Supply Commands</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Power Supply Commands</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # data
         cmddata = {
@@ -376,7 +376,7 @@ class PSCmdWindow(SiriusMainWindow):
         self.wid_procs = QWidget(self)
 
         self.ld_procs = QLabel(
-            'Select a procedure: ', self, alignment=Qt.AlignRight)
+            'Select a procedure: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.cb_procs = QComboBox(self)
         self.cb_procs.addItems(procedures)
         self.cb_procs.setCurrentIndex(init_index)
@@ -384,8 +384,8 @@ class PSCmdWindow(SiriusMainWindow):
         self.tab.setObjectName('ASTab')
 
         lay_procs = QGridLayout(self.wid_procs)
-        lay_procs.addWidget(self.ld_procs, 0, 0, alignment=Qt.AlignRight)
-        lay_procs.addWidget(self.cb_procs, 0, 1, alignment=Qt.AlignLeft)
+        lay_procs.addWidget(self.ld_procs, 0, 0, alignment=Qt.AlignmentFlag.AlignRight)
+        lay_procs.addWidget(self.cb_procs, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
         lay_procs.addWidget(self.tab, 1, 0, 1, 2)
 
         self.seltrees = dict()
@@ -437,7 +437,7 @@ class PSCmdWindow(SiriusMainWindow):
                 for cmdgroup, cmdlist in props[proc].items():
                     label = QLabel(
                         '<h4>'+cmdgroup+'</h4>', self,
-                        alignment=Qt.AlignCenter)
+                        alignment=Qt.AlignmentFlag.AlignCenter)
                     lay_comm.addWidget(label)
                     for cmd, data in cmdlist.items():
                         btn = QPushButton(str(cmdidx) + '. ' + cmd, self)
@@ -488,17 +488,17 @@ class PSCmdWindow(SiriusMainWindow):
         self.nok_ps_aux_list = list()
         hbox = QHBoxLayout()
         hbox.addWidget(self.label_lastcomm)
-        hbox.addWidget(self.clearlists_bt, alignment=Qt.AlignRight)
+        hbox.addWidget(self.clearlists_bt, alignment=Qt.AlignmentFlag.AlignRight)
         list_layout = QGridLayout()
         list_layout.setContentsMargins(0, 0, 0, 0)
         list_layout.setVerticalSpacing(6)
         list_layout.setHorizontalSpacing(9)
         list_layout.addLayout(hbox, 0, 0, 1, 2)
         list_layout.addWidget(QLabel('<h4>Ok</h4>', self,
-                                     alignment=Qt.AlignCenter), 1, 0)
+                                     alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
         list_layout.addWidget(self.ok_ps, 2, 0)
         list_layout.addWidget(QLabel('<h4>Failed</h4>', self,
-                                     alignment=Qt.AlignCenter), 1, 1)
+                                     alignment=Qt.AlignmentFlag.AlignCenter), 1, 1)
         list_layout.addWidget(self.nok_ps, 2, 1)
 
         # layout

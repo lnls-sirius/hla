@@ -78,7 +78,7 @@ class MainLauncher(SiriusMainWindow):
             'QLabel{max-height: 2em; min-width: 7em;}')
         lay_shift = QGridLayout(self.wid_shift)
         lay_shift.setVerticalSpacing(5)
-        lay_shift.setAlignment(Qt.AlignCenter)
+        lay_shift.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay_shift.addWidget(cbox_shift_mode, 1, 0)
         lay_shift.addWidget(label_shift_mode, 2, 0)
 
@@ -116,7 +116,7 @@ class MainLauncher(SiriusMainWindow):
 
         # # Settings
         label_sett = QLabel(
-            '<h4>Sett.</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Sett.</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         led_sett = InjDiagLed(self)
         self.wid_injsett = QWidget()
         lay_injsett = QGridLayout(self.wid_injsett)
@@ -127,13 +127,13 @@ class MainLauncher(SiriusMainWindow):
 
         # # Top-up status
         label_tusts = QLabel(
-            '<h4>Status</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Status</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         label_tunow = ClockLabel(self)
         label_tunow.setStyleSheet('max-height:2em;')
         label_tunxt = SiriusLabel(
             self, injctrl_dev.substitute(propty='TopUpNextInj-Mon'))
         label_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
-        label_tunxt.setAlignment(Qt.AlignCenter)
+        label_tunxt.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_tunxt.setStyleSheet('max-height:2em;')
         self.wid_tusts = QWidget()
         self.wid_tusts.setObjectName('wid')
@@ -150,7 +150,7 @@ class MainLauncher(SiriusMainWindow):
 
         # # Control
         label_inj = QLabel(
-            '<h4>Control</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Control</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.but_tiinj = EVGInjectionButton(self, self._prefix)
         self.but_topup = PyDMStateButton(
             self, injctrl_dev.substitute(propty='TopUpState-Sel'))
@@ -159,7 +159,7 @@ class MainLauncher(SiriusMainWindow):
             self, injctrl_dev.substitute(propty='AccumState-Sel'))
         self.but_accum.setVisible(False)
         lay_inject_sel = QGridLayout()
-        lay_inject_sel.setAlignment(Qt.AlignCenter)
+        lay_inject_sel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay_inject_sel.addWidget(self.but_tiinj, 0, 0)
         lay_inject_sel.addWidget(self.but_topup, 0, 0)
         lay_inject_sel.addWidget(self.but_accum, 0, 0)
@@ -179,9 +179,9 @@ class MainLauncher(SiriusMainWindow):
         lay_injctrl = QGridLayout(self.wid_injctrl)
         lay_injctrl.setContentsMargins(0, 0, 0, 0)
         lay_injctrl.setAlignment(Qt.AlignTop)
-        lay_injctrl.addWidget(label_inj, 0, 2, alignment=Qt.AlignCenter)
-        lay_injctrl.addLayout(lay_inject_sel, 1, 2, alignment=Qt.AlignCenter)
-        lay_injctrl.addLayout(lay_inject_sts, 2, 2, alignment=Qt.AlignCenter)
+        lay_injctrl.addWidget(label_inj, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_injctrl.addLayout(lay_inject_sel, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_injctrl.addLayout(lay_inject_sts, 2, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # # Injection Auxiliary section
         self.wid_injlog = QGroupBox('Injection Log')
@@ -197,7 +197,7 @@ class MainLauncher(SiriusMainWindow):
 
         # # Target Current
         self._ld_currtgt = QLabel(
-            '<h4>Target Curr.</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Target Curr.</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._sb_currtgt = SiriusSpinbox(
             self, injctrl_dev.substitute(propty='TargetCurrent-SP'))
         self._lb_currtgt = SiriusLabel(
@@ -293,7 +293,7 @@ class MainLauncher(SiriusMainWindow):
         lay.addLayout(hlay2, 1, 0)
         lay.addWidget(self._menubutton, 2, 0, 1, 2)
         lay.addWidget(
-            self.wid_pbt, 0, 1, 2, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
+            self.wid_pbt, 0, 1, 2, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
         self.setCentralWidget(cwid)
 
     def _toggle_show_menubutton(self):

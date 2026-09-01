@@ -31,7 +31,7 @@ class TempMonitor(SiriusDialog):
 
         self.title = QLabel(
             '<h3>RF Temperature Monitor</h3>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.title, 0, 0)
 
         if len(self.chs['TempMon']) == 1:

@@ -32,7 +32,7 @@ class LLRFInterlockDetails(SiriusDialog):
 
         self.title = QLabel(
             '<h4>LLRF Interlock Details</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.title)
 
         scarea = QScrollArea(self)
@@ -61,7 +61,7 @@ class LLRFInterlockDetails(SiriusDialog):
         if system:
             lay.addWidget(QLabel(
                 f'<h4>LLRF {system}</h4>', self,
-                alignment=Qt.AlignLeft), offset, 0)
+                alignment=Qt.AlignmentFlag.AlignLeft), offset, 0)
 
         # inputs
         col = 0
@@ -74,9 +74,9 @@ class LLRFInterlockDetails(SiriusDialog):
 
             icol = 0
             for key in dic['Status']:
-                desc = QLabel(key, self, alignment=Qt.AlignCenter)
+                desc = QLabel(key, self, alignment=Qt.AlignmentFlag.AlignCenter)
                 desc.setStyleSheet('QLabel{min-width:2.5em; max-width:2.5em;}')
-                lay_intlk.addWidget(desc, 0, icol, alignment=Qt.AlignCenter)
+                lay_intlk.addWidget(desc, 0, icol, alignment=Qt.AlignmentFlag.AlignCenter)
                 icol += 1
 
             labels = dic['Labels']
@@ -88,7 +88,7 @@ class LLRFInterlockDetails(SiriusDialog):
                     if key != 'Mon':
                         led.offColor = led.DarkRed
                     lay_intlk.addWidget(led, irow, icol,
-                        alignment=Qt.AlignHCenter)
+                        alignment=Qt.AlignmentFlag.AlignHCenter)
                     icol += 1
                 lbl = QLabel(label, self)
                 lbl.setStyleSheet('QLabel{min-width:12em;}')
@@ -105,7 +105,7 @@ class LLRFInterlockDetails(SiriusDialog):
         lay_time.setVerticalSpacing(9)
         for idx, pvn in chs_dict['Timestamps'].items():
             irow = int(idx)-1
-            desc = QLabel('Interlock '+idx, self, alignment=Qt.AlignCenter)
+            desc = QLabel('Interlock '+idx, self, alignment=Qt.AlignmentFlag.AlignCenter)
             desc.setStyleSheet('QLabel{min-width:6em;}')
             lbl = SiriusLabel(self, self.prefix+pvn)
             lbl.showUnits = True
@@ -120,4 +120,4 @@ class LLRFInterlockDetails(SiriusDialog):
         connect_window(
             pb_dtls, AdvancedInterlockDetails, parent=self,
             prefix=self.prefix, section=self.section, system=system)
-        lay.addWidget(pb_dtls, offset+2, col, alignment=Qt.AlignCenter)
+        lay.addWidget(pb_dtls, offset+2, col, alignment=Qt.AlignmentFlag.AlignCenter)

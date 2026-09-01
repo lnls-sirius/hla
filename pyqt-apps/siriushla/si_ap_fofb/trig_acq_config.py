@@ -56,7 +56,7 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name='SYSID') +
-            ' Acquisitions < /h2 >', alignment=Qt.AlignCenter)
+            ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
@@ -132,7 +132,7 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
         lay = QGridLayout(wid)
         lay.addWidget(ld_syncenb, 0, 0)
         lay.addWidget(self.sb_syncenb, 0, 1)
-        lay.addWidget(self.led_syncenb, 0, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self.led_syncenb, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(ld_stepdur, 1, 0)
         lay.addWidget(self.sb_stepdur, 1, 1)
         lay.addWidget(self.lb_stepdur, 1, 2)
@@ -144,10 +144,10 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
         lay.addWidget(self.lb_movavgtap, 3, 2)
         lay.addWidget(ld_correnb, 4, 0)
         lay.addWidget(self.sb_correnb, 4, 1)
-        lay.addWidget(self.led_correnb, 4, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self.led_correnb, 4, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(ld_bpmenbl, 5, 0)
         lay.addWidget(self.sb_bpmenbl, 5, 1)
-        lay.addWidget(self.led_bpmenbl, 5, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self.led_bpmenbl, 5, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         return wid
 
     def _PRBSFOFBAccSettingsWidget(self):
@@ -160,7 +160,7 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
             # row header
             lblr = QLabel(
                 '<h4>'+sub+'</h4>', self,
-                alignment=Qt.AlignRight | Qt.AlignVCenter)
+                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             lblr.setObjectName('rowhead')
             lay.addWidget(lblr, row, 0)
 
@@ -169,11 +169,11 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
                 if ridx == 0:
                     # column header
                     lblp = QLabel(
-                        '<h4>FC'+plan+'</h4>', self, alignment=Qt.AlignCenter)
+                        '<h4>FC'+plan+'</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
                     lbl0 = QLabel(
-                        '<h4>Level 0</h4>', self, alignment=Qt.AlignCenter)
+                        '<h4>Level 0</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
                     lbl1 = QLabel(
-                        '<h4>Level 1</h4>', self, alignment=Qt.AlignCenter)
+                        '<h4>Level 1</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
                     gridhead = QGridLayout()
                     gridhead.setContentsMargins(0, 0, 0, 0)
                     gridhead.addWidget(lblp, 0, 0, 1, 2)
@@ -278,7 +278,7 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
         lay.addWidget(gp_posx)
         lay.addWidget(gp_posy)
         lay.addWidget(gp_fofbacc)
-        lay.addWidget(cb_linkxaxis, alignment=Qt.AlignLeft)
+        lay.addWidget(cb_linkxaxis, alignment=Qt.AlignmentFlag.AlignLeft)
         return wid
 
 
@@ -290,7 +290,7 @@ class FOFBAcqLAMPWindow(FOFBAcqBaseWindow):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name='LAMP') +
-            ' Acquisitions < /h2 >', alignment=Qt.AlignCenter)
+            ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
@@ -345,5 +345,5 @@ class FOFBAcqLAMPWindow(FOFBAcqBaseWindow):
         lay.addWidget(gp_curr)
         lay.addWidget(gp_currref)
         lay.addWidget(gp_volt)
-        lay.addWidget(cb_linkxaxis, alignment=Qt.AlignLeft)
+        lay.addWidget(cb_linkxaxis, alignment=Qt.AlignmentFlag.AlignLeft)
         return wid

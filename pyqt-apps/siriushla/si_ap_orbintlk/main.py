@@ -51,7 +51,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
 
         # title
         self.title = QLabel(
-            '<h3>Orbit Interlock</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Orbit Interlock</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Log
         self._log = self._setupLogWidget()
@@ -85,18 +85,18 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         wid = QGroupBox('IOC Log')
         lay = QVBoxLayout(wid)
         lay.addWidget(loglabel)
-        lay.addWidget(bt_clear, alignment=Qt.AlignCenter)
+        lay.addWidget(bt_clear, alignment=Qt.AlignmentFlag.AlignCenter)
         return wid
 
     def _setupGlobStatusGroup(self):
         wid = QGroupBox('Global Status')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         for i, sts in enumerate(['BPM', 'Timing', 'LLRF']):
             lblsprop = f'STS_LBLS_{sts.upper()}'
             lbl = QLabel(
-                f'{sts}: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                f'{sts}: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             pvname = self.hlprefix.substitute(propty=f'{sts}Status-Mon')
             led = SiriusLedAlert(self, pvname)
             pbt = self._create_detail_button()
@@ -123,10 +123,10 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupGlobSettingsGroup(self):
         wid = QGroupBox('Global Settings')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         ld_enbl = QLabel(
-            'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_enbl = PyDMStateButton(
             self, self.hlprefix.substitute(propty='Enable-Sel'))
         lb_enbl = SiriusLedState(
@@ -137,7 +137,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
 
         lbl_rst = QLabel(
             'Reset all interlocks: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         pvname = self.hlprefix.substitute(propty='Reset-Cmd')
         pb_rst = PyDMPushButton(self, pressValue=1, init_channel=pvname)
         pb_rst.setToolTip('Send reset for BPM flags, EVG and LLRF')
@@ -176,15 +176,15 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             'Ang.': 'Ang',
         }
         ld_enblsel = QLabel(
-            'Enable: ', alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Enable: ', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         ld_lim = QLabel(
-            'Thresholds: ', alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Thresholds: ', alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         ld_clr = QLabel(
-            'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         wid = QGroupBox('BPM Settings')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignRight)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignRight)
         lay.addWidget(ld_enblsel, 1, 0)
         lay.addWidget(ld_lim, 2, 0)
         lay.addWidget(ld_clr, 3, 0)
@@ -193,8 +193,8 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         for intlktype, pvstr in intlk2pvstr.items():
             lblcol = QLabel(
                 f'<h4>{intlktype}</h4>', self,
-                alignment=Qt.AlignRight | Qt.AlignVCenter)
-            lay.addWidget(lblcol, 0, col, alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            lay.addWidget(lblcol, 0, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
             if intlktype.startswith(('Min', 'Pos', 'Ang')):
                 sel_enbl_wind = create_window_from_widget(
@@ -209,7 +209,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
                     bt_enblsel, sel_enbl_wind, parent=self,
                     propty=pvstr+'EnblList-SP', title=intlktype + ' Enable',
                     prefix=self.prefix)
-                lay.addWidget(bt_enblsel, 1, col, alignment=Qt.AlignCenter)
+                lay.addWidget(bt_enblsel, 1, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
                 sel_lim_wind = create_window_from_widget(
                     BPMIntlkLimSPWidget,
@@ -224,7 +224,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
                 connect_window(
                     bt_lim, sel_lim_wind, parent=self,
                     metric=intlktype, prefix=self.prefix)
-                lay.addWidget(bt_lim, 2, col, alignment=Qt.AlignCenter)
+                lay.addWidget(bt_lim, 2, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
             if 'Sum' not in intlktype:
                 propty = f'ResetBPM{pvstr}-Cmd'
@@ -235,7 +235,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
                 bt_clr.setObjectName('clr')
                 bt_clr.setStyleSheet(
                     '#clr{min-width:25px; max-width:25px; icon-size:20px;}')
-                lay.addWidget(bt_clr, 3, col, alignment=Qt.AlignCenter)
+                lay.addWidget(bt_clr, 3, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
             col += 1
 
@@ -244,7 +244,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupBPMAcqSettingsGroup(self):
         wid = QGroupBox('BPM Acq. Settings')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         props = [
             'PsMtmAcqChannel-Sel',
@@ -257,7 +257,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             rbn = spn.substitute(
                 propty=prop.replace('Sel', 'Sts').replace('SP', 'RB'))
 
-            ldw = QLabel(desc, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            ldw = QLabel(desc, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             spw = SiriusEnumComboBox if spn.endswith('Sel') else SiriusSpinbox
             widsp = spw(self, spn)
             widrb = SiriusLabel(self, rbn)
@@ -267,7 +267,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
 
         ld_config = QLabel(
             'Send Acq. Config.', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         bt_config = SiriusPushButton(
             parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
             init_channel=self.hlprefix.substitute(
@@ -275,7 +275,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         pvname = self.hlprefix.substitute(propty=f'PsMtmAcqStatus-Mon')
         led_configsts = SiriusLedAlert(self, pvname)
         lay.addWidget(ld_config, 3, 0)
-        lay.addWidget(bt_config, 3, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(bt_config, 3, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(led_configsts, 3, 2)
 
         return wid
@@ -283,7 +283,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupHLGroup(self):
         wid = QGroupBox('IOC Control')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         # Global Status
         self._gb_globsts = self._setupGlobStatusGroup()

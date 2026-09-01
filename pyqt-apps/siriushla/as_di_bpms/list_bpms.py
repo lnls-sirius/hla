@@ -40,7 +40,7 @@ class SelectBPMs(BaseWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('<h2>BPMs List</h2>', alignment=Qt.AlignCenter)
+        lab = QLabel('<h2>BPMs List</h2>', alignment=Qt.AlignmentFlag.AlignCenter)
         vbl.addWidget(lab)
         vbl.addSpacing(20)
 
@@ -95,7 +95,7 @@ class AcqDataSummary(BaseWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('<h2>BPMs List</h2>', alignment=Qt.AlignCenter)
+        lab = QLabel('<h2>BPMs List</h2>', alignment=Qt.AlignmentFlag.AlignCenter)
         vbl.addWidget(lab)
         vbl.addSpacing(20)
 
@@ -123,7 +123,7 @@ class AcqDataSummary(BaseWidget):
             widb = QWidget(wid)
             vbl2 = QVBoxLayout(widb)
             vbl2.addWidget(QLabel(
-                '<h3>'+bpm+'</h3>', alignment=Qt.AlignCenter))
+                '<h3>'+bpm+'</h3>', alignment=Qt.AlignmentFlag.AlignCenter))
             wbpm = self.create_graph(widb, bpm=bpm, typ=self.mode)
             vbl2.addWidget(wbpm)
             gdl.addWidget(widb, i // 3, i % 3)

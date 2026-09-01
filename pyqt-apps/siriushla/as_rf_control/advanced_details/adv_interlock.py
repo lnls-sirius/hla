@@ -42,7 +42,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -118,7 +118,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         self._setupByteMonitor(lay_inp, labels, chs_dict['GPIO']['Inp'])
         lay_inp.addWidget(SiriusLabel(
             self, self.prefix+chs_dict['GPIO']['Inp']),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # GPIO Interlock
         gbox_intlk = QGroupBox('GPIO Interlock')
@@ -133,7 +133,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay_intlk, labels, self.prefix+chs_dict['GPIO']['Intlk'])
         lay_intlk.addWidget(SiriusLabel(
             self, self.prefix+chs_dict['GPIO']['Intlk']),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # GPIO Outputs
         gbox_out = QGroupBox('GPIO Outputs')
@@ -149,7 +149,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay_out, labels, self.prefix+chs_dict['GPIO']['Out'])
         lay_out.addWidget(SiriusLabel(
             self, self.prefix+chs_dict['GPIO']['Out']),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # General Controls
         gbox_gen = QGroupBox('General Controls')
@@ -184,16 +184,16 @@ class AdvancedInterlockDetails(SiriusDialog):
         lb_dly.showUnits = True
 
         tab1_layout.addWidget(QLabel(
-            'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Rv Ratio'), 0, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         tab1_layout.addWidget(SiriusSpinbox(
-            self, rv_ch + '-SP'), 0, 1, alignment=Qt.AlignCenter)
-        tab1_layout.addWidget(lb_rv, 0, 2, alignment=Qt.AlignCenter)
+            self, rv_ch + '-SP'), 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        tab1_layout.addWidget(lb_rv, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         tab1_layout.addWidget(QLabel(
-            'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Delay'), 1, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         tab1_layout.addWidget(SiriusSpinbox(
-            self, dly_ch + '-SP'), 1, 1, alignment=Qt.AlignCenter)
-        tab1_layout.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+            self, dly_ch + '-SP'), 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        tab1_layout.addWidget(lb_dly, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         tabwidget.addTab(tab1, 'Quench Cond. 1')
 
@@ -212,16 +212,16 @@ class AdvancedInterlockDetails(SiriusDialog):
         lb_dly_e.showUnits = True
 
         tab2_layout.addWidget(QLabel(
-            'Fw Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Fw Ratio'), 0, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         tab2_layout.addWidget(SiriusSpinbox(
-            self, fw_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
-        tab2_layout.addWidget(lb_fw, 0, 2, alignment=Qt.AlignCenter)
+            self, fw_ch+'-SP'), 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        tab2_layout.addWidget(lb_fw, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         tab2_layout.addWidget(QLabel(
-            'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Delay'), 1, 0, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         tab2_layout.addWidget(SiriusSpinbox(
-            self, dly_ch_e+'-SP'), 1, 1, alignment=Qt.AlignCenter)
-        tab2_layout.addWidget(lb_dly_e, 1, 2, alignment=Qt.AlignCenter)
+            self, dly_ch_e+'-SP'), 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        tab2_layout.addWidget(lb_dly_e, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         tabwidget.addTab(tab2, 'E-Quench')
 
@@ -243,15 +243,15 @@ class AdvancedInterlockDetails(SiriusDialog):
         lb_dly = SiriusLabel(self, self.prefix+chs_dict['Delay']+'-RB')
         lb_dly.showUnits = True
 
-        lay.addWidget(QLabel('Interlocks Delay'), 0, 0, alignment=Qt.AlignRight)
+        lay.addWidget(QLabel('Interlocks Delay'), 0, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(SiriusSpinbox(
-            self, self.prefix+chs_dict['Delay']+'-SP'), 0, 1, alignment=Qt.AlignLeft)
-        lay.addWidget(lb_dly, 0, 2, alignment=Qt.AlignLeft)
+            self, self.prefix+chs_dict['Delay']+'-SP'), 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addWidget(lb_dly, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
 
         # HW Interlock
-        lay.addWidget(QLabel('HW Interlock'), 1, 0, alignment=Qt.AlignRight)
+        lay.addWidget(QLabel('HW Interlock'), 1, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(SiriusLedAlert(
-            self, self.prefix+chs_dict['HW']), 1, 2, alignment=Qt.AlignLeft)
+            self, self.prefix+chs_dict['HW']), 1, 2, alignment=Qt.AlignmentFlag.AlignLeft)
 
         # Manual Interlock, End Switches and Logic Inversions
         keys = ['Manual', 'EndSw', 'Beam Inv',
@@ -259,12 +259,12 @@ class AdvancedInterlockDetails(SiriusDialog):
         row = 2
         column = 0
         for key in keys:
-            lay.addWidget(QLabel(chs_dict[key][0]), row, column, alignment=Qt.AlignRight)
+            lay.addWidget(QLabel(chs_dict[key][0]), row, column, alignment=Qt.AlignmentFlag.AlignRight)
             lay.addWidget(PyDMStateButton(
-                self, self.prefix+chs_dict[key][1]+'-Sel'), row, column+1, alignment=Qt.AlignLeft)
+                self, self.prefix+chs_dict[key][1]+'-Sel'), row, column+1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(SiriusLedState(
                 self, self.prefix+chs_dict[key][1]+'-Sts'),
-                row, column+2, alignment=Qt.AlignLeft)
+                row, column+2, alignment=Qt.AlignmentFlag.AlignLeft)
             row += 1
             if row == 4:
                 row = 0
@@ -277,7 +277,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         for bit in range(len(labels)):
             lay.addWidget(QLabel(labels[bit]), bit+1, 0)
             lay.addWidget(SiriusLedState(
-                self, channel, bit), bit+1, 1, alignment=Qt.AlignCenter)
+                self, channel, bit), bit+1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def _dynamicInterlockLayout(self, chs_dict):
         lay = QGridLayout()
@@ -291,29 +291,29 @@ class AdvancedInterlockDetails(SiriusDialog):
         lb_delta.showUnits = True
 
         lay.addWidget(QLabel(
-            '<h4>Readback</h4>', alignment=Qt.AlignCenter), 0, 1)
+            '<h4>Readback</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(QLabel(
-            '<h4>Delta</h4>', alignment=Qt.AlignCenter), 0, 2, 1, 2)
+            '<h4>Delta</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 2, 1, 2)
         lay.addWidget(QLabel(
             '<h4>Current</h4>',
-            alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
-        lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), 1, 0)
+        lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(SiriusLineEdit(
             self, self.prefix+chs_dict['Curr Delta']+'-SP'),
-            1, 2, alignment=Qt.AlignCenter)
-        lay.addWidget(lb_delta, 1, 3, alignment=Qt.AlignCenter)
+            1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(lb_delta, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
 
         # Rev Cav, Fwd Cav and Quench Cond 1 Ratio
         # # Header
         lay.addWidget(QLabel(
-            '<h4>Readback</h4>', alignment=Qt.AlignCenter), 3, 1)
+            '<h4>Readback</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 3, 1)
         lay.addWidget(QLabel(
-            '<h4>Enable</h4>', alignment=Qt.AlignCenter), 3, 2)
+            '<h4>Enable</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 3, 2)
         lay.addWidget(QLabel(
-            '<h4>Coeff</h4>', alignment=Qt.AlignCenter), 3, 3, 1, 2)
+            '<h4>Coeff</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 3, 3, 1, 2)
         lay.addWidget(QLabel(
-            '<h4>Offset</h4>', alignment=Qt.AlignCenter), 3, 5, 1, 2)
+            '<h4>Offset</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 3, 5, 1, 2)
 
         # # Body
         keys = ['Fwd Cav', 'Rev Cav', 'Quench', 'E-Quench']
@@ -331,30 +331,30 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay_enable = QHBoxLayout()
             lay_enable.addWidget(PyDMStateButton(
                 self, self.prefix+chs['Enable']+'-Sel'),
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
             lay_enable.addWidget(SiriusLedState(
                 self, self.prefix+chs['Enable']+'-Sts'),
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignCenter)
 
             lay.addWidget(QLabel(f'<h4>{chs["Label"]}</h4>',
-                alignment=Qt.AlignRight | Qt.AlignVCenter), row, 0)
-            lay.addWidget(lb_value, row, 1, alignment=Qt.AlignCenter)
+                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter), row, 0)
+            lay.addWidget(lb_value, row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addLayout(lay_enable, row, 2)
             lay.addWidget(SiriusLineEdit(
                 self, self.prefix+chs['Coeff']+'-SP'),
-                row, 3, alignment=Qt.AlignCenter)
-            lay.addWidget(lb_coeff, row, 4, alignment=Qt.AlignCenter)
+                row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
+            lay.addWidget(lb_coeff, row, 4, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(SiriusLineEdit(
                 self, self.prefix+chs['Offset']+'-SP'),
-                row, 5, alignment=Qt.AlignCenter)
-            lay.addWidget(lb_ofs, row, 6, alignment=Qt.AlignCenter)
+                row, 5, alignment=Qt.AlignmentFlag.AlignCenter)
+            lay.addWidget(lb_ofs, row, 6, alignment=Qt.AlignmentFlag.AlignCenter)
 
             row += 1
 
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
         lay.addWidget(QLabel(
             "Out = Coeff * Current + Offset",
-            alignment=Qt.AlignCenter), row+1, 0, 1, 2)
+            alignment=Qt.AlignmentFlag.AlignCenter), row+1, 0, 1, 2)
         row += 2
 
         return lay
@@ -382,7 +382,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
         column = 2
         for lb in lbs_header:
-            label = QLabel(lb, alignment=Qt.AlignCenter)
+            label = QLabel(lb, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet('QLabel{min-width:6em;}')
             lay_scr.addWidget(label, 0, column)
             column += 2
@@ -394,7 +394,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay_scr.addWidget(lb_idx, row, 0)
             lb_desc = QLabel(val[0])
             lb_desc.setStyleSheet('QLabel{min-width:12em;}')
-            lay_scr.addWidget(lb_desc, row, 1, alignment=Qt.AlignLeft)
+            lay_scr.addWidget(lb_desc, row, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             column = 2
             for bit in reversed(range(len(lbs_header))):
                 lay_state = QHBoxLayout()
@@ -402,8 +402,8 @@ class AdvancedInterlockDetails(SiriusDialog):
                 pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel', bit=bit)
                 led = SiriusLedState(self, self.prefix+val[1]+'-Sts', bit)
                 led.setStyleSheet('QLed{min-width: 1.29em;}')
-                lay_state.addWidget(pb, alignment=Qt.AlignRight)
-                lay_state.addWidget(led, alignment=Qt.AlignLeft)
+                lay_state.addWidget(pb, alignment=Qt.AlignmentFlag.AlignRight)
+                lay_state.addWidget(led, alignment=Qt.AlignmentFlag.AlignLeft)
                 lay_scr.addLayout(lay_state, row, column)
                 lay_scr.addItem(QSpacerItem(
                     9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)

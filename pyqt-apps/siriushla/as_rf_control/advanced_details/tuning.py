@@ -42,7 +42,7 @@ class TuningDetails(SiriusDialog):
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QGridLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(title_frame, 0, 0, 1, 3)
 
         gbox_gen = QGroupBox('General')
@@ -99,14 +99,14 @@ class TuningDetails(SiriusDialog):
         self._setupAddrLabel(lay, chs_dict, '307', row)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['307'][1]),
-            row, 3, alignment=Qt.AlignCenter)
+            row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         row += 1
 
         # Tuning Out
         self._setupAddrLabel(lay, chs_dict, '299', row)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['299'][1]),
-            row, 3, alignment=Qt.AlignCenter)
+            row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         row += 1
 
         # Pulses Freq
@@ -115,8 +115,8 @@ class TuningDetails(SiriusDialog):
         self._setupAddrLabel(lay, chs_dict, '303', row)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['303'][1]+'-SP'),
-            row, 2, alignment=Qt.AlignCenter)
-        lay.addWidget(lb_freq, row, 3, alignment=Qt.AlignCenter)
+            row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(lb_freq, row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         row += 1
 
         # Moving
@@ -128,23 +128,23 @@ class TuningDetails(SiriusDialog):
         mv_dict = chs_dict['Moving']
 
         lay_mv.addWidget(QLabel(
-            'Manual', alignment=Qt.AlignCenter), 0, 1)
+            'Manual', alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay_mv.addWidget(QLabel(
-            'Auto', alignment=Qt.AlignCenter), 0, 2)
+            'Auto', alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         if self.section == 'SI':
             lay_mv.addWidget(QLabel(
-                'Tuner Up', alignment=Qt.AlignCenter), 1, 0)
+                'Tuner Up', alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
             lay_mv.addWidget(QLabel(
-                'Tuner Down', alignment=Qt.AlignCenter), 2, 0)
+                'Tuner Down', alignment=Qt.AlignmentFlag.AlignCenter), 2, 0)
         else:
             lay_mv.addWidget(QLabel(
-                'Plg 1 Up', alignment=Qt.AlignCenter), 1, 0)
+                'Plg 1 Up', alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
             lay_mv.addWidget(QLabel(
-                'Plg 1 Down', alignment=Qt.AlignCenter), 2, 0)
+                'Plg 1 Down', alignment=Qt.AlignmentFlag.AlignCenter), 2, 0)
             lay_mv.addWidget(QLabel(
-                'Plg 2 Up', alignment=Qt.AlignCenter), 3, 0)
+                'Plg 2 Up', alignment=Qt.AlignmentFlag.AlignCenter), 3, 0)
             lay_mv.addWidget(QLabel(
-                'Plg 2 Down', alignment=Qt.AlignCenter), 4, 0)
+                'Plg 2 Down', alignment=Qt.AlignmentFlag.AlignCenter), 4, 0)
 
         keys = ['Manual', 'Auto']
         column = 1
@@ -152,7 +152,7 @@ class TuningDetails(SiriusDialog):
             row_ = 1
             for _, val in mv_dict[key].items():
                 lay_mv.addWidget(SiriusLedState(
-                    self, val), row_, column, alignment=Qt.AlignCenter)
+                    self, val), row_, column, alignment=Qt.AlignmentFlag.AlignCenter)
                 row_ += 1
             column += 1
 
@@ -171,7 +171,7 @@ class TuningDetails(SiriusDialog):
             supplies = ['5V', '48V']
         row = 0
         for sup in supplies:
-            lb_supply = QLabel(f'{sup} Supply', alignment=Qt.AlignCenter)
+            lb_supply = QLabel(f'{sup} Supply', alignment=Qt.AlignmentFlag.AlignCenter)
             lb_supply.setStyleSheet('min-width:5em;')
             lb_volt = SiriusLabel(self, self.prefix+chs_dict[sup][0])
             lb_volt.showUnits = True
@@ -190,10 +190,10 @@ class TuningDetails(SiriusDialog):
         lay.addWidget(QLabel('Drivers'), row+1, 0)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+chs_dict['Enable']+'-Sel'),
-            row+1, 1, alignment=Qt.AlignCenter)
+            row+1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['Enable']+'-Sts'),
-            row+1, 2, alignment=Qt.AlignCenter)
+            row+1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         row += 2
 
         drivers = ['1', '2']
@@ -206,25 +206,25 @@ class TuningDetails(SiriusDialog):
             lb_status.showUnits = True
 
             gbox_lay.addWidget(QLabel(
-                'Status'), 0, 0, alignment=Qt.AlignCenter)
+                'Status'), 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
             gbox_lay.addWidget(lb_status, 0, 1)
             if self.section == 'SI':
                 lb_curr = SiriusLabel(self, self.prefix+chs_dict[d][1])
                 lb_curr.showUnits = True
                 gbox_lay.addWidget(QLabel(
-                    'Current'), 1, 0, alignment=Qt.AlignCenter)
-                gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
+                    'Current'), 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+                gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
             else:
                 lb_curr = SiriusLabel(self, self.prefix+chs_dict[d][2])
                 lb_curr.showUnits = True
                 gbox_lay.addWidget(QLabel(
-                    'Current'), 1, 0, alignment=Qt.AlignCenter)
-                gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
+                    'Current'), 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+                gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
                 gbox_lay.addWidget(QLabel(
-                    'Fault'), 2, 0, alignment=Qt.AlignCenter)
+                    'Fault'), 2, 0, alignment=Qt.AlignmentFlag.AlignCenter)
                 gbox_lay.addWidget(SiriusLedAlert(
                     self, self.prefix+chs_dict[d][1]),
-                    2, 1, alignment=Qt.AlignCenter)
+                    2, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
             lay.addWidget(gbox, row, 0, 1, 3)
             row += 1
@@ -242,7 +242,7 @@ class TuningDetails(SiriusDialog):
         self._setupAddrLabel(lay, chs_dict, '302', 0)
         lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict['302'][1]+'-SP'), 0, 2)
-        lay.addWidget(lb_num, 0, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_num, 0, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Move and Move Dir
         keys = ['306', '305']
@@ -255,10 +255,10 @@ class TuningDetails(SiriusDialog):
             if i % 2 == 0:
                 lay.addWidget(SiriusEnumComboBox(
                     self, self.prefix+chs_dict[key][1]+'-Sel'),
-                    row, 2, alignment=Qt.AlignCenter)
+                    row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(SiriusLedState(
                     self, self.prefix+chs_dict[key][1]+'-Sts'),
-                    row, 3, alignment=Qt.AlignCenter)
+                    row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
             else:
                 self._setupButtonLed(lay, chs_dict, key, row)
             row += 1
@@ -270,7 +270,7 @@ class TuningDetails(SiriusDialog):
             parent=self, init_channel=self.prefix+chs_dict['307'][1])
         pb_reset.setStyleSheet(
             'min-width:25px; max-width:25px; icon-size:20px;')
-        lay.addWidget(pb_reset, row, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(pb_reset, row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         row += 1
 
         return lay
@@ -298,8 +298,8 @@ class TuningDetails(SiriusDialog):
         self._setupAddrLabel(lay, chs_dict, '313', row)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['313'][1]+'-Sel'),
-            row, 2, alignment=Qt.AlignCenter)
-        lay.addWidget(lb_trig, row, 3, alignment=Qt.AlignCenter)
+            row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(lb_trig, row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         row += 1
 
         # Filter Enable
@@ -322,4 +322,4 @@ class TuningDetails(SiriusDialog):
             self, self.prefix+chs_dict[addr][1]+'-Sel'), row, 2)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict[addr][1]+'-Sts'),
-            row, 3, alignment=Qt.AlignCenter)
+            row, 3, alignment=Qt.AlignmentFlag.AlignCenter)

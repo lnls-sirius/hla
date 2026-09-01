@@ -124,9 +124,8 @@ class TuneControls(QWidget):
             lbl_acqcnt = QLabel('Frame Count', self)
             dev = self.device.substitute(dev='TuneProc')
             self.lb_acqcnt = SiriusLabel(
-                self, dev.substitute(propty='FrameCount-Mon')
-            )
-            self.lb_acqcnt.setAlignment(Qt.AlignCenter)
+                self, dev.substitute(propty='FrameCount-Mon'))
+            self.lb_acqcnt.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.led_acqcnt = PyDMLedMultiChannel(parent=self)
             self.trigNrPulseChannel = SiriusConnectionSignal(
                 self.trigger.substitute(
@@ -400,19 +399,11 @@ class TuneControls(QWidget):
                 bt_dsblmark.setObjectName('mark_dsbl')
                 grid_markers.addWidget(bt_dsblmark, 0, 0)
                 grid_markers.addWidget(
-                    QLabel('Enable', self, alignment=Qt.AlignHCenter),
-                    0,
-                    1,
-                    1,
-                    2,
-                )
+                    QLabel('Enable', self, alignment=Qt.AlignmentFlag.AlignHCenter),
+                    0, 1, 1, 2)
                 grid_markers.addWidget(
-                    QLabel('Auto Max', self, alignment=Qt.AlignHCenter),
-                    0,
-                    3,
-                    1,
-                    2,
-                )
+                    QLabel('Auto Max', self, alignment=Qt.AlignmentFlag.AlignHCenter),
+                    0, 3, 1, 2)
 
                 for i in range(1, 5):
                     bt_enbl = PyDMStateButton(
@@ -470,17 +461,13 @@ class TuneControls(QWidget):
                     )
                     grid_markers.addWidget(pb_m, i, 0)
                     grid_markers.addWidget(
-                        bt_enbl, i, 1, alignment=Qt.AlignRight
-                    )
+                        bt_enbl, i, 1, alignment=Qt.AlignmentFlag.AlignRight)
                     grid_markers.addWidget(
-                        led_enbl, i, 2, alignment=Qt.AlignLeft
-                    )
+                        led_enbl, i, 2, alignment=Qt.AlignmentFlag.AlignLeft)
                     grid_markers.addWidget(
-                        bt_max, i, 3, alignment=Qt.AlignRight
-                    )
+                        bt_max, i, 3, alignment=Qt.AlignmentFlag.AlignRight)
                     grid_markers.addWidget(
-                        led_max, i, 4, alignment=Qt.AlignLeft
-                    )
+                        led_max, i, 4, alignment=Qt.AlignmentFlag.AlignLeft)
                 tab_markers.addTab(
                     wid_markers, ('Delta' if mtyp else '') + 'Markers'
                 )
@@ -503,8 +490,8 @@ class TuneControls(QWidget):
 
         # layout
         lay = QFormLayout(self)
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         if self.section == 'SI':
             lay.addRow(QLabel('<h4>Measure</h4>'))
             lay.addRow(label_tunefreq, self.lb_tunefreq)
@@ -598,16 +585,12 @@ class SITuneMonitor(QWidget):
     def _setupUi(self):
         lay_tune = QGridLayout(self)
 
-        self.ld_tunefrach = QLabel(self.hdesc, self, alignment=Qt.AlignHCenter)
-        self.lb_tunefrach = SiriusLabel(
-            self,
-            SiriusPVName('SI-Glob:DI-Tune-H:TuneFrac-Mon').substitute(
-                prefix=self.prefix
-            ),
-        )
+        self.ld_tunefrach = QLabel(self.hdesc, self, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.lb_tunefrach = SiriusLabel(self, SiriusPVName(
+            'SI-Glob:DI-Tune-H:TuneFrac-Mon').substitute(prefix=self.prefix))
         self.lb_tunefrach.precisionFromPV = False
         self.lb_tunefrach.precision = 4
-        self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
+        self.lb_tunefrach.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.lb_tunefrach.setStyleSheet('QLabel{font-size: 30pt;}')
         wid_tuneh = QWidget()
         wid_tuneh.setObjectName('wid_tuneh')
@@ -618,23 +601,19 @@ class SITuneMonitor(QWidget):
         vbox_tuneh.addWidget(self.lb_tunefrach)
         lay_tune.addWidget(wid_tuneh, 0, 0)
 
-        self.ld_tunefracv = QLabel(self.vdesc, self, alignment=Qt.AlignHCenter)
-        self.lb_tunefracv = SiriusLabel(
-            self,
-            SiriusPVName('SI-Glob:DI-Tune-V:TuneFrac-Mon').substitute(
-                prefix=self.prefix
-            ),
-        )
+        self.ld_tunefracv = QLabel(self.vdesc, self, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.lb_tunefracv = SiriusLabel(self, SiriusPVName(
+            'SI-Glob:DI-Tune-V:TuneFrac-Mon').substitute(prefix=self.prefix))
         self.lb_tunefracv.precisionFromPV = False
         self.lb_tunefracv.precision = 4
-        self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
+        self.lb_tunefracv.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.lb_tunefracv.setStyleSheet('QLabel{font-size: 30pt;}')
         wid_tunev = QWidget()
         wid_tunev.setObjectName('wid_tunev')
         if self.use_color_labels:
             wid_tunev.setStyleSheet('background-color:#FFB3B3;')
         vbox_tunev = QVBoxLayout(wid_tunev)
-        vbox_tunev.setAlignment(Qt.AlignHCenter)
+        vbox_tunev.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         vbox_tunev.addWidget(self.ld_tunefracv)
         vbox_tunev.addWidget(self.lb_tunefracv)
         lay_tune.addWidget(wid_tunev, 0, 1)

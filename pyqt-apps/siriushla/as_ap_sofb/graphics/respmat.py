@@ -34,7 +34,7 @@ class ShowMatrixWidget(QWidget):
     def setupui(self):
         vbl = QVBoxLayout(self)
 
-        lab = QLabel('Response Matrix', self, alignment=Qt.AlignCenter)
+        lab = QLabel('Response Matrix', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 
@@ -145,8 +145,8 @@ class SingularValues(QWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        vbl.setAlignment(Qt.AlignCenter)
-        lab = QLabel('Singular Values', self, alignment=Qt.AlignCenter)
+        vbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        lab = QLabel('Singular Values', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph()

@@ -33,7 +33,7 @@ class IDCommonControlWindow(SiriusMainWindow):
     def _setupUi(self):
         self._label_title = QLabel(
             '<h3>'+self._device+' Control - '+self._beamline+'</h3 >', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self._label_title.setStyleSheet('max-height:1.29em;')
 
         vlay1 = QVBoxLayout()
@@ -159,7 +159,7 @@ class IDCommonSummaryHeader(IDCommonSummaryBase):
         layout = QHBoxLayout(self)
         for name, size in self.prop2width:
             text = name.replace(' ', '\n')
-            label = QLabel(text, self, alignment=Qt.AlignCenter)
+            label = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet(
                 'min-width:{0}em; max-width:{0}em;'
                 'font-weight:bold;'.format(str(size)))
@@ -185,7 +185,7 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
         orientation = 'v'
         if prop == 'Beamline':
             lbl = QLabel(
-                '<h4>'+self._beamline+'</h4>', self, alignment=Qt.AlignCenter)
+                '<h4>'+self._beamline+'</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             wids.append(lbl)
         elif prop == 'Device':
             btn = QPushButton(self._device, self)
@@ -230,7 +230,7 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
             widget = QWidget(self)
             lay = QVBoxLayout() if orientation == 'v' else QHBoxLayout()
             lay.setContentsMargins(0, 0, 0, 0)
-            lay.setAlignment(Qt.AlignCenter)
+            lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.setSpacing(0)
             widget.setLayout(lay)
 

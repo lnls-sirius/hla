@@ -97,7 +97,7 @@ class SiriusScrnView(QWidget):
         self.calibrationgrid_widget.setLayout(self._calibrationgridLayout())
         self.calibrationgrid_widget.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Expanding)
-        self.calibrationgrid_widget.layout().setAlignment(Qt.AlignHCenter)
+        self.calibrationgrid_widget.layout().setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.tab = QTabWidget(self)
         self.tab.setObjectName(self.scrn_prefix.sec+'Tab')
         self.tab.setStyleSheet("""
@@ -155,7 +155,7 @@ class SiriusScrnView(QWidget):
     def _cameraviewLayout(self):
         label = QLabel(self.device, self)
         label.setStyleSheet("""font-weight: bold;max-height:1.29em;""")
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_view = _SiriusImageView(
             parent=self,
             image_channel=self.scrn_prefix.substitute(
@@ -257,8 +257,8 @@ class SiriusScrnView(QWidget):
         lay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow('  LED: ', hbox_EnblLED)
         lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return lay
 
     def _settingsLayout(self):
@@ -313,12 +313,12 @@ class SiriusScrnView(QWidget):
                             device=self.device)
 
         hbox_aux = QHBoxLayout()
-        hbox_aux.addWidget(self.pb_dtl, alignment=Qt.AlignLeft)
-        hbox_aux.addWidget(self.pb_details, alignment=Qt.AlignRight)
+        hbox_aux.addWidget(self.pb_dtl, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_aux.addWidget(self.pb_details, alignment=Qt.AlignmentFlag.AlignRight)
 
         camwid = QWidget()
         camlay = QFormLayout(camwid)
-        camlay.setFormAlignment(Qt.AlignCenter)
+        camlay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         camlay.addRow(label_CamEnbl, hbox_CamEnbl)
         camlay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         camlay.addRow(label_CamExposureTime, hbox_CamExposureTime)
@@ -353,7 +353,7 @@ class SiriusScrnView(QWidget):
 
         motorwid = QWidget()
         motorlay = QFormLayout(motorwid)
-        motorlay.setFormAlignment(Qt.AlignCenter)
+        motorlay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         motorlay.addRow(label_motorabspos, hbox_motorabspos)
         motorlay.addRow(label_motorencpos, hbox_motorencpos)
         motorlay.addRow(label_motorhomecmd, self.pb_motorhomecmd)
@@ -461,7 +461,7 @@ class SiriusScrnView(QWidget):
         lay = QGridLayout()
         lay.addWidget(label_Method, 1, 1, 1, 3)
         lay.addWidget(self.comboBox_Method, 1, 3, 1, 3)
-        lay.addWidget(label_Centroid, 3, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(label_Centroid, 3, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label_i_Center, 3, 2)
         lay.addWidget(self.lb_CenterXDimFei, 3, 3)
         lay.addWidget(self.lb_CenterXNDStats, 3, 3)
@@ -469,7 +469,7 @@ class SiriusScrnView(QWidget):
         lay.addWidget(self.lb_CenterYDimFei, 3, 5)
         lay.addWidget(self.lb_CenterYNDStats, 3, 5)
         lay.addWidget(label_f_Center, 3, 6)
-        lay.addWidget(label_Sigma, 5, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(label_Sigma, 5, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label_i_Sigma, 5, 2)
         lay.addWidget(self.lb_SigmaXDimFei, 5, 3)
         lay.addWidget(self.lb_SigmaXNDStats, 5, 3)
@@ -477,7 +477,7 @@ class SiriusScrnView(QWidget):
         lay.addWidget(self.lb_SigmaYDimFei, 5, 5)
         lay.addWidget(self.lb_SigmaYNDStats, 5, 5)
         lay.addWidget(label_f_Sigma, 5, 6)
-        lay.addWidget(label_Theta, 7, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(label_Theta, 7, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label_i_Theta, 7, 2)
         lay.addWidget(self.lb_ThetaDimFei, 7, 3, 1, 3)
         lay.addWidget(self.lb_ThetaNDStats, 7, 3, 1, 3)
@@ -668,10 +668,10 @@ class IndividualScrn(QWidget):
 
         lay = QGridLayout()
         lay.addWidget(QLabel('<h3>Screen View</h3>',
-                             self, alignment=Qt.AlignCenter), 0, 0, 1, 4)
+                             self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 4)
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
         lay.addWidget(QLabel('Select Screen Type: ', self,
-                             alignment=Qt.AlignRight), 2, 0)
+                             alignment=Qt.AlignmentFlag.AlignRight), 2, 0)
         lay.addWidget(self.cb_scrntype, 2, 1)
         lay.addWidget(self.l_scrntype, 2, 2)
         lay.addWidget(self.led_scrntype, 2, 3)

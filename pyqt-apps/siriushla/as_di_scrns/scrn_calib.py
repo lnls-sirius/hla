@@ -24,7 +24,7 @@ class ScrnCalibrationSettings(SiriusDialog):
 
     def _setupUi(self):
         label = QLabel('<h3>'+self.scrn_prefix+' Calibration</h3>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         positioning = QGroupBox('Positioning', self)
         positioning.setStyleSheet("""
@@ -96,8 +96,8 @@ class ScrnCalibrationSettings(SiriusDialog):
         flay_pos.addRow(label_NoneScrnPos, hbox_NoneScrnPos)
         flay_pos.addItem(
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_pos.setLabelAlignment(Qt.AlignRight)
-        flay_pos.setFormAlignment(Qt.AlignCenter)
+        flay_pos.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_pos.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay_pos
 
     def _setupLEDLayout(self):
@@ -124,8 +124,8 @@ class ScrnCalibrationSettings(SiriusDialog):
         flay_LED.addRow(label_LedThold, hbox_LedThold)
         flay_LED.addItem(
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_LED.setLabelAlignment(Qt.AlignRight)
-        flay_LED.setFormAlignment(Qt.AlignCenter)
+        flay_LED.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_LED.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay_LED
 
     def _setupImageCalibLayout(self):
@@ -166,6 +166,6 @@ class ScrnCalibrationSettings(SiriusDialog):
         flay_Img.addRow(label_ImgThetaOffset, hbox_ImgThetaOffset)
         flay_Img.addItem(
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_Img.setLabelAlignment(Qt.AlignRight)
-        flay_Img.setFormAlignment(Qt.AlignCenter)
+        flay_Img.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay_Img.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return flay_Img

@@ -55,8 +55,8 @@ class BbBControlWindow(SiriusMainWindow):
 
     def _setupUi(self):
         label = QLabel(
-            '<h1>' + self.device + '</h1>', self, alignment=Qt.AlignCenter
-        )
+            '<h1>'+self.device+'</h1>', self,
+            alignment=Qt.AlignmentFlag.AlignCenter)
 
         main_wid = BbBMainSettingsWidget(
             self, self.prefix, self.device, resume=False
@@ -119,12 +119,11 @@ class BbBMainSettingsWidget(QWidget):
         status_wid = self._setupStatusWidget()
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignCenter)
         if self._is_resumed:
             led_gensts = SiriusLedAlert(self, self.dev_pref + ':ERRSUM')
             dev_label = QLabel(
-                '<h3>' + self._label + '</h3>', self, alignment=Qt.AlignCenter
-            )
+                '<h3>'+self._label+'</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             self.pb_detail = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
             self.pb_detail.setObjectName('dtls')
             self.pb_detail.setStyleSheet(
@@ -136,9 +135,9 @@ class BbBMainSettingsWidget(QWidget):
             connect_newprocess(self.pb_detail, cmd, self)
             hbox_label = QHBoxLayout()
             hbox_label.setContentsMargins(0, 0, 0, 0)
-            hbox_label.addWidget(led_gensts, alignment=Qt.AlignLeft)
+            hbox_label.addWidget(led_gensts, alignment=Qt.AlignmentFlag.AlignLeft)
             hbox_label.addWidget(dev_label)
-            hbox_label.addWidget(self.pb_detail, alignment=Qt.AlignRight)
+            hbox_label.addWidget(self.pb_detail, alignment=Qt.AlignmentFlag.AlignRight)
             hbox_label.setStretch(0, 1)
             hbox_label.setStretch(1, 10)
             hbox_label.setStretch(2, 1)
@@ -196,8 +195,7 @@ class BbBMainSettingsWidget(QWidget):
             wid = QWidget()
             wid.setLayout(lay)
             fb_label = QLabel(
-                '<h4>Feedback Settings</h4>', self, alignment=Qt.AlignCenter
-            )
+                '<h4>Feedback Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.setContentsMargins(0, 0, 0, 0)
             lay.setVerticalSpacing(12)
             lay.addWidget(fb_label, 0, 0, 1, 2)
@@ -269,32 +267,32 @@ class BbBStatusWidget(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        ld_clkmis = QLabel('Clock missing', alignment=Qt.AlignCenter)
-        led_clkmis = SiriusLedAlert(self, self.dev_pref + ':CLKMISS')
-        lb_clkmis = SiriusLabel(self, self.dev_pref + ':CLKMISS_COUNT')
+        ld_clkmis = QLabel('Clock missing', alignment=Qt.AlignmentFlag.AlignCenter)
+        led_clkmis = SiriusLedAlert(self, self.dev_pref+':CLKMISS')
+        lb_clkmis = SiriusLabel(self, self.dev_pref+':CLKMISS_COUNT')
 
-        ld_pllulk = QLabel('PLL Unlocked', alignment=Qt.AlignCenter)
-        led_pllulk = SiriusLedAlert(self, self.dev_pref + ':PLL_UNLOCK')
-        lb_pllulk = SiriusLabel(self, self.dev_pref + ':PLL_UNLOCK_COUNT')
+        ld_pllulk = QLabel('PLL Unlocked', alignment=Qt.AlignmentFlag.AlignCenter)
+        led_pllulk = SiriusLedAlert(self, self.dev_pref+':PLL_UNLOCK')
+        lb_pllulk = SiriusLabel(self, self.dev_pref+':PLL_UNLOCK_COUNT')
 
-        ld_dcmulk = QLabel('DCM unlocked', alignment=Qt.AlignCenter)
-        led_dcmulk = SiriusLedAlert(self, self.dev_pref + ':DCM_UNLOCK')
-        lb_dcmulk = SiriusLabel(self, self.dev_pref + ':DCM_UNLOCK_COUNT')
+        ld_dcmulk = QLabel('DCM unlocked', alignment=Qt.AlignmentFlag.AlignCenter)
+        led_dcmulk = SiriusLedAlert(self, self.dev_pref+':DCM_UNLOCK')
+        lb_dcmulk = SiriusLabel(self, self.dev_pref+':DCM_UNLOCK_COUNT')
 
-        ld_avcovr = QLabel('ADC Overrange', alignment=Qt.AlignCenter)
-        led_avcovr = SiriusLedAlert(self, self.dev_pref + ':ADC_OVR')
-        lb_avcovr = SiriusLabel(self, self.dev_pref + ':ADC_OVR_COUNT')
+        ld_avcovr = QLabel('ADC Overrange', alignment=Qt.AlignmentFlag.AlignCenter)
+        led_avcovr = SiriusLedAlert(self, self.dev_pref+':ADC_OVR')
+        lb_avcovr = SiriusLabel(self, self.dev_pref+':ADC_OVR_COUNT')
 
-        ld_outsat = QLabel('Output satured', alignment=Qt.AlignCenter)
-        led_outsat = SiriusLedAlert(self, self.dev_pref + ':SAT')
-        lb_outsat = SiriusLabel(self, self.dev_pref + ':SAT_COUNT')
+        ld_outsat = QLabel('Output satured', alignment=Qt.AlignmentFlag.AlignCenter)
+        led_outsat = SiriusLedAlert(self, self.dev_pref+':SAT')
+        lb_outsat = SiriusLabel(self, self.dev_pref+':SAT_COUNT')
 
-        ld_fiderr = QLabel('Fiducial Error', alignment=Qt.AlignCenter)
-        led_fiderr = SiriusLedAlert(self, self.dev_pref + ':FID_ERR')
-        lb_fiderr = SiriusLabel(self, self.dev_pref + ':FID_ERR_COUNT')
+        ld_fiderr = QLabel('Fiducial Error', alignment=Qt.AlignmentFlag.AlignCenter)
+        led_fiderr = SiriusLedAlert(self, self.dev_pref+':FID_ERR')
+        lb_fiderr = SiriusLabel(self, self.dev_pref+':FID_ERR_COUNT')
 
-        ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
-        lb_intvl = SiriusLabel(self, self.dev_pref + ':RST_COUNT')
+        ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignmentFlag.AlignCenter)
+        lb_intvl = SiriusLabel(self, self.dev_pref+':RST_COUNT')
         pb_intvl = SiriusPushButton(
             self,
             init_channel=self.dev_pref + ':CNTRST',
@@ -312,23 +310,16 @@ class BbBStatusWidget(QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         if self._is_resumed:
             lay.addWidget(
-                QLabel('<h3>Status</h3>', self, alignment=Qt.AlignCenter),
-                0,
-                0,
-                1,
-                3,
-            )
+                QLabel('<h3>Status</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter),
+                0, 0, 1, 3)
             lay.addItem(
                 QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0
             )
         lay.addWidget(
-            QLabel('<h4>Description</h4>', self, alignment=Qt.AlignCenter),
-            2,
-            1,
-        )
+            QLabel('<h4>Description</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
+            2, 1)
         lay.addWidget(
-            QLabel('<h4>Count</h4>', self, alignment=Qt.AlignCenter), 2, 2
-        )
+            QLabel('<h4>Count</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 2, 2)
         lay.addWidget(led_clkmis, 3, 0)
         lay.addWidget(ld_clkmis, 3, 1)
         lay.addWidget(lb_clkmis, 3, 2)

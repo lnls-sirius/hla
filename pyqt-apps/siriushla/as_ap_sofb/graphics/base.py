@@ -96,14 +96,14 @@ class BaseWidget(QWidget):
     def setupui(self):
         """."""
         vbl = QVBoxLayout(self)
-        vbl.setAlignment(Qt.AlignCenter)
+        vbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         graphx = self.uigetgraph('x', (45, 15))
         graphy = self.uigetgraph('y', (45, 15))
         suf = 'Orbit' if self.is_orb else 'Correctors'
         lab = QLabel(
             '<h2>' + self.acc + ' - Horizontal ' + suf + '</h2>',
-            self, alignment=Qt.AlignLeft)
+            self, alignment=Qt.AlignmentFlag.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_nameh = QHBoxLayout()
         vbl.addLayout(self.hbl_nameh)
@@ -113,7 +113,7 @@ class BaseWidget(QWidget):
         vbl.addSpacing(30)
         lab = QLabel(
             '<h2>' + self.acc + ' - Vertical ' + suf + '</h2>',
-            self, alignment=Qt.AlignLeft)
+            self, alignment=Qt.AlignmentFlag.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_namev = QHBoxLayout()
         vbl.addLayout(self.hbl_namev)
@@ -248,21 +248,21 @@ class BaseWidget(QWidget):
             lab_avg = Label(unit, '-100.00 mrad', wid)
             self.updater[idx].ave[pln].connect(lab_avg.setFloat)
             lab_avg.setStyleSheet("""min-width:4.5em;""")
-            lab_avg.setAlignment(Qt.AlignRight)
+            lab_avg.setAlignment(Qt.AlignmentFlag.AlignRight)
             hbl.addWidget(lab_avg)
             hbl.addWidget(QLabel(
                 " <html><head/><body><p>&#177;</p></body></html> ", wid))
             lab_std = Label(unit, '100.00 mrad', wid)
             self.updater[idx].std[pln].connect(lab_std.setFloat)
             lab_std.setStyleSheet("""min-width:4.5em;""")
-            lab_std.setAlignment(Qt.AlignLeft)
+            lab_std.setAlignment(Qt.AlignmentFlag.AlignLeft)
             hbl.addWidget(lab_std)
 
             hbl.addWidget(QLabel('(pp. ', wid))
             lab_p2p = Label(unit, '100.00 mrad', wid)
             self.updater[idx].p2p[pln].connect(lab_p2p.setFloat)
             lab_p2p.setStyleSheet("""min-width:4.5em;""")
-            lab_p2p.setAlignment(Qt.AlignLeft)
+            lab_p2p.setAlignment(Qt.AlignmentFlag.AlignLeft)
             hbl.addWidget(lab_p2p)
             hbl.addWidget(QLabel(')', wid))
         return grpbx
@@ -288,7 +288,7 @@ class BaseWidget(QWidget):
         sz_pol = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         label.setSizePolicy(sz_pol)
         label.setStyleSheet("""min-width:2.5em;""")
-        label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         return label
 
     def connect_signals(self):

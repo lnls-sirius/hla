@@ -43,7 +43,7 @@ class BaseWidget(QWidget):
             grpbx = QWidget(self)
         fbl = QFormLayout(grpbx)
         grpbx.layoutf = fbl
-        fbl.setLabelAlignment(Qt.AlignVCenter)
+        fbl.setLabelAlignment(Qt.AlignmentFlag.AlignVCenter)
         for prop in props:
             if len(prop) == 2:
                 pvs, txt = prop

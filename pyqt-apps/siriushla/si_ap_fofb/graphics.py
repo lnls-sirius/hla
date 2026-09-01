@@ -48,7 +48,7 @@ class MatrixWidget(BaseObject, QWidget):
             text += ' of Response Matrix - '
             text += 'Hardware Units' if self._is_hw else 'Physics Units'
 
-        lab = QLabel(text, self, alignment=Qt.AlignCenter)
+        lab = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 
@@ -181,7 +181,7 @@ class CorrGainWidget(BaseObject, QWidget):
 
     def _setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('Corrector Gains', self, alignment=Qt.AlignCenter)
+        lab = QLabel('Corrector Gains', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 
@@ -258,7 +258,7 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
 
     def _setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('Reference Orbit', self, alignment=Qt.AlignCenter)
+        lab = QLabel('Reference Orbit', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 
@@ -359,7 +359,7 @@ class KickWidget(BaseObject, QWidget):
     def _setupui(self):
         lay = QGridLayout(self)
         lab = QLabel(
-            '<h4>Fast Corrector Kicks</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Fast Corrector Kicks</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lab, 0, 0, 1, 2)
 
         cbkicks = dict()
@@ -371,11 +371,11 @@ class KickWidget(BaseObject, QWidget):
             cbx.setChecked(checked)
             cbkicks[curve] = cbx
             hview.addWidget(cbx)
-        lay.addLayout(hview, 1, 0, alignment=Qt.AlignLeft)
+        lay.addLayout(hview, 1, 0, alignment=Qt.AlignmentFlag.AlignLeft)
 
         cblim = QCheckBox('Show Kick Limits', self)
         cblim.setChecked(True)
-        lay.addWidget(cblim, 1, 1, alignment=Qt.AlignRight)
+        lay.addWidget(cblim, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
 
         row = 2
         for plane in ['h', 'v']:

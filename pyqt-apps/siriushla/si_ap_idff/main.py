@@ -71,7 +71,7 @@ class IDFFWindow(SiriusMainWindow):
     def _setupUi(self):
         self.title = QLabel(
             '<h2>' + self.idname + ' Feedforward Settings</h2>',
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(self.title, 0, 0, 1, 2)
@@ -243,7 +243,7 @@ class IDFFWindow(SiriusMainWindow):
 
     def _basicSettingsWidget(self):
         ld_configname = QLabel(
-            'Config. Name: ', self, alignment=Qt.AlignRight)
+            'Config. Name: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.le_configname = ConfigLineEdit(
             self, self.dev_pref.substitute(propty='ConfigName-SP'))
         self.le_configname.setStyleSheet('min-width:10em; max-width:10em;')
@@ -251,14 +251,14 @@ class IDFFWindow(SiriusMainWindow):
             self, self.dev_pref.substitute(propty='ConfigName-RB'))
 
         ld_loopstate = QLabel(
-            'Loop State: ', self, alignment=Qt.AlignRight)
+            'Loop State: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.sb_loopstate = PyDMStateButton(
             self, self.dev_pref.substitute(propty='LoopState-Sel'))
         self.lb_loopstate = SiriusLedState(
             self, self.dev_pref.substitute(propty='LoopState-Sts'))
 
         ld_loopfreq = QLabel(
-            'Loop Freq.: ', self, alignment=Qt.AlignRight)
+            'Loop Freq.: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.sb_loopfreq = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='LoopFreq-SP'))
         self.lb_loopfreq = SiriusLabel(
@@ -273,7 +273,7 @@ class IDFFWindow(SiriusMainWindow):
         # ccnames = IDSearch.conv_idname_2_idff_ccnames(self.idname)
 
         ld_calccorr = QLabel(
-            'Calc. values:', self, alignment=Qt.AlignRight)
+            'Calc. values:', self, alignment=Qt.AlignmentFlag.AlignRight)
         glay_calccorr = QGridLayout()
         glay_calccorr.addWidget(ld_calccorr, 0, 0)
         corr_fams = ['CH', 'CV', 'QS', 'LCH', 'LCV', 'QD1', 'QF', 'QD2', 'CC']
@@ -293,13 +293,13 @@ class IDFFWindow(SiriusMainWindow):
             # if corr == 'CC' and not ccnames:
             #     continue
             row = ridx + 1
-            hheader = QLabel(f'{corr}', alignment=Qt.AlignCenter)
+            hheader = QLabel(f'{corr}', alignment=Qt.AlignmentFlag.AlignCenter)
             hheader.setStyleSheet('.QLabel{font-weight: bold;}')
             glay_calccorr.addWidget(hheader, row, 0)
             for cidx in range(2):
                 col = cidx + 1
                 if ridx == 0:
-                    vheader = QLabel(f'{col}', alignment=Qt.AlignCenter)
+                    vheader = QLabel(f'{col}', alignment=Qt.AlignmentFlag.AlignCenter)
                     vheader.setStyleSheet('.QLabel{font-weight: bold;}')
                     glay_calccorr.addWidget(vheader, 0, col)
                 propty = f'Corr{corr}_{col}Current-Mon'
@@ -329,7 +329,7 @@ class IDFFWindow(SiriusMainWindow):
 
         if chnames:
             ld_controlch = QLabel(
-                'Control CH: ', self, alignment=Qt.AlignRight)
+                'Control CH: ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self.sb_controlch = PyDMStateButton(
                 self, self.dev_pref.substitute(propty='ControlCH-Sel'))
             self.lb_controlch = SiriusLedState(
@@ -341,7 +341,7 @@ class IDFFWindow(SiriusMainWindow):
 
         if cvnames:
             ld_controlcv = QLabel(
-                'Control CV: ', self, alignment=Qt.AlignRight)
+                'Control CV: ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self.sb_controlcv = PyDMStateButton(
                 self, self.dev_pref.substitute(propty='ControlCV-Sel'))
             self.lb_controlcv = SiriusLedState(
@@ -353,7 +353,7 @@ class IDFFWindow(SiriusMainWindow):
 
         if qsnames:
             ld_controlqs = QLabel(
-                'Control QS: ', self, alignment=Qt.AlignRight)
+                'Control QS: ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self.sb_controlqs = PyDMStateButton(
                 self, self.dev_pref.substitute(propty='ControlQS-Sel'))
             self.lb_controlqs = SiriusLedState(
@@ -365,7 +365,7 @@ class IDFFWindow(SiriusMainWindow):
 
         if lcnames:
             ld_controllc = QLabel(
-                'Control LC: ', self, alignment=Qt.AlignRight)
+                'Control LC: ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self.sb_controllc = PyDMStateButton(
                 self, self.dev_pref.substitute(propty='ControlLC-Sel'))
             self.lb_controllc = SiriusLedState(
@@ -377,7 +377,7 @@ class IDFFWindow(SiriusMainWindow):
 
         if qnnames:
             ld_controlqn = QLabel(
-                'Control QN: ', self, alignment=Qt.AlignRight)
+                'Control QN: ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self.sb_controlqn = PyDMStateButton(
                 self, self.dev_pref.substitute(propty='ControlQN-Sel'))
             self.lb_controlqn = SiriusLedState(
@@ -389,7 +389,7 @@ class IDFFWindow(SiriusMainWindow):
 
         # if ccnames:
         #     ld_controlcc = QLabel(
-        #         'Control CC: ', self, alignment=Qt.AlignRight)
+        #         'Control CC: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         #     self.sb_controlcc = PyDMStateButton(
         #         self, self.dev_pref.substitute(propty='ControlCC-Sel'))
         #     self.lb_controlcc = SiriusLedState(
@@ -401,13 +401,13 @@ class IDFFWindow(SiriusMainWindow):
 
         lay.addLayout(glay_calccorr, row, 0, 1, 3)
         row += 1
-        lay.addWidget(self.rampcorr_wid, row, 0, 1, 3, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.rampcorr_wid, row, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         return gbox
 
     def _corrStatusWidget(self):
         ld_corconf = QLabel(
-            'Corr. Status: ', self, alignment=Qt.AlignRight)
+            'Corr. Status: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.led_corr = SiriusLedAlert(
             self, self.dev_pref.substitute(propty='CorrStatus-Mon'))
         pb_corsts = QPushButton('', self)
@@ -445,7 +445,7 @@ class IDFFWindow(SiriusMainWindow):
         if self._idffdata['pparameter']:
             pparam = _PVName(self._idffdata['pparameter'])
             ld_pparam = QLabel(
-                pparam.propty_name + ': ', self, alignment=Qt.AlignRight)
+                pparam.propty_name + ': ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self._lb_pparam = SiriusLabel(self, pparam, keep_unit=True)
             self._lb_pparam.showUnits = True
             lay.addWidget(ld_pparam, 0, 0)
@@ -454,14 +454,14 @@ class IDFFWindow(SiriusMainWindow):
         if self._idffdata['kparameter']:
             kparam = _PVName(self._idffdata['kparameter'])
             ld_kparam = QLabel(
-                kparam.propty_name + ': ', self, alignment=Qt.AlignRight)
+                kparam.propty_name + ': ', self, alignment=Qt.AlignmentFlag.AlignRight)
             self._lb_kparam = SiriusLabel(self, kparam, keep_unit=True)
             self._lb_kparam.showUnits = True
             lay.addWidget(ld_kparam, 1, 0)
             lay.addWidget(self._lb_kparam, 1, 1)
 
         ld_polar = QLabel(
-            'Polarization: ', self, alignment=Qt.AlignRight)
+            'Polarization: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.lb_polar = SiriusLabel(
             self, self.dev_pref.substitute(propty='Polarization-Mon'))
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
@@ -527,7 +527,7 @@ class IDFFWindow(SiriusMainWindow):
     def _setupRampCorrWidget(self):
         self.lb_rampcorr = QLabel(
             '<h4>Ramp Correctors<h4>', self,
-            alignment=Qt.AlignLeft | Qt.AlignBottom
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignBottom
         )
         self.lb_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 
@@ -557,14 +557,14 @@ class IDFFWindow(SiriusMainWindow):
         self.rampdown_initial_icon = self.btn_rampdowncorr.icon()
 
         self.lb_rampnrpts = QLabel(
-            "Nr. Points:", self, alignment=Qt.AlignRight
+            "Nr. Points:", self, alignment=Qt.AlignmentFlag.AlignRight
         )
         self.sb_rampnrpts = QSpinBox()
         self.sb_rampnrpts.setRange(1, 10000)
         self.sb_rampnrpts.setValue(50)
 
         self.lb_rampintvl = QLabel(
-            "Time Interval [s]:", self, alignment=Qt.AlignRight
+            "Time Interval [s]:", self, alignment=Qt.AlignmentFlag.AlignRight
         )
         self.sb_rampintvl = QDoubleSpinBox()
         self.sb_rampintvl.setRange(0.1, 1000.0)
@@ -572,10 +572,10 @@ class IDFFWindow(SiriusMainWindow):
         self.sb_rampintvl.setValue(10.0)
 
         self.lb_rampupcorr = QLabel(
-            "Ramp-up:", self, alignment=Qt.AlignRight
+            "Ramp-up:", self, alignment=Qt.AlignmentFlag.AlignRight
         )
         self.lb_rampdowncorr = QLabel(
-            "Ramp-down:", self, alignment=Qt.AlignRight
+            "Ramp-down:", self, alignment=Qt.AlignmentFlag.AlignRight
         )
 
         wid = QWidget()
@@ -587,11 +587,11 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rampintvl, 2, 0)
         lay.addWidget(self.sb_rampintvl, 2, 1)
         lay.addWidget(self.lb_rampupcorr, 3, 0)
-        lay.addWidget(self.btn_rampupcorr, 3, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.btn_rampupcorr, 3, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.lb_rampdowncorr, 4, 0)
-        lay.addWidget(self.btn_rampdowncorr, 4, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.btn_rampdowncorr, 4, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
         # lay.addWidget(
-        #     self.btn_rampcorr, 3, 0, 1, 2, alignment=Qt.AlignHCenter
+        #     self.btn_rampcorr, 3, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter
         # )
         return wid
 

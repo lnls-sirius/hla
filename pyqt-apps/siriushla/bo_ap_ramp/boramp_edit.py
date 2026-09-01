@@ -169,7 +169,7 @@ class DipoleRamp(QWidget):
         lay.addWidget(self.table)
         lay.addLayout(lay_exclim)
         lay.addStretch()
-        lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
+        lay.addWidget(self.bt_apply, alignment=Qt.AlignmentFlag.AlignRight)
 
     def _setupGraph(self):
         self.graph.setObjectName('DipoleGraph')
@@ -199,7 +199,7 @@ class DipoleRamp(QWidget):
 
     def _setupPSDelayAndWfmNrPoints(self):
         label_psdelay = QLabel('PS delay [ms]:', self,
-                               alignment=Qt.AlignVCenter)
+                               alignment=Qt.AlignmentFlag.AlignVCenter)
         self.sb_psdelay = QDoubleSpinBoxPlus(self)
         self.sb_psdelay.setMinimum(0)
         self.sb_psdelay.setMaximum(490)
@@ -210,7 +210,7 @@ class DipoleRamp(QWidget):
         self.sb_psdelay.setStyleSheet('#sb_psdelay{max-width:5em;}')
 
         label_nrpoints_fams = QLabel('# points: fams:', self,
-                                     alignment=Qt.AlignVCenter)
+                                     alignment=Qt.AlignmentFlag.AlignVCenter)
         self.sb_nrpoints_fams = QDoubleSpinBoxPlus(self)
         self.sb_nrpoints_fams.setMinimum(1)
         self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE)
@@ -223,7 +223,7 @@ class DipoleRamp(QWidget):
             '#sb_nrpoints_fams{max-width:3.5em;}')
 
         label_nrpoints_corrs = QLabel('corrs:', self,
-                                      alignment=Qt.AlignVCenter)
+                                      alignment=Qt.AlignmentFlag.AlignVCenter)
         self.sb_nrpoints_corrs = QDoubleSpinBoxPlus(self)
         self.sb_nrpoints_corrs.setMinimum(1)
         self.sb_nrpoints_corrs.setMaximum(MAX_WFMSIZE_FBP)
@@ -326,17 +326,17 @@ class DipoleRamp(QWidget):
                 np_item.setBackground(QBrush(light_blue))
             elif vlabel == 'Smoothing Areas':
                 label_item.setBackground(QBrush(dark_orchid))
-                label_item.setTextAlignment(Qt.AlignCenter)
+                label_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 t_item.setBackground(QBrush(dark_orchid))
-                t_item.setTextAlignment(Qt.AlignCenter)
+                t_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 t_item.setFlags(Qt.ItemFlag.ItemIsEnabled)
                 t_item.setData(Qt.ItemDataRole.DisplayRole, 'Interval [ms]')
                 e_item.setBackground(QBrush(dark_orchid))
-                e_item.setTextAlignment(Qt.AlignCenter)
+                e_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 e_item.setFlags(Qt.ItemFlag.ItemIsEnabled)
                 e_item.setData(Qt.ItemDataRole.DisplayRole, 'E Range [GeV]')
                 np_item.setBackground(QBrush(dark_orchid))
-                np_item.setTextAlignment(Qt.AlignCenter)
+                np_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 np_item.setData(Qt.ItemDataRole.DisplayRole, ' ')
             elif vlabel in ['RampUp', 'RampDown']:
                 label_item.setBackground(QBrush(light_orchid))
@@ -875,7 +875,7 @@ class MultipolesRamp(QWidget):
         lay.addWidget(self.table)
         lay.addLayout(lay_exclim)
         lay.addLayout(lay_diff)
-        lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
+        lay.addWidget(self.bt_apply, alignment=Qt.AlignmentFlag.AlignRight)
 
     def _setupGraph(self):
         self.graph.setObjectName('MultipolesGraph')
@@ -1514,7 +1514,7 @@ class RFRamp(QWidget):
         lay.addWidget(self.set_rfdelay)
         lay.addWidget(self.table)
         lay.addStretch()
-        lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
+        lay.addWidget(self.bt_apply, alignment=Qt.AlignmentFlag.AlignRight)
 
     def _setupGraph(self):
         self.graph.setObjectName('RFGraph')
@@ -1539,7 +1539,7 @@ class RFRamp(QWidget):
 
     def _setupRFDelay(self):
         label_rfdelay = QLabel('RF delay [ms]:', self,
-                               alignment=Qt.AlignVCenter)
+                               alignment=Qt.AlignmentFlag.AlignVCenter)
         self.sb_rfdelay = QDoubleSpinBoxPlus(self)
         self.sb_rfdelay.setMinimum(0)
         self.sb_rfdelay.setMaximum(410)

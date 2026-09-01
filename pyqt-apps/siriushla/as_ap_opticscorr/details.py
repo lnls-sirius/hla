@@ -35,7 +35,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         lay = QGridLayout()
 
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
-                                  alignment=Qt.AlignCenter)
+                                  alignment=Qt.AlignmentFlag.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
             self, ioc_prefix.substitute(propty='ConfigName-SP'))
         self.pydmlinedit_configname.setStyleSheet(
@@ -51,7 +51,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 12, 1)
 
         label_matrix = QLabel('<h4>Matrix</h4>', self,
-                              alignment=Qt.AlignCenter)
+                              alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_matrix = SiriusWaveformTable(
             self, ioc_prefix.substitute(propty='RespMat-Mon'))
         self.table_matrix.setObjectName('matrix')
@@ -84,7 +84,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         label_nomintstrength = QLabel(
             '<h4>Nominal '+self._intstrength+'s</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_nomintstrength = SiriusWaveformTable(
             self, ioc_prefix.substitute(
                 propty='Nominal'+self._intstrength+'-Mon'))
@@ -121,10 +121,10 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         if self._opticsparam == 'Chrom':
             label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,
-                                    alignment=Qt.AlignCenter)
+                                    alignment=Qt.AlignmentFlag.AlignCenter)
             self.pydmlabel_nomchrom = SiriusLabel(
                 self, ioc_prefix.substitute(propty='NominalChrom-Mon'))
-            self.pydmlabel_nomchrom.setAlignment(Qt.AlignCenter)
+            self.pydmlabel_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
             lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
             lay.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, self._nfam)
