@@ -53,9 +53,9 @@ class MainWindow(SiriusMainWindow):
         self.orbit_regist = self._create_orbit_registers()
         self.sofb_control = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.ioc_log)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.orbit_regist)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.sofb_control)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.ioc_log)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.orbit_regist)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.sofb_control)
 
         mwid = self._create_central_widget()
         self.setCentralWidget(mwid)
@@ -81,7 +81,7 @@ class MainWindow(SiriusMainWindow):
         wid.setFloating(False)
         wid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
                         | QDockWidget.DockWidgetFeature.DockWidgetMovable)
-        wid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        wid.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
         wid.setObjectName('doc_OrbReg')
         wid.setStyleSheet("#doc_OrbReg{min-width:20em; min-height:14em;}")
 
@@ -99,7 +99,7 @@ class MainWindow(SiriusMainWindow):
         docwid.setFloating(False)
         docwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
                            | QDockWidget.DockWidgetFeature.DockWidgetMovable)
-        docwid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        docwid.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
 
         ctrls = self.orb_regtr.get_registers_control()
         wid = SOFBControl(self, self.device, ctrls, self.prefix, self.acc)

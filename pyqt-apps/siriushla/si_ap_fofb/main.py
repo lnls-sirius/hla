@@ -52,9 +52,9 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.log)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.log)
         self.setCentralWidget(self.kicks_view)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.control)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.control)
 
         # menu
         menubar = QMenuBar(self)
@@ -490,7 +490,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         dockwid.setFloating(False)
         dockwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
                             | QDockWidget.DockWidgetFeature.DockWidgetMovable)
-        dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        dockwid.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
         dockwid.setWidget(wid)
         return dockwid
 
@@ -520,7 +520,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         dockwid.setFloating(False)
         dockwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
                             | QDockWidget.DockWidgetFeature.DockWidgetMovable)
-        dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        dockwid.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
         dockwid.setWidget(wid)
         return dockwid
 
