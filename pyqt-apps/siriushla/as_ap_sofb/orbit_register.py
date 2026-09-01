@@ -176,7 +176,7 @@ class OrbitRegister(QWidget):
 
         lbl = QLabel(self)
         hbl.addWidget(lbl)
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sz_pol.setHorizontalStretch(1)
         lbl.setSizePolicy(sz_pol)
         lbl.setMouseTracking(True)

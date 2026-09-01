@@ -313,8 +313,7 @@ class BbBStatusWidget(QWidget):
                 QLabel('<h3>Status</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter),
                 0, 0, 1, 3)
             lay.addItem(
-                QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0
-            )
+                QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(
             QLabel('<h4>Description</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
             2, 1)
@@ -338,7 +337,7 @@ class BbBStatusWidget(QWidget):
         lay.addWidget(led_fiderr, 8, 0)
         lay.addWidget(ld_fiderr, 8, 1)
         lay.addWidget(lb_fiderr, 8, 2)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 8, 0)
         hlay = QHBoxLayout()
         lay.addLayout(hlay, 9, 0, 1, 3)
         hlay.addWidget(ld_intvl)

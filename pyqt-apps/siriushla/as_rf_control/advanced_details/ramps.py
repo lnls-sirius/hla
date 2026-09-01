@@ -284,13 +284,13 @@ class RampsDetails(SiriusDialog):
                 alt_row, column+2, alignment=Qt.AlignmentFlag.AlignCenter)
             alt_row += 1
 
-        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
         lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 2)
         lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 3)
         lay.addWidget(QLabel('Amp', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 4)
         lay.addWidget(QLabel('Phase', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 5)
         lay.addItem(QSpacerItem(
-            12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row+1, 6)
+            12, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), row+1, 6)
         lay.addWidget(QLabel(
             'Power', alignment=Qt.AlignmentFlag.AlignCenter), row+1, 7, 1, 2)
         row += 2

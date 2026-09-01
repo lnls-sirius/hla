@@ -32,7 +32,7 @@ class TransmLineStatusDetails(SiriusDialog):
             '<h4>Transm. Line - Detailed Status</h4>',
             self, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.title, 0, 0, 1, 4)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
 
         offset = 0
         if self.section == 'SI':
@@ -104,7 +104,7 @@ class TransmLineStatusDetails(SiriusDialog):
                 row += 1
 
         lay.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, offset)
+            0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, offset)
         row += 1
 
         for widget_id, pvname in chs_dict['led'].items():

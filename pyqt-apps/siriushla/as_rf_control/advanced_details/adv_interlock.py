@@ -94,7 +94,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             lb_w.showUnits = True
             lay_lvls.addWidget(label, row, 0)
             lay_lvls.addItem(QSpacerItem(
-                9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row, 1)
+                9, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), row, 1)
             lay_lvls.addWidget(SiriusSpinbox(
                 self, self.prefix+val+'-SP'), row, 2)
             lay_lvls.addWidget(lb, row, 3)
@@ -102,7 +102,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             row += 1
             if key == 'RevSSA4 (RF In 12)':
                 lay_lvls.addItem(QSpacerItem(
-                    0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+                    0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
                 row += 1
 
         # GPIO Inputs
@@ -302,7 +302,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             self, self.prefix+chs_dict['Curr Delta']+'-SP'),
             1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_delta, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 2, 0)
 
         # Rev Cav, Fwd Cav and Quench Cond 1 Ratio
         # # Header
@@ -351,7 +351,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
             row += 1
 
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
         lay.addWidget(QLabel(
             "Out = Coeff * Current + Offset",
             alignment=Qt.AlignmentFlag.AlignCenter), row+1, 0, 1, 2)
@@ -390,7 +390,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         row = 1
         for key, val in chs_dict.items():
             lb_idx = QLabel(key.split()[0])
-            lb_idx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            lb_idx.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
             lay_scr.addWidget(lb_idx, row, 0)
             lb_desc = QLabel(val[0])
             lb_desc.setStyleSheet('QLabel{min-width:12em;}')
@@ -406,7 +406,7 @@ class AdvancedInterlockDetails(SiriusDialog):
                 lay_state.addWidget(led, alignment=Qt.AlignmentFlag.AlignLeft)
                 lay_scr.addLayout(lay_state, row, column)
                 lay_scr.addItem(QSpacerItem(
-                    9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)
+                    9, 0, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, column+1)
                 column += 2
             lay_scr.addWidget(SiriusPushButton(
                 self, self.prefix+val[1]+'-Sel', 'All Zero', releaseValue=0),

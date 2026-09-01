@@ -68,7 +68,7 @@ class CalEqDetails(SiriusDialog):
         lay_extra_pol = QGridLayout()
         lay_extra_pol.setVerticalSpacing(12)
         lay_extra_pol.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
         lay_extra_pol.addWidget(QLabel(
             'C0 + C1*F + C2*F^2 + C3*F^3 + C4*F^4',
             alignment=Qt.AlignmentFlag.AlignCenter), 1, 0, 1, 2)
@@ -76,17 +76,17 @@ class CalEqDetails(SiriusDialog):
         lay_extra_rq = QGridLayout()
         lay_extra_rq.setVerticalSpacing(12)
         lay_extra_rq.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
         
         lay_extra_q0 = QGridLayout()
         lay_extra_q0.setVerticalSpacing(12)
         lay_extra_q0.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
 
         lay_extra_rsh = QGridLayout()
         lay_extra_rsh.setVerticalSpacing(12)
         lay_extra_rsh.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, 0)
 
         if self.section == 'SI':
             lb_rq = SiriusLabel(self, self.prefix+self.syst_dict['r/Q'])

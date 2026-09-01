@@ -103,7 +103,7 @@ class PAPUControlWindow(IDCommonControlWindow):
         lay.addLayout(hbox_enbl, 2, 1, 1, 3)
         lay.addWidget(self._ld_phsismov, 3, 0)
         lay.addLayout(hbox_mov, 3, 1, 1, 3)
-        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0)
+        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 4, 0)
 
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
@@ -134,7 +134,7 @@ class PAPUControlWindow(IDCommonControlWindow):
         self._log = PyDMLogLabel(
             self, init_channel=self.dev_pref.substitute(propty='Log-Mon'))
         self._log.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.MinimumExpanding)
         self._log.setAlternatingRowColors(True)
         self._log.maxCount = 2000
 
@@ -142,7 +142,7 @@ class PAPUControlWindow(IDCommonControlWindow):
         self._bt_logclear.clicked.connect(self._log.clear)
 
         gbox = QGroupBox('Status')
-        gbox.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        gbox.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
         lay = QGridLayout(gbox)
         lay.addWidget(self._ld_drivests, 0, 0)
         lay.addWidget(self._lb_drivests, 0, 1)
@@ -225,26 +225,26 @@ class PAPUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._ld_phsspdlim, 0, 0)
         lay.addWidget(self._sb_phsspdlim, 0, 1)
         lay.addWidget(self._lb_phsspdlim, 0, 2)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(self._ld_pwrenbl, 2, 0)
         lay.addWidget(self._pb_pwrenbl, 2, 1)
         lay.addWidget(self._led_pwrsts, 2, 2, alignment=Qt.AlignmentFlag.AlignLeft)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 3, 0)
         lay.addWidget(self._ld_homeaxis, 4, 0)
         lay.addWidget(self._pb_home, 4, 1)
         lay.addWidget(self._led_home, 4, 2, alignment=Qt.AlignmentFlag.AlignLeft)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 5, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 5, 0)
         lay.addWidget(self._ld_parkspd, 6, 0)
         lay.addWidget(self._sb_parkspd, 6, 1)
         lay.addWidget(self._lb_parkspd, 6, 2)
         lay.addWidget(self._ld_park, 7, 0)
         lay.addWidget(self._pb_park, 7, 1)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 8, 0)
         lay.addWidget(self._ld_gotomin, 9, 0)
         lay.addWidget(self._pb_gotomin, 9, 1, 1, 2)
         lay.addWidget(self._ld_gotoop, 10, 0)
         lay.addWidget(self._pb_gotoop, 10, 1, 1, 2)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 11, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 11, 0)
         lay.addWidget(self._ld_clrerr, 12, 0)
         lay.addWidget(self._pb_clrerr, 12, 1)
 

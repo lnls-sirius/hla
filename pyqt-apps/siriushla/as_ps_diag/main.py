@@ -187,8 +187,8 @@ class PSDiag(SiriusMainWindow):
                         panel_lay.addWidget(diff_led, i, 5)
 
                     i += 1
-            panel_lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored,
-                              QSzPlcy.MinimumExpanding), i, 0)
+            panel_lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored,
+                              QSzPlcy.Policy.MinimumExpanding), i, 0)
             i += 1
 
         # Current State and Log Tables
@@ -237,11 +237,11 @@ class PSDiag(SiriusMainWindow):
             if name == 'Value':
                 le.setStyleSheet(
                     '#'+name+'{min-width:'+width+'px;}')
-                le.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Maximum)
+                le.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Maximum)
             else:
                 le.setStyleSheet(
                     '#'+name+'{min-width:'+width+'px; max-width:'+width+'px;}')
-                le.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+                le.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
         self._scrollup_pb = QPushButton('↟', cw)
         self._scrollup_pb.setObjectName('scrollup_pb')

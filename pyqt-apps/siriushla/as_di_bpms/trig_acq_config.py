@@ -21,7 +21,7 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
             ' Acquisitions </h2>', alignment=Qt.AlignmentFlag.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
         self.wid_trig = self._triggersWidget()
@@ -134,7 +134,7 @@ class PBPMBaseTriggeredAcquisition(AcqBaseWindow):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
             ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
         self.wid_trig = self._triggersWidget()

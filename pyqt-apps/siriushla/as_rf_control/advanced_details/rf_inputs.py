@@ -48,7 +48,7 @@ class RFInputsDetails(SiriusDialog):
         lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignmentFlag.AlignCenter), 1, 3)
         lay.addWidget(QLabel('Amp', alignment=Qt.AlignmentFlag.AlignCenter), 1, 4)
         lay.addWidget(QLabel('Phase', alignment=Qt.AlignmentFlag.AlignCenter), 1, 5)
-        lay.addItem(QSpacerItem(24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 6)
+        lay.addItem(QSpacerItem(24, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 6)
         lay.addWidget(QLabel('Power', alignment=Qt.AlignmentFlag.AlignCenter), 1, 7, 1, 2)
 
         row = 2

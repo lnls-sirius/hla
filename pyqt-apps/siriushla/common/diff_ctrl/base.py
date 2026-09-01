@@ -112,7 +112,7 @@ class DiffCtrlDevMonitor(QWidget):
             '#dev{background-color:transparent;}')
         self.dev_widget_scrarea.setWidget(self.dev_widget)
         self.dev_widget_scrarea.setSizePolicy(
-            QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
 
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -166,7 +166,7 @@ class DiffCtrlView(QWidget):
         title = QLabel(
             '<h3>' + self.sec + ' ' + devname + ' View</h3>',
             alignment=Qt.AlignmentFlag.AlignCenter)
-        title.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        title.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
 
         gbox_h = QGroupBox(self.DEVICE_PREFIX + 'H')
         self.dev_h = self.DEVICE_CLASS(self, prefix, self.DEVICE_PREFIX+'H')

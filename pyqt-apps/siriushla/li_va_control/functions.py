@@ -64,7 +64,7 @@ class BaseFunctionsInterface():
                 widget.precisionFromPV = False
                 widget.precision = 2
                 widget.setSizePolicy(
-                    QSizePolicy.Maximum, QSizePolicy.Minimum)
+                    QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Minimum)
             else:
                 widget = SiriusLabel(
                     init_channel=pv_name,

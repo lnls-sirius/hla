@@ -343,7 +343,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
     def saveStack(self, stack, stack_type):
         ''' Save the stack for future item changes '''
         if stack_type == 0:
-            stack.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
+            stack.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding)
             self.stack_screens = stack
         elif stack_type == 1:
             self.stack_screen = stack
@@ -404,7 +404,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         self.image_container.setPixmap(self.pixmap)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
-            QSizePolicy.Ignored, QSizePolicy.Ignored)
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         return self.image_container
 
     def _setupUi(self):

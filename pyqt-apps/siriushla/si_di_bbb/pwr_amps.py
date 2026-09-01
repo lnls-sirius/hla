@@ -106,13 +106,13 @@ class BbBPwrAmpsWidget(QWidget):
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addItem(
-            QSpacerItem(10, 1, QSzPlcy.MinimumExpanding, QSzPlcy.Fixed), 0, 0)
+            QSpacerItem(10, 1, QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Fixed), 0, 0)
         lay.addWidget(ld_serial, 0, 1)
         lay.addWidget(gbox_ctrl, 1, 1)
         lay.addWidget(gbox_mon, 2, 1)
         lay.addItem(
-            QSpacerItem(10, 10, QSzPlcy.MinimumExpanding,
-                        QSzPlcy.MinimumExpanding), 3, 2)
+            QSpacerItem(10, 10, QSzPlcy.Policy.MinimumExpanding,
+                        QSzPlcy.Policy.MinimumExpanding), 3, 2)
         return wid
 
     def _setupMilmegaWidget(self, unit):

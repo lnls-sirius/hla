@@ -51,7 +51,7 @@ class InjBOControlWindow(BaseWindow):
         header_screens.setStyleSheet(
             '#header_screens {border-bottom: 2px solid gray;}')
         header_screens.layout().setContentsMargins(0, 9, 0, 9)
-        header_screens.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        header_screens.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         lay_screens.addWidget(header_screens)
 
         for idx, scrn_prefix in enumerate(self._scrns):
@@ -80,7 +80,7 @@ class InjBOControlWindow(BaseWindow):
         header_corrs.setStyleSheet(
             '#header_corrs {border-bottom: 2px solid gray;}')
         header_corrs.layout().setContentsMargins(0, 9, 0, 9)
-        header_corrs.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        header_corrs.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         lay_corr.addWidget(header_corrs, 0, 0, 1, 2)
 
         for corr, row, col in (('TB-04:PS-CH-1', 1, 0),
@@ -99,7 +99,7 @@ class InjBOControlWindow(BaseWindow):
             'TB-Glob:AP-PosAng').substitute(prefix=self.prefix)
 
         w_posang = QWidget()
-        w_posang.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        w_posang.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         w_posang.setObjectName('w_posang')
         w_posang.setStyleSheet(
             '#w_posang {border-top: 2px solid gray;}')
@@ -111,7 +111,7 @@ class InjBOControlWindow(BaseWindow):
             (('', 0),
              ('', 1.29), ('Position and Angle Correction', 30),
              ('', 0)))
-        header_posang.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        header_posang.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         lay_posang.addWidget(header_posang, 0, 0, 1, 2)
 
         self.pb_update_ref = PyDMPushButton(
@@ -124,7 +124,7 @@ class InjBOControlWindow(BaseWindow):
         for col, title, axis in ((0, 'Horizontal', 'X'), (1, 'Vertical', 'Y')):
             lb_pos = QLabel('<h4>Δ'+axis.lower()+'</h4>', self,
                             alignment=Qt.AlignmentFlag.AlignRight)
-            lb_pos.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            lb_pos.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
             pos_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-SP'))
             pos_sp.setObjectName('pos_sp_'+axis.lower())
@@ -135,7 +135,7 @@ class InjBOControlWindow(BaseWindow):
             pos_rb.setObjectName('pos_rb_'+axis.lower())
             lb_ang = QLabel('<h4>Δ'+axis.lower()+'\'</h4>', self,
                             alignment=Qt.AlignmentFlag.AlignRight)
-            lb_ang.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            lb_ang.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
             ang_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-SP'))
             ang_sp.setObjectName('ang_sp_'+axis.lower())

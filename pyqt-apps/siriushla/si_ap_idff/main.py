@@ -316,14 +316,14 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
         lay.addWidget(self.lb_loopstate, 0, 2)
-        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(ld_loopfreq, 2, 0)
         lay.addWidget(self.sb_loopfreq, 2, 1)
         lay.addWidget(self.lb_loopfreq, 2, 2, 1, 2)
         lay.addWidget(ld_configname, 3, 0)
         lay.addWidget(self.le_configname, 3, 1, 1, 3)
         lay.addWidget(self.lb_configname, 4, 1, 1, 3)
-        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
+        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 6, 0)
 
         row = 5
 
@@ -464,7 +464,7 @@ class IDFFWindow(SiriusMainWindow):
             'Polarization: ', self, alignment=Qt.AlignmentFlag.AlignRight)
         self.lb_polar = SiriusLabel(
             self, self.dev_pref.substitute(propty='Polarization-Mon'))
-        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 2, 0)
         lay.addWidget(ld_polar, 3, 0)
         lay.addWidget(self.lb_polar, 3, 1, 1, 3)
 
@@ -474,7 +474,7 @@ class IDFFWindow(SiriusMainWindow):
         self.log = PyDMLogLabel(
             self, init_channel=self.dev_pref.substitute(propty='Log-Mon'))
         self.log.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.MinimumExpanding)
         self.log.setAlternatingRowColors(True)
         self.log.maxCount = 2000
 
@@ -529,7 +529,7 @@ class IDFFWindow(SiriusMainWindow):
             '<h4>Ramp Correctors<h4>', self,
             alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom
         )
-        self.lb_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.lb_rampcorr.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
         self.btn_rampupcorr = QPushButton('', self)
         self.btn_rampupcorr.clicked.connect(
@@ -579,7 +579,7 @@ class IDFFWindow(SiriusMainWindow):
         )
 
         wid = QWidget()
-        wid.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Maximum)
+        wid.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Maximum)
         lay = QGridLayout(wid)
         lay.addWidget(self.lb_rampcorr, 0, 0, 1, 2)
         lay.addWidget(self.lb_rampnrpts, 1, 0)

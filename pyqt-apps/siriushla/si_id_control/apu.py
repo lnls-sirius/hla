@@ -67,7 +67,7 @@ class APUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._sb_phsspd, 1, 1)
         lay.addWidget(self._lb_phsspd, 1, 2)
         lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 2, 0)
         lay.addWidget(self._ld_ismov, 3, 0)
         lay.addLayout(hbox_motion, 3, 1, 1, 2)
         gbox.setStyleSheet(
@@ -204,7 +204,7 @@ class APUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._sb_speedlim, 0, 1)
         lay.addWidget(self._lb_speedlim, 0, 2)
         lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+            QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(self._ld_homeaxis, 2, 0)
         lay.addWidget(self._pb_home, 2, 1, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self._ld_standby, 3, 0)
@@ -281,7 +281,7 @@ class APUAlarmDetails(IDCommonDialog):
         lay.addWidget(self._lb_almsttdw, 4, 1)
         lay.addWidget(self._ld_almsttcode, 5, 0)
         lay.addWidget(self._lb_almsttcode, 5, 1)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 6, 0)
         lay.addWidget(self._ld_almrack, 7, 0, 1, 2)
         lay.addWidget(self._ld_almestop, 8, 0)
         lay.addWidget(self._led_almestop, 8, 1)
@@ -366,7 +366,7 @@ class APUHardLLDetails(IDCommonDialog):
         self._led_stthw.onColor = PyDMLed.LightGreen
         self._led_stthw.setObjectName('led')
         self._led_stthw.setStyleSheet('#led{max-width: 1.29em;}')
-        self._led_stthw.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._led_stthw.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         self._lb_stthw = SiriusLabel(
             self, self.dev_pref.substitute(propty='StateHw-Mon'))
 
@@ -379,7 +379,7 @@ class APUHardLLDetails(IDCommonDialog):
         self._led_sttsys.onColor = PyDMLed.LightGreen
         self._led_sttsys.setObjectName('led')
         self._led_sttsys.setStyleSheet('#led{max-width: 1.29em;}')
-        self._led_sttsys.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._led_sttsys.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         self._lb_sttsys = SiriusLabel(
             self, self.dev_pref.substitute(propty='State-Mon'))
 
@@ -389,7 +389,7 @@ class APUHardLLDetails(IDCommonDialog):
         self._led_isopr.offColor = PyDMLed.Red
         self._led_isopr.onColor = PyDMLed.LightGreen
         self._led_isopr.setStyleSheet('max-width: 1.29em;')
-        self._led_isopr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._led_isopr.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
 
         lay_hwsys = QGridLayout(self)
         lay_hwsys.addWidget(

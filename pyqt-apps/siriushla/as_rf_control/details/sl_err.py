@@ -43,7 +43,7 @@ class SlowLoopErrorDetails(SiriusDialog):
 
     def _setupDetails(self, lay, key, chs_dict):
         if key:
-            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addWidget(QLabel(
                 f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter))
 
@@ -88,7 +88,7 @@ class SlowLoopErrorDetails(SiriusDialog):
         lay_table.addWidget(lb_qerr, 3, 2)
 
         lay_llrf.addLayout(lay_table)
-        lay_llrf.addItem(QSpacerItem(15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored))
+        lay_llrf.addItem(QSpacerItem(15, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored))
 
         # Graphs
         self.setupGraphFasor(lay_llrf, chs_dict)

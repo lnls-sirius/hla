@@ -79,18 +79,18 @@ class MagOffConvApp(SiriusMainWindow):
         norm_lay.setAlignment(Qt.AlignmentFlag.AlignLeft)
         norm_lay.setHorizontalSpacing(5)
         norm_lay.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 0)
         norm_lay.addWidget(self._lb_current, 0, 1)
         norm_lay.addWidget(self._sb_current, 1, 1)
         norm_lay.addWidget(lb_arrow, 0, 2, 2, 1)
         norm_lay.addWidget(self._lb_strength, 0, 3)
         norm_lay.addWidget(self._sb_strength, 1, 3)
         norm_lay.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 4)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 4)
         norm_lay.addWidget(self._lb_energy, 0, 5)
         norm_lay.addWidget(self._sb_energy, 1, 5)
         norm_lay.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 6)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 6)
         norm_lay.addWidget(self._lb_quadfam_kl, 0, 7)
         norm_lay.addWidget(self._sb_quadfam_kl, 1, 7)
         self.norm_gb = QGroupBox('', self)

@@ -176,7 +176,7 @@ class DipoleRamp(QWidget):
         self.graph.setStyleSheet("""
             #DipoleGraph{min-width:24em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
-        self.graph.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.graph.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -290,7 +290,7 @@ class DipoleRamp(QWidget):
         self.table.verticalHeader().hide()
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
-        self.table.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        self.table.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
 
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
@@ -882,7 +882,7 @@ class MultipolesRamp(QWidget):
         self.graph.setStyleSheet("""
             #MultipolesGraph{min-width:28em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
-        self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        self.graph.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -922,8 +922,8 @@ class MultipolesRamp(QWidget):
             QTableWidget QTableCornerButton::section {
                 background-color: #FF6666;
             }""")
-        self.table.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                 QSzPlcy.MinimumExpanding)
+        self.table.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                 QSzPlcy.Policy.MinimumExpanding)
         self.table.verticalHeader().setStyleSheet("""
             min-width:1.75em; max-width:1.75em;""")
         self.table.horizontalHeader().setStyleSheet("""
@@ -1521,7 +1521,7 @@ class RFRamp(QWidget):
         self.graph.setStyleSheet("""
             #RFGraph{min-width:30em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
-        self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        self.graph.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
 
         self.ax1 = self.graph.figure.subplots()
@@ -1597,7 +1597,7 @@ class RFRamp(QWidget):
         self.table.verticalHeader().hide()
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
-        self.table.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        self.table.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
 
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)

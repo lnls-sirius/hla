@@ -163,7 +163,7 @@ class IDCommonSummaryHeader(IDCommonSummaryBase):
             label.setStyleSheet(
                 'min-width:{0}em; max-width:{0}em;'
                 'font-weight:bold;'.format(str(size)))
-            label.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Preferred)
+            label.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Preferred)
             layout.addWidget(label)
 
 

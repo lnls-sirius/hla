@@ -146,7 +146,7 @@ class BaseWindow(SiriusMainWindow):
 
         cb_scrntype = PyDMEnumComboBox(self, scrn_device.substitute(
             prefix=self.prefix, propty='ScrnType-Sel'))
-        cb_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        cb_scrntype.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed)
         cb_scrntype.setStyleSheet("min-width:4.5em;max-width:4.5em;")
 
         lb_scrntype = SiriusLabel(self, scrn_device.substitute(
@@ -175,7 +175,7 @@ class BaseWindow(SiriusMainWindow):
     def _create_corr_summwidget(self, corr):
         """Create and return a corrector detail widget."""
         wid = QWidget()
-        wid.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        wid.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setAlignment(Qt.AlignmentFlag.AlignCenter)

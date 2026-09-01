@@ -507,7 +507,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         led.setStyleSheet(
             "min-width:1.29em; max-width:1.29em; "
             "min-height:1.29em; max-height:1.29em;")
-        led.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        led.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         layout.addWidget(led)
     elif propty_type == 'offon':
         statebutton = PyDMStateButton(parent, prefix.substitute(

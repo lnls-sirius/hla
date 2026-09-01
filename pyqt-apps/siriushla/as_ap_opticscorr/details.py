@@ -48,7 +48,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         lay.addWidget(self.pydmlinedit_configname, 11, self._nfam//2)
         lay.addWidget(self.pydmlabel_configname, 11, self._nfam//2+1)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 12, 1)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 12, 1)
 
         label_matrix = QLabel('<h4>Matrix</h4>', self,
                               alignment=Qt.AlignmentFlag.AlignCenter)
@@ -75,12 +75,12 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QHeaderView.Stretch)
         self.table_matrix.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_matrix.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                        QSzPlcy.Preferred)
+        self.table_matrix.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                        QSzPlcy.Policy.Preferred)
 
         lay.addWidget(label_matrix, 13, 1, 1, self._nfam)
         lay.addWidget(self.table_matrix, 14, 1, 1, self._nfam)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 15, 1)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 15, 1)
 
         label_nomintstrength = QLabel(
             '<h4>Nominal '+self._intstrength+'s</h4>', self,
@@ -112,12 +112,12 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength.setColumnCount(self._nfam)
         self.table_nomintstrength.rowHeaderLabels = [self._intstrength]
         self.table_nomintstrength.columnHeaderLabels = self._fams
-        self.table_nomintstrength.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                                QSzPlcy.Preferred)
+        self.table_nomintstrength.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                                QSzPlcy.Policy.Preferred)
 
         lay.addWidget(label_nomintstrength, 16, 1, 1, self._nfam)
         lay.addWidget(self.table_nomintstrength, 17, 1, 1, self._nfam)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 18, 1)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 18, 1)
 
         if self._opticsparam == 'Chrom':
             label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,

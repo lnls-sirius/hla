@@ -45,7 +45,7 @@ class ACPanelDetails(SiriusDialog):
             f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
 
         lay.addWidget(title_frame, 0, 0, 1, 7)
-        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
 
         # Phases
         row = 3
@@ -67,7 +67,7 @@ class ACPanelDetails(SiriusDialog):
             '<h4>Voltage</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 2, 2)
         lay.addWidget(QLabel(
             '<h4>THD</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 2, 3)
-        lay.addItem(QSpacerItem(9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 2, 4)
+        lay.addItem(QSpacerItem(9, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 2, 4)
 
         # Line Voltage
         row = 3
@@ -80,7 +80,7 @@ class ACPanelDetails(SiriusDialog):
             lay.addWidget(lb, row, 6)
             row += 1
 
-        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
         row += 1
         old_row = row
 

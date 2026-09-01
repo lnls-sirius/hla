@@ -336,7 +336,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         col = 1
         for header_lbl in pv_info:
             lbl = QLabel(header_lbl, self, alignment=Qt.AlignmentFlag.AlignCenter)
-            lbl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+            lbl.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
             lay.addWidget(lbl, row, col, 1, 2)
             col += 2
 

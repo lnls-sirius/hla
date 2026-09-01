@@ -75,7 +75,7 @@ class MainWindow(SiriusMainWindow):
         # assign them to the clicked signal
         wid = QDockWidget(self)
         wid.setWindowTitle("Orbit Registers")
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sz_pol.setVerticalStretch(1)
         wid.setSizePolicy(sz_pol)
         wid.setFloating(False)
@@ -93,7 +93,7 @@ class MainWindow(SiriusMainWindow):
     def _create_ioc_controllers(self):
         docwid = QDockWidget(self)
         docwid.setWindowTitle("IOC Control")
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sz_pol.setVerticalStretch(1)
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
@@ -109,7 +109,7 @@ class MainWindow(SiriusMainWindow):
     def _create_log_docwidget(self):
         docwid = QDockWidget(self)
         docwid.setWindowTitle('IOC Log')
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setObjectName('doc_IOCLog')

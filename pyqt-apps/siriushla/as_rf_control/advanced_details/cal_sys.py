@@ -81,12 +81,12 @@ class CalSysDetails(SiriusDialog):
 
         lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 1)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 2)
         lay.addWidget(QLabel('<h4>UnCal</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 4)
         lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 5)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 6)
         lay.addWidget(QLabel('<h4>Cal</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 7)
         lay.addWidget(cb_units, 0, 8)
 
@@ -135,7 +135,7 @@ class CalSysDetails(SiriusDialog):
 
         lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 1, 1, 2)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 3)
         lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
             0, 4, 1, 2)
 

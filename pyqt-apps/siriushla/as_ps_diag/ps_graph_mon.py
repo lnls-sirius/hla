@@ -71,10 +71,10 @@ class PSGraphMonWindow(SiriusMainWindow):
         if not self._filters:
             lay.addWidget(self.dev_sel, 1, 0)
             lay.addItem(
-                QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 1)
+                QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), 1, 1)
         lay.addWidget(self.propty_sel, 2, 0)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 2, 1)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), 2, 1)
         lay.addWidget(self.graph, 3, 0, 1, 2)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 1)
@@ -241,12 +241,12 @@ class PSGraphProptySelWidget(QWidget):
         icon = qta.icon('mdi.record-circle-outline')
         pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)))
         self._label_symb.setPixmap(pixmap)
-        self._label_symb.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_symb.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self.cb_prop_symb = QComboBox(self)
         self.cb_prop_symb.currentTextChanged.connect(
             self.propty_symb_changed.emit)
         self.cb_prop_symb.setSizePolicy(
-            QSzPlcy.Expanding, QSzPlcy.Preferred)
+            QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.cb_prop_symb.setMaxVisibleItems(10)
         self.cb_prop_symb.addItems(self._choose_prop_symb)
         hbox_prop_symb = QHBoxLayout()
@@ -257,12 +257,12 @@ class PSGraphProptySelWidget(QWidget):
         icon = qta.icon('mdi.pulse')
         pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)))
         self._label_line.setPixmap(pixmap)
-        self._label_line.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_line.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self.cb_prop_line = QComboBox(self)
         self.cb_prop_line.currentTextChanged.connect(
             self.propty_line_changed.emit)
         self.cb_prop_line.setSizePolicy(
-            QSzPlcy.Expanding, QSzPlcy.Preferred)
+            QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.cb_prop_line.setMaxVisibleItems(10)
         self.cb_prop_line.addItems(self._choose_prop_line)
         hbox_prop_line = QHBoxLayout()

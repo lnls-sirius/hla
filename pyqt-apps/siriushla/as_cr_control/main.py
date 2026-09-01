@@ -44,7 +44,7 @@ class CryoControl(SiriusMainWindow):
             _os.path.abspath(_os.path.dirname(__file__)), img_file))
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
-            QSizePolicy.Ignored, QSizePolicy.Ignored)
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         self.image_container.setPixmap(pixmap)
         self.image_container.setMinimumSize(1750, 850)
         self.image_container.installEventFilter(self)

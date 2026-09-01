@@ -83,7 +83,7 @@ class SSADetailsSI(SiriusDialog):
                 column = 0
 
         lay.addLayout(lay_racks, 1, 0, 1, 4)
-        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 2, 0)
 
         # Runtime
         lb_run = SiriusLabel(
@@ -174,7 +174,7 @@ class SSADetailsSI(SiriusDialog):
                 column = 0
 
         lay.addItem(QSpacerItem(
-            0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row_general, 0)
+            0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row_general, 0)
         lay.addLayout(lay_alerts, row_general+1, 0, 1, 4)
         row_general += 2
 

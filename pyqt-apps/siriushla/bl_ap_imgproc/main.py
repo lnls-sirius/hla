@@ -175,7 +175,7 @@ class BLImgProc(QWidget):
         for x in range(0, 2):
             widget = self.select_widget(
                 pv_list[x], sprb_type[x], units=False)
-            widget.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+            widget.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
             lay.addWidget(widget)
         return wid
 

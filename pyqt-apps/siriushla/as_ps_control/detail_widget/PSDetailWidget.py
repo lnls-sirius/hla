@@ -104,7 +104,7 @@ class _BaseDetailWidget(QWidget):
 
         self.setFocus()
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
     @staticmethod
     def conv_time_string(value):
@@ -329,7 +329,7 @@ class PSDetailWidget(_BaseDetailWidget):
         # Group boxes that compose the widget
         self.frmwr_box = QGroupBox("Firmware && IOC")
         self.frmwr_box.setObjectName("version")
-        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.frmwr_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
         self.pwrstate_box = QGroupBox("PwrState")
@@ -426,18 +426,18 @@ class PSDetailWidget(_BaseDetailWidget):
     def _frmwrLayout(self):
         self.version_label = QLabel('ARM & DSP')
         self.version_label.setObjectName("version_label")
-        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.version_cte = SiriusLabel(
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.displayFormat = \
             SiriusLabel.DisplayFormat.BSMPUDCVersion
         self.version_cte.setObjectName("version_cte_label")
-        self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_cte.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_boot_label = QLabel('IOC Boot')
         self.tstamp_boot_label.setObjectName("tstamp_label")
-        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_boot = QLabel('', self)
         self.tstamp_boot_ch = SiriusConnectionSignal(
@@ -445,12 +445,12 @@ class PSDetailWidget(_BaseDetailWidget):
         self.tstamp_boot_ch.new_value_signal[float].connect(
             self._tstamp_boot_met)
         self.tstamp_boot.setObjectName("tstamp_boot_label")
-        self.tstamp_boot.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstamp_label")
         self.tstamp_update_label.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Maximum)
+            QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_update = QLabel('', self)
         self.tstamp_update_ch = SiriusConnectionSignal(
@@ -458,7 +458,7 @@ class PSDetailWidget(_BaseDetailWidget):
         self.tstamp_update_ch.new_value_signal[float].connect(
             self._tstamp_update_met)
         self.tstamp_update.setObjectName("tstamp_update_label")
-        self.tstamp_update.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         layout = QGridLayout()
         layout.addWidget(self.version_label, 0, 0, Qt.AlignmentFlag.AlignHCenter)
@@ -733,7 +733,7 @@ class PSDetailWidget(_BaseDetailWidget):
                 '#graph{max-height:15em; max-width:16.5em;}')
             self.curve_siggen.setLabel('left', text='Current [A]', color='gray')
             self.curve_siggen.setLabel('bottom', text='Time [s]', color='gray')
-            self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            self.curve_siggen.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
             self.curve_siggen.autoRangeX = True
             self.curve_siggen.autoRangeY = True
             self.curve_siggen.showXGrid = True
@@ -821,7 +821,7 @@ class PSDetailWidget(_BaseDetailWidget):
         self.wfm_graph.setObjectName('graph')
         self.wfm_graph.setStyleSheet(
             '#graph{max-height:15em; max-width:16.5em;}')
-        self.wfm_graph.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_graph.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.wfm_graph.autoRangeX = True
         self.wfm_graph.autoRangeY = True
         self.wfm_graph.showXGrid = True
@@ -834,7 +834,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # nrpts label
         self.wfm_nrpts_lb = QLabel('Nrpts (SP|RB|Ref-Mon|Mon):', self)
-        self.wfm_nrpts_lb.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_nrpts_lb.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
 
         # checkbox layout
         hbox_show = QHBoxLayout()
@@ -962,7 +962,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         self.scope_box = QGroupBox("Scope")
         self.scope_box.setObjectName("Scope")
-        self.scope_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.scope_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.scope_box.setLayout(layout_scope)
 
         # --- wfm groupbox ---
@@ -1044,7 +1044,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         self.wfm_box = QGroupBox("Wfm")
         self.wfm_box.setObjectName("Wfm")
-        self.wfm_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.wfm_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.wfm_box.setLayout(layout_wfm)
 
         # --- wfmlayout ---
@@ -1127,7 +1127,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
         # Group boxes that compose the widget
         self.frmwr_box = QGroupBox("IOC && Net")
         self.frmwr_box.setObjectName("version")
-        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.frmwr_box.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.pwrstate_box = QGroupBox("PwrState")
         self.pwrstate_box.setObjectName("power_state")
         self.interlock_box = QGroupBox("Interlock")
@@ -1184,19 +1184,19 @@ class LIPSDetailWidget(_BaseDetailWidget):
     def _frmwrLayout(self):
         self.version_label = QLabel('Version')
         self.version_label.setObjectName("version_label")
-        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.version_cte = SiriusLabel(
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.setObjectName("version_cte_label")
-        self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_cte.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         self.tstamp_boot_label = QLabel('IOC Boot')
         self.tstamp_boot_label.setObjectName("tstamp_label")
-        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_boot_cte = SiriusLabel(
             self, self._prefixed_psname + ":TimestampBoot-Cte")
         self.tstamp_boot_cte.setObjectName("tstamp_cte_label")
-        self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_boot_cte_ch = SiriusConnectionSignal(
             self._prefixed_psname + ":TimestampBoot-Cte")
         self.tstamp_boot_cte_ch.new_value_signal[float].connect(
@@ -1205,11 +1205,11 @@ class LIPSDetailWidget(_BaseDetailWidget):
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstampupdate_label")
         self.tstamp_update_label.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Maximum)
+            QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_update_mon = SiriusLabel(
             self, self._prefixed_psname + ":TimestampUpdate-Mon")
         self.tstamp_update_mon.setObjectName("tstampupdate_mon_label")
-        self.tstamp_update_mon.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_mon.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.tstamp_update_mon_ch = SiriusConnectionSignal(
             self._prefixed_psname + ":TimestampUpdate-Mon")
         self.tstamp_update_mon_ch.new_value_signal[float].connect(
@@ -1217,11 +1217,11 @@ class LIPSDetailWidget(_BaseDetailWidget):
 
         self.conn_label = QLabel('Net Status')
         self.conn_label.setObjectName("net_label")
-        self.conn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.conn_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
         self.conn_sts = SiriusLabel(
             self, self._prefixed_psname + ":Connected-Mon")
         self.conn_sts.setObjectName("net_cte_label")
-        self.conn_sts.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.conn_sts.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Maximum)
 
         layout = QGridLayout()
         layout.addWidget(self.version_label, 0, 0, Qt.AlignmentFlag.AlignHCenter)
@@ -1875,7 +1875,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr.addChannel(
             y_channel=self._prefixed_psname + ':LAMPCurrentRefData',
             name='CurrentRef', color='green', lineWidth=1)
-        # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        # self.graph_curr.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
         self.graph_curr.showXGrid = True
@@ -1891,7 +1891,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_volt.addChannel(
             y_channel=self._prefixed_psname + ':LAMPVoltageData',
             name='Voltage', color='blue', lineWidth=1)
-        # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        # self.graph_volt.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.graph_volt.autoRangeX = True
         self.graph_volt.autoRangeY = True
         self.graph_volt.showXGrid = True
@@ -1926,7 +1926,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             cb_show.setStyleSheet('color: '+color+';')
             cb_show.stateChanged.connect(curve.setVisible)
             hbox_show.addWidget(cb_show)
-        self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.graph_chist.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.graph_chist.autoRangeX = True
         self.graph_chist.autoRangeY = True
         self.graph_chist.showXGrid = True
@@ -1955,7 +1955,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             'Accumulator', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.fofbacc_mon = SiriusLabel(
             self, self._prefixed_psname + ':FOFBAcc-Mon')
-        self.fofbacc_mon.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.fofbacc_mon.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         fofbaccgain_lb = QLabel(
             'Acc. Gain', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
@@ -2045,7 +2045,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             colorrb = 'blue' if plane == 'X' else 'red'
             gph_fofbcoeffs[plane] = SiriusWaveformPlot()
             gph_fofbcoeffs[plane].setSizePolicy(
-                QSzPlcy.Maximum, QSzPlcy.Maximum)
+                QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
             gph_fofbcoeffs[plane].showLegend = True
             gph_fofbcoeffs[plane].autoRangeX = True
             gph_fofbcoeffs[plane].autoRangeY = True
@@ -2083,7 +2083,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         # filters
         gph_filt = SiriusWaveformPlot()
-        gph_filt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        gph_filt.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         gph_filt.showLegend = True
         gph_filt.autoRangeX = True
         gph_filt.autoRangeY = True

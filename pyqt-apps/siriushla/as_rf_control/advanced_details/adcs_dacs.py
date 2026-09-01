@@ -84,4 +84,4 @@ class ADCDACDetails(SiriusDialog):
                     lay.addWidget(lb_value, row, offset+3)
                 row += 1
 
-        lay.addItem(QSpacerItem(20, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 4)
+        lay.addItem(QSpacerItem(20, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 4)

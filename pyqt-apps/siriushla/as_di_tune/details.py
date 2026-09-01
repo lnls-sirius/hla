@@ -448,33 +448,33 @@ class TuneDetails(SiriusMainWindow):
         lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addRow(lbl_acq, hbox_acq)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_drive, hbox_drive)
         lay.addRow(lbl_enblsts, gbox_enblsts)
         if self.section == 'BO':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(lbl_acqcnt, hbox_acqcnt)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(lbl_nrsmp, hbox_nrsmp)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
+        lay.addRow(lbl_nrsmp, self.lb_nrsmp)
         if self.section == 'SI':
             lay.addRow(lbl_acqtime, self.cb_acqtime)
             lay.addRow(lbl_swetime, self.lb_swetime)
         lay.addRow(lbl_span, hbox_span)
         lay.addRow(lbl_rbw, hbox_rbw)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_h, hbox_h)
         lay.addRow(lbl_Fh, self.lb_Fh)
         lay.addRow(lbl_foff, hbox_foff)
         lay.addRow(lbl_Fc, hbox_Fc)
         lay.addRow(lbl_autoFc, hbox_autoFc)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_drivegain, hbox_drivegain)
         if self.section == 'BO':
             lay.addRow(lbl_driveauto, hbox_driveauto)
             lay.addRow(lbl_noiseamp, hbox_noiseamp)
         else:
             lay.addRow(lbl_trkgenlvl, hbox_trkgenlvl)
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(lbl_getspec, hbox_getspec)
         return lay
 
@@ -769,11 +769,11 @@ class SITuneMarkerDetails(SiriusMainWindow):
         vbox_cmd.addWidget(self.pb_maxnext)
         vbox_cmd.addWidget(self.pb_maxright)
         vbox_cmd.addWidget(self.pb_maxleft)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(vbox_cmd)
 
         if self.mtyp == '' and self.idx == '1':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
             label_enblautomin = QLabel('Enable Auto Min: ', self)
             self.bt_enblautomin = PyDMStateButton(

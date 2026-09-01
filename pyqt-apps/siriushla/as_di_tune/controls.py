@@ -496,28 +496,28 @@ class TuneControls(QWidget):
             lay.addRow(QLabel('<h4>Measure</h4>'))
             lay.addRow(label_tunefreq, self.lb_tunefreq)
             lay.addRow(label_tunefrac, self.lb_tunefrac)
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(QLabel('<h4>Measurement Settings</h4>'))
         lay.addRow(lbl_acq, hbox_acq)
         lay.addRow(lbl_drive, hbox_drive)
         if self.section == 'BO':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(lbl_acqcnt, hbox_acqcnt)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(lbl_nrsmp, hbox_nrsmp)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
+        lay.addRow(lbl_nrsmp, self.lb_nrsmp)
         if self.section == 'SI':
             lay.addRow(lbl_acqtime, self.cb_acqtime)
             lay.addRow(lbl_swetime, self.lb_swetime)
         lay.addRow(lbl_span, hbox_span)
         lay.addRow(lbl_rbw, hbox_rbw)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_h, hbox_h)
         lay.addRow(lbl_Fh, self.lb_Fh)
         lay.addRow(lbl_foff, hbox_foff)
         lay.addRow(lbl_Fc, hbox_Fc)
         lay.addRow(lbl_autoFc, hbox_autoFc)
         if self.section == 'BO':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(QLabel('<h4>ROI</h4>'))
             lay.addRow(lbl_roistartx, hbox_roistartx)
             lay.addRow(lbl_roiwidth, hbox_roiwidth)
@@ -526,7 +526,7 @@ class TuneControls(QWidget):
             lay.addRow(lbl_roiauto, hbox_roiauto)
         lay.addRow(hbox_details)
         if self.section == 'SI':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(tab_markers)
 
         self.setStyleSheet("""

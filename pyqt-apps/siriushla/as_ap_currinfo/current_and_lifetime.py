@@ -217,15 +217,15 @@ class CurrLTWindow(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 0)
         lay.addWidget(self._ld_current, 0, 1)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 2)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 3)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 3)
         lay.addWidget(self._ld_lifetime, 0, 4)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 5)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 5)
         lay.addWidget(self._lb_current, 1, 1)
         lay.addWidget(self._lb_lifetime, 1, 4)
         lay.addWidget(self.graph, 2, 0, 1, 6)
@@ -271,14 +271,14 @@ class CurrLTWindow(SiriusMainWindow):
             prefix=self.prefix, device='SI-13C4:DI-DCCT')
         hlay_dcct13c4 = QHBoxLayout()
         hlay_dcct13c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct13c4.addWidget(self._led_dcct13c4)
         hlay_dcct13c4.addWidget(self._lb_dcct13c4)
         hlay_dcct13c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct13c4.addWidget(self._pb_13c4_detail)
         hlay_dcct13c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
 
         self._led_dcct14c4 = SiriusLedAlert(self, _PVName(
             'SI-14C4:DI-DCCT:ReliableMeas-Mon').substitute(prefix=self.prefix))
@@ -295,14 +295,14 @@ class CurrLTWindow(SiriusMainWindow):
             prefix=self.prefix, device='SI-14C4:DI-DCCT')
         hlay_dcct14c4 = QHBoxLayout()
         hlay_dcct14c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct14c4.addWidget(self._led_dcct14c4)
         hlay_dcct14c4.addWidget(self._lb_dcct14c4)
         hlay_dcct14c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
         hlay_dcct14c4.addWidget(self._pb_14c4_detail)
         hlay_dcct14c4.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum))
 
         gbox = QGroupBox('Current Settings and Status', self)
         lay = QGridLayout(gbox)
@@ -315,7 +315,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._cb_seldcct, 2, 1)
         lay.addWidget(self._lb_seldcct, 2, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 3, 0)
         lay.addLayout(hlay_dcct13c4, 4, 0, 1, 3)
         lay.addLayout(hlay_dcct14c4, 5, 0, 1, 3)
         lay.setColumnStretch(0, 2)
@@ -510,7 +510,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_curroffset, 1, 1)
         lay.addWidget(self._lb_curroffset, 1, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 2, 1)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 2, 1)
         lay.addWidget(self._ld_buffer, 3, 0, 1, 3)
         lay.addLayout(hlay_maxintvl, 4, 0)
         lay.addWidget(self._sb_maxintvl, 4, 1)
@@ -530,7 +530,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_intvlbtwspl, 10, 1)
         lay.addWidget(self._lb_intvlbtwspl, 10, 2)
         lay.addItem(
-            QSpacerItem(20, 5, QSzPlcy.Minimum, QSzPlcy.Fixed), 11, 1)
+            QSpacerItem(20, 5, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 11, 1)
         lay.addWidget(self._ld_bufautoreset, 12, 0)
         lay.addWidget(self._cb_bufautoreset, 12, 1)
         lay.addWidget(self._lb_bufautoreset, 12, 2)
@@ -538,7 +538,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_bufdcurr, 13, 1)
         lay.addWidget(self._lb_bufdcurr, 13, 2)
         lay.addItem(
-            QSpacerItem(20, 5, QSzPlcy.Minimum, QSzPlcy.Fixed), 14, 1)
+            QSpacerItem(20, 5, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 14, 1)
         lay.addWidget(self._ld_bufsize, 15, 0)
         lay.addLayout(glay_bufsize, 15, 1, 1, 2)
         return gbox
@@ -563,13 +563,13 @@ class CurrLTWindow(SiriusMainWindow):
         gbox = QGroupBox('Graphs Settings', self)
         lay = QGridLayout(gbox)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 0)
         lay.addWidget(self._ld_ltfrom, 0, 1)
         lay.addWidget(self._cb_ltfrom, 0, 2)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 0, 3)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Minimum), 0, 3)
         lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Minimum, QSzPlcy.Expanding),
+            QSpacerItem(1, 1, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding),
             1, 1, 1, 2)
         lay.addWidget(self._ld_showsmpl, 2, 1)
         lay.addWidget(self._cb_showsmpl, 2, 2)

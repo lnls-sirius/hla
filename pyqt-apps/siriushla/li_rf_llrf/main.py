@@ -53,7 +53,7 @@ class LLRFMain(QWidget):
         self.image_container.installEventFilter(self)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
-            QSizePolicy.Ignored, QSizePolicy.Ignored)
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         self.image_container.setMinimumSize(950, 0)
         return self.image_container
 
@@ -191,7 +191,7 @@ class LLRFMain(QWidget):
 
         conlay = QGridLayout()
         conlay.addItem(
-            QSpacerItem(1, 12, QSizePolicy.Ignored, QSizePolicy.Fixed), 0, 0)
+            QSpacerItem(1, 12, QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed), 0, 0)
         for dev in DEVICES:
             grbox = QGroupBox(dev.label, self)
             lay = QGridLayout()

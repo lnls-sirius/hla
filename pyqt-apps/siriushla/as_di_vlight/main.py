@@ -138,7 +138,7 @@ class VLightCamView(QWidget):
         self.pb_details.setObjectName('detail')
         self.pb_details.setStyleSheet(
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-        self.pb_details.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.pb_details.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         MyWindow = create_window_from_widget(
             BaslerCamSettings, title=self.device+' Settings Details',
             is_main=True)

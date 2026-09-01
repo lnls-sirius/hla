@@ -162,7 +162,7 @@ class BiasFBDetailDialog(SiriusDialog):
                 propty='BiasFBModelMaxNrPts-RB'),
             alignment=Qt.AlignmentFlag.AlignCenter)
         slash = QLabel('/', self, alignment=Qt.AlignmentFlag.AlignCenter)
-        slash.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        slash.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         lb_modnp = SiriusLabel(
             self, self._inj_prefix.substitute(propty='BiasFBModelNrPts-Mon'),
             alignment=Qt.AlignmentFlag.AlignCenter)
@@ -184,7 +184,7 @@ class BiasFBDetailDialog(SiriusDialog):
             self, label='Fit Now', pressValue=1,
             init_channel=self._inj_prefix.substitute(
                 propty='BiasFBModelFitParamsNow-Cmd'))
-        pb_fitnow.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        pb_fitnow.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
         pb_fitnow.setDefault(False)
         pb_fitnow.setAutoDefault(False)
 
@@ -193,7 +193,7 @@ class BiasFBDetailDialog(SiriusDialog):
         lay2.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay2.addWidget(gbox_autofit, 0, 0, 2, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         lay2.addItem(
-            QSpacerItem(20, QSzPlcy.Minimum, QSzPlcy.Preferred), 0, 3)
+            QSpacerItem(20, 20, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Preferred), 0, 3)
         lay2.addWidget(ld_modmaxnp, 0, 4)
         lay2.addLayout(hlay_modmaxnp, 0, 5, 1, 2)
         lay2.addWidget(ld_npafterfit, 1, 4)

@@ -484,7 +484,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         dockwid = QDockWidget(self)
         dockwid.setObjectName('SIApp')
         dockwid.setWindowTitle('FOFB Control')
-        sz_pol = QSzPlcy(QSzPlcy.Preferred, QSzPlcy.Preferred)
+        sz_pol = QSzPlcy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Preferred)
         sz_pol.setVerticalStretch(1)
         dockwid.setSizePolicy(sz_pol)
         dockwid.setFloating(False)
@@ -499,7 +499,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
             self, init_channel=self.devpref.substitute(propty='Log-Mon'))
         loglabel.setObjectName('log')
         loglabel.setStyleSheet('#log{min-width: 20em;}')
-        loglabel.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
+        loglabel.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.MinimumExpanding)
         loglabel.setAlternatingRowColors(True)
         loglabel.maxCount = 2000
 
@@ -514,7 +514,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         dockwid = QDockWidget(self)
         dockwid.setObjectName('SIApp')
         dockwid.setWindowTitle("FOFB Log")
-        sz_pol = QSzPlcy(QSzPlcy.Preferred, QSzPlcy.Preferred)
+        sz_pol = QSzPlcy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Preferred)
         sz_pol.setVerticalStretch(1)
         dockwid.setSizePolicy(sz_pol)
         dockwid.setFloating(False)

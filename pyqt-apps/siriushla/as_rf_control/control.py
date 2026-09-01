@@ -451,7 +451,7 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(QLabel(
             '<h4>Enable</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 4, 0)
         lay_slc.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 5, 0)
+            0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 5, 0)
         lay_slc.addWidget(QLabel(
             '<h4>Amp.</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 7, 0)
         lay_slc.addWidget(QLabel(
@@ -523,7 +523,7 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addWidget(ld_dphase, 5, 1)
         lay_tunset.addWidget(ld_tunact, 6, 1)
         lay_tunset.addItem(QSpacerItem(
-            15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
+            15, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 3)
         lay_tunset.setColumnStretch(5, 3)
         if self.section == 'SI':
             offset = 2
@@ -855,7 +855,7 @@ class RFMainControl(SiriusMainWindow):
         lay.setAlignment(Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(ctrls_label, 0, 0)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+            QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(QLabel('Enable: ', self,
                              alignment=Qt.AlignmentFlag.AlignRight), 2, 0)
         lay.addWidget(self.bt_rmpenbl, 2, 2)
@@ -867,7 +867,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignmentFlag.AlignRight), 4, 0)
         lay.addWidget(self.led_rmptrig, 4, 1, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 5, 0)
+            QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 5, 0)
         lay.addWidget(QLabel('<h4>Durations</h4>', self), 6, 0, 1, 3)
         lay.addWidget(QLabel('Bottom: ', self,
                              alignment=Qt.AlignmentFlag.AlignRight), 7, 0)
@@ -889,7 +889,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignmentFlag.AlignRight), 11, 0)
         lay.addWidget(self.cb_rmpincts, 11, 2)
         lay.addWidget(self.lb_rmpincts, 11, 3)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 12, 0)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 12, 0)
         lay.addWidget(QLabel('<h4>Bottom</h4>', self), 13, 0, 1, 3)
         lay.addWidget(QLabel('Phase', self,
                              alignment=Qt.AlignmentFlag.AlignRight), 14, 0)
@@ -921,7 +921,7 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(lbl, 20, 1)
         lay.addWidget(self.lb_rmpvolttop2, 20, 1, 1, 3)
         lay.addItem(QSpacerItem(
-            200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 21, 3)
+            200, 10, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.MinimumExpanding), 21, 3)
         return lay
 
     def _advancedDetailsLayout(self):
@@ -935,7 +935,7 @@ class RFMainControl(SiriusMainWindow):
             lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
             lay.setHorizontalSpacing(9)
             lay.setVerticalSpacing(18)
-            lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             systems = ['']
 
         for i in range(len(systems)):
@@ -967,7 +967,7 @@ class RFMainControl(SiriusMainWindow):
                 gbox_lay.setVerticalSpacing(18)
                 self._setupDetailButtons(gbox_lay, buttons, 0)
                 gbox.setLayout(gbox_lay)
-                lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
                 lay.addWidget(gbox)
             else:
                 self._setupDetailButtons(lay, buttons, 1)
@@ -1098,18 +1098,18 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(QLabel(
             '<h4>SSA Rev.</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 6, 0)
         lay.addItem(
-            QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Ignored), 7, 0)
+            QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Ignored), 7, 0)
         lay.addWidget(QLabel(
             '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 8, 0)
 
         lay.addWidget(self.cb_ramp, 1, 0)
         lay.addWidget(self.lb_cavvgapbot, 8, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.lb_cavvgaptop, 8, 2, alignment=Qt.AlignmentFlag.AlignCenter)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 9, 0)
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 9, 0)
         lay.addWidget(self.ramp_graph, 10, 0, 1, 3)
         lay.addLayout(hbox_rb, 11, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 12, 0)
+            QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding), 12, 0)
         return lay
 
     def _powerMeterLayout(self):
@@ -1166,7 +1166,7 @@ class RFMainControl(SiriusMainWindow):
                     column = 0
                     if idx == 8:
                         lay_vals.addItem(QSpacerItem(
-                            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+                            0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
                     elif idx > 14:
                         column = 3
                         row = idx-4
@@ -1309,15 +1309,15 @@ class RFMainControl(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(25)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addLayout(lay_vals, 2, 0)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 3, 0)
         lay.addWidget(self.pwr_mon_graph, 4, 0)
         lay.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
+            0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Minimum), 5, 0)
         lay.addLayout(lay_cavvgap, 6, 0)
         lay.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 7, 0)
+            0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.MinimumExpanding), 7, 0)
         return lay
 
     def _graphsLayout(self):
@@ -1434,7 +1434,7 @@ class RFMainControl(SiriusMainWindow):
             lay_cavtemp.addWidget(self.tempcell_graph)
             lay_cavtemp.addLayout(hbox_cbs)
             lay_cavtemp.addItem(QSpacerItem(
-                0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay_cavtemp.addLayout(hbox_tempcoup_state)
             lay_cavtemp.addWidget(self.tempcoup_graph)
             lay_cavtemp.addWidget(self.horizontal_separator())
@@ -1553,7 +1553,7 @@ class RFMainControl(SiriusMainWindow):
                 lay_grid_temp.addWidget(temp_rb, row_t, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
                 lay_grid_temp.addItem(QSpacerItem(
-                    200, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row_t, 2)
+                    200, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), row_t, 2)
 
                 led_rfarea = SiriusLedAlert(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Geral'])
                 lay_grid_temp.addWidget(led_rfarea, row_t, 3, alignment=Qt.AlignmentFlag.AlignRight)
@@ -1596,13 +1596,13 @@ class RFMainControl(SiriusMainWindow):
                 graph.setLabel('left', '°C')
                 lay_rfarea.addWidget(graph)
                 lay_rfarea.addItem(QSpacerItem(
-                    0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                    0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
                 self.temparea_graphs[systems[i]] = graph
 
             lay_rfarea.addWidget(self.horizontal_separator())
             lay_rfarea.addItem(QSpacerItem(
-                0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
             # # Humidity
             lb_humidity_area = QLabel('<h4> Room Humidity [%] </h4>', self)
@@ -1630,7 +1630,7 @@ class RFMainControl(SiriusMainWindow):
                 lay_grid_hmdt.addWidget(unity_lb_hmdt, row_h, 2, alignment=Qt.AlignmentFlag.AlignLeft)
 
                 lay_grid_hmdt.addItem(QSpacerItem(
-                    300, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row_h, 3)
+                    300, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), row_h, 3)
 
                 row_h += 1
 
@@ -1651,12 +1651,12 @@ class RFMainControl(SiriusMainWindow):
                 graph.setLabel('left', '%')
                 lay_rfarea.addWidget(graph)
                 lay_rfarea.addItem(QSpacerItem(
-                    0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                    0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
                 self.humidity_graphs[systems[i]] = graph
 
             lay_rfarea.addItem(QSpacerItem(
-                0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
             self.temp_tab.addTab(self.temparea_wid, 'RF Area')
 
@@ -1935,10 +1935,10 @@ class RFMainControl(SiriusMainWindow):
                 f'<h4>{key}</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
                 0, column)
             lay_diag.addItem(QSpacerItem(
-                0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, column)
+                0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, column)
         else:
             lay_diag.addItem(QSpacerItem(
-                0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, column)
+                0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 0, column)
 
         row = 2
         for k, val in chs.items():

@@ -149,11 +149,11 @@ class AcqBaseWindow(SiriusMainWindow):
         self.lb_status = SiriusLabel(
             self, self._get_pvname('Status-Mon'), keep_unit=True)
         self.lb_status.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lb_status.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.lb_status.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self.lb_count = SiriusLabel(
             self, self._get_pvname('Count-Mon'), keep_unit=True)
         self.lb_count.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lb_count.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.lb_count.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         dlay_cmd = QGridLayout()
         dlay_cmd.setContentsMargins(0, 0, 0, 0)
         dlay_cmd.addWidget(self.pb_start, 0, 0)
@@ -166,7 +166,7 @@ class AcqBaseWindow(SiriusMainWindow):
         lay.addWidget(ld_chan, 0, 0)
         lay.addWidget(self.ec_chan, 0, 1)
         lay.addWidget(self.lb_chan, 0, 2)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Preferred, QSzPlcy.Fixed), 2, 0)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed), 2, 0)
         lay.addWidget(ld_hwdly, 3, 0)
         lay.addWidget(self.sb_hwdly, 3, 1)
         lay.addWidget(self.lb_hwdly, 3, 2)
@@ -187,7 +187,7 @@ class AcqBaseWindow(SiriusMainWindow):
         lay.addWidget(ld_uptime, 9, 0)
         lay.addWidget(self.sb_uptime, 9, 1)
         lay.addWidget(self.lb_uptime, 9, 2)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Preferred, QSzPlcy.Fixed), 10, 0)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed), 10, 0)
         lay.addLayout(dlay_cmd, 11, 0, 1, 3)
 
         return wid

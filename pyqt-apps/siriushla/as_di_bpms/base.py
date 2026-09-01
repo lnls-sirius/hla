@@ -106,7 +106,7 @@ class BaseWidget(QWidget):
         elif widtype == 'lineedit':
             wid = SiriusLineEdit(self, pvname)
             wid.setStyleSheet("QWidget{min-width:5em;}")
-            wid.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            wid.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
             if prec is not None:
                 wid.precisionFromPV = False
                 wid.precision = prec

@@ -167,7 +167,7 @@ class LIEgunWindow(SiriusMainWindow):
         lay.addWidget(self._sb_hvpsvoltsp, 1, 2)
         lay.addWidget(self._ld_hvpsvoltrb, 0, 3)
         lay.addWidget(self._lb_hvpsvoltrb, 1, 3)
-        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 2, 0)
         lay.addWidget(self._ld_hvpsenblsel, 3, 0, 1, 2)
         lay.addWidget(self._bt_hvpsenblsel, 4, 0, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self._led_hvpsenblsts, 4, 1, alignment=Qt.AlignmentFlag.AlignLeft)

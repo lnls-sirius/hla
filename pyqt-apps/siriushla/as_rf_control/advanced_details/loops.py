@@ -155,8 +155,8 @@ class LoopsDetails(SiriusDialog):
         pb_limit.setStyleSheet('min-width:8em')
         lay.addWidget(pb_limit, 9, 1)
 
-        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
-        lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
+        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 8, 0)
+        lay.addItem(QSpacerItem(40, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 4)
 
         # Amp Ref Min
         self._setupLabelEdit(lay, chs_dict, '26 mV', 0, 5)
@@ -308,7 +308,7 @@ class LoopsDetails(SiriusDialog):
             grp_lay.setAlignment(Qt.AlignmentFlag.AlignTop)
             grp_lay.addLayout(
                 self._controlLayout(chs_dict[grp_name]['Control'], addrs))
-            grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             grp_lay.addLayout(
                 self._statisticsLayout(chs_dict[grp_name], False))
             wid_grp = QWidget()
@@ -316,7 +316,7 @@ class LoopsDetails(SiriusDialog):
             grps.addTab(wid_grp, f'{grp_name} Loop')
 
         lay.addLayout(title_lay)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addLayout(rect_lay)
         lay.addWidget(grps)
 
@@ -336,7 +336,7 @@ class LoopsDetails(SiriusDialog):
             'Phase', alignment=Qt.AlignmentFlag.AlignCenter), 0, 5)
         if is_top_section:
             lay.addItem(QSpacerItem(
-                24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
+                24, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 6)
             lay.addWidget(QLabel(
                 'Power', alignment=Qt.AlignmentFlag.AlignCenter), 0, 7, 1, 2)
 

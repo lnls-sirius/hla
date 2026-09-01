@@ -57,7 +57,7 @@ class FOFBAcqSYSIDWindow(FOFBAcqBaseWindow):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name='SYSID') +
             ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
         self.wid_prbs = self._PRBSSettingsWidget()
@@ -291,7 +291,7 @@ class FOFBAcqLAMPWindow(FOFBAcqBaseWindow):
         self.title = QLabel(
             '<h2>'+self.device.substitute(propty_name='LAMP') +
             ' Acquisitions < /h2 >', alignment=Qt.AlignmentFlag.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.wid_basic = self._basicSettingsWidget()
         self.wid_trig = self._triggersWidget()

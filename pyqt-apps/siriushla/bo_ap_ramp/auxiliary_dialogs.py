@@ -198,7 +198,7 @@ class DeleteNormalizedConfig(SiriusDialog):
 
         self.l_configid = QLabel('', self)
         self.l_configid.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.Expanding)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Expanding)
         self.sb_confignumber.setValue(self.selected_row+1)
         self._searchConfigByIndex(self.selected_row+1)
 
@@ -265,7 +265,7 @@ class OpticsAdjustSettings(SiriusDialog):
         self.bt_apply.setDefault(False)
         hlay_apply = QHBoxLayout()
         hlay_apply.addItem(
-            QSpacerItem(20, 60, QSzPlcy.Expanding, QSzPlcy.Ignored))
+            QSpacerItem(20, 60, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored))
         hlay_apply.addWidget(self.bt_apply)
 
         tabs = QTabWidget(self)
@@ -307,8 +307,8 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_tunemat.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_tunemat.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                         QSzPlcy.Preferred)
+        self.table_tunemat.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                         QSzPlcy.Policy.Preferred)
 
         label_nomKL = QLabel('<h4>Nominal KL</h4>')
         label_nomKL.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -333,19 +333,19 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_nomKL.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_nomKL.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                       QSzPlcy.Preferred)
+        self.table_nomKL.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                       QSzPlcy.Policy.Preferred)
 
         lay = QVBoxLayout()
         lay.addWidget(l_tuneconfig)
         lay.addWidget(self.le_tuneconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding))
         lay.addWidget(label_tunemat)
         lay.addWidget(self.table_tunemat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding))
         lay.addWidget(label_nomKL)
         lay.addWidget(self.table_nomKL)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding))
 
         return lay
 
@@ -379,8 +379,8 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_chrommat.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_chrommat.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                          QSzPlcy.Preferred)
+        self.table_chrommat.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                          QSzPlcy.Policy.Preferred)
 
         l_nomSL = QLabel('<h4>Nominal SL</h4>')
         l_nomSL.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -405,8 +405,8 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_nomSL.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_nomSL.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                       QSzPlcy.Preferred)
+        self.table_nomSL.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                       QSzPlcy.Policy.Preferred)
 
         l_nomchrom = QLabel('<h4>Nominal Chrom</h4>')
         l_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -416,13 +416,13 @@ class OpticsAdjustSettings(SiriusDialog):
         lay = QVBoxLayout()
         lay.addWidget(l_chromconfig)
         lay.addWidget(self.le_chromconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding))
         lay.addWidget(l_chrommat)
         lay.addWidget(self.table_chrommat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding))
         lay.addWidget(l_nomSL)
         lay.addWidget(self.table_nomSL)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding))
         lay.addWidget(l_nomchrom)
         lay.addWidget(self.label_nomchrom)
 

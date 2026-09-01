@@ -176,7 +176,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def setup_ui(self, add_items=None):
         """."""
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         self.setSizePolicy(sz_pol)
         add_items = add_items or []
         add_items.extend(['Zero', 'ServConf'])

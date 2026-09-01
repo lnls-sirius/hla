@@ -403,7 +403,7 @@ class PSCmdWindow(SiriusMainWindow):
             tree.setStyleSheet(".QLabel{min-width: 8.5em;}")
             tree.tree.setHeaderHidden(True)
             tree.setSizePolicy(
-                QSizePolicy.Preferred, QSizePolicy.Preferred)
+                QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
             tree.tree.setColumnCount(1)
             tree.tree.doubleClicked.connect(self._open_detail)
             tree.tree.itemChanged.connect(
@@ -442,7 +442,7 @@ class PSCmdWindow(SiriusMainWindow):
                     for cmd, data in cmdlist.items():
                         btn = QPushButton(str(cmdidx) + '. ' + cmd, self)
                         btn.setSizePolicy(
-                            QSizePolicy.Minimum, QSizePolicy.Maximum)
+                            QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
                         btn.clicked.connect(_part(self._set_lastcomm, group))
                         btn.clicked.connect(data['cmd'])
                         if 'tooltip' in data:

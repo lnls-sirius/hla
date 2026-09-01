@@ -206,7 +206,7 @@ class _ICTSettings(SiriusDialog):
         self.bt_cal.setAutoDefault(False)
         self.bt_cal.setDefault(False)
         hlay_cal = QHBoxLayout()
-        hlay_cal.addItem(QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_cal.addItem(QSpacerItem(4, 2, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Fixed))
         hlay_cal.addWidget(self.bt_cal)
 
         self.setStyleSheet("""
@@ -243,7 +243,7 @@ class _ICTSettings(SiriusDialog):
             callback=self._updateReliableMeasLabels)
 
         gbox_reliablemeas = QGroupBox('ICT Measure Reliability Status', self)
-        gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        gbox_reliablemeas.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed)
 
         self.label_reliablemeas0 = QLabel('', self)
         self.led_ReliableMeas0 = SiriusLedAlert(
@@ -376,12 +376,12 @@ class _ICTSettings(SiriusDialog):
 
         flay = QFormLayout()
         flay.addRow(l_sampletrg, hlay_sampletrg)
-        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         flay.addRow(QLabel('<h4>Triggers</h4>'))
         flay.addRow(label_Digi, lay_Digi)
-        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         flay.addRow(label_Inte, lay_Integ)
-        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         flay.addRow(l_thold, hlay_thold)
         flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
@@ -556,22 +556,22 @@ class _ICTCalibration(QWidget):
         flay = QFormLayout()
         flay.addRow(l_thold, hlay_thold)
         flay.addRow(l_hfreject, hlay_hfreject)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_2ndreaddy, hlay_2ndreaddy)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_samplecnt, hlay_samplecnt)
         flay.addRow(l_aperture, hlay_aperture)
         flay.addRow(l_samplerate, hlay_samplerate)
         flay.addRow(l_imped, hlay_imped)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_bcmrange, self.pydmspinbox_BCMRange)
         flay.addRow(l_range, hlay_range)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_calenbl, hlay_calenbl)
         flay.addRow(l_calcharge, hlay_calcharge)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_download, self.pydmpushbutton_Download)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         return flay
 

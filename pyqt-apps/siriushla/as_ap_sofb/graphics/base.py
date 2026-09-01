@@ -271,7 +271,7 @@ class BaseWidget(QWidget):
         """."""
         combo = QComboBox(parent)
         combo.setObjectName('ComboBox_' + orb_tp + str(idx))
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         combo.setSizePolicy(sz_pol)
         combo.setMaxVisibleItems(10)
         for name in sorted(self.controls.keys()):
@@ -285,7 +285,7 @@ class BaseWidget(QWidget):
     def uicreate_label(self, lab, parent):
         """."""
         label = QLabel(lab, parent)
-        sz_pol = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
         label.setSizePolicy(sz_pol)
         label.setStyleSheet("""min-width:2.5em;""")
         label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)

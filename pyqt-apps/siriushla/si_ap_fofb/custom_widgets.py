@@ -85,7 +85,7 @@ class RefOrbWidget(BaseObject, QWidget):
         lbl_combo = QLabel(
             'Value: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.combo = QComboBox()
-        self.combo.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.combo.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.combo.setMaxVisibleItems(10)
         self._choose_reforb = [
             'Zero', 'SOFB SlowOrb', 'SOFB RefOrb',
@@ -618,7 +618,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                 if ctrl not in visisel:
                     cbx = QCheckBox(ctrl[3:5], self)
                     cbx.setChecked(True)
-                    cbx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+                    cbx.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
                     pal = cbx.palette()
                     pal.setColor(QPalette.ColorRole.Window, coloro)
                     pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)

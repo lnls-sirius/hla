@@ -458,7 +458,7 @@ class _BbBAcqBase(QWidget):
         lay_acqctrl.addWidget(ld_avg, 2, 0)
         lay_acqctrl.addWidget(sb_avg, 2, 1)
         lay_acqctrl.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2, 3, 1)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 2, 3, 1)
         lay_acqctrl.addWidget(ld_mean, 0, 3)
         lay_acqctrl.addWidget(lb_mean, 0, 4)
         lay_acqctrl.addWidget(ld_ampp2p, 0, 5)
@@ -845,7 +845,7 @@ class BbBAcqSB(QWidget):
         lay_acqctrl.addWidget(ld_acqsing, 1, 0)
         lay_acqctrl.addWidget(cb_acqsing, 1, 1)
         lay_acqctrl.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2, 2, 1)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 2, 2, 1)
         lay_acqctrl.addWidget(ld_mean, 0, 3)
         lay_acqctrl.addWidget(lb_mean, 0, 4)
         lay_acqctrl.addWidget(ld_ampp2p, 0, 5)

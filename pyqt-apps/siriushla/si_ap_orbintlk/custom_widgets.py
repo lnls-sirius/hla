@@ -27,7 +27,7 @@ class RefOrbComboBox(QComboBox):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.setMaxVisibleItems(10)
         self._choose_reforb = [
             'Zero', 'ref_orb', 'bba_orb', 'other...']
@@ -79,7 +79,7 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
 
     def get_widgets(self):
         widgets = list()
-        sz_polc = QSzPlcy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        sz_polc = QSzPlcy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         for idx, nick in enumerate(self.BPM_NICKNAMES):
             wid = QWidget(self.parent())
             tooltip = '{0}; Pos = {1:5.1f} m'.format(
@@ -210,7 +210,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
     def _setupUi(self):
         title = QLabel(self.title, self, alignment=Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("font-weight: bold;")
-        title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         # limit setpoints
         self._wid_lims = QGroupBox('Select Thresholds: ')
@@ -413,7 +413,7 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
         self.setWindowTitle(title)
 
         self._desc = QLabel('<h4>'+title+'</h4>')
-        self._desc.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self._desc.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self._label = SiriusLabel(
             self, self.hlprefix.substitute(propty=propty))
         self._label.displayFormat = SiriusLabel.DisplayFormat.String

@@ -52,7 +52,7 @@ class RaBPMMonitor(SiriusMainWindow):
     def _setupUi(self):
         self.title = QLabel(
             '<h3>RaBPM Monitor</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         self.monitor = self._setupMonitorWidget()
 
@@ -62,7 +62,7 @@ class RaBPMMonitor(SiriusMainWindow):
         layout = QVBoxLayout(cwid)
         layout.addWidget(self.title)
         layout.addWidget(self.monitor)
-        layout.addItem(QSpacerItem(1, 15, QSzPlcy.Preferred, QSzPlcy.Fixed))
+        layout.addItem(QSpacerItem(1, 15, QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed))
         layout.addWidget(self.legend)
         self.setCentralWidget(cwid)
 
@@ -214,7 +214,7 @@ class RaBPMMonitor(SiriusMainWindow):
         }
 
         legend = QWidget()
-        legend.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        legend.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         hlay_leg = QHBoxLayout(legend)
 

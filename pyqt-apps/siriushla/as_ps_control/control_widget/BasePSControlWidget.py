@@ -76,7 +76,7 @@ class PSContainer(QWidget):
             self._hide = QPushButton('', self)
             self._hide.setEnabled(False)
         self._hide.setObjectName('HideButton')
-        self._hide.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self._hide.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self._hide.setFlat(True)
 
         self._layout.addWidget(self._hide, 0, 0, Qt.AlignmentFlag.AlignCenter)
@@ -331,7 +331,7 @@ class BasePSControlWidget(QWidget):
         self.layout.addLayout(hlay_filter)
 
         self.count_label = QLabel(parent=self)
-        self.count_label.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.count_label.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Maximum)
         self.layout.addWidget(self.count_label)
 
         self.pwrsupplies_layout = self._getSplitter()

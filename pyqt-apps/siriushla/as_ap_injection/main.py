@@ -50,16 +50,16 @@ class InjCtrlWindow(SiriusMainWindow):
         self.title.setStyleSheet('QLabel{max-height:1.6em;}')
 
         self.wid_comm = self._setupMainBarWidget()
-        self.wid_comm.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        self.wid_comm.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
 
         self.wid_sett = self._setupSettingsWidget()
         self.wid_sett.setSizePolicy(
-            QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
+            QSzPlcy.Policy.Preferred, QSzPlcy.Policy.MinimumExpanding)
 
         self.wid_mon = self._setupMonitorWidget()
         self.wid_log = self._setupLogWidget()
         wid_row = QWidget()
-        wid_row.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        wid_row.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
         hbox_row = QHBoxLayout(wid_row)
         hbox_row.setContentsMargins(0, 0, 0, 0)
         hbox_row.setStretch(0, 3)
@@ -417,10 +417,10 @@ class InjCtrlWindow(SiriusMainWindow):
         # Bucket list
         self._wid_bl = BucketList(
             self, prefix=self._prefix, min_size=15, show_graph=True)
-        self._wid_bl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
+        self._wid_bl.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.MinimumExpanding)
 
         wid1 = QWidget()
-        wid1.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        wid1.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
         glay1 = QGridLayout(wid1)
         glay1.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay1.addWidget(self._ld_injset, 0, 0)
@@ -442,7 +442,7 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.setColumnStretch(3, 1)
 
         wid2 = QWidget()
-        wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        wid2.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
         glay2 = QGridLayout(wid2)
         glay2.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay2.addWidget(ld_sp, 0, 1)

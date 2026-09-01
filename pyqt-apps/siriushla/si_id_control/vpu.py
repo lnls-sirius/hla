@@ -125,7 +125,7 @@ class VPUControlWindow(IDCommonControlWindow):
     def _statusWidget(self):
         gbox = QGroupBox('Status')
         gbox.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+            QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         lay = QGridLayout(gbox)
         lay.setVerticalSpacing(15)
         row = 0

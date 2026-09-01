@@ -151,7 +151,7 @@ class MacReportWindow(SiriusMainWindow):
         lay.setVerticalSpacing(0)
         lay.setHorizontalSpacing(0)
         lay.setAlignment(Qt.AlignmentFlag.AlignTop)
-        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 0)
+        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 0)
         lay.addWidget(LbHHeader('Programmed Time (h)'), 0, 1)
         lay.addWidget(self.lb_uspt, 0, 2)
         lay.addWidget(LbHHeader('Delivered Time (h)'), 1, 1)
@@ -191,7 +191,7 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rsbt, 16, 2)
         lay.addWidget(LbHHeader('Injection time (avg ± std) (h)'), 17, 1)
         lay.addWidget(self.lb_itav, 17, 2)
-        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
+        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 3)
         return wid
 
     def _updateUserShiftStats(self, setup=False):

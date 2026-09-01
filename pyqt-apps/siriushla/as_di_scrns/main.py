@@ -96,7 +96,7 @@ class SiriusScrnView(QWidget):
         self.calibrationgrid_widget = QWidget(self)
         self.calibrationgrid_widget.setLayout(self._calibrationgridLayout())
         self.calibrationgrid_widget.setSizePolicy(
-            QSzPlcy.Expanding, QSzPlcy.Expanding)
+            QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding)
         self.calibrationgrid_widget.layout().setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.tab = QTabWidget(self)
         self.tab.setObjectName(self.scrn_prefix.sec+'Tab')
@@ -112,7 +112,7 @@ class SiriusScrnView(QWidget):
         self.statistics_groupBox = QGroupBox('Statistics', self)
         self.statistics_groupBox.setLayout(self._statisticsLayout())
         self.statistics_groupBox.setSizePolicy(
-            QSzPlcy.Expanding, QSzPlcy.Expanding)
+            QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding)
         self.statistics_groupBox.setStyleSheet("""
             .QLabel{
                 min-width:0.28em; max-width:0.28em;
@@ -182,7 +182,7 @@ class SiriusScrnView(QWidget):
         lay = QGridLayout()
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(label, 0, 1)
-        lay.addItem(QSpacerItem(40, 2, QSzPlcy.Preferred, QSzPlcy.Fixed), 1, 1)
+        lay.addItem(QSpacerItem(40, 2, QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed), 1, 1)
         lay.addWidget(self.image_view, 2, 1)
         return lay
 
@@ -249,14 +249,14 @@ class SiriusScrnView(QWidget):
             propty_type='enbldisabl', width=4.68)
 
         lay = QFormLayout()
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         lay.addRow('  Grid: ', hbox_grid)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         lay.addRow('  ', hbox_filter)
         lay.addRow('  ', hbox_remove)
-        lay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         lay.addRow('  LED: ', hbox_EnblLED)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         return lay
@@ -307,7 +307,7 @@ class SiriusScrnView(QWidget):
         self.pb_details.setObjectName('detail')
         self.pb_details.setStyleSheet(
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-        self.pb_details.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.pb_details.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         util.connect_window(self.pb_details, _ScrnSettingsDetails,
                             parent=self, prefix=self.prefix,
                             device=self.device)
@@ -669,13 +669,13 @@ class IndividualScrn(QWidget):
         lay = QGridLayout()
         lay.addWidget(QLabel('<h3>Screen View</h3>',
                              self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(QLabel('Select Screen Type: ', self,
                              alignment=Qt.AlignmentFlag.AlignRight), 2, 0)
         lay.addWidget(self.cb_scrntype, 2, 1)
         lay.addWidget(self.l_scrntype, 2, 2)
         lay.addWidget(self.led_scrntype, 2, 3)
 
-        lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
+        lay.addItem(QSpacerItem(20, 40, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed), 4, 0)
         lay.addWidget(self.scrn_view, 5, 0, 1, 4)
         self.setLayout(lay)

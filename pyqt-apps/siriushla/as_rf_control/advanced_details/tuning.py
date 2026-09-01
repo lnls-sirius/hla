@@ -186,7 +186,7 @@ class TuningDetails(SiriusDialog):
                 lay.addWidget(lb_curr, row, 2)
             row += 1
 
-        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
         lay.addWidget(QLabel('Drivers'), row+1, 0)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+chs_dict['Enable']+'-Sel'),

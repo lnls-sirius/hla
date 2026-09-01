@@ -43,7 +43,7 @@ class SlowLoopParametersDetails(SiriusDialog):
 
     def _setupDetails(self, lay, key, chs_dict):
         if key:
-            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addWidget(QLabel(
                 f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignmentFlag.AlignLeft))
 

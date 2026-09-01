@@ -225,7 +225,7 @@ class PosAngCorr(SiriusMainWindow):
         lay.setVerticalSpacing(12)
         lay.setHorizontalSpacing(12)
         lay.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
+            QSpacerItem(10, 0, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), 0, 0)
         lay.addWidget(label_pos, 0, 1)
         lay.addWidget(sb_deltapos, 0, 2)
         lay.addWidget(lb_deltapos, 0, 3)
@@ -233,7 +233,7 @@ class PosAngCorr(SiriusMainWindow):
         lay.addWidget(sb_deltaang, 1, 2)
         lay.addWidget(lb_deltaang, 1, 3)
         lay.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 4)
+            QSpacerItem(10, 0, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), 0, 4)
         return lay
 
     def _setupCorrectorsLayout(self):
@@ -285,12 +285,12 @@ class PosAngCorr(SiriusMainWindow):
             idx += 1
 
         lay.addItem(
-            QSpacerItem(0, 15, QSzPlcy.Preferred, QSzPlcy.Fixed), idx, 0)
+            QSpacerItem(0, 15, QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed), idx, 0)
 
         kckr = 'BO-01D:PU-InjKckr' if self._tl == 'TB' \
             else 'SI-01SA:PU-InjNLKckr'
         self._kckr_name = _PVName(kckr)
-        lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(0, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         pb_kckr = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         pb_kckr.setObjectName('pb')
         pb_kckr.setStyleSheet("""
@@ -321,7 +321,7 @@ class PosAngCorr(SiriusMainWindow):
 
         if self._tl == 'TB':
             pref = self._prefix + ('-' if self._prefix else '')
-            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
             label_voltsp = QLabel('<h4>Amplitude-SP</h4>', self)
             label_voltrb = QLabel('<h4>Amplitude-RB</h4>', self)
@@ -449,7 +449,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QHeaderView.Stretch)
         self.table_matrix_x.verticalHeader().setVisible(False)
         self.table_matrix_x.setSizePolicy(
-           QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+           QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
 
         columns = 2 if self._tl == 'TB' else 4
         width = 12 if self._tl == 'TB' else 24
@@ -473,27 +473,27 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QHeaderView.Stretch)
         self.table_matrix_y.verticalHeader().setVisible(False)
         self.table_matrix_y.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
 
         self.bt_apply = QPushButton('Ok', self)
         self.bt_apply.clicked.connect(self.close)
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 0, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 0, 0)
         lay.addWidget(label_configname, 1, 0, 1, columns)
         lay.addWidget(self.pydmlinedit_configname, 2, 0, 1, columns)
         lay.addWidget(self.pydmlabel_configname, 3, 0, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 4, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 4, 0)
         lay.addWidget(label_matrix_x, 5, 0, 1, columns)
         lay.addWidget(self.table_matrix_x, 6, (columns/2)-1, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 7, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 7, 0)
         lay.addWidget(label_matrix_y, 8, 0, 1, columns)
         lay.addWidget(self.table_matrix_y, 9, 0, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 10, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 10, 0)
         lay.addWidget(self.bt_apply, 11, columns-1)
         for i in range(columns):
             lay.setColumnStretch(i, 1)

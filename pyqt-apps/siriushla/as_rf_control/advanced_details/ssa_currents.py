@@ -103,7 +103,7 @@ class SSACurrentsDetails(SiriusDialog):
                     column += 1
                 elif column == 5:
                     lay_scr.addItem(QSpacerItem(
-                        0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row+1, 0)
+                        0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row+1, 0)
                     column = 0
                     row += 2
 
@@ -376,7 +376,7 @@ class SSACurrentsDetails(SiriusDialog):
             lay_dc.addWidget(SiriusLedState(
                 self, self.prefix+chs_dict['DC']), alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addItem(QSpacerItem(
-                0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+                0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), row, 0)
             lay.addLayout(lay_dc, row+1, 1, 1, 2)
 
         return lay
@@ -474,7 +474,7 @@ class SSACurrentsDetails(SiriusDialog):
                 self, self._substitute_macros(self.prefix+lst[1])), row, 2)
             row += 1
         lay_off.addItem(QSpacerItem(
-            27, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 1)
+            27, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 1)
         lay.addWidget(gbox_off)
 
         # Alarms

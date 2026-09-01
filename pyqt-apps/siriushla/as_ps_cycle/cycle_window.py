@@ -238,14 +238,14 @@ class CycleWindow(SiriusMainWindow):
             QLabel{qproperty-alignment: AlignCenter;}""")
         lay_commsts = QGridLayout(gb_commsts)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 0, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding), 0, 0, 1, 2)
         lay_commsts.addWidget(lb_prep_ti, 1, 0)
         lay_commsts.addWidget(self.ticonn_led, 1, 1)
         lay_commsts.addWidget(self.save_timing_bt, 2, 0)
         lay_commsts.addWidget(self.prepare_timing_bt, 3, 0)
         lay_commsts.addWidget(self.prepare_timing_lb, 3, 1)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding), 4, 0)
         lay_commsts.addWidget(lb_prep_ps, 4, 0)
         lay_commsts.addWidget(self.psconn_led, 4, 1)
         lay_commsts.addWidget(self.set_ps_idffmode_off_bt, 5, 0)
@@ -259,17 +259,17 @@ class CycleWindow(SiriusMainWindow):
         lay_commsts.addWidget(self.prepare_ps_opmode_bt, 9, 0)
         lay_commsts.addWidget(self.prepare_ps_opmode_lb, 9, 1)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 10, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding), 10, 0)
         lay_commsts.addWidget(lb_cycle, 11, 0)
         lay_commsts.addWidget(self.cycle_trims_bt, 12, 0)
         lay_commsts.addWidget(self.cycle_trims_lb, 12, 1)
         lay_commsts.addWidget(self.cycle_bt, 13, 0)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 14, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding), 14, 0)
         lay_commsts.addWidget(lb_rest_ti, 15, 0)
         lay_commsts.addWidget(self.restore_timing_bt, 16, 0)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 17, 0)
+            QSpacerItem(1, 1, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding), 17, 0)
         lay_commsts.setColumnStretch(0, 10)
         lay_commsts.setColumnStretch(1, 1)
         lay_commsts.setVerticalSpacing(12)

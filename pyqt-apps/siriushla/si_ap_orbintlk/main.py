@@ -75,7 +75,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             self, init_channel=self.hlprefix.substitute(propty='Log-Mon'))
         loglabel.setObjectName('log')
         loglabel.setStyleSheet('#log{min-width: 20em;}')
-        loglabel.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
+        loglabel.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.MinimumExpanding)
         loglabel.setAlternatingRowColors(True)
         loglabel.maxCount = 2000
 
