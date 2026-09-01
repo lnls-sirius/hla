@@ -12,7 +12,7 @@ from pydm.utilities import is_pydm_app, is_qt_designer
 from siriuspy.clientarch import Time as _Time
 
 
-class SiriusLabel(QLabel, TextFormatter, PyDMWidget):
+class SiriusLabel(TextFormatter, PyDMWidget, QLabel):
     """
     A QLabel with support for Channels and more from PyDM
 
@@ -34,8 +34,9 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget):
 
     def __init__(self, parent=None, init_channel=None, keep_unit=False, **kws):
         """Init."""
-        QLabel.__init__(self, parent, **kws)
+        super().__init__()
         PyDMWidget.__init__(self, init_channel=init_channel)
+        QLabel.__init__(self, parent, **kws)
         self.app = QApplication.instance()
         self.setTextFormat(Qt.PlainText)
         self.setTextInteractionFlags(Qt.NoTextInteraction)
