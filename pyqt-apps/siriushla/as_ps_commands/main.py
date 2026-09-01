@@ -1315,7 +1315,7 @@ class PSCmdWindow(SiriusMainWindow):
                 items = self.nok_ps.selectedItems()
             items = '\n'.join([i.text() for i in items])
             QApplication.clipboard().setText(items)
-        if evt.key() == Qt.Key_Escape:
+        if evt.key() == Qt.Key.Key_Escape:
             if self.ok_ps.underMouse():
                 items = self.ok_ps.clearSelection()
             elif self.nok_ps.underMouse():

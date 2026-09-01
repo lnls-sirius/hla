@@ -640,7 +640,7 @@ class CycleWindow(SiriusMainWindow):
             items = self.progress_list.selectedItems()
             items = '\n'.join([i.text() for i in items])
             QApplication.clipboard().setText(items)
-        if evt.key() == Qt.Key_Escape and self.progress_list.underMouse():
+        if evt.key() == Qt.Key.Key_Escape and self.progress_list.underMouse():
             items = self.progress_list.clearSelection()
         super().keyPressEvent(evt)
 

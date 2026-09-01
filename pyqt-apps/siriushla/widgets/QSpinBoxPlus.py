@@ -29,8 +29,8 @@ def _create_spinboxplus(qt_type):
 
         def keyPressEvent(self, evt):
             ctrl_hold = self.app.queryKeyboardModifiers() == Qt.ControlModifier
-            if ctrl_hold and (evt.key() in (Qt.Key_Left, Qt.Key_Right)):
-                self.step_exponent += 1 if evt.key() == Qt.Key_Left else -1
+            if ctrl_hold and (evt.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right)):
+                self.step_exponent += 1 if evt.key() == Qt.Key.Key_Left else -1
                 if isinstance(self, QSpinBox):
                     self.step_exponent = max(0, self.step_exponent)
                 else:

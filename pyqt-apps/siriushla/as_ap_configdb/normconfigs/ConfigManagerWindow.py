@@ -94,21 +94,21 @@ class ConfigManagerWindow(SiriusMainWindow):
         Ctrl+Z - Undo
         Ctrl+R - Redo
         """
-        if event.key() == Qt.Key_S:
+        if event.key() == Qt.Key.Key_S:
             self._saveChanges()
             return
-        if event.key() == Qt.Key_W:
+        if event.key() == Qt.Key.Key_W:
             self._closeConfigurationOnFocus()
             return
-        if event.key() == Qt.Key_F2:
+        if event.key() == Qt.Key.Key_F2:
             self._renameOnFocus()
             return
-        if event.key() == Qt.Key_Z:
+        if event.key() == Qt.Key.Key_Z:
             print(self._model._undo)
             if len(self._model._undo) > 0:
                 self._model._undo.pop()[1]()
             return
-        if event.key() == Qt.Key_R:
+        if event.key() == Qt.Key.Key_R:
             if len(self._model._redo) > 0:
                 self._model._redo.pop()[1]()
             return
