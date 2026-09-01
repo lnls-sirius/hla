@@ -34,6 +34,7 @@ from siriushla.li_ap_mps import MPSMonitor
 from siriushla.li_di_bpms import DigBeamPosProc
 from siriushla.li_di_scrns import LiBeamProfile
 from siriushla.li_eg_control import LIEgunWindow
+from siriushla.li_eg_control import ITTIWidget
 
 from siriushla.tb_di_slits import SlitsView
 
@@ -148,7 +149,7 @@ si_scripts_config = [
         (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "InvRespMatHw-Mon"}),
         (MatrixWidget, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "propty": "CorrCoeffs-Mon"}),
         (FofbMainWindow, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX}),
-        (ControllersDetailDialog, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "tab_selected": 2})
+        (ControllersDetailDialog, {"device": "SI-Glob:AP-FOFB", "prefix": VACA_PREFIX, "tab_selected": 2}),
         (FOFBAcqSYSIDWindow, {"prefix": VACA_PREFIX, "device": "IA-01RaBPM:BS-FOFBCtrl"}),
         (IDFFWindow, {"prefix": VACA_PREFIX, "idname": "SI-10SB:AP-IDFF"}),
         BPMOrbIntlkMainWindow,
@@ -207,6 +208,14 @@ si_scripts_config = [
 ]
     
 
+it_scripts_config = [
+    (ITTIWidget, {"prefix": VACA_PREFIX}),
+    (PSTabControlWindow, {"section": "IT"}),
+    (VLightCamView, {"section": "IT"}),
+    (LIEgunWindow, {"is_it": True})
+]
+
+
 @pytest.fixture
 def open_gui(gui_config, qtbot):
     if isinstance(gui_config, tuple):
@@ -246,4 +255,8 @@ def test_bo_gui_opens(open_gui):
 
 @pytest.mark.parametrize("gui_config", si_scripts_config)
 def test_si_gui_opens(open_gui):
+    assert open_gui
+
+@pytest.mark.parametrize("gui_config", it_scripts_config)
+def test_it_gui_opens(open_gui):
     assert open_gui
