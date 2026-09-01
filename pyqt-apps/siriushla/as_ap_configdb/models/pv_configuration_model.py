@@ -84,7 +84,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
             return Qt.ItemFlag.ItemIsEnabled
         if index.column() in (2, ):
             return Qt.ItemFlags(
-                QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
+                QAbstractTableModel.flags(self, index) | Qt.ItemFlag.ItemIsEditable)
         return QAbstractTableModel.flags(self, index)
 
     def setData(self, index, value, role=Qt.EditRole):

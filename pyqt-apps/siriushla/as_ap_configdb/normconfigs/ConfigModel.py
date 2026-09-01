@@ -219,7 +219,7 @@ class ConfigModel(QAbstractTableModel):
         if not index.isValid():
             return Qt.ItemFlag.ItemIsEnabled
         return Qt.ItemFlags(
-            QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
+            QAbstractTableModel.flags(self, index) | Qt.ItemFlag.ItemIsEditable)
 
     def setData(self, index, value, role=Qt.EditRole):
         """Set cell data."""
