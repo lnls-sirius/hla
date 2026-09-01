@@ -3,7 +3,7 @@
 
 import os as _os
 import numpy as np
-
+from pathlib import Path
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
@@ -98,10 +98,15 @@ class ICTMonitoring(SiriusMainWindow):
         self.prefix = prefix
         self.icts = TL_2_ICTS[self.tl]
 
-        tmp_file = _substitute_in_file(
-            _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui',
+        file_path = _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui'
+        ui_file = _substitute_in_file(
+            file_path,
             {'TL': self.tl, 'ICT1': self.icts[0], 'ICT2': self.icts[1],
              'PREFIX': prefix + ('-' if prefix else '')})
+        path = Path(file_path)
+        tmp_file = str(path.with_name(f"temp_{path.name}"))
+        with open(tmp_file, "w") as file:
+            file.write(ui_file.getvalue())
         self.setWindowTitle(self.tl+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)
         self.setObjectName(self.tl+'App')
