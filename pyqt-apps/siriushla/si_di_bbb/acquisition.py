@@ -1,6 +1,6 @@
 """BbB Acquisition Module."""
 import os as _os
-from PyQt5.QtWidgets import QHBoxLayout
+from qtpy.QtWidgets import QHBoxLayout
 
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor, QPixmap
