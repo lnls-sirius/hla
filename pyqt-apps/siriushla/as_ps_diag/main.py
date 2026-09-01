@@ -382,7 +382,46 @@ class PSDiag(SiriusMainWindow):
         self._filter_table()
 
 
-class LogTable(QTreeView, PyDMWidget):
+class PyDMLogTable(PyDMWidget):
+
+    def __init__(self, parent):
+        self.parent = parent
+        super().__init__()
+        
+    @Slot(bool)
+    def connection_changed(self, conn):
+        """Reimplement connection_changed to handle all channels."""
+        address = self.parent.sender().address
+        self.address2conn[address] = conn
+        allconn = True
+        for conn in self.address2conn.values():
+            allconn &= conn
+        self.setState(allconn)
+        self._connected = allconn
+
+    def alarm_severity_changed(self, new_alarm_severity):
+        """Reimplement alarm_severity_changed."""
+        if self.parent.sender():
+            pv_diff = _PVName(self.parent.sender().address)
+            val_diff = self.address2channels[pv_diff].value
+
+            pv_opmd = pv_diff.substitute(
+                propty_name='OpMode', propty_suffix='Sts')
+            val_opmd = self.address2channels[pv_opmd].value
+            is_slowref = val_opmd == _PSConst.States.SlowRef
+
+            new_value = {'logtype': 'WARN', 'psname': pv_diff.device_name,
+                         'propty': pv_diff.propty_name, 'value': str(val_diff)}
+            if new_alarm_severity in [_Sev.MINOR_ALARM, _Sev.MAJOR_ALARM] and \
+                    is_slowref:
+                self.parent.add_log(new_value)
+            elif self._is_status:
+                self.parent.remove_log(new_value)
+
+            super().alarm_severity_changed(new_alarm_severity)
+
+
+class LogTable(QTreeView):
     """Log Table."""
 
     updated = Signal()
@@ -391,10 +430,10 @@ class LogTable(QTreeView, PyDMWidget):
                  is_status=False):
         # QTableView.__init__(self, parent)
         QTreeView.__init__(self, parent)
-        PyDMWidget.__init__(self)
+        self.pydm_log_table = PyDMLogTable(parent=self)
 
         # setup table
-        self._is_status = is_status
+        self.pydm_log_table._is_status = is_status
         self._date_fmt = ' %Y/%m/%d '
         self._time_fmt = ' %H:%M:%S '
         self.headerLabels = label2width.keys()
@@ -415,29 +454,17 @@ class LogTable(QTreeView, PyDMWidget):
         self.setStyleSheet("gridline-color: #ffffff;")
 
         # set channels
-        self.address2conn = dict()
-        self.address2channels = dict()
+        self.pydm_log_table.address2conn = dict()
+        self.pydm_log_table.address2channels = dict()
         for address in channels:
-            self.address2conn[address] = False
+            self.pydm_log_table.address2conn[address] = False
             channel = SiriusConnectionSignal(
                 address=address,
-                connection_slot=self.connection_changed,
-                value_slot=self.value_changed,
-                severity_slot=self.alarm_severity_changed)
-            channel.connect()
-            self.address2channels[address] = channel
-            self._channels.append(channel)
-
-    @Slot(bool)
-    def connection_changed(self, conn):
-        """Reimplement connection_changed to handle all channels."""
-        address = self.sender().address
-        self.address2conn[address] = conn
-        allconn = True
-        for conn in self.address2conn.values():
-            allconn &= conn
-        self.setState(allconn)
-        self._connected = allconn
+                connection_slot=self.pydm_log_table.connection_changed,
+                value_slot=self.pydm_log_table.value_changed,
+                severity_slot=self.pydm_log_table.alarm_severity_changed)
+            self.pydm_log_table.address2channels[address] = channel
+            self.pydm_log_table._channels.append(channel)
 
     def add_log_slot(self, updated):
         new_value = self._get_newitem_data(updated)
@@ -446,7 +473,7 @@ class LogTable(QTreeView, PyDMWidget):
         self.add_log(new_value)
 
     def add_log(self, new_value):
-        if self._is_status:
+        if self.pydm_log_table._is_status:
             self.remove_log(new_value)
 
         datetime_now = _datetime.now()
@@ -482,27 +509,6 @@ class LogTable(QTreeView, PyDMWidget):
                 continue
             self._model.removeRow(row)
         self.updated.emit()
-
-    def alarm_severity_changed(self, new_alarm_severity):
-        """Reimplement alarm_severity_changed."""
-        if self.sender():
-            pv_diff = _PVName(self.sender().address)
-            val_diff = self.address2channels[pv_diff].value
-
-            pv_opmd = pv_diff.substitute(
-                propty_name='OpMode', propty_suffix='Sts')
-            val_opmd = self.address2channels[pv_opmd].value
-            is_slowref = val_opmd == _PSConst.States.SlowRef
-
-            new_value = {'logtype': 'WARN', 'psname': pv_diff.device_name,
-                         'propty': pv_diff.propty_name, 'value': str(val_diff)}
-            if new_alarm_severity in [_Sev.MINOR_ALARM, _Sev.MAJOR_ALARM] and \
-                    is_slowref:
-                self.add_log(new_value)
-            elif self._is_status:
-                self.remove_log(new_value)
-
-            super().alarm_severity_changed(new_alarm_severity)
 
     def _get_newitem_data(self, updated):
         pv, value = updated
