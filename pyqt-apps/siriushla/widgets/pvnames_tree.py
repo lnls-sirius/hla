@@ -47,7 +47,8 @@ class QTreeItem(QTreeWidgetItem):
 
     def setData(self, column, role, value):
         """Set data."""
-        if column == 0 and role == Qt.CheckStateRole:
+        value = Qt.CheckState(value)
+        if column == 0 and role == Qt.ItemDataRole.CheckStateRole:
             if self.checkState(0) == Qt.CheckState.PartiallyChecked:
                 value = Qt.CheckState.Unchecked
             # Trigger parent check
@@ -58,7 +59,7 @@ class QTreeItem(QTreeWidgetItem):
                 if self.childCount() == 0:
                     if self.checkState(column) != value:
                         self.treeWidget().parent().itemChecked.emit(
-                            self, column, value)
+                            self, column, value.value)
                     super().setData(column, role, value)
                 else:
                     for chil in range(self.childCount()):
@@ -524,6 +525,7 @@ class PVNameTree(QWidget):
 
     @Slot(QTreeItem, int, int)
     def _item_checked(self, item, column, value):
+        value = Qt.CheckState(value)
         if item.childCount() == 0:
             if value == Qt.CheckState.Checked:
                 self._nr_checked_items += 1
