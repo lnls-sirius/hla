@@ -67,10 +67,7 @@ class BbBCoefficientsWidget(QWidget):
         le_coefdesc = PyDMLineEdit(self, self.dev_pref + ':DESC_COEFF')
         graph_coefs = WfmGraph(wid)
         graph_coefs.add_scatter_curve(
-            ychannel=self.dev_pref + ':COEFF',
-            lineStyle=Qt.SolidLine,
-            symbol='o',
-        )
+            ychannel=self.dev_pref+':COEFF', lineStyle=Qt.PenStyle.SolidLine)
 
         graph_fftmag = WfmGraph(wid)
         graph_fftmag.setObjectName('graph')
@@ -78,13 +75,10 @@ class BbBCoefficientsWidget(QWidget):
         graph_fftmag.setLabel('left', text='Magnitude [dB]')
         graph_fftmag.setLabel('bottom', text='Fractional Freq.')
         graph_fftmag.add_scatter_curve(
-            ychannel=self.dev_pref + ':FTF_MAG',
-            xchannel=self.dev_pref + ':FTF_FREQ',
-            color=QColor('blue'),
-            lineWidth=2,
-            lineStyle=Qt.SolidLine,
-            symbolSize=4,
-        )
+            ychannel=self.dev_pref+':FTF_MAG',
+            xchannel=self.dev_pref+':FTF_FREQ',
+            color=QColor('blue'), lineWidth=2, lineStyle=Qt.PenStyle.SolidLine,
+            symbolSize=4)
         graph_fftmag.add_scatter_curve(
             ychannel=self.dev_pref + ':FTF_GTUNE',
             xchannel=self.dev_pref + ':FTF_FTUNE',
@@ -97,13 +91,10 @@ class BbBCoefficientsWidget(QWidget):
         graph_fftphs.setLabel('left', text='Phase [°]')
         graph_fftphs.setLabel('bottom', text='Fractional Freq.')
         graph_fftphs.add_scatter_curve(
-            ychannel=self.dev_pref + ':FTF_PHASE',
-            xchannel=self.dev_pref + ':FTF_FREQ',
-            color=QColor('blue'),
-            lineWidth=2,
-            lineStyle=Qt.SolidLine,
-            symbolSize=4,
-        )
+            ychannel=self.dev_pref+':FTF_PHASE',
+            xchannel=self.dev_pref+':FTF_FREQ',
+            color=QColor('blue'), lineWidth=2, lineStyle=Qt.PenStyle.SolidLine,
+            symbolSize=4)
         graph_fftphs.add_scatter_curve(
             ychannel=self.dev_pref + ':FTF_PTUNE',
             xchannel=self.dev_pref + ':FTF_FTUNE',
@@ -330,10 +321,7 @@ class BbBCoefficientsWidget(QWidget):
 
         graph_coef0 = WfmGraph(self)
         graph_coef0.add_scatter_curve(
-            ychannel=self.dev_pref + ':CSET0',
-            lineStyle=Qt.SolidLine,
-            symbol='o',
-        )
+            ychannel=self.dev_pref+':CSET0', lineStyle=Qt.PenStyle.SolidLine)
 
         ld_coef1 = QLabel('<h4>Set 1</h4>', self)
         ld_coef1.setStyleSheet('max-width: 3em;')
@@ -344,10 +332,7 @@ class BbBCoefficientsWidget(QWidget):
 
         graph_coef1 = WfmGraph(self)
         graph_coef1.add_scatter_curve(
-            ychannel=self.dev_pref + ':CSET1',
-            lineStyle=Qt.SolidLine,
-            symbol='o',
-        )
+            ychannel=self.dev_pref+':CSET1', lineStyle=Qt.PenStyle.SolidLine)
 
         ld_coef2 = QLabel('<h4>Set 2</h4>', self)
         ld_coef2.setStyleSheet('max-width: 3em;')
@@ -358,10 +343,7 @@ class BbBCoefficientsWidget(QWidget):
 
         graph_coef2 = WfmGraph(self)
         graph_coef2.add_scatter_curve(
-            ychannel=self.dev_pref + ':CSET2',
-            lineStyle=Qt.SolidLine,
-            symbol='o',
-        )
+            ychannel=self.dev_pref+':CSET2', lineStyle=Qt.PenStyle.SolidLine)
 
         ld_coef3 = QLabel('<h4>Set 3</h4>', self)
         ld_coef3.setStyleSheet('max-width: 3em;')
@@ -372,10 +354,7 @@ class BbBCoefficientsWidget(QWidget):
 
         graph_coef3 = WfmGraph(self)
         graph_coef3.add_scatter_curve(
-            ychannel=self.dev_pref + ':CSET3',
-            lineStyle=Qt.SolidLine,
-            symbol='o',
-        )
+            ychannel=self.dev_pref+':CSET3', lineStyle=Qt.PenStyle.SolidLine)
 
         gbox_coefview = QGroupBox('Coefficient Sets View', self)
         gbox_coefview.setLayout(QGridLayout())

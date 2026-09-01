@@ -340,7 +340,7 @@ class SSADetailsSI(SiriusDialog):
             channel = self._substitute_pv_macros(
                 self.prefix+self.syst_dict['Rack']['Temp'], suffix)
             graph_hs.addYChannel(y_channel=channel, color=colors[i],
-                name=suffix, lineStyle=Qt.SolidLine, lineWidth=1)
+                name=suffix, lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.curves_hs[suffix] = graph_hs.curveAtIndex(i)
             if i % 2 != 0:
                 new_sink_count += 1
@@ -392,7 +392,7 @@ class SSADetailsSI(SiriusDialog):
                 channel = self._substitute_pv_macros(
                     self.prefix+self.syst_dict['Rack'][f'Temp {k}'], str(i))
                 graph_temp.addYChannel(y_channel=channel, color=colors[k][i-1],
-                    name=i, lineStyle=Qt.SolidLine, lineWidth=1)
+                    name=i, lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
                 self.curves_temp[f'{graph_idx+1}{k}'] = graph_temp.curveAtIndex(
                     graph_idx)
                 graph_idx += 1
@@ -608,7 +608,7 @@ class SSADetailsBO(SiriusDialog):
             channel = self._substitute_pv_macros(
                 self.prefix+self.syst_dict['HeatSink']['Temp'], i+1)
             graph_hs.addYChannel(y_channel=channel, color=colors[i], name=name,
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.curves_hs[name] = graph_hs.curveAtIndex(i)
 
         lay.addWidget(QLabel(

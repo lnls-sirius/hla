@@ -299,7 +299,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         curr_pvname = curr_pvname.substitute(prefix=self.prefix)
         self.curr_graph.addYChannel(
             y_channel=curr_pvname, name='Current',
-            color='blue', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='blue', lineStyle=Qt.PenStyle.SolidLine, lineWidth=2)
         self.curve = self.curr_graph.curveAtIndex(0)
         self.curve.setFillLevel(0)
         self.curve.setBrush(QBrush(QGradient(QGradient.ColdEvening)))

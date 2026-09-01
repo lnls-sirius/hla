@@ -85,7 +85,7 @@ class TempVariationDetails(SiriusDialog):
             graph_temp.addYChannel(
                 y_channel=self.prefix+chs_dict['Temp'][tag][addr][0],
                 color=chs_dict['Temp'][tag][addr][1], name=tag,
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
             self.ref_lines[tag] = {}
             self.ref_channels[tag] = {}
@@ -129,7 +129,7 @@ class TempVariationDetails(SiriusDialog):
         graph_delta.addYChannel(
             y_channel=self.prefix+chs_dict[delta]['Diff'],
             color='green', name='Diff',
-            lineStyle=Qt.SolidLine, lineWidth=1)
+            lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
         for lim in lims:
             pv_lim_delta = self.prefix+chs_dict[delta][lim]

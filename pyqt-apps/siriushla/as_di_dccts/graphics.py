@@ -86,7 +86,7 @@ class DCCTMonitor(QWidget):
         channel = self.dcct_prefix.substitute(propty='Current-Mon')
         self.timegraph.addYChannel(
             y_channel=channel, name='Current History', color='blue',
-            lineWidth=1, lineStyle=Qt.SolidLine)
+            lineWidth=1, lineStyle=Qt.PenStyle.SolidLine)
         self.timegraph.autoRangeX = True
         self.timegraph.autoRangeY = True
         self.timegraph.backgroundColor = QColor(255, 255, 255)
@@ -117,7 +117,7 @@ class DCCTMonitor(QWidget):
             self._updateRawBuffer)
         self.wavegraph.addChannel(
             y_channel=channel, name='Current Raw Readings', color='blue',
-            lineWidth=2, lineStyle=Qt.SolidLine)
+            lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         self.wavegraph.setLabel('left', text='Current [mA]')
         self.wavegraph.setLabel('bottom', text='Index')
         self.wavegraph.autoRangeX = True
@@ -359,7 +359,7 @@ class EffMonitor(QWidget):
         self.graph.timeSpan = 1000  # [s]
         self.graph.addYChannel(
             y_channel=self._pvname, name='Efficiency',
-            color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
+            color='blue', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine,
             symbol='o', symbolSize=2)
         self.graph.setAutoRangeX(True)
         self.graph.setAutoRangeY(True)

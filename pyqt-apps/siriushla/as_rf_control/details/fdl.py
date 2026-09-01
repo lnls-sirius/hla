@@ -247,7 +247,7 @@ class FDLDetails(SiriusDialog):
                 y_channel=chn_amp,
                 x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1
             )
             self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
         if signal[2]:
@@ -256,7 +256,7 @@ class FDLDetails(SiriusDialog):
                 y_channel=chn_phs,
                 x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1
             )
             self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)
 

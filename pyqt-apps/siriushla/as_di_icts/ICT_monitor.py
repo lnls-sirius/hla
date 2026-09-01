@@ -590,10 +590,10 @@ class _ICTCalibration(QWidget):
         graph_rawread.setLabel('bottom', text='Index', color='gray')
         graph_rawread.addChannel(
             y_channel=self.ict_prefix.substitute(propty='RawPulse-Mon'),
-            name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
+            name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         graph_rawread.addChannel(
             y_channel=self.ict_prefix.substitute(propty='RawNoise-Mon'),
-            name='RawNoise', color='red', lineWidth=2, lineStyle=Qt.SolidLine)
+            name='RawNoise', color='red', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         leftAxis = graph_rawread.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curvePulse = graph_rawread.curveAtIndex(0)

@@ -131,7 +131,7 @@ class RampsDetails(SiriusDialog):
             graph_amp.addYChannel(
                 y_channel=self.prefix+chs_dict[addr][1],
                 color=chs_dict[addr][2], name=chs_dict[addr][0],
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
         # Times
         lay_times = QGridLayout()

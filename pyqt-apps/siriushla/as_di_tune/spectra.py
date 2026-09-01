@@ -52,13 +52,8 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.x_channel = 'Tune'
 
         self.addChannel(
-            y_channel='FAKE:SpectrumH',
-            name='Tune H',
-            redraw_mode=2,
-            color='blue',
-            lineWidth=1,
-            lineStyle=Qt.SolidLine,
-        )
+            y_channel='FAKE:SpectrumH', name='Tune H',
+            redraw_mode=2, color='blue', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         self.curveH = self.curveAtIndex(0)
         self.curveH.x_channels = {
             'Tune': SiriusConnectionSignal(
@@ -75,13 +70,8 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.curveH.setVisible(True)
 
         self.addChannel(
-            y_channel='FAKE:SpectrumV',
-            name='Tune V',
-            redraw_mode=2,
-            color='red',
-            lineWidth=1,
-            lineStyle=Qt.SolidLine,
-        )
+            y_channel='FAKE:SpectrumV', name='Tune V',
+            redraw_mode=2, color='red', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         self.curveV = self.curveAtIndex(1)
         self.curveV.x_channels = {
             'Tune': SiriusConnectionSignal(
@@ -378,14 +368,10 @@ class TuneSpectraControls(QWidget):
         for i in range(4):
             # checks
             self.spectra.addChannel(
-                y_channel='FAKE:Register' + str(i),
-                name='Register ' + str(i),
-                redraw_mode=2,
-                color=self.colors[i],
-                lineWidth=2,
-                lineStyle=Qt.SolidLine,
-            )
-            self.spectra.curveReg[i] = self.spectra.curveAtIndex(i + shift)
+                y_channel='FAKE:Register'+str(i), name='Register '+str(i),
+                redraw_mode=2, color=self.colors[i],
+                lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
+            self.spectra.curveReg[i] = self.spectra.curveAtIndex(i+shift)
             self.spectra.curveReg[i].setVisible(False)
             self.cb_reg[i].setStyleSheet(
                 'min-width:1.2em; max-width:1.2em;'

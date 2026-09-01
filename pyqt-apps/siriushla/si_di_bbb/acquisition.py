@@ -48,7 +48,7 @@ class _BbBModalAnalysis(QWidget):
         gp_mode.add_scatter_curve(
             ychannel=self.prop_pref + 'MD_MODES',
             color=QColor('red'),
-            lineStyle=Qt.SolidLine)
+            lineStyle=Qt.PenStyle.SolidLine)
 
         gp_spec = WfmGraph(self)
         gp_spec.setStyleSheet('min-height: 10em;')
@@ -59,7 +59,7 @@ class _BbBModalAnalysis(QWidget):
             ychannel=self.prop_pref+'MD_SPEC',
             xchannel=self.prop_pref+'FREQ',
             color=QColor('blue'),
-            lineStyle=Qt.SolidLine)
+            lineStyle=Qt.PenStyle.SolidLine)
         gp_spec.add_marker(
             name='Marker',
             xchannel=self.prop_pref+'MD_FREQ',
@@ -373,7 +373,7 @@ class _BbBAcqBase(QWidget):
             ychannel=self.dev_pref+':'+self.TYPE+'_MEAN',
             xchannel=self.dev_pref+':'+self.TYPE+'_XSC',
             color=QColor('red'),
-            lineStyle=Qt.SolidLine)
+            lineStyle=Qt.PenStyle.SolidLine)
 
         gp_maxrms = WfmGraph(self)
         gp_maxrms.setPlotTitle('Max RMS Channel (filtered)')
@@ -383,7 +383,7 @@ class _BbBAcqBase(QWidget):
             ychannel=self.dev_pref+':'+self.TYPE+'_MAXRMS',
             xchannel=self.dev_pref+':'+self.TYPE+'_TSC',
             color=QColor('blue'),
-            lineStyle=Qt.SolidLine)
+            lineStyle=Qt.PenStyle.SolidLine)
 
         gp_rms = WfmGraph(self)
         gp_rms.setPlotTitle('RMS')
@@ -393,7 +393,7 @@ class _BbBAcqBase(QWidget):
             ychannel=self.dev_pref+':'+self.TYPE+'_RMS',
             xchannel=self.dev_pref+':'+self.TYPE+'_XSC',
             color=QColor('green'),
-            lineStyle=Qt.SolidLine)
+            lineStyle=Qt.PenStyle.SolidLine)
 
         gp_avgspe = WfmGraph(self)
         gp_avgspe.setPlotTitle('Average spectrum')
@@ -403,7 +403,7 @@ class _BbBAcqBase(QWidget):
             ychannel=self.dev_pref+':'+self.TYPE+'_SPEC',
             xchannel=self.dev_pref+':'+self.TYPE+'_FREQ',
             color=QColor('blue'),
-            lineStyle=Qt.SolidLine)
+            lineStyle=Qt.PenStyle.SolidLine)
         gp_avgspe.add_marker(
             name='Marker 1',
             xchannel=self.dev_pref+':'+self.TYPE+'_M1_FREQ',
@@ -756,7 +756,7 @@ class BbBAcqSB(QWidget):
         gp_bunsig.add_scatter_curve(
             ychannel=self.dev_pref+':SB_RAW',
             xchannel=self.dev_pref+':SB_TSC',
-            color=QColor('blue'), lineStyle=Qt.SolidLine,
+            color=QColor('blue'), lineStyle=Qt.PenStyle.SolidLine,
             nchannel=self.dev_pref+':SB_RAW_SAMPLES')
 
         gp_mag = WfmGraph(self)
@@ -766,7 +766,7 @@ class BbBAcqSB(QWidget):
         gp_mag.add_scatter_curve(
             ychannel=self.dev_pref+':SB_MAG',
             xchannel=self.dev_pref+':SB_FREQ',
-            color=QColor('blue'), lineStyle=Qt.SolidLine)
+            color=QColor('blue'), lineStyle=Qt.PenStyle.SolidLine)
         gp_mag.add_marker(
             self.dev_pref+':SB_M1_FREQ',
             self.dev_pref+':SB_M1_PEAK',
@@ -779,7 +779,7 @@ class BbBAcqSB(QWidget):
         gp_phs.add_scatter_curve(
             ychannel=self.dev_pref+':SB_PHASE',
             xchannel=self.dev_pref+':SB_FREQ',
-            color=QColor('blue'), lineStyle=Qt.SolidLine)
+            color=QColor('blue'), lineStyle=Qt.PenStyle.SolidLine)
         gp_phs.add_marker(
             self.dev_pref+':SB_M1_FREQ',
             self.dev_pref+':SB_M1_PHASE',

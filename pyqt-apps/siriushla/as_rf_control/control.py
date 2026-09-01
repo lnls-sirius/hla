@@ -569,7 +569,7 @@ class RFMainControl(SiriusMainWindow):
                 self.graph_plunmotors.addYChannel(
                     y_channel=self.prefix+chs_dict['PlM1Curr'],
                     color=self.prefix+chs_dict['color'], name=key,
-                    lineStyle=Qt.SolidLine, lineWidth=1,
+                    lineStyle=Qt.PenStyle.SolidLine, lineWidth=1,
                 )
 
                 lay_plunmon.addWidget(lb_plg, 1, offset)
@@ -593,7 +593,7 @@ class RFMainControl(SiriusMainWindow):
             self.graph_plunmotors.addYChannel(
                 y_channel=self.prefix+self.chs['Tun']['PlM1Curr'],
                 color='blue', name='Motor 1',
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
             self.lb_plg2 = QLabel('Plg 2', alignment=Qt.AlignmentFlag.AlignCenter)
             self.led_plg2_dn = PyDMLed(
@@ -608,7 +608,7 @@ class RFMainControl(SiriusMainWindow):
             self.led_plg2_up.shape = PyDMLed.ShapeMap.Square
             self.graph_plunmotors.addYChannel(
                 y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
-                name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
+                name='Motor 2', lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
             lay_plunmon.addWidget(self.lb_plg1, 1, 2)
             lay_plunmon.addWidget(
@@ -1214,15 +1214,15 @@ class RFMainControl(SiriusMainWindow):
             # Graph
             self.pwr_mon_graph.addYChannel(
                 y_channel=self.prefix+dbch, name=name+' dBm', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(3*idx)
             self.pwr_mon_graph.addYChannel(
                 y_channel=self.prefix+wch, name=name+' W', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.curves[name+' W'] = self.pwr_mon_graph.curveAtIndex(3*idx+1)
             self.pwr_mon_graph.addYChannel(
                 y_channel=self.prefix+mvch, name=name+' mV', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.curves[name+' mV'] = self.pwr_mon_graph.curveAtIndex(3*idx+2)
 
             idx += 1
@@ -1380,7 +1380,7 @@ class RFMainControl(SiriusMainWindow):
 
                 self.tempcell_graph.addYChannel(
                     y_channel=chn, name=cid, color=color,
-                    lineStyle=Qt.SolidLine, lineWidth=1)
+                    lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
                 self.curves[cid] = self.tempcell_graph.curveAtIndex(idx)
 
                 cbx = QCheckBox(cid, self)
@@ -1418,7 +1418,7 @@ class RFMainControl(SiriusMainWindow):
             self.tempcoup_graph.addYChannel(
                 y_channel=self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0],
                 color=self.chs['Cav Sts']['Temp']['Coupler'][1],
-                name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
+                name='Coupler', lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
             self.tempcoup_graph.setLabel('left', '')
             self.line_coup_maxlim = InfiniteLine(angle=0, pen=pen)
@@ -1482,20 +1482,20 @@ class RFMainControl(SiriusMainWindow):
             self.tempcirc_graph.addYChannel(
                 y_channel=self.prefix+self.chs['TL Sts']['A']['Circulator Temp. In']['label'],
                 name='A', color='magenta',
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.tempcirc_graph.addYChannel(
                 y_channel=self.prefix+self.chs['TL Sts']['B']['Circulator Temp. In']['label'],
                 name='B', color='darkRed',
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
         else:
             self.tempcirc_graph.addYChannel(
                 y_channel=self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label'],
                 name='CTIn', color='magenta',
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
             self.tempcirc_graph.addYChannel(
                 y_channel=self.prefix+self.chs['TL Sts']['label']['Circulator Temp. Out'],
                 name='CTOut', color='darkRed',
-                lineStyle=Qt.SolidLine, lineWidth=1)
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
         self.tempcirc_graph.setLabel('left', '')
 
         self.line_circ_maxlim = InfiniteLine(
@@ -1579,7 +1579,7 @@ class RFMainControl(SiriusMainWindow):
                 graph.addYChannel(
                     y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'],
                     name=f'Temp_{systems[i]}', color='red',
-                    lineStyle=Qt.SolidLine, lineWidth=1)
+                    lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
 
                 pv_lim = self.prefix+self.chs['RF Area'][f'{systems[i]}'][lim]
 
@@ -1647,7 +1647,7 @@ class RFMainControl(SiriusMainWindow):
                 graph.maxRedrawRate = 2
                 graph.addYChannel(
                     y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Humidity'],
-                    name=f'Humidity_{systems[i]}', color='green', lineStyle=Qt.SolidLine, lineWidth=1)
+                    name=f'Humidity_{systems[i]}', color='green', lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
                 graph.setLabel('left', '%')
                 lay_rfarea.addWidget(graph)
                 lay_rfarea.addItem(QSpacerItem(
@@ -1704,7 +1704,7 @@ class RFMainControl(SiriusMainWindow):
         if self.section == "BO":
             self.vacuum_graph.addYChannel(
                 y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cells'],
-                name='Vacuum', color='black', lineStyle=Qt.SolidLine, lineWidth=1)
+                name='Vacuum', color='black', lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
         else:
             cav_pv = ['POB', 'Taper']
             systems = ['A', 'B']
@@ -1714,7 +1714,7 @@ class RFMainControl(SiriusMainWindow):
                         y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cav Pressure'][sys][cav][0],
                         name=self.prefix+self.chs['Cav Sts']['Vac']['Cav Pressure'][sys][cav][0][21:26],
                         color=self.prefix+self.chs['Cav Sts']['Vac']['Cav Pressure'][sys][cav][1],
-                        lineStyle=Qt.SolidLine, lineWidth=1)
+                        lineStyle=Qt.PenStyle.SolidLine, lineWidth=1)
         self.vacuum_graph.setLabel('left', '')
         lay_vacuum.addWidget(self.vacuum_graph)
         return self.vacuum_wid
@@ -2049,7 +2049,7 @@ class RFMainControl(SiriusMainWindow):
                 y_channel=chn_amp,
                 x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1
+                lineStyle=Qt.PenStyle.SolidLine, lineWidth=1
             )
             self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
 
