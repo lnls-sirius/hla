@@ -211,7 +211,7 @@ class SiriusTimePlot(PyDMTimePlot):
             return
 
         if self._plot_by_timestamps:
-            if self._update_mode == PyDMTimePlot.SynchronousMode:
+            if self._update_mode == PyDMTimePlot.AtFixedRate:
                 maxrange = max([curve.max_x() for curve in self._curves])
             else:
                 maxrange = time.time()
