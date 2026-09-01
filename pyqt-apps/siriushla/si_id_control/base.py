@@ -190,7 +190,8 @@ class IDCommonSummaryWidget(IDCommonSummaryBase):
         elif prop == 'Device':
             btn = QPushButton(self._device, self)
             connect_newprocess(
-                btn, ['sirius-hla-si-id-control.py', '-dev', self._device])
+                btn, ['sirius-hla-si-id-control.py', '-dev', self._device],
+                parent=self)
             wids.append(btn)
         elif prop == 'Moving':
             led = SiriusLedState(
