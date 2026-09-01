@@ -157,9 +157,9 @@ class MatrixWidget(BaseObject, QWidget):
             self.graph.removeItem(cur)
         self._inflines = []
         for i in range(3):
-            dic = {'style': 2, 'width': 2, 'color': QColor('000')}
+            dic = {'style': Qt.PenStyle.DashLine, 'width': 2, 'color': QColor('000')}
             if i == 1:
-                dic = {'style': 1, 'width': 3, 'color': QColor('000')}
+                dic = {'style': Qt.PenStyle.SolidLine, 'width': 3, 'color': QColor('000')}
             pen = mkPen(**dic)
             line = InfLine(pos=i*SICte.length+bpm_pos[0]/2, pen=pen)
             self._inflines.append(line)

@@ -318,7 +318,7 @@ class Details(QWidget):
         cdta.setSymbolBrush((0, 0, 0))
 
         pen = mkPen(opts['color'], width=opts['lineWidth'])
-        pen.setStyle(2)
+        pen.setStyle(Qt.PenStyle.DashLine)
         self.curve_bun0 = InfiniteLine(pos=0.0, pen=pen, angle=90)
         graph.addItem(self.curve_bun0)
         self.curve_bun0.opts = {'pen': pen}
