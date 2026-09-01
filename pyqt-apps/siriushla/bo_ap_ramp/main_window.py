@@ -3,9 +3,9 @@
 from copy import deepcopy as _dcopy
 
 from qtpy.QtCore import Qt, Slot, Signal
-from qtpy.QtGui import QKeySequence, QPalette
+from qtpy.QtGui import QKeySequence, QPalette, QUndoStack
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
-    QUndoStack, QMessageBox
+    QMessageBox
 import qtawesome as qta
 
 from siriuspy.ramp import ramp
