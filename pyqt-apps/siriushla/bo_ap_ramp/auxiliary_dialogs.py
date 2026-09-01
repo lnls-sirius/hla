@@ -293,7 +293,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 6em; max-height: 6em;}""")
-        self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_tunemat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_tunemat.setRowCount(2)
         self.table_tunemat.setColumnCount(2)
@@ -319,7 +319,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 4em; max-height: 4em;}""")
-        self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomKL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomKL.setRowCount(1)
         self.table_nomKL.setColumnCount(2)
@@ -365,7 +365,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 6em; max-height: 6em;}""")
-        self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_chrommat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_chrommat.setRowCount(2)
         self.table_chrommat.setColumnCount(2)
@@ -391,7 +391,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 4em; max-height: 4em;}""")
-        self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomSL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomSL.setRowCount(1)
         self.table_nomSL.setColumnCount(2)

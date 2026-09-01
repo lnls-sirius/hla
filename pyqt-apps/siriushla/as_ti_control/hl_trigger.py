@@ -391,7 +391,7 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(spin, idx, 1)
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
-        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         return wid_
 
 

@@ -2305,8 +2305,8 @@ class PSParamsWidget(SiriusDialog):
         lay.addWidget(text_psname)
 
         scr_area = QScrollArea(self)
-        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         scr_area.setWidgetResizable(True)
         scr_area.setFrameShape(QFrame.NoFrame)
         scr_area_wid = QWidget()
@@ -2361,7 +2361,7 @@ class PSParamsWidget(SiriusDialog):
         table.setColumnCount(col_count)
         table.setObjectName('table')
         table.setStyleSheet('#table{max-width:24em; max-height: 3em;}')
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         table.horizontalHeader().setStyleSheet(
             "min-height:1em; max-height:1em;")
         table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)

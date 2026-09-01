@@ -78,8 +78,8 @@ class BaseWidget(QWidget):
         table.setObjectName('tb')
         table.setEnabled(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        table.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         table.horizontalHeader().setVisible(False)
         table.setStyleSheet(
             '#tb{min-width:6em; max-width:12em; max-height: 16em;}')
@@ -165,8 +165,8 @@ class BaseList(CustomGroupBox):
 
         # Create scrollarea
         sc_area = QScrollArea()
-        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        sc_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        sc_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
         self.my_layout.addWidget(sc_area)

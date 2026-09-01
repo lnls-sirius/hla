@@ -56,8 +56,8 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             self, ioc_prefix.substitute(propty='RespMat-Mon'))
         self.table_matrix.setObjectName('matrix')
         self.table_matrix.setEnabled(False)
-        self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.table_matrix.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.table_matrix.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_matrix.verticalHeader().setStyleSheet(
             """min-width:1.5em; max-width:1.5em;""")
         self.table_matrix.horizontalHeader().setStyleSheet(
@@ -95,9 +95,9 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table_nomintstrength.setVerticalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomintstrength.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomintstrength.verticalHeader().setStyleSheet(
             """min-width:1.5em; max-width:1.5em;""")
         self.table_nomintstrength.horizontalHeader().setStyleSheet(

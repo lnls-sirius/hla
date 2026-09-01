@@ -974,7 +974,7 @@ class MultipolesRamp(QWidget):
 
         self.table.setItemDelegateForColumn(
             1, _SpinBoxDelegate(parent=self.table, mini=0, maxi=500, prec=3))
-        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.table.setVerticalScrollMode(QAbstractItemView.ScrollPerItem)
         self.table.cellChanged.connect(self._handleCellChanged)
 
