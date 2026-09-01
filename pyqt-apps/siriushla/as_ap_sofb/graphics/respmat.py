@@ -122,9 +122,9 @@ class ShowMatrixWidget(QWidget):
             self.graph.removeItem(cur)
         self._inflines = []
         for i in range(2*val+1):
-            dic = {'style': 2, 'width': 2, 'color': '000'}
+            dic = {'style': 2, 'width': 2, 'color': QColor('000')}
             if i == val:
-                dic = {'style': 1, 'width': 3, 'color': '000'}
+                dic = {'style': 1, 'width': 3, 'color': QColor('000')}
             pen = mkPen(**dic)
             line = InfLine(pos=i*self._csorb.circum+bpm_pos[0]/2, pen=pen)
             self._inflines.append(line)

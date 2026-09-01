@@ -350,9 +350,9 @@ class BaseWidget(QWidget):
     def _update_enable_list(self, pln, array, curve=None, idx=None):
         # cor = (255, 255, 255)
         # cor = (0, 200, 0)
-        cor = (0, 0, 0)
-        offbrs = mkBrush(*cor)
-        offpen = mkPen(*cor)
+        cor = QColor(0, 0, 0)
+        offbrs = mkBrush(cor)
+        offpen = mkPen(cor)
         offsimb = 's'
         simb = 'o'
         offsz = 15
