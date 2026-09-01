@@ -20,6 +20,8 @@ from siriushla.li_di_bpms import DigBeamPosProc
 from siriushla.li_di_scrns import LiBeamProfile
 from siriushla.li_eg_control import LIEgunWindow
 
+from siriushla.tb_di_slits import SlitsView
+
 
 linac_scripts_config = [
     LLRFMain,
@@ -48,6 +50,19 @@ ts_scripts_config = [
 ]
 
 
+tb_scripts_config = [
+    (TLControlWindow, {"tl": "tb"}),
+    (PosAngCorr, {"tl": "tb"}),
+    (ShowMatrixWidget, {"device": "TB-Glob:AP-SOFB", "acc": "TB"}),
+    (MainWindow, {"acc": "TB"}),
+    (ICTMonitoring, {"tl": "TB", "prefix": VACA_PREFIX}),
+    (PSTabControlWindow, {"section": "TB"}),
+    (PUControlWindow, {"section": "TB"}),
+    SlitsView,
+    (EmittanceMeasure, {"place": "TB-QF2A"})
+]
+
+
 @pytest.fixture
 def open_gui(gui_config, qtbot):
     if isinstance(gui_config, tuple):
@@ -71,4 +86,8 @@ def test_linac_gui_opens(open_gui):
 
 @pytest.mark.parametrize("gui_config", ts_scripts_config)
 def test_ts_gui_opens(open_gui):
+    assert open_gui
+
+@pytest.mark.parametrize("gui_config", tb_scripts_config)
+def test_tb_gui_opens(open_gui):
     assert open_gui
