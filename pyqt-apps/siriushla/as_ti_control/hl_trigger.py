@@ -114,7 +114,7 @@ class HLTriggerSimple(BaseWidget):
                 unit = '' if 'Raw' in tab else ' [us]'
                 wid = QWidget(self)
                 lay = QGridLayout(wid)
-                lay.setAlignment(Qt.AlignTop)
+                lay.setAlignment(Qt.AlignmentFlag.AlignTop)
                 lay.addWidget(
                     QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(
@@ -371,7 +371,7 @@ class HLTriggerDetailed(BaseWidget):
         sc_area.setWidget(wid)
 
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignmentFlag.AlignCenter)

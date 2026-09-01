@@ -34,7 +34,7 @@ class RFInputsDetails(SiriusDialog):
     def _setupUi(self):
         lay = QGridLayout(self)
         self.setStyleSheet(DEFAULT_STYLESHEET)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
 

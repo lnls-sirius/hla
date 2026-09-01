@@ -340,7 +340,7 @@ class EmittanceMeasure(QWidget):
                 prefix=self._prefix))
         gb.layout().addWidget(spnbox)
         gb.layout().addWidget(lbl)
-        gb.layout().setAlignment(Qt.AlignTop)
+        gb.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
 
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)

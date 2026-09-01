@@ -36,7 +36,7 @@ class ACPanelDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         title_frame = RFTitleFrame(self, self.system)
@@ -86,7 +86,7 @@ class ACPanelDetails(SiriusDialog):
 
         grid_lay = QGridLayout()
         grid_lay.setSpacing(9)
-        grid_lay.setAlignment(Qt.AlignTop)
+        grid_lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         row = 0
 
         # Current N

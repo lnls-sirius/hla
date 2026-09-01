@@ -438,7 +438,7 @@ class EVG(BaseWidget):
             min-height:25px; max-height:25px;\
             icon-size:20px;}')
         but.clicked.connect(self._open_tstamp_dialog)
-        lay.addWidget(but, 0, 4, alignment=Qt.AlignTop)
+        lay.addWidget(but, 0, 4, alignment=Qt.AlignmentFlag.AlignTop)
 
         return info_wid
 
@@ -710,9 +710,9 @@ class EVG(BaseWidget):
         lay_logcnt.addWidget(ld_logcnt, 0, 0, 1, 4)
         lay_logcnt.addWidget(self.lb_logcnt, 1, 0, 1, 4)
         lay_logcnt.addWidget(ld_logful, 2, 0, alignment=Qt.AlignmentFlag.AlignRight)
-        lay_logcnt.addWidget(self.led_logful, 2, 1, alignment=Qt.AlignTop)
+        lay_logcnt.addWidget(self.led_logful, 2, 1, alignment=Qt.AlignmentFlag.AlignTop)
         lay_logcnt.addWidget(ld_logemp, 2, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignTop)
+        lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignmentFlag.AlignTop)
 
         ld_logevt = QLabel('<b>Event</b>', self)
         self.lb_logevt = SiriusLabel(self, self.get_pvname('LOGEVENT'))
@@ -732,12 +732,12 @@ class EVG(BaseWidget):
             '', gbox_log, (ld_logsub, self.lb_logsub))
 
         lay_log = QGridLayout(gbox_log)
-        lay_log.addWidget(gb_logen, 0, 0, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logen, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
@@ -1453,19 +1453,19 @@ class FOUT(BaseWidget):
         pvname = self.get_pvname(propty='IPPort-Mon')
         port = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, addr, port))
-        info_lay.addWidget(gb, 0, 0, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>DevFun</b>")
         pvname = self.get_pvname(propty='DevFun-Sts')
         rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
-        info_lay.addWidget(gb, 0, 1, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Device Status</b>")
         pvname = self.get_pvname(propty='DevStatus-Mon')
         rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
-        info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
         but_otp = QPushButton(self)
         but_otp.setToolTip('Open OTP Window')
@@ -1478,7 +1478,7 @@ class FOUT(BaseWidget):
             min-height:25px; max-height:25px;\
             icon-size:20px;}')
         but_otp.clicked.connect(self._open_otp_dialog)
-        info_lay.addWidget(but_otp, 0, 3, alignment=Qt.AlignTop)
+        info_lay.addWidget(but_otp, 0, 3, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
@@ -1486,21 +1486,21 @@ class FOUT(BaseWidget):
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
         gb = self._create_small_group('', info_wid, (lb, sp))
-        info_lay.addWidget(gb, 1, 0, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Save Settings</b>")
         pvname = self.get_pvname('Save-Cmd')
         sp = PyDMPushButton(
             self, label='Save', init_channel=pvname, pressValue=1)  # ?
         gb = self._create_small_group('', info_wid, (lb, sp))
-        info_lay.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Fw.Version</b>")
         pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
         frmv = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
-        info_lay.addWidget(gb, 1, 2, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 1, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
         return info_wid
 
@@ -2204,7 +2204,7 @@ class _EVR_EVE(BaseWidget):
             min-height:25px; max-height:25px;\
             icon-size:20px;}')
         but.clicked.connect(self._open_detail_dialog)
-        status_lay.addWidget(but, 0, 7, alignment=Qt.AlignTop)
+        status_lay.addWidget(but, 0, 7, alignment=Qt.AlignmentFlag.AlignTop)
 
         return status_wid
 
@@ -2219,7 +2219,7 @@ class _EVR_EVE(BaseWidget):
         pvname = self.get_pvname(propty='IPPort-Mon')
         port = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, addr, port))
-        info_lay.addWidget(gb, 0, 0, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>DevFun</b>")
         pvname = self.get_pvname(propty='DevFun-Sel')
@@ -2227,13 +2227,13 @@ class _EVR_EVE(BaseWidget):
         pvname = self.get_pvname(propty='DevFun-Sts')
         rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, sp, rb))
-        info_lay.addWidget(gb, 0, 1, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Device Status</b>")
         pvname = self.get_pvname(propty='DevStatus-Mon')
         rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
-        info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
@@ -2241,21 +2241,21 @@ class _EVR_EVE(BaseWidget):
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
         gb = self._create_small_group('', info_wid, (lb, sp))
-        info_lay.addWidget(gb, 0, 3, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 3, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Save Settings</b>")
         pvname = self.get_pvname('Save-Cmd')
         sp = PyDMPushButton(
             self, label='Save', init_channel=pvname, pressValue=1)
         gb = self._create_small_group('', info_wid, (lb, sp))
-        info_lay.addWidget(gb, 0, 4, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 4, alignment=Qt.AlignmentFlag.AlignTop)
 
         # if self.device_type == 'EVE':
         lb = QLabel("<b>Clk Mode</b>")
         pvname = self.get_pvname(propty='ClkMode-RB')
         rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
-        info_lay.addWidget(gb, 0, 5, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 5, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>FPGA Clk</b>")
         pvname = self.get_pvname('FPGAClk-Cte')
@@ -2264,14 +2264,14 @@ class _EVR_EVE(BaseWidget):
         pvname = self.get_pvname('FPGAClk-Cte', field='INP')
         inp = PyDMLineEdit(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, mon, inp))
-        info_lay.addWidget(gb, 0, 6, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 6, alignment=Qt.AlignmentFlag.AlignTop)
 
         lb = QLabel("<b>Fw.Version</b>")
         pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
         frmv = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
-        info_lay.addWidget(gb, 0, 7, alignment=Qt.AlignTop)
+        info_lay.addWidget(gb, 0, 7, alignment=Qt.AlignmentFlag.AlignTop)
 
         return info_wid
 
@@ -2349,9 +2349,9 @@ class _EVR_EVE(BaseWidget):
         lay_logcnt.addWidget(ld_logcnt, 0, 0, 1, 4)
         lay_logcnt.addWidget(self.lb_logcnt, 1, 0, 1, 4)
         lay_logcnt.addWidget(ld_logful, 2, 0, alignment=Qt.AlignmentFlag.AlignRight)
-        lay_logcnt.addWidget(self.led_logful, 2, 1, alignment=Qt.AlignTop)
+        lay_logcnt.addWidget(self.led_logful, 2, 1, alignment=Qt.AlignmentFlag.AlignTop)
         lay_logcnt.addWidget(ld_logemp, 2, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignTop)
+        lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignmentFlag.AlignTop)
 
         ld_logevt = QLabel('<b>Event</b>', self)
         self.lb_logevt = SiriusLabel(self, self.get_pvname('LOGEVENT'))
@@ -2371,12 +2371,12 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logsub, self.lb_logsub))
 
         lay_log = QGridLayout(gbox_log)
-        lay_log.addWidget(gb_logen, 0, 0, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
-        lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logen, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignmentFlag.AlignTop)
+        lay_log.addWidget(fr_logcnt, 0, 2, 2, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)

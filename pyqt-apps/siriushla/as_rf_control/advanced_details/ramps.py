@@ -38,7 +38,7 @@ class RampsDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -71,7 +71,7 @@ class RampsDetails(SiriusDialog):
 
         # General
         lay_gen = QGridLayout()
-        lay_gen.setAlignment(Qt.AlignTop)
+        lay_gen.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_gen.setSpacing(9)
         gbox_gen = QGroupBox('General')
         gbox_gen.setLayout(lay_gen)
@@ -135,7 +135,7 @@ class RampsDetails(SiriusDialog):
 
         # Times
         lay_times = QGridLayout()
-        lay_times.setAlignment(Qt.AlignTop)
+        lay_times.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_times.setSpacing(9)
         gbox_times = QGroupBox('Times')
         gbox_times.setLayout(lay_times)
@@ -172,7 +172,7 @@ class RampsDetails(SiriusDialog):
 
         # Top
         lay_top = QGridLayout()
-        lay_top.setAlignment(Qt.AlignTop)
+        lay_top.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_top.setSpacing(9)
         gbox_top = QGroupBox('Top Ramp')
         gbox_top.setLayout(lay_top)
@@ -184,7 +184,7 @@ class RampsDetails(SiriusDialog):
 
         # Bot
         lay_bot = QGridLayout()
-        lay_bot.setAlignment(Qt.AlignTop)
+        lay_bot.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_bot.setSpacing(9)
         gbox_bot = QGroupBox('Bottom Ramp')
         gbox_bot.setLayout(lay_bot)
@@ -196,7 +196,7 @@ class RampsDetails(SiriusDialog):
 
         # Slopes
         lay_slopes = QGridLayout()
-        lay_slopes.setAlignment(Qt.AlignTop)
+        lay_slopes.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_slopes.setSpacing(9)
         gbox_slopes = QGroupBox('Slopes')
         gbox_slopes.setLayout(lay_slopes)
@@ -235,7 +235,7 @@ class RampsDetails(SiriusDialog):
 
     def _diagnosticsRampLayout(self, chs_dict):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(20)
 
         lb_addrs_top = ['163', '162'] if self.section == 'BO' else ['162']
@@ -256,7 +256,7 @@ class RampsDetails(SiriusDialog):
 
     def _topOrBotRampLayout(self, chs_dict, lb_addrs, led_addrs):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
 

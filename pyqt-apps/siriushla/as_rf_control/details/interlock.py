@@ -28,7 +28,7 @@ class LLRFInterlockDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.title = QLabel(
             '<h4>LLRF Interlock Details</h4>', self,
@@ -68,7 +68,7 @@ class LLRFInterlockDetails(SiriusDialog):
         for name, dic in chs_dict['Inputs'].items():
             gbox = QGroupBox(name, self)
             lay_intlk = QGridLayout(gbox)
-            lay_intlk.setAlignment(Qt.AlignTop)
+            lay_intlk.setAlignment(Qt.AlignmentFlag.AlignTop)
             lay_intlk.setHorizontalSpacing(0)
             lay_intlk.setVerticalSpacing(0)
 
@@ -100,7 +100,7 @@ class LLRFInterlockDetails(SiriusDialog):
         # timestamps
         gbox_time = QGroupBox('Timestamps', self)
         lay_time = QGridLayout(gbox_time)
-        lay_time.setAlignment(Qt.AlignTop)
+        lay_time.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_time.setHorizontalSpacing(9)
         lay_time.setVerticalSpacing(9)
         for idx, pvn in chs_dict['Timestamps'].items():

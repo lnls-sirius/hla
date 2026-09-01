@@ -527,7 +527,7 @@ class IDFFWindow(SiriusMainWindow):
     def _setupRampCorrWidget(self):
         self.lb_rampcorr = QLabel(
             '<h4>Ramp Correctors<h4>', self,
-            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignBottom
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom
         )
         self.lb_rampcorr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 

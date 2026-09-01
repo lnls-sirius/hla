@@ -27,7 +27,7 @@ class SlowLoopErrorDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(20)
 
         self.title = QLabel(
@@ -48,7 +48,7 @@ class SlowLoopErrorDetails(SiriusDialog):
                 f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter))
 
         lay_llrf = QHBoxLayout()
-        lay_llrf.setAlignment(Qt.AlignTop)
+        lay_llrf.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_llrf.setSpacing(0)
 
         lay_table = QGridLayout()

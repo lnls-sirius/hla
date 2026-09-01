@@ -101,7 +101,7 @@ class IDControl(SiriusMainWindow):
 
     def _setupAPULayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._apu_header = APUSummaryHeader(self)
         lay.addWidget(self._apu_header)
@@ -124,7 +124,7 @@ class IDControl(SiriusMainWindow):
 
     def _setupDELTALayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._delta_header = DELTASummaryHeader(self)
         lay.addWidget(self._delta_header)
@@ -143,7 +143,7 @@ class IDControl(SiriusMainWindow):
 
     def _setupIVULayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._ivu_header = IVUSummaryHeader(self)
         lay.addWidget(self._ivu_header)
@@ -162,7 +162,7 @@ class IDControl(SiriusMainWindow):
 
     def _setupVPULayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._vpu_header = VPUSummaryHeader(self)
         lay.addWidget(self._vpu_header)
@@ -181,7 +181,7 @@ class IDControl(SiriusMainWindow):
 
     def _setupUELayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._ue_header = UESummaryHeader(self)
         lay.addWidget(self._ue_header)

@@ -163,7 +163,7 @@ class MotorControlWindow(SiriusMainWindow):
                 lay.addLayout(
                     lb_glay,
                     pos[0], pos[1], 1, 1,
-                    alignment=Qt.AlignTop)
+                    alignment=Qt.AlignmentFlag.AlignTop)
             else:
                 lay.addLayout(
                     self.infoBox(title, basename + data),

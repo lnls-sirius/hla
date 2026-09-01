@@ -689,7 +689,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         parms = QWidget()
         lay_parms = QGridLayout(parms)
-        lay_parms.setAlignment(Qt.AlignTop)
+        lay_parms.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_parms.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         lay_parms.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignmentFlag.AlignCenter)
         lay_parms.addWidget(self.cycle_type_label, 1, 0, Qt.AlignmentFlag.AlignRight)
@@ -767,7 +767,7 @@ class PSDetailWidget(_BaseDetailWidget):
         idff_mode_led = SiriusLedState(self, idff_mode_sts)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setColumnStretch(2, 1)
         layout.addWidget(idff_mode_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(idff_mode_btn, 0, 1, Qt.AlignmentFlag.AlignHCenter)
@@ -780,7 +780,7 @@ class PSDetailWidget(_BaseDetailWidget):
         queue_size_rb_label = SiriusLabel(self, queue_size_ca)
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setColumnStretch(3, 1)
         layout.addWidget(queue_size_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(queue_size_rb_label, 0, 1)
@@ -928,7 +928,7 @@ class PSDetailWidget(_BaseDetailWidget):
         self.scope_dur_rb_lb.showUnits = True
 
         layout_scope = QGridLayout()
-        layout_scope.setAlignment(Qt.AlignTop)
+        layout_scope.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout_scope.setContentsMargins(6, 6, 3, 3)
         layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout_scope.addWidget(self.scope_src_rb_lb, 0, 3)
@@ -1014,7 +1014,7 @@ class PSDetailWidget(_BaseDetailWidget):
         wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
 
         layout_wfm = QGridLayout()
-        layout_wfm.setAlignment(Qt.AlignTop)
+        layout_wfm.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout_wfm.setContentsMargins(6, 6, 3, 3)
 
         layout_wfm.addWidget(
@@ -1050,7 +1050,7 @@ class PSDetailWidget(_BaseDetailWidget):
         # --- wfmlayout ---
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setContentsMargins(6, 6, 3, 3)
         layout.addWidget(self.scope_box, 1, 1)
         layout.addWidget(self.wfm_box, 2, 1)
@@ -1401,7 +1401,7 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         self.current_mon_val.precFromPV = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_sp_widget, 0, 1)
         layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
@@ -1459,7 +1459,7 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_mon_val.showUnits = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(self.cap_bank_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.cap_bank_sp_widget, 0, 1)
         layout.addWidget(self.cap_bank_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
@@ -1618,7 +1618,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname+":CurrentRaw-Mon")
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(current_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.current_raw_sp, 0, 1)
         layout.addWidget(current_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
@@ -1651,7 +1651,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.voltage_mn.showUnits = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(voltage_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_sp, 0, 1)
         layout.addWidget(voltage_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
@@ -1676,7 +1676,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.voltage_raw_mn.showUnits = True
 
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(voltage_sp_label, 0, 0, Qt.AlignmentFlag.AlignRight)
         layout.addWidget(self.voltage_raw_sp, 0, 1)
         layout.addWidget(voltage_rb_label, 1, 0, Qt.AlignmentFlag.AlignRight)
@@ -1803,7 +1803,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widgetparms = QWidget()
         lay = QGridLayout(widgetparms)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ctlmode_lb, 0, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.ctlmode_cb, 0, 1)
         lay.addWidget(self.ctlmode_lb, 0, 2)
@@ -1851,7 +1851,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widgettest = QWidget()
         lay = QGridLayout(widgettest)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(testlima_lb, 0, 0, Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self.testlima_sp, 0, 1)
         lay.addWidget(self.testlima_rb, 0, 2)
@@ -2076,7 +2076,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widcoeff = QWidget()
         lay = QVBoxLayout(widcoeff)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         for plane in ['X', 'Y']:
             lay.addWidget(gph_fofbcoeffs[plane])
         lay.addLayout(hbox_coeffshow)
@@ -2113,7 +2113,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widfilt = QWidget()
         lay = QVBoxLayout(widfilt)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(gph_filt)
         lay.addLayout(hbox_filtshow)
 
@@ -2252,7 +2252,7 @@ class PSAuxMeasWidget(SiriusDialog):
     def _setupModWidget(self, psname, mod, dbase):
         wid = QWidget()
         lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         modname = mod
         if psname in self.auxdev2mod:

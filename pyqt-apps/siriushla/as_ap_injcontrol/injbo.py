@@ -69,7 +69,7 @@ class InjBOControlWindow(BaseWindow):
         lay_corr.setContentsMargins(0, 0, 0, 0)
         lay_corr.setVerticalSpacing(25)
         lay_corr.setHorizontalSpacing(15)
-        lay_corr.setAlignment(Qt.AlignTop)
+        lay_corr.setAlignment(Qt.AlignmentFlag.AlignTop)
         header_corrs = self._create_headerline(
             (('', 0),
              ('', 1.29), ('', 5), ('Kick-SP', 5), ('Kick-Mon', 5),

@@ -33,7 +33,7 @@ class DCCTSettings(QWidget):
     def _setupUi(self):
         lay = QVBoxLayout()
         lay.addWidget(QLabel('<h3>Settings</h3>', self,
-                             alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignBottom))
+                             alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom))
         lay.setStretch(0, 1)
 
         # Measure

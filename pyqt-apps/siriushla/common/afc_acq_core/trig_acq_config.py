@@ -102,7 +102,7 @@ class AcqBaseWindow(SiriusMainWindow):
         self.sb_nrpre = SiriusSpinbox(self, self._get_pvname('SamplesPre-SP'))
         self.lb_nrpre = SiriusLabel(
             self, self._get_pvname('SamplesPre-RB'), keep_unit=True,
-            alignment=Qt.AlignTop)
+            alignment=Qt.AlignmentFlag.AlignTop)
         self.lb_nrpre.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';}')
 
@@ -110,7 +110,7 @@ class AcqBaseWindow(SiriusMainWindow):
         self.sb_nrpos = SiriusSpinbox(self, self._get_pvname('SamplesPost-SP'))
         self.lb_nrpos = SiriusLabel(
             self, self._get_pvname('SamplesPost-RB'), keep_unit=True,
-            alignment=Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignBottom)
         self.lb_nrpos.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';}')
 

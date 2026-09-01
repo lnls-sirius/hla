@@ -472,7 +472,7 @@ class MPSControl(QWidget):
         if tab_type != 0:
             if_glay.addLayout(self.displayTempGroups(), 0, 0, 1, 1)
 
-        if_glay.setAlignment(Qt.AlignTop)
+        if_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         wid.setLayout(if_glay)
 
         if tab_type == 0:
@@ -524,6 +524,6 @@ class MPSControl(QWidget):
         if_glay = QGridLayout()
         if_glay.addWidget(self.displayTabs(), 1, 0, 1, 1)
         if_glay.addWidget(self.displayHeader(), 0, 0, 1, 1)
-        if_glay.setAlignment(Qt.AlignTop)
+        if_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.setLayout(if_glay)

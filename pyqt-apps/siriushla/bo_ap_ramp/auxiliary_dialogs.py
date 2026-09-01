@@ -500,22 +500,22 @@ class ChoosePSToPlot(SiriusDialog):
     def _setupUi(self):
         self.quads = QWidget(self)
         vlay_quad = QVBoxLayout()
-        vlay_quad.setAlignment(Qt.AlignTop)
+        vlay_quad.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.quads.setLayout(vlay_quad)
 
         self.sexts = QWidget(self)
         vlay_sext = QVBoxLayout()
-        vlay_sext.setAlignment(Qt.AlignTop)
+        vlay_sext.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.sexts.setLayout(vlay_sext)
 
         self.chs = QWidget(self)
         vlay_ch = QVBoxLayout()
-        vlay_ch.setAlignment(Qt.AlignTop)
+        vlay_ch.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.chs.setLayout(vlay_ch)
 
         self.cvs = QWidget(self)
         vlay_cv = QVBoxLayout()
-        vlay_cv.setAlignment(Qt.AlignTop)
+        vlay_cv.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.cvs.setLayout(vlay_cv)
 
         self.all_quad_sel = QCheckBox('All quadrupoles', self.quads)

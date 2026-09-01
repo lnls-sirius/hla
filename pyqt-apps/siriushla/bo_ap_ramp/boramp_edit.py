@@ -160,7 +160,7 @@ class DipoleRamp(QWidget):
             _part(self.applyChanges2MachineSignal.emit, self))
 
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(label)
         lay.addWidget(self.graph)
         lay.addLayout(lay_v)
@@ -867,7 +867,7 @@ class MultipolesRamp(QWidget):
             _part(self.applyChanges2MachineSignal.emit, self))
 
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(label)
         lay.addWidget(self.graph)
         lay.addWidget(QLabel(''))

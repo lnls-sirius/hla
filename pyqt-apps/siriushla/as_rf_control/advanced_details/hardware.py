@@ -35,7 +35,7 @@ class HardwareDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setHorizontalSpacing(18)
         lay.setVerticalSpacing(9)
 
@@ -65,7 +65,7 @@ class HardwareDetails(SiriusDialog):
         gbox_pll = QGroupBox(self)
         lay_pll = QGridLayout(gbox_pll)
         lay_pll.setSpacing(9)
-        lay_pll.setAlignment(Qt.AlignTop)
+        lay_pll.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         cb_clock = PyDMEnumComboBox(
             self, self.prefix+self.syst_dict['Clock Src'])
@@ -92,7 +92,7 @@ class HardwareDetails(SiriusDialog):
         gbox_type = QGroupBox(self)
         lay_type = QGridLayout(gbox_type)
         lay_type.setSpacing(9)
-        lay_type.setSpacing(Qt.AlignTop)
+        lay_type.setSpacing(Qt.AlignmentFlag.AlignTop)
         lay_type.addWidget(QLabel('Cavity Type'), 0, 0)
         lay_type.addWidget(SiriusLabel(
             self, self.prefix+self.syst_dict['Cav Type']), 0, 1)
@@ -101,7 +101,7 @@ class HardwareDetails(SiriusDialog):
         gbox_err = QGroupBox('Errors', self)
         lay_err = QGridLayout(gbox_err)
         lay_err.setSpacing(9)
-        lay_err.setAlignment(Qt.AlignTop)
+        lay_err.setAlignment(Qt.AlignmentFlag.AlignTop)
         labels = ['EAPI', 'Mo1000', 'Mi125', 'SysMon',
             'GPIO', 'VCXO', 'Loops', 'RecPlay']
         self._setupByteMonitor(
@@ -111,7 +111,7 @@ class HardwareDetails(SiriusDialog):
         gbox_interr = QGroupBox('Internal Errors', self)
         lay_interr = QGridLayout(gbox_interr)
         lay_interr.setSpacing(9)
-        lay_interr.setAlignment(Qt.AlignTop)
+        lay_interr.setAlignment(Qt.AlignmentFlag.AlignTop)
         labels = ['Loop Set', 'Loop Get', 'Loop Set Inconsistency',
             'Phs Ref Inconsistency', 'Amd Ref Inconsistency', 'Diag Get']
         self._setupByteMonitor(lay_interr, True, labels,
@@ -125,7 +125,7 @@ class HardwareDetails(SiriusDialog):
         gbox_init = QGroupBox('Init', self)
         lay_init = QGridLayout(gbox_init)
         lay_init.setSpacing(9)
-        lay_init.setAlignment(Qt.AlignTop)
+        lay_init.setAlignment(Qt.AlignmentFlag.AlignTop)
         labels = ['GPIO', 'DACS', 'Mo1000', 'Mi125', 'Intercore FIFO', 'FPGA',
             'Cav Type', 'Double Write', 'Initial Settings', 'Disable Cavity B']
         self._setupByteMonitor(
@@ -153,7 +153,7 @@ class HardwareDetails(SiriusDialog):
     def _setupLabelsLayout(self, gbox, isFPGA, chs_dict):
         lay = QGridLayout(gbox)
         lay.setSpacing(9)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         row = 0
         for key, val in chs_dict.items():
             lb_value = SiriusLabel(self, self.prefix+val)

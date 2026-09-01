@@ -178,7 +178,7 @@ class BaseList(CustomGroupBox):
         lay = QVBoxLayout(wid)
         lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         sc_area.setWidget(wid)
 
         self.lines = dict()
@@ -278,7 +278,7 @@ class BaseList(CustomGroupBox):
 
     def _headerLabel(self, device, prop):
         lbl = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
-        lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignTop)
+        lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         return (lbl, )
 
     def _createObjs(self, device, prop):

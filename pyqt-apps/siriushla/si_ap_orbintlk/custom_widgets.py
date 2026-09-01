@@ -215,7 +215,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         # limit setpoints
         self._wid_lims = QGroupBox('Select Thresholds: ')
         lay_lims = QGridLayout(self._wid_lims)
-        lay_lims.setAlignment(Qt.AlignTop)
+        lay_lims.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         if 'sum' in self.metric:

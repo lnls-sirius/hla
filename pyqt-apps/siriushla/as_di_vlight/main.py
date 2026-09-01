@@ -150,5 +150,5 @@ class VLightCamView(QWidget):
         lay.setSpacing(20)
         lay.addLayout(flay_sts)
         lay.addLayout(flay_ctrl)
-        lay.addWidget(self.pb_details, alignment=Qt.AlignTop)
+        lay.addWidget(self.pb_details, alignment=Qt.AlignmentFlag.AlignTop)
         return lay

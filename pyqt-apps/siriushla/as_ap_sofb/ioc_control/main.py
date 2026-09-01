@@ -218,7 +218,7 @@ class SOFBControl(BaseWidget):
         wid = QWidget(parent)
         wid.setObjectName('grp')
         gdl = QGridLayout(wid)
-        gdl.setAlignment(Qt.AlignTop)
+        gdl.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         prp = 'FOFBDownloadKicks'
         lbl = QLabel('Download Kicks', wid, alignment=Qt.AlignmentFlag.AlignCenter)

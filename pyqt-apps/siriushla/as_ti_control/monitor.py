@@ -176,7 +176,7 @@ class MonitorLL(QGroupBox):
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(12)
         lay.setVerticalSpacing(20)
-        align = Qt.AlignmentFlag.AlignHCenter | Qt.AlignTop
+        align = Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop
         lay.addWidget(g1, 0, 0, 1, len(g3), align)
         for i, g in enumerate(g2):
             lay.addWidget(g, 1, i, align)

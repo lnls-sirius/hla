@@ -36,7 +36,7 @@ class CalSysDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
@@ -70,7 +70,7 @@ class CalSysDetails(SiriusDialog):
 
     def _signalsLayout(self):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         cb_units = QComboBox(self)
@@ -130,7 +130,7 @@ class CalSysDetails(SiriusDialog):
 
     def _controlLayout(self):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignmentFlag.AlignCenter),
@@ -163,7 +163,7 @@ class CalSysDetails(SiriusDialog):
 
     def _graphLayout(self):
         lay_table = QGridLayout()
-        lay_table.setAlignment(Qt.AlignTop)
+        lay_table.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_table.setSpacing(9)
 
         self.cb_units = QComboBox(self)
@@ -225,7 +225,7 @@ class CalSysDetails(SiriusDialog):
         self.graph.setLabel('left', '')
 
         lay = QHBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
         lay.addLayout(lay_table)
         lay.addWidget(self.graph)

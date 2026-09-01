@@ -78,7 +78,7 @@ class PSMonitor(QWidget):
     def _make_groupbox(self, sec):
         status = QGroupBox(sec, self)
         status_lay = QGridLayout()
-        status_lay.setAlignment(Qt.AlignTop)
+        status_lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         status.setStyleSheet("QLabel{max-height: 1.4em;}")
         status.setLayout(status_lay)
 
@@ -151,7 +151,7 @@ class PSMonitor(QWidget):
                     offset)
             row, col, rowc, colc = self.get_sec2dev_laypos(sec, label)
             status_lay.addLayout(grid, row, col, rowc, colc,
-                                 alignment=Qt.AlignTop)
+                                 alignment=Qt.AlignmentFlag.AlignTop)
 
         if sec == 'LI':
             status_lay.setColumnStretch(0, 2)

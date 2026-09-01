@@ -38,7 +38,7 @@ class LoopsDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
@@ -70,7 +70,7 @@ class LoopsDetails(SiriusDialog):
 
     def _loopsControlLayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         gbox_gen = QGroupBox('General Controls')
@@ -200,7 +200,7 @@ class LoopsDetails(SiriusDialog):
 
     def _setupConditioningLayout(self, chs_dict):
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Pulse Enable
@@ -269,7 +269,7 @@ class LoopsDetails(SiriusDialog):
 
     def _specificLoopsLayout(self, rect_or_polar):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
         chs_dict = self.syst_dict[rect_or_polar]
 
@@ -305,7 +305,7 @@ class LoopsDetails(SiriusDialog):
 
         for grp_name, addrs in grp_dict.items():
             grp_lay = QVBoxLayout()
-            grp_lay.setAlignment(Qt.AlignTop)
+            grp_lay.setAlignment(Qt.AlignmentFlag.AlignTop)
             grp_lay.addLayout(
                 self._controlLayout(chs_dict[grp_name]['Control'], addrs))
             grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
@@ -371,7 +371,7 @@ class LoopsDetails(SiriusDialog):
 
     def _controlLayout(self, chs_dict, addrs):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Enable
         lay.addWidget(QLabel(addrs[0], alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)

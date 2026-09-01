@@ -39,7 +39,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_temp1.setHorizontalSpacing(9)
         lay_temp1.setVerticalSpacing(9)
         lay_temp1.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        lay_temp1.setFormAlignment(Qt.AlignTop)
+        lay_temp1.setFormAlignment(Qt.AlignmentFlag.AlignTop)
         lb_temp1 = QLabel('Cell and Coupler\nTemperatures\nPT100', self)
         lb_temp1.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -92,7 +92,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_temp2.setHorizontalSpacing(9)
         lay_temp2.setVerticalSpacing(9)
         lay_temp2.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        lay_temp2.setFormAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay_temp2.setFormAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         lb_temp2 = QLabel('Cell\nTemperatures\nThermostats', self)
         lb_temp2.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -108,7 +108,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_dtemp.setHorizontalSpacing(9)
         lay_dtemp.setVerticalSpacing(9)
         lay_dtemp.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        lay_dtemp.setFormAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay_dtemp.setFormAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         lb_dtemp = QLabel('Disc\nTemperatures\nThermostats', self)
         lb_dtemp.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -124,7 +124,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_flwrt.setHorizontalSpacing(9)
         lay_flwrt.setVerticalSpacing(9)
         lay_flwrt.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        lay_flwrt.setFormAlignment(Qt.AlignTop)
+        lay_flwrt.setFormAlignment(Qt.AlignmentFlag.AlignTop)
         lb_flwrf = QLabel('Flow Switches', self)
         lb_flwrf.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -144,7 +144,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_vac.setHorizontalSpacing(9)
         lay_vac.setVerticalSpacing(9)
         lay_vac.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        lay_vac.setFormAlignment(Qt.AlignTop)
+        lay_vac.setFormAlignment(Qt.AlignmentFlag.AlignTop)
         lb_vac = QLabel('Vacuum', self)
         lb_vac.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')

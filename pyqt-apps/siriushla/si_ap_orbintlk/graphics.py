@@ -50,7 +50,7 @@ class GraphMonitorWidget(QWidget):
     def _setupTab(self, intlktype):
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         label = QLabel(
             '<h3>'+intlktype+'</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -254,7 +254,7 @@ class GraphLegendWidget(QWidget):
         self._label_labok = QLabel('Intlk Off (All ok)')
 
         lay = QHBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self._label_leg)
         lay.addStretch()

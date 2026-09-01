@@ -33,7 +33,7 @@ class ModIntlkDetailDialog(SiriusDialog):
             alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(self.title, 0, 0, 1, 2)
         lay.addWidget(self._setupModSignalWidget(), 1, 0)
         lay.addWidget(self._setupExtIntlkSignalWidget(), 1, 1)
@@ -254,7 +254,7 @@ class ModIntlkDetailDialog(SiriusDialog):
 
         wid = QWidget(self)
         lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(0)
         lay.addWidget(self.lb_modsig)
         lay.addWidget(gb_sig1)
@@ -300,7 +300,7 @@ class ModIntlkDetailDialog(SiriusDialog):
                 border-right: 1px solid gray;
             }""")
         lay_lvilk = QGridLayout(wid_lvilk)
-        lay_lvilk.setAlignment(Qt.AlignTop)
+        lay_lvilk.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_lvilk.addWidget(led_lvilk, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_lvilk.addWidget(lbl_lvilk, 1, 0, 1, 2)
         lay_lvilk.addWidget(led_lv1, 2, 0)
@@ -350,7 +350,7 @@ class ModIntlkDetailDialog(SiriusDialog):
                 border-right: 1px solid gray;
             }""")
         lay_hvilk = QGridLayout(wid_hvilk)
-        lay_hvilk.setAlignment(Qt.AlignTop)
+        lay_hvilk.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_hvilk.addWidget(led_hvilk, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_hvilk.addWidget(lbl_hvilk, 1, 0, 1, 2)
         lay_hvilk.addWidget(led_hv1, 2, 0)
@@ -412,7 +412,7 @@ class ModIntlkDetailDialog(SiriusDialog):
                 border-right: 2px solid gray;
             }""")
         lay_trilk = QGridLayout(wid_trilk)
-        lay_trilk.setAlignment(Qt.AlignTop)
+        lay_trilk.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_trilk.addWidget(led_trilk, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_trilk.addWidget(lbl_trilk, 1, 0, 1, 2)
         lay_trilk.addWidget(led_tr1, 2, 0)
@@ -436,7 +436,7 @@ class ModIntlkDetailDialog(SiriusDialog):
         lay = QGridLayout(wid)
         lay.setVerticalSpacing(0)
         lay.setHorizontalSpacing(0)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(self.lb_extsig, 0, 0, 1, 3)
         lay.addWidget(wid_lvilk, 1, 0)
         lay.addWidget(wid_hvilk, 1, 1)

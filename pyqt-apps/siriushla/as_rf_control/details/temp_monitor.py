@@ -25,7 +25,7 @@ class TempMonitor(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setHorizontalSpacing(25)
         lay.setVerticalSpacing(15)
 

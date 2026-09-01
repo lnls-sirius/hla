@@ -17,7 +17,7 @@ class MPSMonitor(QWidget):
 
     def _setupUi(self):
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.title = QLabel('<h2>LI MPS Monitor</h2>', self)
         lay.addWidget(self.title, 0, 0, 1, 2)

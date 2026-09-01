@@ -48,7 +48,7 @@ class BbBCoefficientsWidget(QWidget):
         gbox_coefedit = self._setupCoefficientsEditWidget()
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(15)
         lay.addWidget(gbox_coefedit, 0, 0, 1, 2)

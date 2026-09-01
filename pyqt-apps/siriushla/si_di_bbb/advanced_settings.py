@@ -286,7 +286,7 @@ class BbBSlowDACsWidget(QWidget):
         cb_dacmode = PyDMEnumComboBox(self, self.dev_pref+':AD5644TEST_BO')
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(15)
         lay.addWidget(ld_dacs, 0, 1, 1, 5)
@@ -386,7 +386,7 @@ class BbBADCWidget(QWidget):
         si_adcch7.setStyleSheet('#ch7{min-height:6em; min-width:8em;}')
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(15)
         lay.addWidget(ld_adc, 0, 0, 1, 4)
@@ -502,7 +502,7 @@ class BbBInterlock(QWidget):
         pb_ld.setStyleSheet("icon-size:20px;")
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_intlk, 0, 0, 1, 5)
         lay.addWidget(ld_sp, 1, 1)
         lay.addWidget(ld_cyc, 1, 2)

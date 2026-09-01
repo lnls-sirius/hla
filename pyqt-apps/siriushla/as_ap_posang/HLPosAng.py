@@ -276,12 +276,12 @@ class PosAngCorr(SiriusMainWindow):
                 propty='RefKick'+corrid+'-Mon'), keep_unit=True)
             lb_ref.showUnits = True
 
-            lay.addWidget(pbt, idx, 0, alignment=Qt.AlignTop)
+            lay.addWidget(pbt, idx, 0, alignment=Qt.AlignmentFlag.AlignTop)
             lay.addWidget(
-                lb_name, idx, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
-            lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignTop)
-            lay.addWidget(lb_rb, idx, 3, alignment=Qt.AlignTop)
-            lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignTop)
+                lb_name, idx, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(lb_rb, idx, 3, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignmentFlag.AlignTop)
             idx += 1
 
         lay.addItem(
@@ -312,12 +312,12 @@ class PosAngCorr(SiriusMainWindow):
         lb_kckr_mn = SiriusLabel(self, self._kckr_name.substitute(
             prefix=self._prefix, propty='Kick-Mon'), keep_unit=True)
         lb_kckr_mn.showUnits = True
-        lay.addWidget(pb_kckr, idx+2, 0, alignment=Qt.AlignTop)
+        lay.addWidget(pb_kckr, idx+2, 0, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addWidget(
-            lb_kckr_name, idx+2, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
-        lay.addWidget(lb_kckr_sp, idx+2, 2, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_rb, idx+2, 3, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_mn, idx+2, 4, alignment=Qt.AlignTop)
+            lb_kckr_name, idx+2, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(lb_kckr_sp, idx+2, 2, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(lb_kckr_rb, idx+2, 3, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(lb_kckr_mn, idx+2, 4, alignment=Qt.AlignmentFlag.AlignTop)
 
         if self._tl == 'TB':
             pref = self._prefix + ('-' if self._prefix else '')
@@ -341,9 +341,9 @@ class PosAngCorr(SiriusMainWindow):
             lb_kly2_rb.precision = 2
             lb_kly2_rb.showUnits = True
             lay.addWidget(lb_kly2_name, idx+4, 1,
-                          alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
-            lay.addWidget(le_kly2_sp, idx+4, 2, alignment=Qt.AlignTop)
-            lay.addWidget(lb_kly2_rb, idx+4, 3, alignment=Qt.AlignTop)
+                          alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(le_kly2_sp, idx+4, 2, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(lb_kly2_rb, idx+4, 3, alignment=Qt.AlignmentFlag.AlignTop)
         return lay
 
     def _setupStatusLayout(self):

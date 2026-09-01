@@ -192,7 +192,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_mmdb15)
         lay.addWidget(ld_mmdesc)
         lay.addWidget(gbox_ctrl)
@@ -271,7 +271,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_mczt102)
         lay.addWidget(ld_mcdesc)
         lay.addWidget(gbox_ctrl)
@@ -313,7 +313,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_main, 0, 0, 1, 3)
         lay.addLayout(conf_lay, 1, 0, 1, 3)
         lay.addWidget(ld_enbl, 2, 0)

@@ -38,7 +38,7 @@ class SSACurrentsDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QHBoxLayout(title_frame)
@@ -66,7 +66,7 @@ class SSACurrentsDetails(SiriusDialog):
 
     def _setupDiagLay(self):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         scarea = QScrollArea(self)
         scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
@@ -149,7 +149,7 @@ class SSACurrentsDetails(SiriusDialog):
 
     def _setupHeatSinkLay(self, hs_num, chs_dict, row_label=''):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         if self.section == 'SI':
@@ -455,7 +455,7 @@ class SSACurrentsDetails(SiriusDialog):
 
     def _setupAlarmLay(self):
         lay = QHBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(18)
 
         # Offsets

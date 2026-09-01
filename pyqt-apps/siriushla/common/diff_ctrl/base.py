@@ -115,7 +115,7 @@ class DiffCtrlDevMonitor(QWidget):
             QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(label_status, 0, 0)
         lay.addWidget(self.multiled_status, 0, 1)
         lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)

@@ -237,8 +237,8 @@ class BbBGPIOWidget(QWidget):
         gbox_phsout = QGroupBox('Phase Servo Output', self)
         lay_phsout = QGridLayout(gbox_phsout)
         lay_phsout.addWidget(si_gpioservodlt, 0, 0, 2, 1)
-        lay_phsout.addWidget(ld_gpioservomax, 0, 1, alignment=Qt.AlignBottom)
-        lay_phsout.addWidget(sb_gpioservomax, 1, 1, alignment=Qt.AlignTop)
+        lay_phsout.addWidget(ld_gpioservomax, 0, 1, alignment=Qt.AlignmentFlag.AlignBottom)
+        lay_phsout.addWidget(sb_gpioservomax, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
         lay_phsout.setColumnStretch(0, 4)
         lay_phsout.setColumnStretch(1, 1)
 

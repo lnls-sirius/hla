@@ -128,7 +128,7 @@ class RFMainControl(SiriusMainWindow):
     def _statusLayout(self):
         lay = QGridLayout()
         lay.setHorizontalSpacing(6)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         button_column = 1 if self.section == 'SI' else 2
 
         # Interlocks
@@ -435,7 +435,7 @@ class RFMainControl(SiriusMainWindow):
         # # Slow Loop Control
         wid_sl = QWidget()
         lay_slc = QGridLayout(wid_sl)
-        lay_slc.setAlignment(Qt.AlignTop)
+        lay_slc.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_slc.setVerticalSpacing(6)
         lay_slc.setHorizontalSpacing(20)
 
@@ -495,7 +495,7 @@ class RFMainControl(SiriusMainWindow):
 
         gbox_details = QGroupBox('Details', self)
         lay_details = QHBoxLayout(gbox_details)
-        lay_details.setAlignment(Qt.AlignTop)
+        lay_details.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_details.addWidget(self.pb_errdtls, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_details.addWidget(self.pb_paramdtls, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -513,7 +513,7 @@ class RFMainControl(SiriusMainWindow):
         ld_margin = QLabel(
             'Deadband: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         lay_tunset = QGridLayout()
-        lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay_tunset.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         lay_tunset.setVerticalSpacing(12)
         lay_tunset.setColumnStretch(0, 3)
         lay_tunset.addWidget(ld_autotun, 1, 1)
@@ -680,7 +680,7 @@ class RFMainControl(SiriusMainWindow):
             self.lb_fwdmin = SiriusLedState(self, self.prefix+pvs['FwdMin'])
 
             lay_fflat = QGridLayout()
-            lay_fflat.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+            lay_fflat.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
             lay_fflat.setVerticalSpacing(12)
             lay_fflat.addWidget(lb_fflat, 0, 0)
             lay_fflat.addWidget(lb_ffen, 1, 0)
@@ -715,7 +715,7 @@ class RFMainControl(SiriusMainWindow):
         # # Diagnostics
         wid_diag = QWidget()
         lay_diag = QGridLayout(wid_diag)
-        lay_diag.setAlignment(Qt.AlignTop)
+        lay_diag.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_diag.setSpacing(9)
 
         add_labels = True
@@ -733,7 +733,7 @@ class RFMainControl(SiriusMainWindow):
         # # FDL
         wid_fdl = QWidget()
         lay_fdl = QVBoxLayout(wid_fdl)
-        lay_fdl.setAlignment(Qt.AlignTop)
+        lay_fdl.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_fdl.setSpacing(9)
         self.curves_amp = dict()
 
@@ -927,12 +927,12 @@ class RFMainControl(SiriusMainWindow):
     def _advancedDetailsLayout(self):
         if self.section == 'SI':
             lay = QVBoxLayout()
-            lay.setAlignment(Qt.AlignTop)
+            lay.setAlignment(Qt.AlignmentFlag.AlignTop)
             lay.setSpacing(9)
             systems = ['A', 'B']
         else:
             lay = QGridLayout()
-            lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+            lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
             lay.setHorizontalSpacing(9)
             lay.setVerticalSpacing(18)
             lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
@@ -1114,7 +1114,7 @@ class RFMainControl(SiriusMainWindow):
 
     def _powerMeterLayout(self):
         lay_vals = QGridLayout()
-        lay_vals.setAlignment(Qt.AlignTop)
+        lay_vals.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_vals.setHorizontalSpacing(15)
         lay_vals.setVerticalSpacing(6)
         self.cb_units = QComboBox(self)
@@ -1428,7 +1428,7 @@ class RFMainControl(SiriusMainWindow):
 
             self.cavtemp_wid = QWidget()
             lay_cavtemp = QVBoxLayout(self.cavtemp_wid)
-            lay_cavtemp.setAlignment(Qt.AlignTop)
+            lay_cavtemp.setAlignment(Qt.AlignmentFlag.AlignTop)
             lay_cavtemp.setContentsMargins(0, 0, 0, 9)
             lay_cavtemp.addLayout(hbox_tempcell_state)
             lay_cavtemp.addWidget(self.tempcell_graph)
@@ -1507,7 +1507,7 @@ class RFMainControl(SiriusMainWindow):
 
         self.trltemp_wid = QWidget()
         lay_trltemp = QVBoxLayout(self.trltemp_wid)
-        lay_trltemp.setAlignment(Qt.AlignTop)
+        lay_trltemp.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_trltemp.setContentsMargins(0, 0, 0, 9)
         lay_trltemp.addLayout(hbox_tempcirc_state)
         lay_trltemp.addWidget(self.tempcirc_graph)
@@ -1520,7 +1520,7 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             self.temparea_wid = QWidget()
             lay_rfarea = QVBoxLayout(self.temparea_wid)
-            lay_rfarea.setAlignment(Qt.AlignTop)
+            lay_rfarea.setAlignment(Qt.AlignmentFlag.AlignTop)
             lay_rfarea.setContentsMargins(0, 0, 0, 9)
 
             self.temparea_graphs = {}

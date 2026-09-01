@@ -91,7 +91,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupGlobStatusGroup(self):
         wid = QGroupBox('Global Status')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         for i, sts in enumerate(['BPM', 'Timing', 'LLRF']):
             lblsprop = f'STS_LBLS_{sts.upper()}'
@@ -123,7 +123,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupGlobSettingsGroup(self):
         wid = QGroupBox('Global Settings')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         ld_enbl = QLabel(
             'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
@@ -184,7 +184,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
 
         wid = QGroupBox('BPM Settings')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignRight)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
         lay.addWidget(ld_enblsel, 1, 0)
         lay.addWidget(ld_lim, 2, 0)
         lay.addWidget(ld_clr, 3, 0)
@@ -244,7 +244,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupBPMAcqSettingsGroup(self):
         wid = QGroupBox('BPM Acq. Settings')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         props = [
             'PsMtmAcqChannel-Sel',
@@ -283,7 +283,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
     def _setupHLGroup(self):
         wid = QGroupBox('IOC Control')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         # Global Status
         self._gb_globsts = self._setupGlobStatusGroup()

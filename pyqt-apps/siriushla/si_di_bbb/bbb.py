@@ -119,7 +119,7 @@ class BbBMainSettingsWidget(QWidget):
         status_wid = self._setupStatusWidget()
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop | Qt.AlignmentFlag.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter)
         if self._is_resumed:
             led_gensts = SiriusLedAlert(self, self.dev_pref + ':ERRSUM')
             dev_label = QLabel(

@@ -273,7 +273,7 @@ class VPUControlWindow(IDCommonControlWindow):
                     read.onColor = SiriusLedState.Yellow
                 vlay.addWidget(read, irow, 0)
                 vlay.addWidget(QLabel(lbl), irow, 1)
-            lay.addLayout(vlay, row, vcol, alignment=Qt.AlignTop)
+            lay.addLayout(vlay, row, vcol, alignment=Qt.AlignmentFlag.AlignTop)
             vcol += 1
 
         return gbox

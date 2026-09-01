@@ -38,7 +38,7 @@ class FDLDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QHBoxLayout(title_frame)

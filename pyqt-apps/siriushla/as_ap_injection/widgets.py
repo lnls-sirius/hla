@@ -37,7 +37,7 @@ class MonitorSummaryWidget(QWidget):
     def _setupUi(self):
         monitor = QGroupBox('Monitor')
         glay = QGridLayout(monitor)
-        glay.setAlignment(Qt.AlignTop)
+        glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay.addWidget(QLabel('', self), 0, 0)
 
         sec_lbls = get_status_labels()

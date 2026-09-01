@@ -329,7 +329,7 @@ class _BbBAcqBase(QWidget):
 
         gbox_trig = QGroupBox('Trigger', self)
         lay_trig = QGridLayout(gbox_trig)
-        lay_trig.setAlignment(Qt.AlignTop)
+        lay_trig.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_trig.addWidget(ld_trgexten, 0, 0)
         lay_trig.addWidget(cb_trgexten, 0, 1, 1, 2)
         lay_trig.addWidget(ld_trginsel, 1, 0)

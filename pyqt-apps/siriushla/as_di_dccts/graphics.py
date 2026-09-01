@@ -73,7 +73,7 @@ class DCCTMonitor(QWidget):
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setHorizontalSpacing(0)
-        lay.addWidget(self.pb_vis, 0, 0, alignment=Qt.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        lay.addWidget(self.pb_vis, 0, 0, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(self.currhist, 0, 1)
         lay.addWidget(self.rawreads, 0, 1)
 
@@ -98,7 +98,7 @@ class DCCTMonitor(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 9)
         lay.addWidget(self.label_currhist, 0, 0)
@@ -130,7 +130,7 @@ class DCCTMonitor(QWidget):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 9)
         lay.addWidget(self.label_waveread, 0, 0)

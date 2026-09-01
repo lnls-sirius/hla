@@ -36,7 +36,7 @@ class SSADetailsSI(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QHBoxLayout(title_frame)
@@ -64,7 +64,7 @@ class SSADetailsSI(SiriusDialog):
 
     def _setupDiagLay(self):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Racks
@@ -182,7 +182,7 @@ class SSADetailsSI(SiriusDialog):
 
     def _setupGraphsLay(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Heat Sinks
@@ -205,7 +205,7 @@ class SSADetailsSI(SiriusDialog):
 
     def _setupRackLay(self, rack_num, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         tab_wid = QTabWidget(self)
@@ -254,7 +254,7 @@ class SSADetailsSI(SiriusDialog):
     def _setup_heat_sink_wid(self, chs_dict):
         lay = QGridLayout()
         lay.setSpacing(9)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         lay.addWidget(QLabel('TMS', alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         lay.addWidget(QLabel('PT-100', alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
@@ -434,7 +434,7 @@ class SSADetailsBO(SiriusDialog):
     def _setupUi(self):
         lay = QVBoxLayout(self)
         lay.setSpacing(9)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self)
         lay_title = QHBoxLayout(title_frame)
@@ -463,7 +463,7 @@ class SSADetailsBO(SiriusDialog):
     def _setupDiagLay(self):
         lay = QGridLayout()
         lay.setSpacing(9)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Temperatures
         gbox_temp = QGroupBox('Temperatures')
@@ -571,7 +571,7 @@ class SSADetailsBO(SiriusDialog):
 
     def _setupGraphsLay(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         graph_hs = SiriusTimePlot(self)

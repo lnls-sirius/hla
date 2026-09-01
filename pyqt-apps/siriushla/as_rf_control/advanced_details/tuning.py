@@ -36,7 +36,7 @@ class TuningDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         title_frame = RFTitleFrame(self, self.system)
@@ -73,7 +73,7 @@ class TuningDetails(SiriusDialog):
 
     def _generalLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
         row = 0
 
@@ -122,7 +122,7 @@ class TuningDetails(SiriusDialog):
         # Moving
         gbox_mv = QGroupBox('Moving')
         lay_mv = QGridLayout()
-        lay_mv.setAlignment(Qt.AlignTop)
+        lay_mv.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_mv.setSpacing(9)
         gbox_mv.setLayout(lay_mv)
         mv_dict = chs_dict['Moving']
@@ -162,7 +162,7 @@ class TuningDetails(SiriusDialog):
 
     def _driversLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         if self.section == 'SI':
@@ -233,7 +233,7 @@ class TuningDetails(SiriusDialog):
 
     def _manualLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Number of Pulses
@@ -277,7 +277,7 @@ class TuningDetails(SiriusDialog):
 
     def _autoLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Tuning Margins, Forward Min and Delay

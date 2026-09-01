@@ -74,14 +74,14 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
     def _setupIntlkGenLayout(self):
         self._ld_genenbl = QLabel(
-            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._sb_genenbl = PyDMStateButton(
             self, self.devpref.substitute(propty='IntlkEn-Sel'))
         self._led_genenbl = SiriusLedState(
             self, self.devpref.substitute(propty='IntlkEn-Sts'))
 
         self._ld_genclr = QLabel(
-            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._bt_genclr = PyDMPushButton(
             self,
             init_channel=self.devpref.substitute(propty='IntlkClr-Cmd'),
@@ -93,19 +93,19 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         self._ld_intlkinst = QLabel(
             'Intantaneous Interlock: ', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._led_intlkinst = SiriusLedAlert(
             self, self.devpref.substitute(propty='Intlk-Mon'))
 
         self._ld_intlkltc = QLabel(
             'Latch Interlock: ', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._led_intlkltc = SiriusLedAlert(
             self, self.devpref.substitute(propty='IntlkLtc-Mon'))
 
         self._ld_minsumenbl = QLabel(
             'Min.Sum.Thres. Enable: ', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._ld_minsumenbl.setToolTip(
             'If enabled, enable interlock only if minimum sum'
             ' threshold is exceeded.')
@@ -152,24 +152,24 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_valx = QLabel(
             intlk+'. X ['+unit+']: ', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         lb_valx = SiriusLabel(
             self, self.devpref.substitute(propty='Intlk'+intlk+'X-Mon'))
         ld_valy = QLabel(
             intlk+'. Y ['+unit+']: ', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         lb_valy = SiriusLabel(
             self, self.devpref.substitute(propty='Intlk'+intlk+'Y-Mon'))
 
         ld_enbl = QLabel(
-            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         sb_enbl = PyDMStateButton(
             self, self.devpref.substitute(propty='Intlk'+intlk+'En-Sel'))
         led_enbl = SiriusLedState(
             self, self.devpref.substitute(propty='Intlk'+intlk+'En-Sts'))
 
         ld_clr = QLabel(
-            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         bt_clr = PyDMPushButton(
             self, init_channel=self.devpref.substitute(
                 propty='Intlk'+intlk+'Clr-Cmd'), pressValue=1)
@@ -281,7 +281,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay_mon.addWidget(led_ltc_yhigh, 6, 2)
 
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_valx, 0, 0)
         lay.addWidget(lb_valx, 0, 1)
         lay.addWidget(ld_valy, 1, 0)

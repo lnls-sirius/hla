@@ -131,7 +131,7 @@ class InjCtrlWindow(SiriusMainWindow):
                 icon-size:12px;}
         """)
         lay_injsys.addWidget(
-            self.bt_is_tgl, 0, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignBottom)
+            self.bt_is_tgl, 0, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
 
         # EGun
         egun_dev = SiriusPVName(
@@ -422,7 +422,7 @@ class InjCtrlWindow(SiriusMainWindow):
         wid1 = QWidget()
         wid1.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
         glay1 = QGridLayout(wid1)
-        glay1.setAlignment(Qt.AlignTop)
+        glay1.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay1.addWidget(self._ld_injset, 0, 0)
         glay1.addWidget(self._led_injset, 0, 1)
         glay1.addWidget(self._ld_currtgt, 1, 0)
@@ -444,7 +444,7 @@ class InjCtrlWindow(SiriusMainWindow):
         wid2 = QWidget()
         wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
         glay2 = QGridLayout(wid2)
-        glay2.setAlignment(Qt.AlignTop)
+        glay2.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay2.addWidget(ld_sp, 0, 1)
         glay2.addWidget(ld_rb, 0, 2)
         glay2.addWidget(ld_mon, 0, 3)
@@ -486,8 +486,8 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
-        lay.addWidget(wid1, 0, 0, alignment=Qt.AlignTop)
-        lay.addWidget(wid2, 0, 1, alignment=Qt.AlignTop)
+        lay.addWidget(wid1, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(wid2, 0, 1, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addWidget(self._wid_bl, 1, 0, 1, 2)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 4)
@@ -550,7 +550,7 @@ class InjCtrlWindow(SiriusMainWindow):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 6, 0, 0)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(self._ld_tuperd, 0, 0)
         lay.addWidget(self._sb_tuperd, 0, 1)
         lay.addWidget(self._lb_tuperd, 0, 2)

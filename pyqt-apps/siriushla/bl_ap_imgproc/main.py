@@ -431,7 +431,7 @@ class BLImgProc(QWidget):
         lay.addWidget(self.loading)
 
         widget = self._setup_gamma_control_widget()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(widget)
 
         widget = self._setup_enable_beamline_widgets()

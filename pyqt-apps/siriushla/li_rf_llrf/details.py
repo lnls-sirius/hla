@@ -83,7 +83,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
 
         wid = QGroupBox('Delay Setting')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -119,7 +119,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
     def _setupPISettingWidget(self):
         wid = QGroupBox('PI Setting')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -182,7 +182,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
 
         wid = QGroupBox('IQ Correction')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -264,7 +264,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
 
         wid = QGroupBox('Attenuation')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         lb_lim = QLabel('0~63', self, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -311,7 +311,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
 
         wid = QGroupBox('Att. Compensation')
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         lb_lim = QLabel('(0.00~200.00)', self, alignment=Qt.AlignmentFlag.AlignCenter)

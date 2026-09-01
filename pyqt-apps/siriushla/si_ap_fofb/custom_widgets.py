@@ -349,14 +349,14 @@ class PSConfigWidget(BaseObject, QWidget):
     def _setupUi(self):
         self._label_name = QLabel('')
 
-        lbl_load = QLabel('Load:', self, alignment=Qt.AlignTop)
+        lbl_load = QLabel('Load:', self, alignment=Qt.AlignmentFlag.AlignTop)
         self._btn_load = CAPushButton('')
         self._btn_load.rules = self._enblrule
         self._btn_load.setIcon(qta.icon('mdi.cloud-upload-outline'))
         self._btn_load.setToolTip('Load PSConfig from ServConf')
         self._btn_load.clicked.connect(self._open_load_config_servconf)
 
-        lbl_save = QLabel('Save:', self, alignment=Qt.AlignTop)
+        lbl_save = QLabel('Save:', self, alignment=Qt.AlignmentFlag.AlignTop)
         self._btn_save = CAPushButton('')
         self._btn_save.setIcon(qta.icon('mdi.cloud-download-outline'))
         self._btn_save.setToolTip('Save PSConfig to ServConf')
@@ -459,7 +459,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -484,7 +484,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -511,7 +511,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             if 'FOFBCtrl' in dcc:
                 led.offColor = led.Red
             self.leds_dccsts[dcc] = led
-            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
             if 'FMC' in dcc:
                 c2v = {pvn: FOFBCtrlDCC.DEF_FMC_BPMCNT}
@@ -539,7 +539,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         lpart_pvs = ['BPMId-RB', ] + [
             'LinkPartnerCH'+str(idx)+'-Mon' for idx in range(8)]
@@ -660,7 +660,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -698,7 +698,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -728,7 +728,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             led = SiriusLedState(self, pvn)
             led.setObjectName('led_status')
             led.shape = led.ShapeMap.Square
-            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
             led = PyDMLedMultiChannel(self, c2v)
             self.leds_odd[ctl] = led
@@ -763,7 +763,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -793,7 +793,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             led = SiriusLedState(self, pvn)
             led.setObjectName('led_status')
             led.shape = led.ShapeMap.Square
-            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
 
             led = PyDMLedMultiChannel(self, c2v)
             self.leds_pld[ctl] = led
@@ -824,7 +824,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -841,7 +841,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                 prefix=self.prefix, propty='LoopIntlk-Mon')
             led = SiriusLedAlert(self, pvn)
             led.setObjectName('led_status')
-            lay.addWidget(led, row, 1, alignment=Qt.AlignTop)
+            lay.addWidget(led, row, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
         return self._build_scroll_area(wid)
 
@@ -849,7 +849,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         trigid = FamFOFBControllers.BPM_TRIGS_ID
         propties = ['RcvSrc-Sts', 'RcvInSel-RB']
@@ -907,7 +907,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -935,8 +935,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             ledbpm.setObjectName('led_status')
             ledsum = PyDMLedMultiChannel(self, {pvnacc: 0, pvnbpm: 0})
             lay.addWidget(lbl, row, 0)
-            lay.addWidget(ledacc, row, 1, alignment=Qt.AlignTop)
-            lay.addWidget(ledbpm, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(ledacc, row, 1, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(ledbpm, row, 2, alignment=Qt.AlignmentFlag.AlignTop)
             lay.addWidget(ledsum, row, 3)
 
         return self._build_scroll_area(wid)
@@ -948,7 +948,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             "there is a packet loss problem.")
         lay = QGridLayout(wid)
         lay.setSpacing(1)
-        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         # header
         lay.addWidget(
@@ -969,7 +969,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                     pvnerr = _PVName(ctl).substitute(
                         prefix=self.prefix, propty=f'DCC{dcc}FrameErrCntCH{i}-Mon')
                     lblerr = SiriusLabel(self, pvnerr)
-                    lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignTop)
+                    lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignmentFlag.AlignTop)
 
         return self._build_scroll_area(wid)
 

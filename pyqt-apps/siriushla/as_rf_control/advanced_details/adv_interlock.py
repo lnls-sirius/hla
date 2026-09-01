@@ -37,7 +37,7 @@ class AdvancedInterlockDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
@@ -72,13 +72,13 @@ class AdvancedInterlockDetails(SiriusDialog):
 
     def _diagnosticsLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Levels
         gbox_lvls = QGroupBox('Levels')
         lay_lvls = QGridLayout()
-        lay_lvls.setAlignment(Qt.AlignTop)
+        lay_lvls.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_lvls.setSpacing(9)
         gbox_lvls.setLayout(lay_lvls)
 
@@ -108,7 +108,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         # GPIO Inputs
         gbox_inp = QGroupBox('GPIO Inputs')
         lay_inp = QGridLayout()
-        lay_inp.setAlignment(Qt.AlignTop)
+        lay_inp.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_inp.setSpacing(9)
         gbox_inp.setLayout(lay_inp)
 
@@ -123,7 +123,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         # GPIO Interlock
         gbox_intlk = QGroupBox('GPIO Interlock')
         lay_intlk = QGridLayout()
-        lay_intlk.setAlignment(Qt.AlignTop)
+        lay_intlk.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_intlk.setSpacing(9)
         gbox_intlk.setLayout(lay_intlk)
 
@@ -138,7 +138,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         # GPIO Outputs
         gbox_out = QGroupBox('GPIO Outputs')
         lay_out = QGridLayout()
-        lay_out.setAlignment(Qt.AlignTop)
+        lay_out.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_out.setSpacing(9)
         gbox_out.setLayout(lay_out)
 
@@ -158,7 +158,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         #Quench
         gbox_quench = QGroupBox('Quench', self)
         lay_quench = QVBoxLayout(gbox_quench)
-        lay_quench.setAlignment(Qt.AlignTop)
+        lay_quench.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay_quench.setSpacing(9)
 
         tabwidget = QTabWidget(gbox_quench)
@@ -171,7 +171,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
         tab1 = QWidget()
         tab1_layout = QGridLayout(tab1)
-        tab1_layout.setAlignment(Qt.AlignTop)
+        tab1_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         tab1_layout.setSpacing(9)
 
         rv_ch = self.prefix+chs_dict['Quench1']['Rv']
@@ -199,7 +199,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
         tab2 = QWidget()
         tab2_layout = QGridLayout(tab2)
-        tab2_layout.setAlignment(Qt.AlignTop)
+        tab2_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         tab2_layout.setSpacing(9)
 
         fw_ch = self.prefix+chs_dict['E-Quench']['Fw']
@@ -236,7 +236,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
     def _genDiagLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(12)
 
         # Interlocks Delay
@@ -281,7 +281,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
     def _dynamicInterlockLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Current
@@ -361,7 +361,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
     def _bypassLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
         scarea = QScrollArea(self)
         scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)

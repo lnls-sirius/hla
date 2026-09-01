@@ -215,7 +215,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
         wid = QGroupBox('Model settings')
         lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addLayout(lay1)
         lay.addLayout(lay2)
         lay.addWidget(tab_models)
@@ -246,7 +246,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_ang, 0, 0)
         lay.addWidget(sb_ang, 0, 1)
         lay.addWidget(lb_ang, 0, 2)
@@ -319,7 +319,7 @@ class BiasFBDetailDialog(SiriusDialog):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_likehdvar, 0, 1)
         lay.addWidget(sb_likehdvar, 0, 2)
         lay.addWidget(lb_likehdvar, 0, 3)

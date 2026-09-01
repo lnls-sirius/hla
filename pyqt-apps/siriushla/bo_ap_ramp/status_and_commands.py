@@ -38,7 +38,7 @@ class StatusAndCommands(QGroupBox):
 
     def _setupUi(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addLayout(self._setupStatusLayout())
         lay.addStretch()
         lay.addLayout(self._setupChooseTIEventLayout())

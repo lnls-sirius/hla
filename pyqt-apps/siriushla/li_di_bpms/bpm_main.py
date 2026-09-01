@@ -244,7 +244,7 @@ class DigBeamPosProc(SiriusMainWindow):
         if_glay.addLayout(self.display_graph(), 1, 0, 2, 1)
         if_glay.addLayout(self.display_mainData(), 1, 1, 1, 1)
         if_glay.addLayout(self.display_selectors(), 1, 2, 1, 1)
-        if_glay.setAlignment(Qt.AlignTop)
+        if_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         if_glay.setColumnStretch(0, 10)
 
         wid.setLayout(if_glay)
@@ -437,7 +437,7 @@ class DigBeamPosProc(SiriusMainWindow):
                 sc_glay.addWidget(selection, countx+1, 0, 1, 2)
             countx += 1
 
-        sc_glay.setAlignment(Qt.AlignTop)
+        sc_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         group.setLayout(sc_glay)
 
         return group

@@ -252,7 +252,7 @@ class BaseFunctionsInterface():
             if leg != 'size':
                 lay.addWidget(
                     self.setupLegend(leg),
-                    alignment=Qt.AlignTop)
+                    alignment=Qt.AlignmentFlag.AlignTop)
                 col += 1
         return group
 

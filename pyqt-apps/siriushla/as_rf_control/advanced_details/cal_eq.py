@@ -34,7 +34,7 @@ class CalEqDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         title_frame = RFTitleFrame(self, self.system)
@@ -123,7 +123,7 @@ class CalEqDetails(SiriusDialog):
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Header
@@ -159,7 +159,7 @@ class CalEqDetails(SiriusDialog):
 
     def _vgapLayout(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Headers

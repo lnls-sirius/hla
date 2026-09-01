@@ -568,7 +568,7 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
                 QLabel(title), 1, alignment=Qt.AlignmentFlag.AlignHCenter)
             lay_info.addWidget(
                 self.setGraphInfo(device, GRAPH[title]['info']),
-                1, alignment=Qt.AlignTop)
+                1, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addWidget(info_group, 3, 3, 1, 1)
 
         return group
