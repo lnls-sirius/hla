@@ -71,12 +71,12 @@ def _create_siriuswindow(qt_type):
             widgets = []
             while wid and not is_graph:
                 is_graph |= isinstance(wid, (QGraphicsView, MatplotlibCanvas))
-                wid.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+                wid.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
                 widgets.append(wid)
                 wid = self.app.widgetAt(pos)
 
             for wid in widgets:
-                wid.setAttribute(Qt.WA_TransparentForMouseEvents, False)
+                wid.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
             return is_graph
 
         def show_connections(self, checked):
