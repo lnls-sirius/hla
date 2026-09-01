@@ -166,7 +166,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
             self.prefix + self.device_name+":"+channel)
         self.active_screen.new_value_signal[int].connect(
             self.radioBtnClick)
-        selector.widgetType = 1
+        selector.widgetType = enum_button.WidgetType.RadioButton
         return selector
 
     def setScrnHeader(self, layout):
