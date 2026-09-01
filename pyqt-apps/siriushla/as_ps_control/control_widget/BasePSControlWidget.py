@@ -474,7 +474,7 @@ class BasePSControlWidget(QWidget):
                 objs.extend(wid.findChildren(SummaryHeader))
                 for ob in objs:
                     chil = ob.findChildren(
-                        QWidget, options=Qt.FindDirectChildrenOnly)
+                        QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly)
                     for c in chil:
                         name = c.objectName()
                         if isinstance(ob, SummaryWidget) and name in props:
