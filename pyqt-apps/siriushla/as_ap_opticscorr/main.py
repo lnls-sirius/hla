@@ -51,7 +51,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.setWindowTitle(self.title)
         self.setObjectName(self.acc+'App')
         self._setupUi()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):

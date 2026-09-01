@@ -88,7 +88,7 @@ class PosAngCorr(SiriusMainWindow):
             pvname_injmode + '", "trigger": true}]}]')
 
         self._setupUi()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
         self._ask_message = QMessageBox(self)

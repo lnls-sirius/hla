@@ -60,7 +60,7 @@ class GraphWidget(QWidget):
         self._delta = delta
         self.curves = []
         self.setupui()
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
         self.chans = [_ConnSig(_PVName(ps).substitute(
             prefix=_VACA_PREFIX, propty='Wfm-Mon')) for ps in pslist]

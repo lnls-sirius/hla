@@ -64,7 +64,7 @@ class MainLauncher(SiriusMainWindow):
             parent=self, signal=self.showEgun)
 
         # set focus policy
-        self.setFocus(True)
+        self.setFocus()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
