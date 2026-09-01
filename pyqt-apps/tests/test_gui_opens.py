@@ -1,5 +1,6 @@
 import pytest
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.clientconfigdb import ConfigDBClient
 
 from siriushla.as_ps_control import PSTabControlWindow
 from siriushla.as_ap_measure import EmittanceMeasure
@@ -25,6 +26,30 @@ from siriushla.as_rf_control.details import CavityStatusDetails, FDLDetails, \
     LLRFInterlockDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     SSADetailsBO, TempMonitor, TransmLineStatusDetails, TransmLineStatusDetails
 from siriushla.as_ap_currinfo.current_and_lifetime import CurrLTWindow
+from siriushla.as_ap_configdb import ConfigurationManager
+from siriushla.as_ap_currinfo.efficiency_monitor import EfficiencyMonitor
+from siriushla.as_ap_energybutton import EnergySetterWindow
+from siriushla.as_ap_injection import InjCtrlWindow
+from siriushla.as_ap_launcher import MainLauncher
+from siriushla.as_ap_macreport import MacReportWindow
+from siriushla.as_ap_magoffconv import MagOffConvApp
+from siriushla.as_ap_monitor import SiriusMonitor
+from siriushla.as_ap_configdb.pvsconfigs import LoadAndApplyConfig2MachineWindow
+from siriushla.as_ap_configdb.pvsconfigs import PVsConfigManager
+from siriushla.as_ap_rabpmmon import RaBPMMonitor
+from siriushla.as_cr_control import CryoControl
+from siriushla.as_ap_radmon import RadTotDoseMonitor
+from siriushla.as_di_dccts import DCCTMain
+from siriushla.as_ps_commands.main import PSCmdWindow
+from siriushla.as_ps_cycle.cycle_window import CycleWindow
+from siriushla.as_ps_diag import PSDiag
+from siriushla.as_ps_control import PSDetailWindow
+from siriushla.as_ps_diag import PSMonitor
+from siriushla.as_ti_control import AFC
+from siriushla.as_ti_control import TimingMain, MonitorWindow
+from siriushla.as_di_scrns import SelectScrns, IndividualScrn
+from siriushla.as_ps_diag.ps_graph_mon import PSGraphMonWindow
+from siriushla.as_di_bpms import SelectBPMs, BPMMain, AcqDataSummary
 
 from siriushla.li_rf_llrf import LLRFMain
 from siriushla.li_va_control import VacuumMain
@@ -216,6 +241,60 @@ it_scripts_config = [
 ]
 
 
+as_scripts_config = [
+    (ConfigurationManager, {"model": ConfigDBClient()}),
+    EfficiencyMonitor,
+    EnergySetterWindow,
+    (InjCtrlWindow, {"prefix": VACA_PREFIX}),
+    (MainLauncher, {"prefix": VACA_PREFIX}),
+    MacReportWindow,
+    MagOffConvApp,
+    SiriusMonitor,
+    (LoadAndApplyConfig2MachineWindow, {"client": ConfigDBClient()}),
+    PVsConfigManager,
+    (RaBPMMonitor, {"prefix": VACA_PREFIX}),
+    CryoControl,
+    RadTotDoseMonitor,
+    (DCCTMain, {"prefix": VACA_PREFIX, "device": "SI-13C4:DI-DCCT"}),     
+    (DCCTMain, {"prefix": VACA_PREFIX, "device": "SI-14C4:DI-DCCT"}),     
+    (DCCTMain, {"prefix": VACA_PREFIX, "device": "BO-35D:DI-DCCT"}),
+    PSCmdWindow,
+    CycleWindow,
+    PSDiag,
+    (PSDetailWindow, {"psname": "BO-01D:PU-InjKckr"}),
+    (PSDetailWindow, {"psname": "TB-04:PU-InjSept"}),
+    (PSDetailWindow, {"psname": "SI-19C4:PU-PingV"}),
+    PSMonitor,
+    (PUControlWindow, {"section": "AS", "main_secs": ('InjBO', 'EjeBO', 'InjSI', 'PingSI')}),
+    (PUControlWindow, {"section": "AS", "main_secs": ('TB', 'BO', 'TS', 'SI')}),
+    (AFC, {"prefix": VACA_PREFIX, "device": "SI-04C3:DI-BPM-1"}),
+    (AFC, {"prefix": VACA_PREFIX, "device": "SI-02C1:DI-BPM-1"}),
+    (AFC, {"prefix": VACA_PREFIX, "device": "SI-03C1:DI-BPM-2"}),
+    (TimingMain, {"prefix": VACA_PREFIX}),
+    (MonitorWindow, {"prefix": VACA_PREFIX}),
+    (SelectScrns, {"sec": "BO"}),
+    (SelectScrns, {"sec": "TS"}),
+    (SelectScrns, {"sec": "TB"}),
+    (IndividualScrn, {"scrn": "TB-01:DI-Scrn-1"}),
+    (IndividualScrn, {"scrn": "TB-01:DI-Scrn-2"}),
+    (IndividualScrn, {"scrn": "TB-02:DI-Scrn-1"}),
+    (IndividualScrn, {"scrn": "TB-02:DI-Scrn-2"}),
+    (IndividualScrn, {"scrn": "TB-03:DI-Scrn"}),
+    (IndividualScrn, {"scrn": "BO-01D:DI-Scrn-1"}),
+    (IndividualScrn, {"scrn": "BO-01D:DI-Scrn-2"}),
+    (IndividualScrn, {"scrn": "BO-02U:DI-Scrn"}),
+    (IndividualScrn, {"scrn": "TS-01:DI-Scrn"}),
+    (IndividualScrn, {"scrn": "TS-02:DI-Scrn"}),
+    (IndividualScrn, {"scrn": "TS-03:DI-Scrn"}),
+    (IndividualScrn, {"scrn": "TS-04:DI-Scrn-1"}),
+    (IndividualScrn, {"scrn": "TS-04:DI-Scrn-2"}),
+    (IndividualScrn, {"scrn": "TS-04:DI-Scrn-3"}),
+    PSGraphMonWindow,
+    (AcqDataSummary, {"prefix": VACA_PREFIX, "bpm_list": []}),
+    (SelectBPMs, {"prefix": VACA_PREFIX, "bpm_list": []})
+]
+
+
 @pytest.fixture
 def open_gui(gui_config, qtbot):
     if isinstance(gui_config, tuple):
@@ -232,6 +311,7 @@ def open_gui(gui_config, qtbot):
     yield True
     gui.close()
     qtbot.waitUntil(lambda: not gui.isVisible(), timeout=10000)
+
 
 @pytest.mark.parametrize("gui_config", linac_scripts_config)
 def test_linac_gui_opens(open_gui):
@@ -259,4 +339,8 @@ def test_si_gui_opens(open_gui):
 
 @pytest.mark.parametrize("gui_config", it_scripts_config)
 def test_it_gui_opens(open_gui):
+    assert open_gui
+
+@pytest.mark.parametrize("gui_config", as_scripts_config)
+def test_as_gui_opens(open_gui):
     assert open_gui
