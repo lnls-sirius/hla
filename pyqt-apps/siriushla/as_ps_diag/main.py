@@ -411,7 +411,7 @@ class LogTable(QTreeView, PyDMWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setItemDelegateForColumn(2, LogItemDelegate(self))
         self.setSelectionBehavior(QAbstractItemView.SelectItems)
-        self.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.setStyleSheet("gridline-color: #ffffff;")
 
         # set channels
