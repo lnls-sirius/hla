@@ -197,7 +197,7 @@ class ConfigModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
         """Set headers of the table (override)."""
-        if role == Qt.TextAlignmentRole:
+        if role == Qt.ItemDataRole.TextAlignmentRole:
             pass
         if role != Qt.ItemDataRole.DisplayRole:
             return object()
