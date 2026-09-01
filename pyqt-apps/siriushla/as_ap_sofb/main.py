@@ -79,7 +79,8 @@ class MainWindow(SiriusMainWindow):
         sz_pol.setVerticalStretch(1)
         wid.setSizePolicy(sz_pol)
         wid.setFloating(False)
-        wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        wid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
+                        | QDockWidget.DockWidgetFeature.DockWidgetMovable)
         wid.setAllowedAreas(Qt.AllDockWidgetAreas)
         wid.setObjectName('doc_OrbReg')
         wid.setStyleSheet("#doc_OrbReg{min-width:20em; min-height:14em;}")
@@ -96,7 +97,8 @@ class MainWindow(SiriusMainWindow):
         sz_pol.setVerticalStretch(1)
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
-        docwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        docwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
+                           | QDockWidget.DockWidgetFeature.DockWidgetMovable)
         docwid.setAllowedAreas(Qt.AllDockWidgetAreas)
 
         ctrls = self.orb_regtr.get_registers_control()
