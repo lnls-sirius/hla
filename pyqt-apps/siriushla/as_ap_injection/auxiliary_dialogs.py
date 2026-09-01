@@ -424,14 +424,14 @@ class BiasFBDetailDialog(SiriusDialog):
                 propty='BiasFBModelDataBias-Mon'),
             y_channel=self._inj_prefix.substitute(
                 propty='BiasFBModelDataInjCurr-Mon'),
-            name='Model data', color='black', lineStyle=Qt.NoPen,
+            name='Model data', color='black', lineStyle=Qt.PenStyle.NoPen,
             symbol='o', symbolSize=6)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
 
         self.graph_pred.addChannel(
             x_channel='FAKE:Bias', y_channel='FAKE:InjCurr',
-            name='Last Inj.', color='red', lineStyle=Qt.NoPen,
+            name='Last Inj.', color='red', lineStyle=Qt.PenStyle.NoPen,
             symbol='o', symbolSize=8, redraw_mode=2)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))

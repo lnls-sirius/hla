@@ -204,11 +204,11 @@ class CurrLTWindow(SiriusMainWindow):
 
         self.graph.addYChannel(
             y_channel='FAKE:DCCTBuffer', axis='left', name='DCCTBuffer',
-            color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
+            color='blue', lineStyle=Qt.PenStyle.NoPen, symbolSize=10, symbol='o')
         self._curve_dcct_buff = self.graph.curveAtIndex(4)
         self.graph.addYChannel(
             y_channel='FAKE:BPMBuffer', axis='left', name='BPMBuffer',
-            color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
+            color='blue', lineStyle=Qt.PenStyle.NoPen, symbolSize=10, symbol='o')
         self._curve_bpm_buff = self.graph.curveAtIndex(5)
 
         self._curve_bpmsum.setVisible(False)
