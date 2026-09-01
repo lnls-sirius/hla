@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt, Signal, Slot, QTimer, Property
 from qtpy.QtGui import QPalette
 from qtpy.QtWidgets import QInputDialog, QLabel, QApplication, QAction
 
-from pyqtgraph import ViewBox, mkBrush
+from pyqtgraph import ViewBox, mkBrush, AxisItem
 
 from pydm import utilities
 from pydm.widgets.timeplot import TimePlotCurveItem, PyDMTimePlot, \
@@ -98,6 +98,8 @@ class SiriusTimePlot(PyDMTimePlot):
 
     def __init__(self, *args, show_tooltip=False, **kws):
         super().__init__(*args, **kws)
+        new_axis = AxisItem(orientation='left')
+        self.plotItem.setAxisItems({'left': new_axis})
         self._filled_with_arch_data = dict()
         self._show_tooltip = show_tooltip
 

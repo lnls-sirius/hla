@@ -1,6 +1,6 @@
 """Waveform plot widget."""
 
-from pyqtgraph import ViewBox
+from pyqtgraph import ViewBox, AxisItem
 
 from pydm.widgets import PyDMWaveformPlot
 
@@ -11,6 +11,8 @@ class SiriusWaveformPlot(PyDMWaveformPlot):
     def __init__(self, *args, **kwargs):
         """Init and change some configurations."""
         super().__init__(*args, **kwargs)
+        new_axis = AxisItem(orientation='left')
+        self.plotItem.setAxisItems({'left': new_axis})
 
         # show auto adjust button
         self.plotItem.showButtons()
