@@ -44,6 +44,7 @@ from siriushla.as_ps_commands.main import PSCmdWindow
 from siriushla.as_ps_cycle.cycle_window import CycleWindow
 from siriushla.as_ps_diag import PSDiag
 from siriushla.as_ps_control import PSDetailWindow
+from siriushla.as_pu_control import PUDetailWindow
 from siriushla.as_ps_diag import PSMonitor
 from siriushla.as_ti_control import AFC
 from siriushla.as_ti_control import TimingMain, MonitorWindow
@@ -260,10 +261,13 @@ as_scripts_config = [
     (DCCTMain, {"prefix": VACA_PREFIX, "device": "BO-35D:DI-DCCT"}),
     PSCmdWindow,
     CycleWindow,
-    PSDiag,
-    (PSDetailWindow, {"psname": "BO-01D:PU-InjKckr"}),
-    (PSDetailWindow, {"psname": "TB-04:PU-InjSept"}),
-    (PSDetailWindow, {"psname": "SI-19C4:PU-PingV"}),
+    (PUDetailWindow, {"devname": "BO-01D:PU-InjKckr"}),
+    (PUDetailWindow, {"devname": "TB-04:PU-InjSept"}),
+    (PUDetailWindow, {"devname": "SI-19C4:PU-PingV"}),
+    (PSDetailWindow, {"psname": "TB-Fam:PS-B"}),
+    (PSDetailWindow, {"psname": "BO-Fam:PS-B-1"}),
+    (PSDetailWindow, {"psname": "TS-Fam:PS-B"}),
+    (PSDetailWindow, {"psname": "SI-Fam:PS-B1B2-2"}),
     PSMonitor,
     (PUControlWindow, {"section": "AS", "main_secs": ('InjBO', 'EjeBO', 'InjSI', 'PingSI')}),
     (PUControlWindow, {"section": "AS", "main_secs": ('TB', 'BO', 'TS', 'SI')}),
