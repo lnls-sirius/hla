@@ -621,7 +621,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                     cbx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
                     pal = cbx.palette()
                     pal.setColor(QPalette.ColorRole.Window, coloro)
-                    pal.setColor(QPalette.ColorRole.Text, Qt.white)
+                    pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
                     cbx.setPalette(pal)
                     visisel[ctrl] = cbx
                 visisel[ctrl].stateChanged.connect(curve.setVisible)

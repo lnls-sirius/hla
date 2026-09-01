@@ -202,7 +202,7 @@ class RadTotDoseMonitor(QWidget):
             cbx.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
             pal = cbx.palette()
             pal.setColor(QPalette.ColorRole.Window, coloro)
-            pal.setColor(QPalette.ColorRole.Text, Qt.white)
+            pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
             cbx.setPalette(pal)
             self._cb_show[mon] = cbx
 

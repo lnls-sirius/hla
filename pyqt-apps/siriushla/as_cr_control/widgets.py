@@ -73,7 +73,7 @@ class RotatedQLabel(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setPen(Qt.black)
+        painter.setPen(Qt.GlobalColor.black)
         painter.translate(self.width()/2, self.height()/2)
         painter.rotate(self.rotation)
         painter.drawText(0, 0, self.text)

@@ -49,7 +49,7 @@ class LedLegend(QWidget):
     def paintEvent(self, event):
         """ Called to paint led on the window """
         painter = QPainter(self)
-        painter.setPen(QPen(Qt.black, 1, Qt.PenStyle.SolidLine))
+        painter.setPen(QPen(Qt.GlobalColor.black, 1, Qt.PenStyle.SolidLine))
         self.drawSingleLed(painter, QColor(self.color), 0, 100)
         painter.end()
 

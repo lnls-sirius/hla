@@ -657,7 +657,7 @@ class MyProgressBar(QProgressBar):
         super().__init__(parent)
         pal = self.palette()
         self.default_color = pal.color(QPalette.ColorRole.Highlight)
-        self.warning_color = Qt.red
+        self.warning_color = Qt.GlobalColor.red
 
     def increment(self):
         current_val = self.value()
