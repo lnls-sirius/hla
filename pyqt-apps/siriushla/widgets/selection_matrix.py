@@ -168,7 +168,7 @@ class SelectionMatrixWidget(QWidget):
 
         lay.addLayout(hlay, 2, 0, 1, 1)
 
-        lay.setSizeConstraint(lay.SetMinimumSize)
+        lay.setSizeConstraint(QGridLayout.SizeConstraint.SetMinimumSize)
 
     def paintEvent(self, _):
         """Paint event to draw selection rectangle."""
