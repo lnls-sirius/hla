@@ -396,7 +396,7 @@ class BiasFBDetailDialog(SiriusDialog):
                 propty='BiasFBGPModPredBias-Mon'),
             y_channel='FAKE:GP_Avg_plus_Std',
             name='extra1', color='gray',
-            lineWidth=2, lineStyle=Qt.DashLine)
+            lineWidth=2, lineStyle=Qt.PenStyle.DashLine)
         self.graph_pred.legend.removeItem('extra1')
         self._curve_gp_pred_avg_p_std = self.graph_pred.curveAtIndex(-1)
 
@@ -404,7 +404,7 @@ class BiasFBDetailDialog(SiriusDialog):
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredBias-Mon'),
             y_channel='FAKE:GP_Avg_minus_Std', name='extra2', color='gray',
-            lineWidth=2, lineStyle=Qt.DashLine)
+            lineWidth=2, lineStyle=Qt.PenStyle.DashLine)
         self.graph_pred.legend.removeItem('extra2')
         self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
 

@@ -1392,7 +1392,7 @@ class RFMainControl(SiriusMainWindow):
 
             self.tempcell_graph.setLabel('left', '')
 
-            pen = mkPen(color='k', width=2, style=Qt.DashLine)
+            pen = mkPen(color='k', width=2, style=Qt.PenStyle.DashLine)
             self.line_cell_maxlim = InfiniteLine(angle=0, pen=pen)
             self.line_cell_minlim = InfiniteLine(angle=0, pen=pen)
             self.tempcell_graph.addItem(self.line_cell_maxlim)
@@ -1444,7 +1444,7 @@ class RFMainControl(SiriusMainWindow):
 
         # Transm.Line Temperatures
         lb_tempcirc = QLabel('<h3> • Circulator</h3>', self)
-        pen = mkPen(color='k', width=2, style=Qt.DashLine)
+        pen = mkPen(color='k', width=2, style=Qt.PenStyle.DashLine)
         # temporary fix
         if self.section == 'SI':
             lims_circ = self.chs['TL Sts']['A']['Circ Limits']
@@ -1562,7 +1562,7 @@ class RFMainControl(SiriusMainWindow):
 
                 lay_rfarea.addLayout(lay_grid_temp)
 
-                pen = mkPen(color='k', width=2, style=Qt.DashLine)
+                pen = mkPen(color='k', width=2, style=Qt.PenStyle.DashLine)
 
                 graph = SiriusTimePlot(self)
                 graph.setObjectName(f'system_temp_{systems[i]}_graph')

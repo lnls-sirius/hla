@@ -60,7 +60,7 @@ class TempVariationDetails(SiriusDialog):
         lay_var = QGridLayout()
         gbox_temp.setLayout(lay_var)
 
-        pen = mkPen(color='k', width=2, style=Qt.DashLine)
+        pen = mkPen(color='k', width=2, style=Qt.PenStyle.DashLine)
 
         graph_temp = SiriusTimePlot(self)
         graph_temp.setShowXGrid(True)

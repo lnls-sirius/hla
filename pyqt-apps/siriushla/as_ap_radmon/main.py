@@ -240,7 +240,7 @@ class RadTotDoseMonitor(QWidget):
         laygrid.setColumnStretch(2, 1)
 
         self.timeplot.addYChannel(
-            'Reference', color='black', lineWidth=6, lineStyle=Qt.DashLine)
+            'Reference', color='black', lineWidth=6, lineStyle=Qt.PenStyle.DashLine)
         self.refline = self.timeplot.curveAtIndex(-1)
         self._fill_refline()
 
