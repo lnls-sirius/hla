@@ -26,7 +26,8 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
-    QSpinBoxPlus, QDoubleSpinBoxPlus, PyDMImageViewBase
+    QSpinBoxPlus, QDoubleSpinBoxPlus
+from siriushla.common.cam_basler import PyDMImageViewBase
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams.update({

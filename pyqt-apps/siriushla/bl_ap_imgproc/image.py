@@ -5,7 +5,9 @@ import numpy as _np
 from qtpy.QtGui import QColor
 from pyqtgraph import PlotCurveItem, mkPen
 
-from ..widgets import SiriusConnectionSignal, PyDMImageViewBase
+from siriushla.common.cam_basler import PyDMImageViewBase
+
+from ..widgets import SiriusConnectionSignal
 
 from .util import PVS_IMGPROCCTRL
 

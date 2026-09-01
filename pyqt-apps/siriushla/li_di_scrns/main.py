@@ -11,11 +11,11 @@ from pydm.widgets import PyDMPushButton, PyDMLineEdit, \
 import qtawesome as qta
 from .. import util as _util
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, \
-    SiriusWaveformPlot, SiriusLabel, SiriusSpinbox, SiriusConnectionSignal, \
-    PyDMImageViewBase
+    SiriusWaveformPlot, SiriusLabel, SiriusSpinbox, SiriusConnectionSignal
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN
-from .motorBtn import MotorBtn 
+from .motorBtn import MotorBtn
+from siriushla.common.cam_basler import PyDMImageViewBase
 
 
 class GeneralFunctions():
