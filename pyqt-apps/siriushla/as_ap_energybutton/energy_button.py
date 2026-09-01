@@ -29,7 +29,7 @@ class EnergyButton(QWidget):
         self._setup_ui()
         color = QColor(get_appropriate_color(section.upper()))
         pal = self.palette()
-        pal.setColor(QPalette.Background, color)
+        pal.setColor(QPalette.ColorRole.Base, color)
         self.setAutoFillBackground(True)
         self.setPalette(pal)
 

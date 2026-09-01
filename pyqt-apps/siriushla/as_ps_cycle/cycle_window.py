@@ -354,7 +354,7 @@ class CycleWindow(SiriusMainWindow):
         self.progress_bar.setMaximum(duration)
         self.progress_bar.setValue(0)
         pal = self.progress_bar.palette()
-        pal.setColor(QPalette.Highlight, self.progress_bar.default_color)
+        pal.setColor(QPalette.ColorRole.Highlight, self.progress_bar.default_color)
         self.progress_bar.setPalette(pal)
 
         self.update_bar = UpdateProgressBar(duration, self)
@@ -403,7 +403,7 @@ class CycleWindow(SiriusMainWindow):
                 item.setForeground(errorcolor)
                 self.update_bar.exit_task()
                 pal = self.progress_bar.palette()
-                pal.setColor(QPalette.Highlight,
+                pal.setColor(QPalette.ColorRole.Highlight,
                              self.progress_bar.warning_color)
                 self.progress_bar.setPalette(pal)
                 if self._is_preparing in self._prepared.keys():
@@ -656,7 +656,7 @@ class MyProgressBar(QProgressBar):
     def __init__(self, parent=None):
         super().__init__(parent)
         pal = self.palette()
-        self.default_color = pal.color(QPalette.Highlight)
+        self.default_color = pal.color(QPalette.ColorRole.Highlight)
         self.warning_color = Qt.red
 
     def increment(self):
