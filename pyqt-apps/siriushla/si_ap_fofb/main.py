@@ -40,7 +40,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
             self.devpref.substitute(propty='LoopState-Sts') +
             '", "trigger": true}]}]')
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         # layout

@@ -61,7 +61,7 @@ class GraphWidget(QWidget):
         self.curves = []
         self.setupui()
         self.setFocus()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.chans = [_ConnSig(_PVName(ps).substitute(
             prefix=_VACA_PREFIX, propty='Wfm-Mon')) for ps in pslist]
         for idx, chan in enumerate(self.chans):

@@ -43,7 +43,7 @@ class RFMainControl(SiriusMainWindow):
         self.curves = dict()
 
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)

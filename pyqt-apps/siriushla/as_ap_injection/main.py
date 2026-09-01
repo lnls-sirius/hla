@@ -42,7 +42,7 @@ class InjCtrlWindow(SiriusMainWindow):
         self._setupUi()
 
         self.setFocus()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         self.title = QLabel(

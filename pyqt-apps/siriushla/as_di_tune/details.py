@@ -55,7 +55,7 @@ class TuneDetails(SiriusMainWindow):
         self.setWindowTitle(self.device + ' Detailed Settings')
         self.setObjectName(self.section + 'App')
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)
@@ -645,7 +645,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
         self.setWindowTitle(self.title)
         self.setObjectName('SIApp')
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)

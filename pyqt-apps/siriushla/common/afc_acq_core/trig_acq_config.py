@@ -42,7 +42,7 @@ class AcqBaseWindow(SiriusMainWindow):
         self.sec = 'SI' if self.device.sec == 'IA' else self.device.sec
         self.app_color = get_appropriate_color(self.sec)
         self.setObjectName(self.sec+'App')
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _get_pvname(self, propty):
         propty = self.ACQCORE + propty

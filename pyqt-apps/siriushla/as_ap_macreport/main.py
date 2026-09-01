@@ -36,7 +36,7 @@ class MacReportWindow(SiriusMainWindow):
         self._update_task = None
 
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setFocus()
 
     def _setupUi(self):

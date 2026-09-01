@@ -109,7 +109,7 @@ class MagOffConvApp(SiriusMainWindow):
         cw.setStyleSheet("""#central_widget{min-width:42em;}""")
         cw.setLayout(layout)
         self.setCentralWidget(cw)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _fill_normalizer_layout(self, index):
         text = self.sender().currentText()

@@ -23,7 +23,7 @@ class SiriusSpinbox(PyDMSpinbox):
         self._user_lower_limit = self.minimum()
         self._user_upper_limit = self.maximum()
         self.showStepExponent = False
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def ctrl_limit_changed(self, which, new_limit):
         """

@@ -52,7 +52,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.setObjectName(self.acc+'App')
         self._setupUi()
         self.setFocus()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         label = QLabel('<h3>'+self.title+'</h3>', self)

@@ -34,7 +34,7 @@ class DCCTMain(SiriusMainWindow):
             qta.icon('mdi.current-dc',
                      color=util.get_appropriate_color(self.section)))
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         self.title = QLabel('<h3>'+self.device+'</h3>',

@@ -66,7 +66,7 @@ class IDFFWindow(SiriusMainWindow):
         self.setWindowTitle(self._idffname)
         self.setWindowIcon(get_idff_icon())
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         self.title = QLabel(

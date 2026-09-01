@@ -41,7 +41,7 @@ class EfficiencyMonitor(SiriusMainWindow):
     def _setupUi(self):
         cw = QWidget(self)
         self.setCentralWidget(cw)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         label = QLabel('<h3>Efficiency Monitor</h3>',
                        self, alignment=Qt.AlignCenter)

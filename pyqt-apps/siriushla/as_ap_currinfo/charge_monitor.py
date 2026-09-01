@@ -35,7 +35,7 @@ class BOMonitor(SiriusMainWindow):
     def _setupUi(self):
         cw = QWidget(self)
         self.setCentralWidget(cw)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         label = QLabel('<h4>Booster Charge</h4>',
                        self, alignment=Qt.AlignCenter)

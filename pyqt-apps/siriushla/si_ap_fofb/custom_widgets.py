@@ -427,7 +427,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         self._ch_synenls.new_value_signal[_np.ndarray].connect(
             self._update_refpacketloss)
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         tab = QTabWidget(self)

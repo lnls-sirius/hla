@@ -65,7 +65,7 @@ class MainLauncher(SiriusMainWindow):
 
         # set focus policy
         self.setFocus()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         # Machine Shift

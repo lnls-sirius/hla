@@ -112,7 +112,7 @@ class BONormEdit(SiriusMainWindow):
                 subcontrol-origin: margin;
                 subcontrol-position: top center;
                 padding: 0 2px 0 2px;}""")
-        cw.setFocusPolicy(Qt.StrongFocus)
+        cw.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setCentralWidget(cw)
 
     def _setupMenu(self):

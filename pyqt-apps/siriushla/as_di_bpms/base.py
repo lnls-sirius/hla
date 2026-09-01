@@ -167,7 +167,7 @@ def get_custom_widget_class(CLASS):
         def __init__(self, parent=None, **kws):
             """Initialize object."""
             super().__init__(parent=parent, **kws)
-            self.setFocusPolicy(Qt.StrongFocus)
+            self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         def wheelEvent(self, event):
             """Reimplement wheel event to ignore event when out of focus."""

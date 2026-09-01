@@ -42,7 +42,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             ]))
 
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         wid = QWidget(self)

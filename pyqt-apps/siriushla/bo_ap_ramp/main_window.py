@@ -43,7 +43,7 @@ class RampMain(SiriusMainWindow):
         self._connSignals()
         self._addActions()
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)

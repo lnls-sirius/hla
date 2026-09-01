@@ -32,7 +32,7 @@ class PyDMScrollBar(QDoubleScrollBar, TextFormatter, PyDMWritableWidget):
         QDoubleScrollBar.__init__(self, orientation, parent)
         PyDMWritableWidget.__init__(self, init_channel)
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setInvertedControls(False)
 
         self.setTracking(True)

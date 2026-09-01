@@ -36,7 +36,7 @@ class Tune(SiriusMainWindow):
             )
         )
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         label = QLabel(

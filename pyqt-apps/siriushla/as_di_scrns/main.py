@@ -64,7 +64,7 @@ class SiriusScrnView(QWidget):
 
         self._setupUi()
         self.setFocus()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self._loadCalibrationGrid(default=True)
 
     @property

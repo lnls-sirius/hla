@@ -31,7 +31,7 @@ class FPMOscMain(SiriusMainWindow):
             )
         )
         self._setup_ui()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setup_ui(self):
         cwid = QWidget()

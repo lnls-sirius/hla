@@ -89,7 +89,7 @@ class PosAngCorr(SiriusMainWindow):
 
         self._setupUi()
         self.setFocus()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self._ask_message = QMessageBox(self)
         self._ask_message.setWindowTitle('Message')

@@ -111,7 +111,7 @@ class RadTotDoseMonitor(QWidget):
         self._setupUi()
 
         # define focus policy
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         # set initial size
         if self.app.primaryScreen().geometry().width() >= 1920:

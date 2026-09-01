@@ -16,7 +16,7 @@ def _create_spinboxplus(qt_type):
             locale = QLocale(QLocale.English, territory=QLocale.UnitedStates)
             locale.setNumberOptions(QLocale.RejectGroupSeparator)
             self.setLocale(locale)
-            self.setFocusPolicy(Qt.StrongFocus)
+            self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
             self.step_exponent = 0
             self.app = QApplication.instance()
 

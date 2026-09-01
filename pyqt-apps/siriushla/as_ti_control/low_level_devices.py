@@ -1088,7 +1088,7 @@ class BucketList(BaseWidget):
 
         wid = SiriusDialog(self)
         wid.setFocus()
-        wid.setFocusPolicy(Qt.StrongFocus)
+        wid.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         wid.setObjectName('ASApp')
 
         window = create_window_from_widget(
