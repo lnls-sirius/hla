@@ -465,7 +465,7 @@ class InjSysStbyControlWidget(QWidget):
         else:
             group = getattr(self, '_checkbox_'+state).values()
         for obj in group:
-            obj.disconnect()
+            obj.disconnect(self.sender())
             ost = obj.objectName() in sts
             obj.setChecked(ost)
             obj.toggled.connect(self._set_commands_order)
