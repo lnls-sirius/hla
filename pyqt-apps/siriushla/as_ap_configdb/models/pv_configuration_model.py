@@ -87,7 +87,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
                 QAbstractTableModel.flags(self, index) | Qt.ItemFlag.ItemIsEditable)
         return QAbstractTableModel.flags(self, index)
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
         """Set data."""
         if not index.isValid():
             return False

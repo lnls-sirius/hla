@@ -221,7 +221,7 @@ class ConfigModel(QAbstractTableModel):
         return Qt.ItemFlags(
             QAbstractTableModel.flags(self, index) | Qt.ItemFlag.ItemIsEditable)
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
         """Set cell data."""
         row = index.row()
         col = index.column()
