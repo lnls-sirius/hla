@@ -169,7 +169,7 @@ class BaseFunctionsInterface():
                 }
             led = PyDMLedMultiIncosistencyDetector(
                 self, chan2vals)
-        shape = getShape(comp)
+        shape = getShape(comp).value
         led.shape = shape
         if shape not in [1, 2]:
             shape -= 2
