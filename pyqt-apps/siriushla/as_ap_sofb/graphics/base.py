@@ -288,7 +288,7 @@ class BaseWidget(QWidget):
         sz_pol = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         label.setSizePolicy(sz_pol)
         label.setStyleSheet("""min-width:2.5em;""")
-        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         return label
 
     def connect_signals(self):

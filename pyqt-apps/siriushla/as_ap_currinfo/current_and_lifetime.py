@@ -234,13 +234,13 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupCurrentSettingsWidget(self):
         self._ld_storedebeam = QLabel('Stored EBeam?', self)
         self._ld_storedebeam.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._led_storedebeam = SiriusLedState(
             self, self.devname.substitute(propty='StoredEBeam-Mon'))
 
         self._ld_dcctfault = QLabel('DCCT Fault Check:', self)
         self._ld_dcctfault.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._bt_dcctfault = PyDMStateButton(
             self, self.devname.substitute(propty='DCCTFltCheck-Sel'))
         self._bt_dcctfault.shape = PyDMStateButton.Rounded
@@ -249,7 +249,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_seldcct = QLabel('Select DCCT:', self)
         self._ld_seldcct.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_seldcct = PyDMEnumComboBox(
             self, self.devname.substitute(propty='DCCT-Sel'))
         self._lb_seldcct = SiriusLabel(
@@ -260,7 +260,7 @@ class CurrLTWindow(SiriusMainWindow):
             'SI-13C4:DI-DCCT:ReliableMeas-Mon').substitute(prefix=self.prefix))
         self._lb_dcct13c4 = QLabel('DCCT 13C4', self)
         self._lb_dcct13c4.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._pb_13c4_detail = QPushButton(self)
         self._pb_13c4_detail.setObjectName('DCCT13C4_dtl')
         self._pb_13c4_detail.setStyleSheet(
@@ -284,7 +284,7 @@ class CurrLTWindow(SiriusMainWindow):
             'SI-14C4:DI-DCCT:ReliableMeas-Mon').substitute(prefix=self.prefix))
         self._lb_dcct14c4 = QLabel('DCCT 14C4', self)
         self._lb_dcct14c4.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._pb_14c4_detail = QPushButton(self)
         self._pb_14c4_detail.setObjectName('DCCT14C4_dtl')
         self._pb_14c4_detail.setStyleSheet(
@@ -326,7 +326,7 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupLifetimeSettigsWidget(self):
         self._ld_calcmode = QLabel(
             'Calc Mode:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_calcmode = PyDMEnumComboBox(
             self, self.devname.substitute(propty='LtFitMode-Sel'))
         self._lb_calcmode = SiriusLabel(
@@ -335,7 +335,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_curroffset = QLabel(
             'Current\nOffset [mA]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._sb_curroffset = SiriusSpinbox(
             self, self.devname.substitute(propty='CurrOffset-SP'))
         self._lb_curroffset = SiriusLabel(
@@ -351,7 +351,7 @@ class CurrLTWindow(SiriusMainWindow):
             self._handle_intvl_sett_visibility)
         self._ld_maxintvl = QLabel(
             'Max. Sampling\nInterval [s]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._ld_maxintvl.setToolTip(
             "Timestamp settings use 2 parameters to define the\n"
             "timestamp interval.\n\n"
@@ -373,7 +373,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_firstsmpl = QLabel(
             'First Time [s]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._ld_firstsmpl.setVisible(False)
         self._le_firstsmpl = PyDMLineEdit(
             self, self.devname.substitute(propty='FrstSplTime-SP'))
@@ -398,7 +398,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_lastsmpl = QLabel(
             'Last Time [s]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._ld_lastsmpl.setToolTip(
             "If 'Last Time' == -1, use current timestamp.")
         self._ld_lastsmpl.setVisible(False)
@@ -425,7 +425,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_smplintvl = QLabel(
             'Samples\nInterval [s]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._lb_smplintvl_dcct = SiriusLabel(
             self, self.devname.substitute(propty='SplIntvl-Mon'))
         self._lb_smplintvl_bpm = SiriusLabel(
@@ -434,7 +434,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_intvlbtwspl = QLabel(
             'Interval Between\nSamples [s]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._sb_intvlbtwspl = SiriusSpinbox(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-SP'))
         self._sb_intvlbtwspl.precisionFromPV = True
@@ -445,7 +445,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_bufautoreset = QLabel(
             'Auto Reset:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_bufautoreset = PyDMEnumComboBox(
             self, self.devname.substitute(propty='BuffAutoRst-Sel'))
         self._lb_bufautoreset = SiriusLabel(
@@ -453,7 +453,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_bufdcurr = QLabel(
             'Auto Reset Delta\nCurrent [mA]:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._sb_bufdcurr = SiriusSpinbox(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-SP'))
         self._lb_bufdcurr = SiriusLabel(
@@ -461,7 +461,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_bufsize = QLabel(
             'Size:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._lb_bufsize_dcct = SiriusLabel(
             self, self.devname.substitute(propty='BuffSize-Mon'))
         self._lb_bufsize_dcct.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -546,7 +546,7 @@ class CurrLTWindow(SiriusMainWindow):
     def _setupGraphSettingsWidget(self):
         self._ld_ltfrom = QLabel(
             'Show lifetime from:', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_ltfrom = QComboBox()
         self._cb_ltfrom.addItem('DCCT')
         self._cb_ltfrom.addItem('BPM')
@@ -555,7 +555,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self._ld_showsmpl = QLabel(
             'Show samples: ', self,
-            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTrailing | Qt.AlignmentFlag.AlignVCenter)
         self._cb_showsmpl = QCheckBox(self)
         self._cb_showsmpl.setChecked(True)
         self._cb_showsmpl.stateChanged.connect(self._handle_samples_visibility)
