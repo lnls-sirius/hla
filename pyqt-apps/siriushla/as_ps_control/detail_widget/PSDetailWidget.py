@@ -880,9 +880,9 @@ class PSDetailWidget(_BaseDetailWidget):
             # change xdata to show time indices according to ScopeDuration-RB
             curvetype = 'scope' if propty == 'Wfm-Mon' else 'wfm'
             self._scopedur_ch_rb.new_value_signal[float].connect(
-                _part(self._wfmTimeData, propty))
+                _part(self._wfmTimeData, propty, self._scopedur_ch_rb))
             self._wfm_chs[suf].new_value_signal[_np.ndarray].connect(
-                _part(self._wfmTimeData, propty))
+                _part(self._wfmTimeData, propty, self._wfm_chs[suf]))
             # reimplement fourier transform to use ScopeFreq-RB
             curve._fourierTransform = _part(self._wfmFourierData, curvetype)
             self._wfm_curves[propty] = curve
@@ -1070,10 +1070,10 @@ class PSDetailWidget(_BaseDetailWidget):
         xlabel = 'Frequency [Hz]' if state else 'Time [s]'
         self.wfm_graph.setLabel('bottom', text=xlabel)
 
-    def _wfmTimeData(self, propty, value):
+    def _wfmTimeData(self, propty, sender, value):
         if value is None:
             return
-        channel = self.sender().address
+        channel = sender.address
         curve = self._wfm_curves[propty]
         if 'Duration' in channel:
             duration = value
