@@ -315,7 +315,7 @@ class MultiTurnSumWidget(QWidget):
 
     def mouseDoubleClickEvent(self, ev):
         """."""
-        if ev.button() != Qt.LeftButton:
+        if ev.button() != Qt.MouseButton.LeftButton:
             return super().mouseDoubleClickEvent(ev)
         graph = self.graph_time
         curve = graph.curveAtIndex(0)
@@ -410,7 +410,7 @@ class Spectrogram(SiriusSpectrogramView):
 
     def mouseDoubleClickEvent(self, ev):
         """."""
-        if ev.button() == Qt.LeftButton:
+        if ev.button() == Qt.MouseButton.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
             if pos.y() > 0 and pos.y() <= self._image_item.height():
                 self.multiturnidx.send_value_signal[int].emit(int(pos.y()))

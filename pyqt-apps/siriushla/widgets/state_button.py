@@ -218,7 +218,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     def mouseReleaseEvent(self, ev):
         """Deal with mouse clicks. Only accept clicks within the figure."""
-        cond = ev.button() == Qt.LeftButton
+        cond = ev.button() == Qt.MouseButton.LeftButton
         cond &= ev.x() < self.width()/2+self.height()
         cond &= ev.x() > self.width()/2-self.height()
         if cond:

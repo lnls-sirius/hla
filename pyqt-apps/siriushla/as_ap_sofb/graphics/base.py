@@ -616,7 +616,7 @@ class Graph(SiriusWaveformPlot):
 
     def mouseDoubleClickEvent(self, ev):
         """."""
-        if ev.button() == Qt.LeftButton:
+        if ev.button() == Qt.MouseButton.LeftButton:
             posx = self.curveAtIndex(0).xData
             vb = self.plotItem.getViewBox()
             pos = vb.mapSceneToView(ev.pos())

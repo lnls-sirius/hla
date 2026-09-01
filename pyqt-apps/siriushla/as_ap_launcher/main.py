@@ -337,7 +337,7 @@ class MainLauncher(SiriusMainWindow):
 
     def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             if self.wid_curr.underMouse():
                 self.showStatus.emit()
             elif self.wid_shift.underMouse():

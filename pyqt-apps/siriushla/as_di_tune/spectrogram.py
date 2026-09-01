@@ -188,7 +188,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.new_data.emit(self.last_data[self._idx2send, :])
 
     def mouseDoubleClickEvent(self, ev):
-        if ev.button() == Qt.LeftButton:
+        if ev.button() == Qt.MouseButton.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
             if not self._image_item.height():
                 pass

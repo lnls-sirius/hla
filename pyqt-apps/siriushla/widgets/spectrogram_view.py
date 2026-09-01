@@ -45,7 +45,7 @@ class _GradientLegend(GraphicsWidget):
     def __init__(self, size=None, colors=None,
                  labels=None, minVal=None, maxVal=None):
         GraphicsWidget.__init__(self)
-        self.setAcceptedMouseButtons(Qt.NoButton)
+        self.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self.size = size
 
         # if min and max values are None, assume normalized data

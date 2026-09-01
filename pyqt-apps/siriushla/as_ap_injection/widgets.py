@@ -96,7 +96,7 @@ class InjDiagLed(SiriusLedAlert):
 
     def mouseDoubleClickEvent(self, event):
         """Reimplement mouseDoubleClickEvent."""
-        if event.button() == Qt.LeftButton and self.labels:
+        if event.button() == Qt.MouseButton.LeftButton and self.labels:
             self.msg = StatusDetailDialog(
                 parent=self.parent(), pvname=self.channel,
                 labels=self.labels, title='Injection Status')

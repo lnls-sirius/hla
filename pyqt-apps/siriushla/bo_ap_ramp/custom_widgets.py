@@ -20,7 +20,7 @@ class MyTableWidget(QTableWidget):
         self.open_window_fun = open_window_fun
 
     def mousePressEvent(self, ev):
-        if ev.button() == Qt.RightButton:
+        if ev.button() == Qt.MouseButton.RightButton:
             self.show_menu_fun(ev.pos())
         super().mousePressEvent(ev)
 

@@ -228,7 +228,7 @@ class MyLed(PyDMLed):
 
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""
-        if event.button() == Qt.RightButton and self.labels:
+        if event.button() == Qt.MouseButton.RightButton and self.labels:
             self.msg = StatusDetailDialog(
                 parent=self.parent(), pvname=self.pvname,
                 labels=self.labels)
