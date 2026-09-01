@@ -29,6 +29,6 @@ def set_bbb_color(obj, device):
         else '#f5f5f0'
     color = QColor(ncolor)
     pal = obj.palette()
-    pal.setColor(QPalette.ColorRole.Base, color)
+    pal.setColor(QPalette.ColorRole.Window, color)
     obj.setAutoFillBackground(True)
     obj.setPalette(pal)
