@@ -351,6 +351,7 @@ class TuneSpectraControls(QWidget):
         )
 
         # Registers
+        self.menu_reg = {}
         self.registers = {i: None for i in range(4)}
         self.spectra.curveReg = [None, None, None, None]
         self.cb_reg = {i: QCheckBox(self) for i in range(4)}
@@ -381,14 +382,14 @@ class TuneSpectraControls(QWidget):
             glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignmentFlag.AlignLeft)
             # buttons
             self.bt_reg[i].setStyleSheet('min-width:5em; max-width:5em;')
-            menu = QMenu()
-            menu.addAction(
+            self.menu_reg[i] = QMenu()
+            self.menu_reg[i].addAction(
                 'Save Tune H', _part(self._registerData, i, 'H'))
-            menu.addAction(
+            self.menu_reg[i].addAction(
                 'Save Tune V', _part(self._registerData, i, 'V'))
-            menu.addAction(
+            self.menu_reg[i].addAction(
                 'Clear', _part(self._clear_register, i))
-            self.bt_reg[i].setMenu(menu)
+            self.bt_reg[i].setMenu(self.menu_reg[i])
             glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             # label
             self.lb_reg[i].setMouseTracking(True)

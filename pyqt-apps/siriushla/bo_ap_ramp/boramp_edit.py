@@ -799,7 +799,7 @@ class MultipolesRamp(QWidget):
         self.bt_units = QPushButton(icon_units, '', self)
         self.bt_units.setStyleSheet('icon-size: 20px 20px;')
         self.bt_units.setToolTip('Choose power supplies to plot')
-        menu_units = QMenu()
+        menu_units = QMenu(self.bt_units)
         menu_units.setIcon(qta.icon('mdi.chart-line'))
         act_unitcurr = menu_units.addAction('Currents')
         act_unitcurr.triggered.connect(
