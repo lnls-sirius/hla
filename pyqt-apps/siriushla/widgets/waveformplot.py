@@ -1,5 +1,7 @@
 """Waveform plot widget."""
 
+from qtpy.QtCore import Slot
+
 from pyqtgraph import ViewBox, AxisItem
 
 from pydm.widgets import PyDMWaveformPlot
@@ -24,3 +26,16 @@ class SiriusWaveformPlot(PyDMWaveformPlot):
     def legend(self):
         """Legend object."""
         return self._legend
+
+    @Slot()
+    def redrawPlot(self):
+        """
+        Request a redraw from each curve in the plot.
+        Called by curves when they get new data.
+        """
+        if not self._needs_redraw:
+            return
+        for curve in self._curves:
+            if not (isinstance(curve.x_waveform, float) or isinstance(curve.y_waveform, float)):
+                curve.redrawCurve()
+        self._needs_redraw = False
