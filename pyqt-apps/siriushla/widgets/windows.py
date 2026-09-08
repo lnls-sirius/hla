@@ -29,12 +29,12 @@ def _create_siriuswindow(qt_type):
         def __init__(self, *args, **kwargs):
             """Init."""
             super().__init__(*args, **kwargs)
-            self.setFocus(True)
+            self.setFocus()
             self.app = QApplication.instance()
             if isinstance(self, SiriusMainWindow):
                 self.label_version = QLabel(
                     'siriushla version: ' + get_package_version(),
-                    self, alignment=Qt.AlignRight)
+                    self, alignment=Qt.AlignmentFlag.AlignRight)
                 self.label_version.setStyleSheet('font-size: 6pt;')
                 self.conn_but = QPushButton('Show Connections...', self)
                 self.conn_but.clicked.connect(self.show_connections)
@@ -71,12 +71,12 @@ def _create_siriuswindow(qt_type):
             widgets = []
             while wid and not is_graph:
                 is_graph |= isinstance(wid, (QGraphicsView, MatplotlibCanvas))
-                wid.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+                wid.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
                 widgets.append(wid)
                 wid = self.app.widgetAt(pos)
 
             for wid in widgets:
-                wid.setAttribute(Qt.WA_TransparentForMouseEvents, False)
+                wid.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
             return is_graph
 
         def show_connections(self, checked):
@@ -148,7 +148,7 @@ def create_window_from_widget(
                     scroll.setWidget(self.widget)
                     scroll.setWidgetResizable(True)
                     scroll.setSizeAdjustPolicy(
-                        QScrollArea.AdjustToContentsOnFirstShow)
+                        QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
                     self.setCentralWidget(scroll)
 
                     scroll_style = '#scroll{'

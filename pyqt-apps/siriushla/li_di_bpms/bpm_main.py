@@ -244,7 +244,7 @@ class DigBeamPosProc(SiriusMainWindow):
         if_glay.addLayout(self.display_graph(), 1, 0, 2, 1)
         if_glay.addLayout(self.display_mainData(), 1, 1, 1, 1)
         if_glay.addLayout(self.display_selectors(), 1, 2, 1, 1)
-        if_glay.setAlignment(Qt.AlignTop)
+        if_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         if_glay.setColumnStretch(0, 10)
 
         wid.setLayout(if_glay)
@@ -255,7 +255,7 @@ class DigBeamPosProc(SiriusMainWindow):
         hd_glay = QGridLayout()
 
         title_lb = QLabel('<h2>' + self.device_name + ' - POSITION MONITOR </h2>', self)
-        title_lb.setAlignment(Qt.AlignCenter)
+        title_lb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hd_glay.addWidget(title_lb, 0, 2, 2, 1)
 
         countx = 0
@@ -267,12 +267,12 @@ class DigBeamPosProc(SiriusMainWindow):
             hd_glay.addWidget(trig_led, 0, countx, 1, 1)
 
             trig_lb = QLabel(led_lb)
-            trig_lb.setAlignment(Qt.AlignCenter)
+            trig_lb.setAlignment(Qt.AlignmentFlag.AlignCenter)
             hd_glay.addWidget(trig_lb, 1, countx, 1, 1)
 
             countx += 1
 
-        hd_glay.setAlignment(Qt.AlignCenter)
+        hd_glay.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         return hd_glay
 
@@ -370,7 +370,7 @@ class DigBeamPosProc(SiriusMainWindow):
             channel_lb.showUnits = True
             glay.addWidget(channel_lb, pos_x, pos_y)
 
-        glay.setAlignment(Qt.AlignCenter)
+        glay.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         group.setTitle(title)
         group.setLayout(glay)
@@ -407,7 +407,7 @@ class DigBeamPosProc(SiriusMainWindow):
                 countx = 0
                 county += 2
 
-        md_glay.setAlignment(Qt.AlignCenter)
+        md_glay.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         return md_glay
 
@@ -430,14 +430,14 @@ class DigBeamPosProc(SiriusMainWindow):
                 sc_glay.addWidget(channel_lb, countx, 1, 1, 1)
             else:
                 text_lb = QLabel(text, self)
-                text_lb.setAlignment(Qt.AlignCenter)
+                text_lb.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 sc_glay.addWidget(text_lb, countx, 0, 1, 2)
                 selection = PyDMEnumComboBox(
                     init_channel=self.prefix + self.device_name+":"+channel)
                 sc_glay.addWidget(selection, countx+1, 0, 1, 2)
             countx += 1
 
-        sc_glay.setAlignment(Qt.AlignTop)
+        sc_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         group.setLayout(sc_glay)
 
         return group
@@ -449,7 +449,7 @@ class DigBeamPosProc(SiriusMainWindow):
 
         selector = enum_button.PyDMEnumButton(
             init_channel=self.prefix + self.device_name+":"+channel)
-        selector.widgetType = 0
+        selector.widgetType = enum_button.WidgetType.PushButton
         selector.orientation = orientation
         lay.addWidget(selector, 0)
 

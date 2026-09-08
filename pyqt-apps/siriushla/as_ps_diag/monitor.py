@@ -47,7 +47,7 @@ class PSMonitor(QWidget):
 
     def _setupUi(self):
         self.title = QLabel('<h2>PS & PU</h2>',
-                            alignment=Qt.AlignCenter)
+                            alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setStyleSheet('max-height:1.29em;')
 
         layout = QGridLayout(self)
@@ -78,7 +78,7 @@ class PSMonitor(QWidget):
     def _make_groupbox(self, sec):
         status = QGroupBox(sec, self)
         status_lay = QGridLayout()
-        status_lay.setAlignment(Qt.AlignTop)
+        status_lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         status.setStyleSheet("QLabel{max-height: 1.4em;}")
         status.setLayout(status_lay)
 
@@ -95,15 +95,15 @@ class PSMonitor(QWidget):
             grid.setVerticalSpacing(6)
             grid.setHorizontalSpacing(6)
             if sec == 'BO' and label in ['CH', 'CV']:
-                desc = QLabel(label, self, alignment=Qt.AlignRight)
+                desc = QLabel(label, self, alignment=Qt.AlignmentFlag.AlignRight)
                 grid.addWidget(desc, 0, 0)
                 for i in range(5):
                     lbh = QLabel('{0:02d}'.format(i*2+1),
-                                 self, alignment=Qt.AlignRight)
+                                 self, alignment=Qt.AlignmentFlag.AlignRight)
                     lbh.setStyleSheet("QLabel{max-width:2em;}")
                     grid.addWidget(lbh, 0, i+1)
                     lbv = QLabel('{0:02d}'.format(i*10),
-                                 self, alignment=Qt.AlignRight)
+                                 self, alignment=Qt.AlignmentFlag.AlignRight)
                     lbv.setStyleSheet("QLabel{max-width:2em;}")
                     grid.addWidget(lbv, i+1, 0)
                 aux_row, aux_col, offset = 1, 1, 1
@@ -126,7 +126,7 @@ class PSMonitor(QWidget):
                     offset = (1 if label == 'QS' else 0)
                     i = 0
                     for text in self.get_dev2sub_labels(label):
-                        lbh = QLabel(text, self, alignment=Qt.AlignCenter)
+                        lbh = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignCenter)
                         grid.addWidget(lbh, 1, offset+i)
                         i += 1
                 else:
@@ -151,7 +151,7 @@ class PSMonitor(QWidget):
                     offset)
             row, col, rowc, colc = self.get_sec2dev_laypos(sec, label)
             status_lay.addLayout(grid, row, col, rowc, colc,
-                                 alignment=Qt.AlignTop)
+                                 alignment=Qt.AlignmentFlag.AlignTop)
 
         if sec == 'LI':
             status_lay.setColumnStretch(0, 2)
@@ -228,7 +228,7 @@ class MyLed(PyDMLed):
 
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""
-        if event.button() == Qt.RightButton and self.labels:
+        if event.button() == Qt.MouseButton.RightButton and self.labels:
             self.msg = StatusDetailDialog(
                 parent=self.parent(), pvname=self.pvname,
                 labels=self.labels)

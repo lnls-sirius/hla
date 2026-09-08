@@ -119,7 +119,7 @@ class SOFBControl(BaseWidget):
         if self.acc == 'SI':
             lbl = QLabel('SOFB Mode', orb_wid)
             wid = self.create_pair_sel(orb_wid, 'SOFBMode', rules=rules)
-            orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
+            orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignmentFlag.AlignVCenter)
             orb_wid.layout().addWidget(wid, 1, 1)
 
         orb_wid.layout().setRowStretch(2, 3)
@@ -133,7 +133,7 @@ class SOFBControl(BaseWidget):
         vbl_ref = QVBoxLayout()
         vbl_ref.addWidget(combo)
         vbl_ref.addWidget(lbl2)
-        orb_wid.layout().addWidget(lbl, 3, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addWidget(lbl, 3, 0, alignment=Qt.AlignmentFlag.AlignVCenter)
         orb_wid.layout().addLayout(vbl_ref, 3, 1)
 
         lbl = QLabel('Num. Pts.', orb_wid)
@@ -141,12 +141,12 @@ class SOFBControl(BaseWidget):
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-SP'))
         rdb = SiriusLabel(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-RB'))
-        rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        slsh = QLabel('/', orb_wid, alignment=Qt.AlignCenter)
+        rdb.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        slsh = QLabel('/', orb_wid, alignment=Qt.AlignmentFlag.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
         cnt = SiriusLabel(
             orb_wid, self.devpref.substitute(propty='BufferCount-Mon'))
-        cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        cnt.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')
         rst = PyDMPushButton(
             orb_wid, pressValue=1,
@@ -162,12 +162,12 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(slsh)
         hbl.addWidget(rdb)
         hbl.addWidget(rst)
-        orb_wid.layout().addWidget(lbl, 4, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addWidget(lbl, 4, 0, alignment=Qt.AlignmentFlag.AlignVCenter)
         orb_wid.layout().addLayout(hbl, 4, 1)
 
-        lbl = QLabel('Smooth Method', orb_wid, alignment=Qt.AlignCenter)
+        lbl = QLabel('Smooth Method', orb_wid, alignment=Qt.AlignmentFlag.AlignCenter)
         wid = self.create_pair_sel(orb_wid, 'SmoothMethod', rules=rules)
-        orb_wid.layout().addWidget(lbl, 5, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addWidget(lbl, 5, 0, alignment=Qt.AlignmentFlag.AlignVCenter)
         orb_wid.layout().addWidget(wid, 5, 1)
 
         orb_wid.layout().setColumnStretch(1, 2)
@@ -218,10 +218,10 @@ class SOFBControl(BaseWidget):
         wid = QWidget(parent)
         wid.setObjectName('grp')
         gdl = QGridLayout(wid)
-        gdl.setAlignment(Qt.AlignTop)
+        gdl.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         prp = 'FOFBDownloadKicks'
-        lbl = QLabel('Download Kicks', wid, alignment=Qt.AlignCenter)
+        lbl = QLabel('Download Kicks', wid, alignment=Qt.AlignmentFlag.AlignCenter)
         lb1 = QLabel('State', wid)
         lb2 = QLabel('Percent [%]', wid)
         spt = PyDMStateButton(wid, self.devpref.substitute(propty=prp+'-Sel'))
@@ -230,7 +230,7 @@ class SOFBControl(BaseWidget):
         sb2 = SiriusSpinbox(wid, self.devpref.substitute(propty=prp+'Perc-SP'))
         rb2 = SiriusLabel(wid, self.devpref.substitute(propty=prp+'Perc-RB'))
         rb2.showUnits = False
-        gdl.addWidget(lbl, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        gdl.addWidget(lbl, 0, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lb1, 1, 0)
         gdl.addWidget(spt, 1, 1)
         gdl.addWidget(rdb, 1, 2)
@@ -242,7 +242,7 @@ class SOFBControl(BaseWidget):
         gdl.setRowStretch(3, 2)
 
         prp = 'FOFBUpdateRefOrb'
-        lbl = QLabel('Update RefOrb', wid, alignment=Qt.AlignCenter)
+        lbl = QLabel('Update RefOrb', wid, alignment=Qt.AlignmentFlag.AlignCenter)
         lb1 = QLabel('State', wid)
         lb2 = QLabel('Percent [%]', wid)
         lb3 = QLabel('Rate [loop iters]', wid)
@@ -255,7 +255,7 @@ class SOFBControl(BaseWidget):
         rb3 = SiriusLabel(wid, self.devpref.substitute(propty=prp+'Rate-RB'))
         rb2.showUnits = False
         rb3.showUnits = False
-        gdl.addWidget(lbl, 4, 0, 1, 4, alignment=Qt.AlignCenter)
+        gdl.addWidget(lbl, 4, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lb1, 5, 0)
         gdl.addWidget(spt, 5, 1)
         gdl.addWidget(rdb, 5, 2)
@@ -277,7 +277,7 @@ class SOFBControl(BaseWidget):
         btmore.clicked.connect(self._handle_fofb_options_vis)
         btmore.visItems = vislist
         btmore.setFlat(True)
-        gdl.addWidget(btmore, 0, 0, alignment=Qt.AlignLeft)
+        gdl.addWidget(btmore, 0, 0, alignment=Qt.AlignmentFlag.AlignLeft)
 
         return wid
 
@@ -440,7 +440,7 @@ class SOFBControl(BaseWidget):
         pairs = []
         for i, k in enumerate(('Kp', 'Ki', 'Kd'), 1):
             gpbx_lay.addWidget(
-                QLabel(k, gpbx), 0, i, alignment=Qt.AlignCenter)
+                QLabel(k, gpbx), 0, i, alignment=Qt.AlignmentFlag.AlignCenter)
             pair = self.create_pair(wid, tmpl.format(k, 'CH'), is_vert=True)
             pairs.append(pair)
             gpbx_lay.addWidget(pair, 1, i)
@@ -539,42 +539,42 @@ class PerformanceWidget(QWidget):
             return self.device.substitute(prefix=self.prefix, propty=x)
 
         lbl_main = QLabel(
-            '<h3>Loop Performance</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Loop Performance</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lbl_prnt = QLabel(
-            'Number of Iter. Between Updates', self, alignment=Qt.AlignCenter)
+            'Number of Iter. Between Updates', self, alignment=Qt.AlignmentFlag.AlignCenter)
         spb = SiriusSpinbox(self, lamb('LoopPrintEveryNumIters-SP'))
         ldrb = SiriusLabel(self, lamb('LoopPrintEveryNumIters-RB'))
-        slsh = QLabel('/', self, alignment=Qt.AlignCenter)
+        slsh = QLabel('/', self, alignment=Qt.AlignmentFlag.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
         ldmon = SiriusLabel(self, lamb('LoopNumIters-Mon'))
 
         lbl_tout = QLabel(
-            'SlowOrb\nTimeouts', self, alignment=Qt.AlignCenter)
+            'SlowOrb\nTimeouts', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_tout = SiriusLabel(self, lamb('SlowOrbTimeoutCnt-Mon'))
         ld_tout.showUnits = True
-        ld_tout.setAlignment(Qt.AlignCenter)
+        ld_tout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         lbl_rate = QLabel(
-            'Effective\nRate', self, alignment=Qt.AlignCenter)
+            'Effective\nRate', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_rate = SiriusLabel(self, lamb('LoopEffectiveRate-Mon'))
         ld_rate.showUnits = True
 
         lay_niter = QGridLayout()
-        lay_niter.addWidget(lbl_prnt, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(lbl_prnt, 0, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_niter.addWidget(spb, 1, 0)
         lay_niter.addWidget(ldrb, 1, 1)
         lay_niter.addWidget(slsh, 1, 2)
         lay_niter.addWidget(ldmon, 1, 3)
-        lay_niter.addWidget(lbl_tout, 0, 4, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(lbl_tout, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_niter.addWidget(ld_tout, 1, 4)
-        lay_niter.addWidget(lbl_rate, 0, 5, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(lbl_rate, 0, 5, alignment=Qt.AlignmentFlag.AlignCenter)
         lay_niter.addWidget(ld_rate, 1, 5)
 
         lbl_iters = QLabel('Iterations [%]:', self)
-        lbl_ok = QLabel('OK', self, alignment=Qt.AlignCenter)
-        lbl_tout = QLabel('Timeout', self, alignment=Qt.AlignCenter)
-        lbl_diff = QLabel('Diff', self, alignment=Qt.AlignCenter)
+        lbl_ok = QLabel('OK', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_tout = QLabel('Timeout', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_diff = QLabel('Diff', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_ok = SiriusLabel(self, lamb('LoopPerfItersOk-Mon'))
         ld_tout = SiriusLabel(self, lamb('LoopPerfItersTOut-Mon'))
         ld_diff = SiriusLabel(self, lamb('LoopPerfItersDiff-Mon'))
@@ -583,14 +583,14 @@ class PerformanceWidget(QWidget):
         lay_iters.addWidget(lbl_ok, 0, 1)
         lay_iters.addWidget(lbl_tout, 0, 2)
         lay_iters.addWidget(lbl_diff, 0, 3)
-        lay_iters.addWidget(ld_ok, 1, 1, alignment=Qt.AlignCenter)
-        lay_iters.addWidget(ld_tout, 1, 2, alignment=Qt.AlignCenter)
-        lay_iters.addWidget(ld_diff, 1, 3, alignment=Qt.AlignCenter)
+        lay_iters.addWidget(ld_ok, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_iters.addWidget(ld_tout, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_iters.addWidget(ld_diff, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lbl_psd = QLabel('# of PSs with Diffs:', self)
-        lbl_avg = QLabel('AVG', self, alignment=Qt.AlignCenter)
-        lbl_std = QLabel('STD', self, alignment=Qt.AlignCenter)
-        lbl_max = QLabel('MAX', self, alignment=Qt.AlignCenter)
+        lbl_avg = QLabel('AVG', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_std = QLabel('STD', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_max = QLabel('MAX', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_avg = SiriusLabel(self, lamb('LoopPerfDiffNrPSAvg-Mon'))
         ld_std = SiriusLabel(self, lamb('LoopPerfDiffNrPSStd-Mon'))
         ld_max = SiriusLabel(self, lamb('LoopPerfDiffNrPSMax-Mon'))
@@ -599,16 +599,16 @@ class PerformanceWidget(QWidget):
         lay_psd.addWidget(lbl_avg, 0, 1)
         lay_psd.addWidget(lbl_std, 0, 2)
         lay_psd.addWidget(lbl_max, 0, 3)
-        lay_psd.addWidget(ld_avg, 1, 1, alignment=Qt.AlignCenter)
-        lay_psd.addWidget(ld_std, 1, 2, alignment=Qt.AlignCenter)
-        lay_psd.addWidget(ld_max, 1, 3, alignment=Qt.AlignCenter)
+        lay_psd.addWidget(ld_avg, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_psd.addWidget(ld_std, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_psd.addWidget(ld_max, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        lbl_tim = QLabel('Duration Statistics', self, alignment=Qt.AlignCenter)
-        lbl_unt = QLabel('[ms]', self, alignment=Qt.AlignCenter)
-        lbl_avg = QLabel('AVG', self, alignment=Qt.AlignCenter)
-        lbl_std = QLabel('STD', self, alignment=Qt.AlignCenter)
-        lbl_min = QLabel('MIN', self, alignment=Qt.AlignCenter)
-        lbl_max = QLabel('MAX', self, alignment=Qt.AlignCenter)
+        lbl_tim = QLabel('Duration Statistics', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_unt = QLabel('[ms]', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_avg = QLabel('AVG', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_std = QLabel('STD', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_min = QLabel('MIN', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_max = QLabel('MAX', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lbl_avg.setStyleSheet('min-width: 5em;')
         lbl_std.setStyleSheet('min-width: 5em;')
         lbl_min.setStyleSheet('min-width: 5em;')
@@ -630,7 +630,7 @@ class PerformanceWidget(QWidget):
             for j, ld in enumerate(['Avg', 'Std', 'Min', 'Max']):
                 ld_ = SiriusLabel(
                     self, lamb(f'LoopPerfTim{nm:s}{ld:s}-Mon'))
-                lay_tim.addWidget(ld_, i+2, j+1, alignment=Qt.AlignCenter)
+                lay_tim.addWidget(ld_, i+2, j+1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay = QGridLayout(self)
         lay.addLayout(lay_niter, 0, 0)

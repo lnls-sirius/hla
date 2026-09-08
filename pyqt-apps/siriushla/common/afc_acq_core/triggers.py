@@ -26,7 +26,7 @@ class PhysicalTriggers(BaseWidget):
     def setupui(self):
         gdl = QGridLayout(self)
         lab = QLabel('<h2>' + self.device + ' Physical Triggers</h2>')
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 2)
         for i in range(8):
             grpbx = self.get_trigger_groupbox(i)
@@ -48,7 +48,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(enum)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'Dir-Sts'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
 
         hbl = QHBoxLayout()
@@ -59,18 +59,18 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(enum)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'DirPol-Sts'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
 
         lab = QLabel('', grpbx)
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
         lab = QLabel('Receiver', grpbx)
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(15)
         lab = QLabel('Transmitter', grpbx)
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
 
         lab = QLabel('Counter', grpbx)
@@ -82,7 +82,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(pbt)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvCnt-Mon'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
         pbt = PyDMPushButton(
@@ -91,7 +91,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(pbt)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnCnt-Mon'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
 
         lab = QLabel('Length', grpbx)
@@ -103,7 +103,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvLen-RB'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
         pvn = trig+'TrnLen-SP'
@@ -112,7 +112,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnLen-RB'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         return grpbx
 
@@ -133,7 +133,7 @@ class LogicalTriggers(BaseWidget):
         if self.trig_tp:
             name += ' ' + self.trig_tp[1:]
         lab = QLabel('<h2>' + name + ' Logical Triggers</h2>')
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 3)
         for i in range(24):
             grpbx = self.get_trigger_groupbox(i)
@@ -153,11 +153,11 @@ class LogicalTriggers(BaseWidget):
             if tname and not tname.startswith('Unconn'):
                 name += ': ' + tname
         lab = QLabel(name, grpbx)
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(15)
         lab = QLabel('Transmitter', grpbx)
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
 
         lab = QLabel('Source', grpbx)
@@ -168,7 +168,7 @@ class LogicalTriggers(BaseWidget):
         hbl.addWidget(enum)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvSrc-Sts'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
         enum = PyDMEnumComboBox(
@@ -176,7 +176,7 @@ class LogicalTriggers(BaseWidget):
         hbl.addWidget(enum)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnSrc-Sts'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
 
         lab = QLabel('Selection', grpbx)
@@ -188,7 +188,7 @@ class LogicalTriggers(BaseWidget):
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvInSel-RB'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
         pvn = trig+'TrnOutSel-SP'
@@ -197,6 +197,6 @@ class LogicalTriggers(BaseWidget):
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnOutSel-RB'))
-        lab.setAlignment(Qt.AlignCenter)
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl.addWidget(lab)
         return grpbx

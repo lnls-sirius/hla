@@ -37,19 +37,19 @@ class MonitorSummaryWidget(QWidget):
     def _setupUi(self):
         monitor = QGroupBox('Monitor')
         glay = QGridLayout(monitor)
-        glay.setAlignment(Qt.AlignTop)
+        glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay.addWidget(QLabel('', self), 0, 0)
 
         sec_lbls = get_status_labels()
         for col, sec in enumerate(sec_lbls):
-            lbl = QLabel(sec, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(sec, self, alignment=Qt.AlignmentFlag.AlignCenter)
             glay.addWidget(lbl, 0, col+1)
         sub_lbls = set()
         for sec in sec_lbls:
             sub_lbls.update(get_status_labels(sec))
         sub_lbls = sorted(sub_lbls)
         for row, sub in enumerate(sub_lbls):
-            lbl = QLabel(sub, self, alignment=Qt.AlignCenter)
+            lbl = QLabel(sub, self, alignment=Qt.AlignmentFlag.AlignCenter)
             glay.addWidget(lbl, row+1, 0)
 
         row = len(sub_lbls) - 1
@@ -59,7 +59,7 @@ class MonitorSummaryWidget(QWidget):
         glay.addWidget(line, row+2, 0, 1, len(sec_lbls)+1)
 
         glay.addWidget(
-            QLabel('All', self, alignment=Qt.AlignCenter), row+3, 0)
+            QLabel('All', self, alignment=Qt.AlignmentFlag.AlignCenter), row+3, 0)
 
         for col, sec in enumerate(sec_lbls):
             lbls = get_status_labels(sec)
@@ -96,7 +96,7 @@ class InjDiagLed(SiriusLedAlert):
 
     def mouseDoubleClickEvent(self, event):
         """Reimplement mouseDoubleClickEvent."""
-        if event.button() == Qt.LeftButton and self.labels:
+        if event.button() == Qt.MouseButton.LeftButton and self.labels:
             self.msg = StatusDetailDialog(
                 parent=self.parent(), pvname=self.channel,
                 labels=self.labels, title='Injection Status')
@@ -247,10 +247,10 @@ class InjSysStbyControlWidget(QWidget):
             'QLed{min-width:1.29em; max-width:1.29em;}')
 
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self._pb_off, 0, 0)
         lay.addWidget(self._pb_on, 0, 1)
-        lay.addWidget(self._led_sts, 1, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(self._led_sts, 1, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # menu
         for cmmtype in ['on', 'off']:
@@ -266,9 +266,9 @@ class InjSysStbyControlWidget(QWidget):
     def _setupFull(self):
         lay = QGridLayout(self)
 
-        lay.addWidget(QLabel('Off', self, alignment=Qt.AlignCenter), 0, 1)
-        lay.addWidget(QLabel('On', self, alignment=Qt.AlignCenter), 0, 2)
-        lay.addWidget(QLabel('Status', self, alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel('Off', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
+        lay.addWidget(QLabel('On', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
+        lay.addWidget(QLabel('Status', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
 
         self._checkbox_off = dict()
         self._checkbox_on = dict()
@@ -286,15 +286,15 @@ class InjSysStbyControlWidget(QWidget):
             tip = ''
             if len(splitd) > 1:
                 lbl_txt, tip = splitd
-            lb_dsc = QLabel(lbl_txt, self, alignment=Qt.AlignLeft)
+            lb_dsc = QLabel(lbl_txt, self, alignment=Qt.AlignmentFlag.AlignLeft)
             if tip:
                 lb_dsc.setToolTip(tip[:-1])
-            lb_sts = QLabel('', self, alignment=Qt.AlignCenter)
+            lb_sts = QLabel('', self, alignment=Qt.AlignmentFlag.AlignCenter)
             lb_sts.setObjectName(name)
             self._labels_sts[name] = lb_sts
             lay.addWidget(lb_dsc, idx+1, 0)
-            lay.addWidget(cb_off, idx+1, 1, alignment=Qt.AlignCenter)
-            lay.addWidget(cb_on, idx+1, 2, alignment=Qt.AlignCenter)
+            lay.addWidget(cb_off, idx+1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+            lay.addWidget(cb_on, idx+1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lb_sts, idx+1, 3)
 
         self._pb_off = PyDMPushButton(
@@ -465,7 +465,7 @@ class InjSysStbyControlWidget(QWidget):
         else:
             group = getattr(self, '_checkbox_'+state).values()
         for obj in group:
-            obj.disconnect()
+            obj.disconnect(self.sender())
             ost = obj.objectName() in sts
             obj.setChecked(ost)
             obj.toggled.connect(self._set_commands_order)

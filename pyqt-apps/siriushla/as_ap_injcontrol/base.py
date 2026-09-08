@@ -2,7 +2,7 @@
 import os as _os
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtSvg import QSvgWidget
+from qtpy.QtSvgWidgets import QSvgWidget
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, \
     QLabel, QPushButton, QCheckBox, QSizePolicy as QSzPlcy, QGroupBox, \
     QButtonGroup, QMenuBar
@@ -116,7 +116,7 @@ class BaseWindow(SiriusMainWindow):
                     hl.layout().addLayout(glay)
                 hl.layout().addStretch()
                 glay = QGridLayout()
-                glay.setAlignment(Qt.AlignCenter)
+                glay.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 glay.setContentsMargins(0, 0, 0, 0)
                 c = 0
             else:
@@ -146,13 +146,13 @@ class BaseWindow(SiriusMainWindow):
 
         cb_scrntype = PyDMEnumComboBox(self, scrn_device.substitute(
             prefix=self.prefix, propty='ScrnType-Sel'))
-        cb_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        cb_scrntype.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed)
         cb_scrntype.setStyleSheet("min-width:4.5em;max-width:4.5em;")
 
         lb_scrntype = SiriusLabel(self, scrn_device.substitute(
             prefix=self.prefix, propty='ScrnType-Sts'))
         lb_scrntype.setStyleSheet("min-width:4.5em; max-width:4.5em;")
-        lb_scrntype.setAlignment(Qt.AlignCenter)
+        lb_scrntype.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         led_scrntype = PyDMLed(
             self, scrn_device.substitute(
@@ -164,7 +164,7 @@ class BaseWindow(SiriusMainWindow):
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(cb_scrn, 1, 1)
         lay.addWidget(led_camenbl, 1, 2)
         lay.addWidget(cb_scrntype, 1, 3)
@@ -175,10 +175,10 @@ class BaseWindow(SiriusMainWindow):
     def _create_corr_summwidget(self, corr):
         """Create and return a corrector detail widget."""
         wid = QWidget()
-        wid.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        wid.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         propty_sp = 'Current-SP' if corr.sec == 'LI' else 'Kick-SP'
         propty_mon = propty_sp.replace('SP', 'Mon')
@@ -218,6 +218,6 @@ class BaseWindow(SiriusMainWindow):
         lb_kick.showUnits = True
         lb_kick.precisionFromPV = False
         lb_kick.precision = 1
-        lb_kick.setAlignment(Qt.AlignCenter)
+        lb_kick.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lb_kick, 1, 4)
         return wid

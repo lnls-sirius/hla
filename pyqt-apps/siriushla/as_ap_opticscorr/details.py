@@ -35,7 +35,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         lay = QGridLayout()
 
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
-                                  alignment=Qt.AlignCenter)
+                                  alignment=Qt.AlignmentFlag.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
             self, ioc_prefix.substitute(propty='ConfigName-SP'))
         self.pydmlinedit_configname.setStyleSheet(
@@ -48,16 +48,16 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         lay.addWidget(self.pydmlinedit_configname, 11, self._nfam//2)
         lay.addWidget(self.pydmlabel_configname, 11, self._nfam//2+1)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 12, 1)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 12, 1)
 
         label_matrix = QLabel('<h4>Matrix</h4>', self,
-                              alignment=Qt.AlignCenter)
+                              alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_matrix = SiriusWaveformTable(
             self, ioc_prefix.substitute(propty='RespMat-Mon'))
         self.table_matrix.setObjectName('matrix')
         self.table_matrix.setEnabled(False)
-        self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.table_matrix.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.table_matrix.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_matrix.verticalHeader().setStyleSheet(
             """min-width:1.5em; max-width:1.5em;""")
         self.table_matrix.horizontalHeader().setStyleSheet(
@@ -75,16 +75,16 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QHeaderView.Stretch)
         self.table_matrix.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_matrix.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                        QSzPlcy.Preferred)
+        self.table_matrix.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                        QSzPlcy.Policy.Preferred)
 
         lay.addWidget(label_matrix, 13, 1, 1, self._nfam)
         lay.addWidget(self.table_matrix, 14, 1, 1, self._nfam)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 15, 1)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 15, 1)
 
         label_nomintstrength = QLabel(
             '<h4>Nominal '+self._intstrength+'s</h4>', self,
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_nomintstrength = SiriusWaveformTable(
             self, ioc_prefix.substitute(
                 propty='Nominal'+self._intstrength+'-Mon'))
@@ -95,9 +95,9 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table_nomintstrength.setVerticalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomintstrength.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomintstrength.verticalHeader().setStyleSheet(
             """min-width:1.5em; max-width:1.5em;""")
         self.table_nomintstrength.horizontalHeader().setStyleSheet(
@@ -112,19 +112,19 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength.setColumnCount(self._nfam)
         self.table_nomintstrength.rowHeaderLabels = [self._intstrength]
         self.table_nomintstrength.columnHeaderLabels = self._fams
-        self.table_nomintstrength.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                                QSzPlcy.Preferred)
+        self.table_nomintstrength.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                                QSzPlcy.Policy.Preferred)
 
         lay.addWidget(label_nomintstrength, 16, 1, 1, self._nfam)
         lay.addWidget(self.table_nomintstrength, 17, 1, 1, self._nfam)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 18, 1)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed), 18, 1)
 
         if self._opticsparam == 'Chrom':
             label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,
-                                    alignment=Qt.AlignCenter)
+                                    alignment=Qt.AlignmentFlag.AlignCenter)
             self.pydmlabel_nomchrom = SiriusLabel(
                 self, ioc_prefix.substitute(propty='NominalChrom-Mon'))
-            self.pydmlabel_nomchrom.setAlignment(Qt.AlignCenter)
+            self.pydmlabel_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
             lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
             lay.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, self._nfam)

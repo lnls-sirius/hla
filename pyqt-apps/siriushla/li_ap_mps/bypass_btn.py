@@ -14,8 +14,8 @@ class BypassBtn(PyDMPushButton):
             # Bypass
             self.setText('Bypass')
             pal = self.palette()
-            pal.setColor(QPalette.Button, QColor('blue'))
-            pal.setColor(QPalette.ButtonText, QColor('white'))
+            pal.setColor(QPalette.ColorRole.Button, QColor('blue'))
+            pal.setColor(QPalette.ColorRole.ButtonText, QColor('white'))
             self.setPalette(pal)
             self.setChecked(True)
             self.pressValue = 0
@@ -23,8 +23,8 @@ class BypassBtn(PyDMPushButton):
             #Active
             self.setText('Active')
             pal = self.palette()
-            pal.setColor(QPalette.Button, QColor('#efefef'))
-            pal.setColor(QPalette.ButtonText, QColor('black'))
+            pal.setColor(QPalette.ColorRole.Button, QColor('#efefef'))
+            pal.setColor(QPalette.ColorRole.ButtonText, QColor('black'))
             self.setPalette(pal)
             self.setChecked(False)
             self.pressValue = 1

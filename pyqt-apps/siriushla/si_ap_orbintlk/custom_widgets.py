@@ -27,7 +27,7 @@ class RefOrbComboBox(QComboBox):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.setSizePolicy(QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         self.setMaxVisibleItems(10)
         self._choose_reforb = [
             'Zero', 'ref_orb', 'bba_orb', 'other...']
@@ -79,7 +79,7 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
 
     def get_widgets(self):
         widgets = list()
-        sz_polc = QSzPlcy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        sz_polc = QSzPlcy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         for idx, nick in enumerate(self.BPM_NICKNAMES):
             wid = QWidget(self.parent())
             tooltip = '{0}; Pos = {1:5.1f} m'.format(
@@ -205,17 +205,17 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         self.setObjectName('SIApp')
 
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
-        title = QLabel(self.title, self, alignment=Qt.AlignCenter)
+        title = QLabel(self.title, self, alignment=Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("font-weight: bold;")
-        title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        title.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
 
         # limit setpoints
         self._wid_lims = QGroupBox('Select Thresholds: ')
         lay_lims = QGridLayout(self._wid_lims)
-        lay_lims.setAlignment(Qt.AlignTop)
+        lay_lims.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         row = 0
         if 'sum' in self.metric:
@@ -247,16 +247,16 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._spin_scl.setMaximum(+100.00)
             lay_lims.addWidget(self._spin_scl, row, 1)
         else:
-            self._head_value = QLabel('Value', self, alignment=Qt.AlignCenter)
+            self._head_value = QLabel('Value', self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay_lims.addWidget(self._head_value, 0, 1)
-            self._head_send = QLabel('Apply', self, alignment=Qt.AlignCenter)
+            self._head_send = QLabel('Apply', self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay_lims.addWidget(self._head_send, 0, 2)
 
             self._spins, self._checks = dict(), dict()
             for lsp in self.lim_sp:
                 row += 1
                 text = lsp.split('-')[0].split('Lim')[0]+' [nm]: '
-                label = QLabel(text, self, alignment=Qt.AlignRight)
+                label = QLabel(text, self, alignment=Qt.AlignmentFlag.AlignRight)
                 lay_lims.addWidget(label, row, 0)
                 spin = QSpinBox(self)
                 self._spins[lsp] = spin
@@ -266,7 +266,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
                 lay_lims.addWidget(spin, row, 1)
                 check = QCheckBox(self)
                 self._checks[lsp] = check
-                lay_lims.addWidget(check, row, 2, alignment=Qt.AlignCenter)
+                lay_lims.addWidget(check, row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
             row += 1
             self._label_reforb = QLabel(
@@ -407,13 +407,13 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
     def __init__(self, parent=None, prefix='', propty=''):
         """Init."""
         BaseObject.__init__(self, prefix)
-        QWidget.__init__(self, parent)
+        QDialog.__init__(self, parent)
         title = 'Monitored Devices'
         self.setObjectName('SIApp')
         self.setWindowTitle(title)
 
         self._desc = QLabel('<h4>'+title+'</h4>')
-        self._desc.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self._desc.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
         self._label = SiriusLabel(
             self, self.hlprefix.substitute(propty=propty))
         self._label.displayFormat = SiriusLabel.DisplayFormat.String
@@ -421,7 +421,7 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
         scarea = QScrollArea(self)
         scarea.setStyleSheet(
             '.QScrollArea{min-height: 30em;}')
-        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setSizeAdjustPolicy(scarea.SizeAdjustPolicy.AdjustToContents)
         scarea.setWidgetResizable(True)
 
         scr_ar_wid = QWidget()

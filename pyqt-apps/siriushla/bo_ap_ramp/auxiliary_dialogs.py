@@ -80,7 +80,7 @@ class InsertNormalizedConfig(SiriusDialog):
         lay = QVBoxLayout()
         lay.addWidget(
             QLabel('<h4>Insert a Normalized Configuration</h4>', self),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.rb_interp)
         lay.addWidget(self.rb_confsrv)
         lay.addWidget(self.rb_create)
@@ -150,7 +150,7 @@ class DuplicateNormConfig(SiriusDialog):
         lay.setVerticalSpacing(15)
         lay.addWidget(
             QLabel('<h4>Duplicate Normalized Configuration</h4>', self),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(
             QLabel('Choose a label and a time to insert\n'
                    'the new configuration:', self), 1, 0, 1, 2)
@@ -198,7 +198,7 @@ class DeleteNormalizedConfig(SiriusDialog):
 
         self.l_configid = QLabel('', self)
         self.l_configid.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.Expanding)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Expanding)
         self.sb_confignumber.setValue(self.selected_row+1)
         self._searchConfigByIndex(self.selected_row+1)
 
@@ -211,7 +211,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         glay.setVerticalSpacing(15)
         glay.setHorizontalSpacing(10)
         label = QLabel('<h4>Delete a Normalized Configuration</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         glay.addWidget(label, 0, 0, 1, 2)
         glay.addWidget(self.sb_confignumber, 2, 0)
         glay.addWidget(self.l_configid, 2, 1)
@@ -265,7 +265,7 @@ class OpticsAdjustSettings(SiriusDialog):
         self.bt_apply.setDefault(False)
         hlay_apply = QHBoxLayout()
         hlay_apply.addItem(
-            QSpacerItem(20, 60, QSzPlcy.Expanding, QSzPlcy.Ignored))
+            QSpacerItem(20, 60, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored))
         hlay_apply.addWidget(self.bt_apply)
 
         tabs = QTabWidget(self)
@@ -279,13 +279,13 @@ class OpticsAdjustSettings(SiriusDialog):
 
     def _setupTuneSettings(self):
         l_tuneconfig = QLabel('<h3>Tune Variation Config</h3>', self)
-        l_tuneconfig.setAlignment(Qt.AlignCenter)
+        l_tuneconfig.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.le_tuneconfig = _ConfigLineEdit(
             parent=self, config_type='bo_tunecorr_params')
         self.le_tuneconfig.textChanged.connect(self._showTuneConfigData)
 
         label_tunemat = QLabel('<h4>Matrix</h4>', self)
-        label_tunemat.setAlignment(Qt.AlignCenter)
+        label_tunemat.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_tunemat = QTableWidget(self)
         self.table_tunemat.setObjectName('tunemat')
         self.table_tunemat.setStyleSheet("""
@@ -293,7 +293,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 6em; max-height: 6em;}""")
-        self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_tunemat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_tunemat.setRowCount(2)
         self.table_tunemat.setColumnCount(2)
@@ -307,11 +307,11 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_tunemat.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_tunemat.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                         QSzPlcy.Preferred)
+        self.table_tunemat.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                         QSzPlcy.Policy.Preferred)
 
         label_nomKL = QLabel('<h4>Nominal KL</h4>')
-        label_nomKL.setAlignment(Qt.AlignCenter)
+        label_nomKL.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_nomKL = QTableWidget(self)
         self.table_nomKL.setObjectName('nomKL')
         self.table_nomKL.setStyleSheet("""
@@ -319,7 +319,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 4em; max-height: 4em;}""")
-        self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomKL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomKL.setRowCount(1)
         self.table_nomKL.setColumnCount(2)
@@ -333,31 +333,31 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_nomKL.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_nomKL.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                       QSzPlcy.Preferred)
+        self.table_nomKL.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                       QSzPlcy.Policy.Preferred)
 
         lay = QVBoxLayout()
         lay.addWidget(l_tuneconfig)
         lay.addWidget(self.le_tuneconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding))
         lay.addWidget(label_tunemat)
         lay.addWidget(self.table_tunemat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding))
         lay.addWidget(label_nomKL)
         lay.addWidget(self.table_nomKL)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Expanding))
 
         return lay
 
     def _setupChromSettings(self):
         l_chromconfig = QLabel('<h3>Chromaticity Variation Config</h3>', self)
-        l_chromconfig.setAlignment(Qt.AlignCenter)
+        l_chromconfig.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.le_chromconfig = _ConfigLineEdit(
             parent=self, config_type='bo_chromcorr_params')
         self.le_chromconfig.textChanged.connect(self._showChromConfigData)
 
         l_chrommat = QLabel('<h4>Matrix</h4>', self)
-        l_chrommat.setAlignment(Qt.AlignCenter)
+        l_chrommat.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_chrommat = QTableWidget(self)
         self.table_chrommat.setObjectName('chrommat')
         self.table_chrommat.setStyleSheet("""
@@ -365,7 +365,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 6em; max-height: 6em;}""")
-        self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_chrommat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_chrommat.setRowCount(2)
         self.table_chrommat.setColumnCount(2)
@@ -379,11 +379,11 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_chrommat.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_chrommat.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                          QSzPlcy.Preferred)
+        self.table_chrommat.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                          QSzPlcy.Policy.Preferred)
 
         l_nomSL = QLabel('<h4>Nominal SL</h4>')
-        l_nomSL.setAlignment(Qt.AlignCenter)
+        l_nomSL.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.table_nomSL = QTableWidget(self)
         self.table_nomSL.setObjectName('nomSL')
         self.table_nomSL.setStyleSheet("""
@@ -391,7 +391,7 @@ class OpticsAdjustSettings(SiriusDialog):
                 background-color: #efebe7;
                 min-width: 22.14em;
                 min-height: 4em; max-height: 4em;}""")
-        self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table_nomSL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomSL.setRowCount(1)
         self.table_nomSL.setColumnCount(2)
@@ -405,24 +405,24 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_nomSL.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_nomSL.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                       QSzPlcy.Preferred)
+        self.table_nomSL.setSizePolicy(QSzPlcy.Policy.MinimumExpanding,
+                                       QSzPlcy.Policy.Preferred)
 
         l_nomchrom = QLabel('<h4>Nominal Chrom</h4>')
-        l_nomchrom.setAlignment(Qt.AlignCenter)
+        l_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_nomchrom = QLabel()
-        self.label_nomchrom.setAlignment(Qt.AlignCenter)
+        self.label_nomchrom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         lay = QVBoxLayout()
         lay.addWidget(l_chromconfig)
         lay.addWidget(self.le_chromconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding))
         lay.addWidget(l_chrommat)
         lay.addWidget(self.table_chrommat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding))
         lay.addWidget(l_nomSL)
         lay.addWidget(self.table_nomSL)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Expanding))
         lay.addWidget(l_nomchrom)
         lay.addWidget(self.label_nomchrom)
 
@@ -442,14 +442,14 @@ class OpticsAdjustSettings(SiriusDialog):
             self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
             self.table_tunemat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
             self.table_tunemat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
-            self.table_tunemat.item(0, 0).setFlags(Qt.ItemIsEnabled)
-            self.table_tunemat.item(0, 1).setFlags(Qt.ItemIsEnabled)
-            self.table_tunemat.item(1, 0).setFlags(Qt.ItemIsEnabled)
-            self.table_tunemat.item(1, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_tunemat.item(0, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_tunemat.item(0, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_tunemat.item(1, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_tunemat.item(1, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
             self.table_nomKL.setItem(0, 0, QTableWidgetItem(str(nomKL[0])))
             self.table_nomKL.setItem(0, 1, QTableWidgetItem(str(nomKL[1])))
-            self.table_nomKL.item(0, 0).setFlags(Qt.ItemIsEnabled)
-            self.table_nomKL.item(0, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_nomKL.item(0, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_nomKL.item(0, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
 
     def _showChromConfigData(self):
         try:
@@ -466,14 +466,14 @@ class OpticsAdjustSettings(SiriusDialog):
             self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
             self.table_chrommat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
             self.table_chrommat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
-            self.table_chrommat.item(0, 0).setFlags(Qt.ItemIsEnabled)
-            self.table_chrommat.item(0, 1).setFlags(Qt.ItemIsEnabled)
-            self.table_chrommat.item(1, 0).setFlags(Qt.ItemIsEnabled)
-            self.table_chrommat.item(1, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_chrommat.item(0, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_chrommat.item(0, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_chrommat.item(1, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_chrommat.item(1, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
             self.table_nomSL.setItem(0, 0, QTableWidgetItem(str(nomSL[0])))
             self.table_nomSL.setItem(0, 1, QTableWidgetItem(str(nomSL[1])))
-            self.table_nomSL.item(0, 0).setFlags(Qt.ItemIsEnabled)
-            self.table_nomSL.item(0, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_nomSL.item(0, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_nomSL.item(0, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
             self.label_nomchrom.setText(str(nomChrom))
 
     def _emitSettings(self):
@@ -500,22 +500,22 @@ class ChoosePSToPlot(SiriusDialog):
     def _setupUi(self):
         self.quads = QWidget(self)
         vlay_quad = QVBoxLayout()
-        vlay_quad.setAlignment(Qt.AlignTop)
+        vlay_quad.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.quads.setLayout(vlay_quad)
 
         self.sexts = QWidget(self)
         vlay_sext = QVBoxLayout()
-        vlay_sext.setAlignment(Qt.AlignTop)
+        vlay_sext.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.sexts.setLayout(vlay_sext)
 
         self.chs = QWidget(self)
         vlay_ch = QVBoxLayout()
-        vlay_ch.setAlignment(Qt.AlignTop)
+        vlay_ch.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.chs.setLayout(vlay_ch)
 
         self.cvs = QWidget(self)
         vlay_cv = QVBoxLayout()
-        vlay_cv.setAlignment(Qt.AlignTop)
+        vlay_cv.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.cvs.setLayout(vlay_cv)
 
         self.all_quad_sel = QCheckBox('All quadrupoles', self.quads)
@@ -602,7 +602,7 @@ class ShowCorrectorKicks(SiriusDialog):
             self.kicks[dev] = _np.array([corr2kicks[n] for n in names])
 
         label_ch = QLabel('<h3>Horizontal</h3>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
         self.graph_ch = _GraphKicks(
             parent=self,
             xdata=_np.array(self.consts.ch_pos),
@@ -612,7 +612,7 @@ class ShowCorrectorKicks(SiriusDialog):
             color='blue')
 
         label_cv = QLabel('<h3>Vertical</h3>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
         self.graph_cv = _GraphKicks(
             parent=self,
             xdata=_np.array(self.consts.cv_pos),
@@ -622,18 +622,18 @@ class ShowCorrectorKicks(SiriusDialog):
             color='red')
 
         lb_stats = QLabel('<h4>Statistics: </h4>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
         self.lb_statsdata = QLabel(
             'X: {:7.3f} ± {:7.3f} urad\n'
             'Y: {:7.3f} ± {:7.3f} urad'.format(
                 _np.mean(self.kicks['CH']), _np.std(self.kicks['CH']),
                 _np.mean(self.kicks['CV']), _np.std(self.kicks['CV'])),
-            self,  alignment=Qt.AlignCenter)
+            self,  alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
         lay.addWidget(QLabel('<h3>'+str(self.time)+'</h3>', self,
-                             alignment=Qt.AlignCenter))
+                             alignment=Qt.AlignmentFlag.AlignCenter))
         lay.addWidget(label_ch)
         lay.addWidget(self.graph_ch)
         lay.addWidget(label_cv)

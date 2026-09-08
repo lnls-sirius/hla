@@ -111,7 +111,7 @@ class RadTotDoseMonitor(QWidget):
         self._setupUi()
 
         # define focus policy
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         # set initial size
         if self.app.primaryScreen().geometry().width() >= 1920:
@@ -120,7 +120,7 @@ class RadTotDoseMonitor(QWidget):
     def _setupUi(self):
         # timeplot
         self.title_plot = QLabel(
-            'Total Dose Rate (γ + n) [µSv/h]', self, alignment=Qt.AlignCenter)
+            'Total Dose Rate (γ + n) [µSv/h]', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title_plot.setStyleSheet(
             'QLabel{font-size: 52pt; font-weight: bold;}')
 
@@ -160,7 +160,7 @@ class RadTotDoseMonitor(QWidget):
 
         # panel
         self.title_grid = QLabel(
-            'Integrated Dose in 4h [µSv]', self, alignment=Qt.AlignCenter)
+            'Integrated Dose in 4h [µSv]', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title_grid.setStyleSheet(
             'QLabel{font-size: 52pt; font-weight: bold;}')
         self.lb_warn = QLabel('Restart\nwindow')
@@ -201,8 +201,8 @@ class RadTotDoseMonitor(QWidget):
             cbx.stateChanged.connect(curve.setVisible)
             cbx.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
             pal = cbx.palette()
-            pal.setColor(QPalette.Base, coloro)
-            pal.setColor(QPalette.Text, Qt.white)
+            pal.setColor(QPalette.ColorRole.Window, coloro)
+            pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
             cbx.setPalette(pal)
             self._cb_show[mon] = cbx
 
@@ -216,7 +216,7 @@ class RadTotDoseMonitor(QWidget):
             frame.add_widget(cbx)
             frame.add_widget(lbl)
 
-            desc = QLabel(local, self, alignment=Qt.AlignCenter)
+            desc = QLabel(local, self, alignment=Qt.AlignmentFlag.AlignCenter)
             desc.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
             desc.setStyleSheet(
                 'QLabel{background-color:black; color:white;font-size:26pt;}')
@@ -240,7 +240,7 @@ class RadTotDoseMonitor(QWidget):
         laygrid.setColumnStretch(2, 1)
 
         self.timeplot.addYChannel(
-            'Reference', color='black', lineWidth=6, lineStyle=Qt.DashLine)
+            'Reference', color='black', lineWidth=6, lineStyle=Qt.PenStyle.DashLine)
         self.refline = self.timeplot.curveAtIndex(-1)
         self._fill_refline()
 

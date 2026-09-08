@@ -22,7 +22,7 @@ class DetailWidgetFactory:
                 scroll.setWidget(scrwidget)
                 scroll.setWidgetResizable(True)
                 scroll.setSizeAdjustPolicy(
-                    QScrollArea.AdjustToContentsOnFirstShow)
+                    QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
                 n_lines = int(len(psname)/4) or 1
                 for idx, name in enumerate(psname):
                     scrwidget.layout.addWidget(

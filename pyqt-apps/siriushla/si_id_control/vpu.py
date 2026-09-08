@@ -96,16 +96,16 @@ class VPUControlWindow(IDCommonControlWindow):
         group.setLayout(lay)
 
         lay.addWidget(
-            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(
-            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         lay.addWidget(
-            QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignCenter), 0, 3)
+            QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
 
         row = 1
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
@@ -125,7 +125,7 @@ class VPUControlWindow(IDCommonControlWindow):
     def _statusWidget(self):
         gbox = QGroupBox('Status')
         gbox.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+            QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         lay = QGridLayout(gbox)
         lay.setVerticalSpacing(15)
         row = 0
@@ -207,7 +207,7 @@ class VPUControlWindow(IDCommonControlWindow):
             title = status.split('-')[0]
             lbl = QLabel(
                 title, self,
-                alignment=Qt.AlignRight | Qt.AlignVCenter)
+                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             read = SiriusLedAlert(self, pvname)
             if title == 'Warning':
                 read.onColor = SiriusLedAlert.Yellow
@@ -220,16 +220,16 @@ class VPUControlWindow(IDCommonControlWindow):
                 pbt, StatusDetailDialog, pvname=pvname, parent=self,
                 labels=labels, section="ID", title=f'{title} Detailed')
             alay.addWidget(lbl, arow, 0)
-            alay.addWidget(read, arow, 1, alignment=Qt.AlignRight)
-            alay.addWidget(pbt, arow, 2, alignment=Qt.AlignLeft)
+            alay.addWidget(read, arow, 1, alignment=Qt.AlignmentFlag.AlignRight)
+            alay.addWidget(pbt, arow, 2, alignment=Qt.AlignmentFlag.AlignLeft)
             arow += 1
         pvname = self.dev_pref.substitute(propty='Warning-Mon')
         power_off_lbl = QLabel('Power Off')
         power_off_led = SiriusLedAlert(self, init_channel=pvname, bit=25)
         power_off_led.onColor = SiriusLedAlert.Yellow
         alay.addWidget(power_off_lbl, arow, 0)
-        alay.addWidget(power_off_led, arow, 1, alignment=Qt.AlignRight)
-        lay.addLayout(alay, 1, 0, 1, 2, alignment=Qt.AlignHCenter)
+        alay.addWidget(power_off_led, arow, 1, alignment=Qt.AlignmentFlag.AlignRight)
+        lay.addLayout(alay, 1, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         row += 1
 
         status2labels = {
@@ -262,7 +262,7 @@ class VPUControlWindow(IDCommonControlWindow):
         for status, labels in status2labels.items():
             pvname = self.dev_pref.substitute(propty=status)
             vlay = QGridLayout()
-            lbl = QLabel('<h4>'+status+'</h4>', self, alignment=Qt.AlignCenter)
+            lbl = QLabel('<h4>'+status+'</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
             vlay.addWidget(lbl, 0, 0, 1, 2)
             for idx, lbl in enumerate(labels):
                 irow = idx + 1
@@ -273,7 +273,7 @@ class VPUControlWindow(IDCommonControlWindow):
                     read.onColor = SiriusLedState.Yellow
                 vlay.addWidget(read, irow, 0)
                 vlay.addWidget(QLabel(lbl), irow, 1)
-            lay.addLayout(vlay, row, vcol, alignment=Qt.AlignTop)
+            lay.addLayout(vlay, row, vcol, alignment=Qt.AlignmentFlag.AlignTop)
             vcol += 1
 
         return gbox
@@ -286,14 +286,14 @@ class VPUControlWindow(IDCommonControlWindow):
         scangroup.setLayout(scanlay)
 
         scanlay.addWidget(
-            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         scanlay.addWidget(
-            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
 
         row = 1
         for title, pv_info in self.SCAN_CONTROL_PVS.items():
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             scanlay.addWidget(label, row, 0)
 
@@ -369,13 +369,13 @@ class VPUControlWindow(IDCommonControlWindow):
             lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.setMinimumWidth(125)
             lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, col, 1, 1)
 
     def _createLedState(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["StateMon"])
         led = SiriusLedState(self, init_channel=pvname)
-        lay.addWidget(led, row, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(led, row, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
     def _createCmdBtns(self, pv_info, lay, row):
         btn = PyDMPushButton(self, label='', icon=qta.icon(pv_info["icon"]))

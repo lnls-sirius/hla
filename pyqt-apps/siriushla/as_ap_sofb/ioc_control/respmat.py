@@ -228,7 +228,7 @@ class RespMatWidget(BaseWidget):
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
         lbl = SiriusLabel(
             meas_wid, self.devpref.substitute(propty='MeasRespMat-Mon'))
-        lbl.setAlignment(Qt.AlignCenter)
+        lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbl = QHBoxLayout()
         hbl.setSpacing(8)
         meas_lay.addLayout(hbl)
@@ -268,7 +268,7 @@ class RespMatWidget(BaseWidget):
         svld_lay = QGridLayout(svld_wid)
 
         lbl = QLabel('Load:', svld_wid)
-        svld_lay.addWidget(lbl, 0, 0, alignment=Qt.AlignRight)
+        svld_lay.addWidget(lbl, 0, 0, alignment=Qt.AlignmentFlag.AlignRight)
         pbtn = CAPushButton('', svld_wid)
         pbtn.rules = self._enblrule
         pbtn.setIcon(qta.icon('mdi.file-upload-outline'))
@@ -283,7 +283,7 @@ class RespMatWidget(BaseWidget):
         svld_lay.addWidget(pbtn, 0, 2)
 
         lbl = QLabel('Save:', svld_wid)
-        svld_lay.addWidget(lbl, 0, 3, alignment=Qt.AlignRight)
+        svld_lay.addWidget(lbl, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
         pbtn = QPushButton('', svld_wid)
         pbtn.setIcon(qta.icon('mdi.file-download-outline'))
         pbtn.setToolTip('Save RespMat to file')

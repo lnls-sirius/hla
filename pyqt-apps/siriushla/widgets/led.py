@@ -587,7 +587,7 @@ class _DiffStatus(SiriusDialog):
                              type(self._current), type(self._desired))
 
         lay = QGridLayout(self)
-        self._label = QLabel(self._text, self, alignment=Qt.AlignCenter)
+        self._label = QLabel(self._text, self, alignment=Qt.AlignmentFlag.AlignCenter)
         self._label.setStyleSheet("min-width: 20em;")
         lay.addWidget(self._label, 0, 0, 1, 3)
         if self._plot:

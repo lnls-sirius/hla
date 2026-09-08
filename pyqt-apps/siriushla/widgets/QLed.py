@@ -5,30 +5,27 @@ https://pypi.python.org/pypi/QLed or https://github.com/jazzycamel/QLed.
 """
 
 import os as _os
+from enum import Enum
 from colorsys import rgb_to_hls, hls_to_rgb
 from qtpy.QtWidgets import QApplication, QWidget, QGridLayout, \
                             QStyleOption, QFrame
 from qtpy.QtGui import QPainter, QColor
 from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
-                        QRectF, Property, Q_ENUMS, QFile
+                        QRectF, Property, QEnum, QFile
 from qtpy.QtSvg import QSvgRenderer
 
 
-class ShapeMap:
-    """Shape enum mapping class."""
-
-    Circle = 1
-    Round = 2
-    Square = 3
-    Triangle = 4
-    Rectangle = 5
-
-
-class QLed(QFrame, ShapeMap):
+class QLed(QFrame):
     """QLed class."""
 
-    ShapeMap = ShapeMap
-    Q_ENUMS(ShapeMap)
+    class ShapeMap(Enum):
+        """Shape enum mapping class."""
+
+        Circle = 1
+        Round = 2
+        Square = 3
+        Triangle = 4
+        Rectangle = 5
 
     abspath = _os.path.abspath(_os.path.dirname(__file__))
     shapesdict = dict()
@@ -142,7 +139,7 @@ class QLed(QFrame, ShapeMap):
 
     def setShape(self, newShape):
         """Shape property setter."""
-        self.m_shape = newShape
+        self.m_shape = self.ShapeMap(newShape)
         self.update()
 
     shape = Property(ShapeMap, getShape, setShape)
@@ -189,7 +186,7 @@ class QLed(QFrame, ShapeMap):
 
         h = option.rect.height()
         w = option.rect.width()
-        if self.m_shape in (self.Triangle, self.Round, self.Rectangle):
+        if self.m_shape in (self.ShapeMap.Triangle, self.ShapeMap.Round, self.ShapeMap.Rectangle):
             aspect = (4/3.0) if self.m_shape == self.ShapeMap.Triangle \
                 else 2.0 if self.m_shape == self.ShapeMap.Round \
                 else (1/2.0)
@@ -295,7 +292,7 @@ if __name__ == "__main__":
                     led.setOnColor(colorsdict[color])
                     led.setOffColor(QColor(90, 90, 90))
                     led.setShape(shape)
-                    _l.addWidget(led, row, col, Qt.AlignCenter)
+                    _l.addWidget(led, row, col, Qt.AlignmentFlag.AlignCenter)
                     self.leds.append(led)
 
             self.toggleLeds()

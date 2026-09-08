@@ -23,7 +23,7 @@ class SiriusMonitor(QWidget):
 
     def _setupUi(self):
         label = QLabel('<h3>Sirius Monitor</h3>',
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet('max-height:1.29em;')
 
         self.wid_asmon = PSMonitor(
@@ -55,6 +55,6 @@ class SiriusMonitor(QWidget):
         layout = QGridLayout(self)
         layout.setHorizontalSpacing(12)
         layout.addWidget(label, 0, 0, 1, 3)
-        layout.addWidget(self.wid_asmon, 1, 0, alignment=Qt.AlignTop)
-        layout.addWidget(self.wid_timon, 1, 1, alignment=Qt.AlignTop)
-        layout.addWidget(self.wid_mpsmon, 1, 2, alignment=Qt.AlignTop)
+        layout.addWidget(self.wid_asmon, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(self.wid_timon, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
+        layout.addWidget(self.wid_mpsmon, 1, 2, alignment=Qt.AlignmentFlag.AlignTop)

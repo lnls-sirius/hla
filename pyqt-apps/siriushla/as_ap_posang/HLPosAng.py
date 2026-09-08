@@ -88,8 +88,8 @@ class PosAngCorr(SiriusMainWindow):
             pvname_injmode + '", "trigger": true}]}]')
 
         self._setupUi()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self._ask_message = QMessageBox(self)
         self._ask_message.setWindowTitle('Message')
@@ -225,7 +225,7 @@ class PosAngCorr(SiriusMainWindow):
         lay.setVerticalSpacing(12)
         lay.setHorizontalSpacing(12)
         lay.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
+            QSpacerItem(10, 0, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), 0, 0)
         lay.addWidget(label_pos, 0, 1)
         lay.addWidget(sb_deltapos, 0, 2)
         lay.addWidget(lb_deltapos, 0, 3)
@@ -233,7 +233,7 @@ class PosAngCorr(SiriusMainWindow):
         lay.addWidget(sb_deltaang, 1, 2)
         lay.addWidget(lb_deltaang, 1, 3)
         lay.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 4)
+            QSpacerItem(10, 0, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), 0, 4)
         return lay
 
     def _setupCorrectorsLayout(self):
@@ -267,7 +267,7 @@ class PosAngCorr(SiriusMainWindow):
             lb_name = QLabel(corr, self)
             le_sp = PyDMSpinboxScrollbar(
                 self, corr.substitute(prefix=self._prefix, propty='Kick-SP'))
-            le_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_sp.spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             le_sp.scrollbar.limitsFromPV = True
             lb_rb = SiriusLabel(self, corr.substitute(
                 prefix=self._prefix, propty='Kick-RB'), keep_unit=True)
@@ -276,21 +276,21 @@ class PosAngCorr(SiriusMainWindow):
                 propty='RefKick'+corrid+'-Mon'), keep_unit=True)
             lb_ref.showUnits = True
 
-            lay.addWidget(pbt, idx, 0, alignment=Qt.AlignTop)
+            lay.addWidget(pbt, idx, 0, alignment=Qt.AlignmentFlag.AlignTop)
             lay.addWidget(
-                lb_name, idx, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
-            lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignTop)
-            lay.addWidget(lb_rb, idx, 3, alignment=Qt.AlignTop)
-            lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignTop)
+                lb_name, idx, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(lb_rb, idx, 3, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignmentFlag.AlignTop)
             idx += 1
 
         lay.addItem(
-            QSpacerItem(0, 15, QSzPlcy.Preferred, QSzPlcy.Fixed), idx, 0)
+            QSpacerItem(0, 15, QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed), idx, 0)
 
         kckr = 'BO-01D:PU-InjKckr' if self._tl == 'TB' \
             else 'SI-01SA:PU-InjNLKckr'
         self._kckr_name = _PVName(kckr)
-        lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(0, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         pb_kckr = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         pb_kckr.setObjectName('pb')
         pb_kckr.setStyleSheet("""
@@ -312,16 +312,16 @@ class PosAngCorr(SiriusMainWindow):
         lb_kckr_mn = SiriusLabel(self, self._kckr_name.substitute(
             prefix=self._prefix, propty='Kick-Mon'), keep_unit=True)
         lb_kckr_mn.showUnits = True
-        lay.addWidget(pb_kckr, idx+2, 0, alignment=Qt.AlignTop)
+        lay.addWidget(pb_kckr, idx+2, 0, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addWidget(
-            lb_kckr_name, idx+2, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
-        lay.addWidget(lb_kckr_sp, idx+2, 2, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_rb, idx+2, 3, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_mn, idx+2, 4, alignment=Qt.AlignTop)
+            lb_kckr_name, idx+2, 1, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(lb_kckr_sp, idx+2, 2, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(lb_kckr_rb, idx+2, 3, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(lb_kckr_mn, idx+2, 4, alignment=Qt.AlignmentFlag.AlignTop)
 
         if self._tl == 'TB':
             pref = self._prefix + ('-' if self._prefix else '')
-            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
             label_voltsp = QLabel('<h4>Amplitude-SP</h4>', self)
             label_voltrb = QLabel('<h4>Amplitude-RB</h4>', self)
@@ -333,7 +333,7 @@ class PosAngCorr(SiriusMainWindow):
                 self, pref+'LA-RF:LLRF:KLY2:SET_AMP')
             le_kly2_sp.spinbox.precisionFromPV = False
             le_kly2_sp.spinbox.precision = 2
-            le_kly2_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_kly2_sp.spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             le_kly2_sp.scrollbar.limitsFromPV = True
             lb_kly2_rb = SiriusLabel(
                 self, pref+'LA-RF:LLRF:KLY2:GET_AMP', keep_unit=True)
@@ -341,9 +341,9 @@ class PosAngCorr(SiriusMainWindow):
             lb_kly2_rb.precision = 2
             lb_kly2_rb.showUnits = True
             lay.addWidget(lb_kly2_name, idx+4, 1,
-                          alignment=Qt.AlignLeft | Qt.AlignTop)
-            lay.addWidget(le_kly2_sp, idx+4, 2, alignment=Qt.AlignTop)
-            lay.addWidget(lb_kly2_rb, idx+4, 3, alignment=Qt.AlignTop)
+                          alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(le_kly2_sp, idx+4, 2, alignment=Qt.AlignmentFlag.AlignTop)
+            lay.addWidget(lb_kly2_rb, idx+4, 3, alignment=Qt.AlignmentFlag.AlignTop)
         return lay
 
     def _setupStatusLayout(self):
@@ -424,14 +424,14 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
     def _setupUi(self):
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
-                                  alignment=Qt.AlignCenter)
+                                  alignment=Qt.AlignmentFlag.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
             self, self.posang_prefix.substitute(propty='ConfigName-SP'))
         self.pydmlabel_configname = SiriusLabel(
             self, self.posang_prefix.substitute(propty='ConfigName-RB'))
 
         label_matrix_x = QLabel('<h4>Matrix X</h4>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_matrix_x = SiriusWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatX-Mon'))
         self.table_matrix_x.setObjectName('table_matrix_x')
@@ -449,12 +449,12 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QHeaderView.Stretch)
         self.table_matrix_x.verticalHeader().setVisible(False)
         self.table_matrix_x.setSizePolicy(
-           QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+           QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
 
         columns = 2 if self._tl == 'TB' else 4
         width = 12 if self._tl == 'TB' else 24
         label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
-                                alignment=Qt.AlignCenter)
+                                alignment=Qt.AlignmentFlag.AlignCenter)
         self.table_matrix_y = SiriusWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatY-Mon'))
         self.table_matrix_y.setObjectName('table_matrix_y')
@@ -473,27 +473,27 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             QHeaderView.Stretch)
         self.table_matrix_y.verticalHeader().setVisible(False)
         self.table_matrix_y.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
 
         self.bt_apply = QPushButton('Ok', self)
         self.bt_apply.clicked.connect(self.close)
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 0, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 0, 0)
         lay.addWidget(label_configname, 1, 0, 1, columns)
         lay.addWidget(self.pydmlinedit_configname, 2, 0, 1, columns)
         lay.addWidget(self.pydmlabel_configname, 3, 0, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 4, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 4, 0)
         lay.addWidget(label_matrix_x, 5, 0, 1, columns)
         lay.addWidget(self.table_matrix_x, 6, (columns/2)-1, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 7, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 7, 0)
         lay.addWidget(label_matrix_y, 8, 0, 1, columns)
         lay.addWidget(self.table_matrix_y, 9, 0, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 10, 0)
+            QSpacerItem(20, 10, QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Expanding), 10, 0)
         lay.addWidget(self.bt_apply, 11, columns-1)
         for i in range(columns):
             lay.setColumnStretch(i, 1)

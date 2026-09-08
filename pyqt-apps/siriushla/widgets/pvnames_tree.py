@@ -18,7 +18,7 @@ class QTreeItem(QTreeWidgetItem):
         super().__init__(parent, string_list)
         self._shown = set()
         self._status = {
-            Qt.Checked: set(), Qt.Unchecked: set(), Qt.PartiallyChecked: set()}
+            Qt.CheckState.Checked: set(), Qt.CheckState.Unchecked: set(), Qt.CheckState.PartiallyChecked: set()}
         self._myhash = uuid.uuid4()
 
     @property
@@ -47,54 +47,55 @@ class QTreeItem(QTreeWidgetItem):
 
     def setData(self, column, role, value):
         """Set data."""
-        if column == 0 and role == Qt.CheckStateRole:
-            if self.checkState(0) == Qt.PartiallyChecked:
-                value = Qt.Unchecked
+        value = Qt.CheckState(value)
+        if column == 0 and role == Qt.ItemDataRole.CheckStateRole:
+            if self.checkState(0) == Qt.CheckState.PartiallyChecked:
+                value = Qt.CheckState.Unchecked
             # Trigger parent check
             if isinstance(self.parent(), QTreeItem):
                 self.parent().childChecked(self, column, value)
             # Trigger children check
-            if value in (Qt.Checked, Qt.Unchecked):
+            if value in (Qt.CheckState.Checked, Qt.CheckState.Unchecked):
                 if self.childCount() == 0:
                     if self.checkState(column) != value:
                         self.treeWidget().parent().itemChecked.emit(
-                            self, column, value)
+                            self, column, value.value)
                     super().setData(column, role, value)
                 else:
                     for chil in range(self.childCount()):
                         if not self.child(chil).isHidden():
                             self.child(chil).setData(
-                                column, Qt.CheckStateRole, value)
+                                column, Qt.ItemDataRole.CheckStateRole, value)
         else:
             super().setData(column, role, value)
 
     def _check_children(self):
         """Child was checked."""
         check = self._status
-        if check[Qt.PartiallyChecked]:
-            return Qt.PartiallyChecked
-        elif check[Qt.Checked] and check[Qt.Unchecked]:
-            return Qt.PartiallyChecked
-        elif check[Qt.Checked]:
-            return Qt.Checked
-        return Qt.Unchecked
+        if check[Qt.CheckState.PartiallyChecked]:
+            return Qt.CheckState.PartiallyChecked
+        elif check[Qt.CheckState.Checked] and check[Qt.CheckState.Unchecked]:
+            return Qt.CheckState.PartiallyChecked
+        elif check[Qt.CheckState.Checked]:
+            return Qt.CheckState.Checked
+        return Qt.CheckState.Unchecked
 
     def childChecked(self, child, column, status):
         """Child was checked."""
-        self._status[status].add(child.myhash)
+        self._status[Qt.CheckState(status)].add(child.myhash)
         left = self._status.keys() - {status, }
         for sts in left:
-            self._status[sts].discard(child.myhash)
+            self._status[Qt.CheckState(sts)].discard(child.myhash)
 
         mystate = self.checkState(column)
-        if status == Qt.PartiallyChecked:
-            status = Qt.PartiallyChecked
+        if status == Qt.CheckState.PartiallyChecked:
+            status = Qt.CheckState.PartiallyChecked
         elif status != mystate:
             status = self._check_children()
         else:
             status = mystate
 
-        super().setData(column, Qt.CheckStateRole, status)
+        super().setData(column, Qt.ItemDataRole.CheckStateRole, status)
         if isinstance(self.parent(), QTreeItem):
             self.parent().childChecked(self, column, status)
 
@@ -185,7 +186,7 @@ class PVNameTree(QWidget):
         self._msg = QLabel(self)
 
         # Add Selection Tree
-        self._check_count = QLabel(self, alignment=Qt.AlignRight)
+        self._check_count = QLabel(self, alignment=Qt.AlignmentFlag.AlignRight)
         self.tree = Tree(self)
         self.tree.setColumnCount(3)
         self.tree.setHeaderHidden(False)
@@ -249,13 +250,13 @@ class PVNameTree(QWidget):
         """Check all items."""
         for item in self._leafs:
             if not item.isHidden():
-                item.setCheckState(0, Qt.Checked)
+                item.setCheckState(0, Qt.CheckState.Checked)
 
     def uncheck_all(self):
         """Uncheck all items."""
         for item in self._leafs:
             if not item.isHidden():
-                item.setCheckState(0, Qt.Unchecked)
+                item.setCheckState(0, Qt.CheckState.Unchecked)
 
     def expand_all(self):
         """Expand all items."""
@@ -304,7 +305,7 @@ class PVNameTree(QWidget):
     def check_requested_levels(self, levels):
         """Set requested levels checked."""
         for level in levels:
-            self._item_map[level].setCheckState(0, Qt.Checked)
+            self._item_map[level].setCheckState(0, Qt.CheckState.Checked)
 
     def _add_item(self, item):
 
@@ -342,7 +343,7 @@ class PVNameTree(QWidget):
                         parent = item
                     else:
                         new_item = QTreeItem([key], parent)
-                        new_item.setCheckState(0, Qt.Unchecked)
+                        new_item.setCheckState(0, Qt.CheckState.Unchecked)
                         # self._item_map.add_symbol(item_key, new_item)
                         self._item_map[item_key] = new_item
                         # parent.addChild(new_item)
@@ -362,7 +363,7 @@ class PVNameTree(QWidget):
                         parent = item
                     else:
                         new_item = QTreeItem([key], parent)
-                        new_item.setCheckState(0, Qt.Unchecked)
+                        new_item.setCheckState(0, Qt.CheckState.Unchecked)
                         # self._item_map.add_symbol(item_key, new_item)
                         self._item_map[item_key] = new_item
                         # parent.addChild(new_item)
@@ -381,7 +382,7 @@ class PVNameTree(QWidget):
                         parent = item
                     else:
                         new_item = QTreeItem([key], parent)
-                        new_item.setCheckState(0, Qt.Unchecked)
+                        new_item.setCheckState(0, Qt.CheckState.Unchecked)
                         # self._item_map.add_symbol(item_key, new_item)
                         self._item_map[item_key] = new_item
                         # parent.addChild(new_item)
@@ -400,7 +401,7 @@ class PVNameTree(QWidget):
                         parent = item
                     else:
                         new_item = QTreeItem([key], parent)
-                        new_item.setCheckState(0, Qt.Unchecked)
+                        new_item.setCheckState(0, Qt.CheckState.Unchecked)
                         # self._item_map.add_symbol(item_key, new_item)
                         self._item_map[item_key] = new_item
                         # parent.addChild(new_item)
@@ -422,7 +423,7 @@ class PVNameTree(QWidget):
                         parent = item
                     else:
                         new_item = QTreeItem([key], parent)
-                        new_item.setCheckState(0, Qt.Unchecked)
+                        new_item.setCheckState(0, Qt.CheckState.Unchecked)
                         self._item_map[item_key] = new_item
                         parent = new_item
                     parent_key = item_key
@@ -444,7 +445,7 @@ class PVNameTree(QWidget):
                         parent = item
                     else:
                         new_item = QTreeItem([key], parent)
-                        new_item.setCheckState(0, Qt.Unchecked)
+                        new_item.setCheckState(0, Qt.CheckState.Unchecked)
                         # self._item_map.add_symbol(item_key, new_item)
                         self._item_map[item_key] = new_item
                         # parent.addChild(new_item)
@@ -457,14 +458,14 @@ class PVNameTree(QWidget):
                 if item_key in self._item_map else None
             if item is None:
                 new_item = QTreeItem([key], parent)
-                new_item.setCheckState(0, Qt.Unchecked)
+                new_item.setCheckState(0, Qt.CheckState.Unchecked)
                 self._item_map[item_key] = new_item
                 parent = new_item
             else:
                 parent = item
         # Insert leaf node pvname
         new_item = QTreeItem(row, parent)
-        new_item.setCheckState(0, Qt.Unchecked)
+        new_item.setCheckState(0, Qt.CheckState.Unchecked)
         self._item_map[pvname] = new_item
         self._leafs.append(new_item)
 
@@ -487,8 +488,8 @@ class PVNameTree(QWidget):
 
     def checked_items(self):
         """Return checked items."""
-        return [item.data(0, Qt.DisplayRole) for item in self._leafs
-                if item.checkState(0) == Qt.Checked]
+        return [item.data(0, Qt.ItemDataRole.DisplayRole) for item in self._leafs
+                if item.checkState(0) == Qt.CheckState.Checked]
 
     def sizeHint(self):
         """Override sizehint."""
@@ -518,16 +519,17 @@ class PVNameTree(QWidget):
                 node.setHidden(False)
                 selected_pvs += 1
             else:
-                # node.setCheckState(0, Qt.Unchecked)
+                # node.setCheckState(0, Qt.CheckState.Unchecked)
                 node.setHidden(True)
         self._msg.setText('Showing {} Items.'.format(selected_pvs))
 
     @Slot(QTreeItem, int, int)
     def _item_checked(self, item, column, value):
+        value = Qt.CheckState(value)
         if item.childCount() == 0:
-            if value == Qt.Checked:
+            if value == Qt.CheckState.Checked:
                 self._nr_checked_items += 1
-            elif value == Qt.Unchecked:
+            elif value == Qt.CheckState.Unchecked:
                 self._nr_checked_items -= 1
         self._check_count.setText(
             '{} Items checked.'.format(self._nr_checked_items))

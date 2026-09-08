@@ -68,7 +68,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
         pdm_lbl = SiriusLabel(
             self, self.devpref.substitute(propty='InvRespMatNormMode-Sts'))
         nlay = QHBoxLayout(norm_gp)
-        nlay.setAlignment(Qt.AlignCenter)
+        nlay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         nlay.addWidget(pdm_cbb)
         nlay.addWidget(pdm_lbl)
         main_lay.addWidget(norm_gp)

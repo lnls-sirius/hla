@@ -55,7 +55,7 @@ class TuneDetails(SiriusMainWindow):
         self.setWindowTitle(self.device + ' Detailed Settings')
         self.setObjectName(self.section + 'App')
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)
@@ -67,7 +67,7 @@ class TuneDetails(SiriusMainWindow):
         )
         self.title_label.setObjectName('title')
         pal = self.title_label.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Window, self.background)
         self.title_label.setAutoFillBackground(True)
         self.title_label.setPalette(pal)
 
@@ -160,11 +160,8 @@ class TuneDetails(SiriusMainWindow):
 
         # Excitation Status Detailed
         gbox_enblsts = QGridLayout()
-        lbl_enblsts = QLabel(
-            'Excitation\nEnable Status\nDetailed',
-            self,
-            alignment=Qt.AlignVCenter | Qt.AlignRight,
-        )
+        lbl_enblsts = QLabel('Excitation\nEnable Status\nDetailed', self,
+                             alignment=Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
         if self.section == 'BO':
             # # Carrier Generator
             self.led_carrier = SiriusLedState(
@@ -197,9 +194,8 @@ class TuneDetails(SiriusMainWindow):
             lbl_acqcnt = QLabel('Frame Count', self)
             dev = self.device.substitute(dev='TuneProc')
             self.lb_acqcnt = SiriusLabel(
-                self, dev.substitute(propty='FrameCount-Mon')
-            )
-            self.lb_acqcnt.setAlignment(Qt.AlignCenter)
+                self, dev.substitute(propty='FrameCount-Mon'))
+            self.lb_acqcnt.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.led_acqcnt = PyDMLedMultiChannel(parent=self)
             self.trigNrPulseChannel = SiriusConnectionSignal(
                 self.trigger.substitute(
@@ -449,36 +445,36 @@ class TuneDetails(SiriusMainWindow):
             hbox_getspec.addWidget(self.lb_getspec)
 
         lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addRow(lbl_acq, hbox_acq)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_drive, hbox_drive)
         lay.addRow(lbl_enblsts, gbox_enblsts)
         if self.section == 'BO':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(lbl_acqcnt, hbox_acqcnt)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(lbl_nrsmp, hbox_nrsmp)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
+        lay.addRow(lbl_nrsmp, self.lb_nrsmp)
         if self.section == 'SI':
             lay.addRow(lbl_acqtime, self.cb_acqtime)
             lay.addRow(lbl_swetime, self.lb_swetime)
         lay.addRow(lbl_span, hbox_span)
         lay.addRow(lbl_rbw, hbox_rbw)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_h, hbox_h)
         lay.addRow(lbl_Fh, self.lb_Fh)
         lay.addRow(lbl_foff, hbox_foff)
         lay.addRow(lbl_Fc, hbox_Fc)
         lay.addRow(lbl_autoFc, hbox_autoFc)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(lbl_drivegain, hbox_drivegain)
         if self.section == 'BO':
             lay.addRow(lbl_driveauto, hbox_driveauto)
             lay.addRow(lbl_noiseamp, hbox_noiseamp)
         else:
             lay.addRow(lbl_trkgenlvl, hbox_trkgenlvl)
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             lay.addRow(lbl_getspec, hbox_getspec)
         return lay
 
@@ -494,8 +490,8 @@ class TuneDetails(SiriusMainWindow):
             '#bt_rst{min-width:25px; max-width:25px; icon-size:20px;}'
         )
         lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addRow('Restore Default', self.bt_rst)
         return lay
 
@@ -526,8 +522,8 @@ class TuneDetails(SiriusMainWindow):
         hbox_timewdw.addWidget(self.lb_timewdw)
 
         lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addRow(lbl_mode, hbox_mode)
         lay.addRow(lbl_timewdw, hbox_timewdw)
         return lay
@@ -599,8 +595,8 @@ class TuneDetails(SiriusMainWindow):
         hbox_roiauto.addWidget(self.led_roiauto)
 
         lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addRow(lbl_roistartx, hbox_roistartx)
         lay.addRow(lbl_roiwidth, hbox_roiwidth)
         lay.addRow(lbl_roistarty, hbox_roistarty)
@@ -645,22 +641,21 @@ class SITuneMarkerDetails(SiriusMainWindow):
         self.setWindowTitle(self.title)
         self.setObjectName('SIApp')
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)
         self.setCentralWidget(cw)
         lay = QFormLayout(cw)
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
+        lay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        lay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # title
         self.title_label = QLabel(
-            '<h3>' + self.title + '<h3>', self, alignment=Qt.AlignCenter
-        )
+            '<h3>'+self.title+'<h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title_label.setObjectName('title')
         pal = self.title_label.palette()
-        pal.setColor(QPalette.Background, self.background)
+        pal.setColor(QPalette.ColorRole.Window, self.background)
         self.title_label.setAutoFillBackground(True)
         self.title_label.setPalette(pal)
         lay.addRow(self.title_label)
@@ -774,11 +769,11 @@ class SITuneMarkerDetails(SiriusMainWindow):
         vbox_cmd.addWidget(self.pb_maxnext)
         vbox_cmd.addWidget(self.pb_maxright)
         vbox_cmd.addWidget(self.pb_maxleft)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addRow(vbox_cmd)
 
         if self.mtyp == '' and self.idx == '1':
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
 
             label_enblautomin = QLabel('Enable Auto Min: ', self)
             self.bt_enblautomin = PyDMStateButton(

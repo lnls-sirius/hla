@@ -59,7 +59,7 @@ class Settings(QMenuBar):
         self.act_save.triggered.connect(self._saveAndEmitConfigName)
         self.act_save_as = self.config_menu.addAction('Save As...')
         self.act_save_as.setIcon(qta.icon('mdi.content-save-settings'))
-        self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
+        self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key.Key_S))
         self.act_save_as.triggered.connect(self.showSaveAsPopup)
         self.config_menu.addSeparator()
         self.act_reconst_normconf_fromwfm = self.config_menu.addAction(

@@ -116,7 +116,7 @@ class JsonTreeModel(QAbstractItemModel):
         if not index.isValid():
             return None
 
-        if role != Qt.DisplayRole:
+        if role != Qt.ItemDataRole.DisplayRole:
             return None
 
         item = index.internalPointer()
@@ -132,7 +132,7 @@ class JsonTreeModel(QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         """Return data stored in root item."""
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self._rootItem.data(section)
 
         return None
@@ -316,14 +316,14 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor_model = ConfigDbTableModel('notexist', self._model)
         self.d_editor_model = ConfigDbTableModel('notexist', self._model, True)
         self.editor.setModel(self.editor_model)
-        self.editor.setSelectionBehavior(self.editor.SelectRows)
+        self.editor.setSelectionBehavior(self.editor.SelectionBehavior.SelectRows)
         self.editor.setSortingEnabled(True)
-        self.editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.editor.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.d_editor.setModel(self.d_editor_model)
-        self.d_editor.setSelectionBehavior(self.editor.SelectRows)
+        self.d_editor.setSelectionBehavior(self.editor.SelectionBehavior.SelectRows)
         self.d_editor.setSortingEnabled(True)
-        self.d_editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
-        self.d_editor.setSelectionMode(self.d_editor.SingleSelection)
+        self.d_editor.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.d_editor.setSelectionMode(self.d_editor.SelectionMode.SingleSelection)
         # Set tree model and options
         self.tree_model = JsonTreeModel(None, None, self._model)
         self.tree.setModel(self.tree_model)
@@ -376,8 +376,8 @@ class ConfigurationManager(SiriusMainWindow):
         self.d_editor_model.setupModelData(config_type)
         self.editor.resizeColumnsToContents()
         self.d_editor.resizeColumnsToContents()
-        self.editor_model.sort(2, Qt.DescendingOrder)
-        self.d_editor_model.sort(2, Qt.DescendingOrder)
+        self.editor_model.sort(2, Qt.SortOrder.DescendingOrder)
+        self.d_editor_model.sort(2, Qt.SortOrder.DescendingOrder)
 
     @Slot()
     def _fill_tree(self):

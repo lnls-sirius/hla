@@ -52,13 +52,8 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.x_channel = 'Tune'
 
         self.addChannel(
-            y_channel='FAKE:SpectrumH',
-            name='Tune H',
-            redraw_mode=2,
-            color='blue',
-            lineWidth=1,
-            lineStyle=Qt.SolidLine,
-        )
+            y_channel='FAKE:SpectrumH', name='Tune H',
+            redraw_mode=2, color='blue', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         self.curveH = self.curveAtIndex(0)
         self.curveH.x_channels = {
             'Tune': SiriusConnectionSignal(
@@ -75,13 +70,8 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.curveH.setVisible(True)
 
         self.addChannel(
-            y_channel='FAKE:SpectrumV',
-            name='Tune V',
-            redraw_mode=2,
-            color='red',
-            lineWidth=1,
-            lineStyle=Qt.SolidLine,
-        )
+            y_channel='FAKE:SpectrumV', name='Tune V',
+            redraw_mode=2, color='red', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         self.curveV = self.curveAtIndex(1)
         self.curveV.x_channels = {
             'Tune': SiriusConnectionSignal(
@@ -361,6 +351,7 @@ class TuneSpectraControls(QWidget):
         )
 
         # Registers
+        self.menu_reg = {}
         self.registers = {i: None for i in range(4)}
         self.spectra.curveReg = [None, None, None, None]
         self.cb_reg = {i: QCheckBox(self) for i in range(4)}
@@ -378,47 +369,39 @@ class TuneSpectraControls(QWidget):
         for i in range(4):
             # checks
             self.spectra.addChannel(
-                y_channel='FAKE:Register' + str(i),
-                name='Register ' + str(i),
-                redraw_mode=2,
-                color=self.colors[i],
-                lineWidth=2,
-                lineStyle=Qt.SolidLine,
-            )
-            self.spectra.curveReg[i] = self.spectra.curveAtIndex(i + shift)
+                y_channel='FAKE:Register'+str(i), name='Register '+str(i),
+                redraw_mode=2, color=self.colors[i],
+                lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
+            self.spectra.curveReg[i] = self.spectra.curveAtIndex(i+shift)
             self.spectra.curveReg[i].setVisible(False)
             self.cb_reg[i].setStyleSheet(
                 'min-width:1.2em; max-width:1.2em;'
                 'min-height:1.29em; color:' + self.colors[i] + ';'
             )
             self.cb_reg[i].stateChanged.connect(_part(self._show_curve, i))
-            glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignLeft)
+            glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignmentFlag.AlignLeft)
             # buttons
             self.bt_reg[i].setStyleSheet('min-width:5em; max-width:5em;')
-            self.bt_reg[i].setMenu(QMenu())
-            self.bt_reg[i].menu().addAction(
-                'Save Tune H', _part(self._registerData, i, 'H')
-            )
-            self.bt_reg[i].menu().addAction(
-                'Save Tune V', _part(self._registerData, i, 'V')
-            )
-            self.bt_reg[i].menu().addAction(
-                'Clear', _part(self._clear_register, i)
-            )
-            glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignLeft)
+            self.menu_reg[i] = QMenu()
+            self.menu_reg[i].addAction(
+                'Save Tune H', _part(self._registerData, i, 'H'))
+            self.menu_reg[i].addAction(
+                'Save Tune V', _part(self._registerData, i, 'V'))
+            self.menu_reg[i].addAction(
+                'Clear', _part(self._clear_register, i))
+            self.bt_reg[i].setMenu(self.menu_reg[i])
+            glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             # label
             self.lb_reg[i].setMouseTracking(True)
-            self.lb_reg[i].setTextInteractionFlags(Qt.TextEditorInteraction)
+            self.lb_reg[i].setTextInteractionFlags(Qt.TextInteractionFlag.TextEditorInteraction)
             self.lb_reg[i].setStyleSheet(
-                'min-height:1.29em; min-width: 20em; max-width: 20em;'
-            )
-            glay_reg.addWidget(self.lb_reg[i], i, 2, alignment=Qt.AlignLeft)
+                'min-height:1.29em; min-width: 20em; max-width: 20em;')
+            glay_reg.addWidget(self.lb_reg[i], i, 2, alignment=Qt.AlignmentFlag.AlignLeft)
             glay_reg.addItem(
-                QSpacerItem(i, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), i, 3
-            )
+                QSpacerItem(i, 1, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Ignored), i, 3)
             # save button
             self.bt_save[i].clicked.connect(_part(self._export_data, i))
-            glay_reg.addWidget(self.bt_save[i], i, 4, alignment=Qt.AlignRight)
+            glay_reg.addWidget(self.bt_save[i], i, 4, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.pb_showregs = QPushButton('^', self)
         self.pb_showregs.setObjectName('showregs')
@@ -431,14 +414,14 @@ class TuneSpectraControls(QWidget):
         hbox_ctrls = QHBoxLayout()
         hbox_ctrls.setContentsMargins(0, 0, 0, 0)
         hbox_ctrls.setSpacing(6)
-        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignmentFlag.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignmentFlag.AlignLeft)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
-        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
-        hbox_ctrls.addItem(QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored))
-        hbox_ctrls.addWidget(self.pb_showregs, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignmentFlag.AlignRight)
+        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignmentFlag.AlignRight)
+        hbox_ctrls.addItem(QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored))
+        hbox_ctrls.addWidget(self.pb_showregs, alignment=Qt.AlignmentFlag.AlignLeft)
 
         lay = QVBoxLayout(self)
         lay.setSpacing(10)

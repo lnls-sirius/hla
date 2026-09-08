@@ -105,11 +105,11 @@ class SiriusProcessImage(QWidget):
         nrpt_sp = SiriusSpinbox(
             gb_pos, init_channel=self._dev+':NrAverages-SP')
         rdb = SiriusLabel(gb_pos, init_channel=self._dev+':NrAverages-RB')
-        rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        slsh = QLabel('/', gb_pos, alignment=Qt.AlignCenter)
+        rdb.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        slsh = QLabel('/', gb_pos, alignment=Qt.AlignmentFlag.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
         cnt = SiriusLabel(gb_pos, init_channel=self._dev+':BufferSize-Mon')
-        cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        cnt.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')
         pbt = PyDMPushButton(
             gb_pos, init_channel=self._dev+':ResetBuffer-Cmd', pressValue=1)
@@ -159,55 +159,55 @@ class SiriusProcessImage(QWidget):
             sts_bt, Window, gb_pos, device=self._dev,
             convertion_set=self._conv_set)
         hlay = QHBoxLayout()
-        hlay.addWidget(sts_bt, alignment=Qt.AlignRight)
+        hlay.addWidget(sts_bt, alignment=Qt.AlignmentFlag.AlignRight)
 
         lay = QGridLayout(gb_pos)
         if self._ori == 'V':
-            lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(meth_sp, 0, 1)
             lay.addWidget(meth_lb, 1, 1)
-            lay.addWidget(nrpt_ld, 2, 0, alignment=Qt.AlignLeft)
+            lay.addWidget(nrpt_ld, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(nrpt_sp, 2, 1)
             lay.addWidget(nrpt_wd, 3, 0, 1, 2)
-            lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rsx_sp, 4+0, 1)
             lay.addWidget(rsx_lb, 4+1, 1)
-            lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rsy_sp, 6+0, 1)
             lay.addWidget(rsy_lb, 6+1, 1)
-            lay.addWidget(sts_bt, 0, 0+4, alignment=Qt.AlignRight)
-            lay.addWidget(ra_ld, 2+0, 0+3, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(sts_bt, 0, 0+4, alignment=Qt.AlignmentFlag.AlignRight)
+            lay.addWidget(ra_ld, 2+0, 0+3, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(ra_bt, 2+0, 1+3)
-            lay.addWidget(ra_lb, 2+1, 1+3, alignment=Qt.AlignLeft)
-            lay.addWidget(rcx_ld, 4+0, 0+3, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(ra_lb, 2+1, 1+3, alignment=Qt.AlignmentFlag.AlignLeft)
+            lay.addWidget(rcx_ld, 4+0, 0+3, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rcx_sp, 4+0, 1+3)
             lay.addWidget(rcx_lb, 4+1, 1+3)
-            lay.addWidget(rcy_ld, 6+0, 0+3, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(rcy_ld, 6+0, 0+3, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rcy_sp, 6+0, 1+3)
             lay.addWidget(rcy_lb, 6+1, 1+3)
         else:
-            lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(meth_sp, 0, 1)
             lay.addWidget(meth_lb, 1, 1)
-            lay.addWidget(nrpt_ld, 2, 0, alignment=Qt.AlignLeft)
+            lay.addWidget(nrpt_ld, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(nrpt_sp, 2, 1)
             lay.addWidget(nrpt_wd, 3, 0, 1, 2)
-            lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rsx_sp, 4+0, 1)
             lay.addWidget(rsx_lb, 4+1, 1)
-            lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rsy_sp, 6+0, 1)
             lay.addWidget(rsy_lb, 6+1, 1)
-            lay.addWidget(ra_ld, 8+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(ra_ld, 8+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(ra_bt, 8+0, 1)
-            lay.addWidget(ra_lb, 8+1, 1, alignment=Qt.AlignLeft)
-            lay.addWidget(rcx_ld, 10+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(ra_lb, 8+1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+            lay.addWidget(rcx_ld, 10+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rcx_sp, 10+0, 1)
             lay.addWidget(rcx_lb, 10+1, 1)
-            lay.addWidget(rcy_ld, 12+0, 0, 2, 1, alignment=Qt.AlignLeft)
+            lay.addWidget(rcy_ld, 12+0, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.addWidget(rcy_sp, 12+0, 1)
             lay.addWidget(rcy_lb, 12+1, 1)
-            lay.addWidget(sts_bt, 14, 0, alignment=Qt.AlignLeft)
+            lay.addWidget(sts_bt, 14, 0, alignment=Qt.AlignmentFlag.AlignLeft)
             lay.setRowStretch(15, 5)
 
         return gb_pos
@@ -220,29 +220,29 @@ class SiriusProcessImage(QWidget):
         wid.setLayout(QHBoxLayout())
         xave = SiriusLabel(wid, init_channel=self._dev+':BeamCenterX-Mon')
         xavemm = SiriusLabel(wid, init_channel=self._dev+':BeamCentermmX-Mon')
-        xave.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
-        xavemm.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        xave.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        xavemm.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         sep = QLabel('/', wid)
         sep.setStyleSheet('max-width:0.7em;')
         wid.layout().addWidget(xave)
         wid.layout().addWidget(sep)
         wid.layout().addWidget(xavemm)
         fl_posi.addRow(QLabel(
-            'X =', gb_posi, alignment=Qt.AlignBottom), wid)
+            'X =', gb_posi, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(gb_posi)
         wid.setLayout(QHBoxLayout())
         yave = SiriusLabel(wid, init_channel=self._dev+':BeamCenterY-Mon')
         yavemm = SiriusLabel(wid, init_channel=self._dev+':BeamCentermmY-Mon')
-        yave.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
-        yavemm.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        yave.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        yavemm.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         sep = QLabel('/', wid)
         sep.setStyleSheet('max-width:0.7em;')
         wid.layout().addWidget(yave)
         wid.layout().addWidget(sep)
         wid.layout().addWidget(yavemm)
         fl_posi.addRow(QLabel(
-            'Y =', gb_posi, alignment=Qt.AlignBottom), wid)
+            'Y =', gb_posi, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         return gb_posi
 
@@ -254,29 +254,29 @@ class SiriusProcessImage(QWidget):
         wid.setLayout(QHBoxLayout())
         xave = SiriusLabel(wid, init_channel=self._dev+':BeamSizeX-Mon')
         xavemm = SiriusLabel(wid, init_channel=self._dev+':BeamSizemmX-Mon')
-        xave.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
-        xavemm.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        xave.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        xavemm.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         sep = QLabel('/', wid)
         sep.setStyleSheet('max-width:0.7em;')
         wid.layout().addWidget(xave)
         wid.layout().addWidget(sep)
         wid.layout().addWidget(xavemm)
         fl_size.addRow(QLabel(
-            'X =', gb_size, alignment=Qt.AlignBottom), wid)
+            'X =', gb_size, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(gb_size)
         wid.setLayout(QHBoxLayout())
         yave = SiriusLabel(wid, init_channel=self._dev+':BeamSizeY-Mon')
         yavemm = SiriusLabel(wid, init_channel=self._dev+':BeamSizemmY-Mon')
-        yave.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
-        yavemm.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        yave.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        yavemm.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         sep = QLabel('/', wid)
         sep.setStyleSheet('max-width:0.7em;')
         wid.layout().addWidget(yave)
         wid.layout().addWidget(sep)
         wid.layout().addWidget(yavemm)
         fl_size.addRow(QLabel(
-            'Y =', gb_size, alignment=Qt.AlignBottom), wid)
+            'Y =', gb_size, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         return gb_size
 
@@ -335,7 +335,7 @@ class _DetailedWidget(QWidget):
 
         self.layout().addRow(QLabel(
             '<h4>Image Processing Detailed Controls</h4>', self,
-            alignment=Qt.AlignTop | Qt.AlignHCenter))
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter))
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -345,7 +345,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Reading Order', self, alignment=Qt.AlignBottom), wid)
+            'Reading Order', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -354,7 +354,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Flip Horintal', self, alignment=Qt.AlignBottom), wid)
+            'Flip Horintal', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -363,7 +363,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Flip Vertical', self, alignment=Qt.AlignBottom), wid)
+            'Flip Vertical', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -372,7 +372,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Min. Pixel Val.', self, alignment=Qt.AlignBottom), wid)
+            'Min. Pixel Val.', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -381,7 +381,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Crop Image Levels', self, alignment=Qt.AlignBottom), wid)
+            'Crop Image Levels', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -390,7 +390,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Max. Pixel Val.', self, alignment=Qt.AlignBottom), wid)
+            'Max. Pixel Val.', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -403,7 +403,7 @@ class _DetailedWidget(QWidget):
             lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleX-Cte')
             wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Pxl 2 mm Scale X', self, alignment=Qt.AlignBottom), wid)
+            'Pxl 2 mm Scale X', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -416,7 +416,7 @@ class _DetailedWidget(QWidget):
             lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleY-Cte')
             wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Pxl 2 mm Scale Y', self, alignment=Qt.AlignBottom), wid)
+            'Pxl 2 mm Scale Y', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -427,7 +427,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Auto Center', self, alignment=Qt.AlignBottom), wid)
+            'Auto Center', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -436,7 +436,7 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Pxl 2 mm Center X', self, alignment=Qt.AlignBottom), wid)
+            'Pxl 2 mm Center X', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -445,4 +445,4 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Pxl 2 mm Center Y', self, alignment=Qt.AlignBottom), wid)
+            'Pxl 2 mm Center Y', self, alignment=Qt.AlignmentFlag.AlignBottom), wid)

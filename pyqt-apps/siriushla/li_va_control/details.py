@@ -31,7 +31,7 @@ class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
             name = self.devpref + type_config['text']
             widget = self.setupUnitView(
                 name, type_config['color'], 6)
-            lay.addWidget(widget, alignment=Qt.AlignCenter)
+            lay.addWidget(widget, alignment=Qt.AlignmentFlag.AlignCenter)
         return wid
 
     def buildGroup(self, info, title):
@@ -55,7 +55,7 @@ class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
                 lay.addWidget(
                     self.getWidget(
                         item['status'], item['widget']),
-                    3, alignment=Qt.AlignCenter)
+                    3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         return group
 
@@ -67,7 +67,7 @@ class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         lay.setContentsMargins(10, 0, 10, 0)
         lay.addWidget(
             QLabel("<strong>"+title+"</strong>"),
-            0, 0, 1, 2, alignment=Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         for title, info in IPS_DETAILS.items():
             pos[3] = 1
             if title == "General":
@@ -108,7 +108,7 @@ class VgcDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
             if title == "Gauge":
                 widget = QLabel(
                     '<strong>'+self.getGroupTitle(data, vgc_id)+'</strong>',
-                    alignment=Qt.AlignCenter)
+                    alignment=Qt.AlignmentFlag.AlignCenter)
             elif isinstance(data, dict):
                 if title == "Setpoint":
                     show_title = False
@@ -137,10 +137,10 @@ class VgcDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         for title, data in VGC_DETAILS.items():
             if title != 'led':
                 label = QLabel('<strong>'+title+'</strong>')
-                label.setAlignment(Qt.AlignCenter)
+                label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(
                     label, pos[0], pos[1],
-                    alignment=Qt.AlignCenter)
+                    alignment=Qt.AlignmentFlag.AlignCenter)
             self.setupDevices(title, data, lay, pos[1])
             pos[1] += 1
         return wid
@@ -152,7 +152,7 @@ class VgcDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         lay.setContentsMargins(10, 0, 10, 0)
         lay.addWidget(
             QLabel("<strong>"+title+"</strong>"),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.buildVgcTable())
         leg_list = [
             'CCG', 'PRG', 'Gauge Status', 'Relay Status']
@@ -222,7 +222,7 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
                         title,
                         pv_suf, pv_number, generation)
             lay.addWidget(
-                widget, pos[0], pos[1], 2, 1, Qt.AlignCenter)
+                widget, pos[0], pos[1], 2, 1, Qt.AlignmentFlag.AlignCenter)
             pos[0] += 1
         return pos
 
@@ -239,19 +239,19 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
                         lbl = QLabel(item['title'])
                         lbl.setStyleSheet(
                             "font: 8pt;max-height:0.6em; min-width:2em;")
-                        lay.addWidget(lbl, pos[0], pos[1], alignment=Qt.AlignCenter)
+                        lay.addWidget(lbl, pos[0], pos[1], alignment=Qt.AlignmentFlag.AlignCenter)
                     pos[0] += 1
                     name = pv_name + item['control']
                     lay.addWidget(
                         self.getWidget(name[12:], item['widget']),
-                        pos[0], pos[1], alignment=Qt.AlignCenter)
+                        pos[0], pos[1], alignment=Qt.AlignmentFlag.AlignCenter)
                     widget = 'led'
                     if item['title'] == "Local/\nRemote":
                         widget = 'label'
                     name = pv_name + item['status']
                     lay.addWidget(
                         self.getWidget(name[12:], widget, precision=False),
-                        pos[0]+1, pos[1], alignment=Qt.AlignCenter)
+                        pos[0]+1, pos[1], alignment=Qt.AlignmentFlag.AlignCenter)
                     pos[1] += 1
                     pos[0] = 0
 
@@ -265,7 +265,7 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
             pos[0] = 0
             if title != 'led':
                 label = QLabel('<strong>'+title+'</strong>')
-                label.setAlignment(Qt.AlignCenter)
+                label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(label, pos[0], pos[1], 1, 1)
             pos[0] += 1
             pos = self.setupAllDevices(title, data, lay, pos)
@@ -286,10 +286,10 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
             lay_item.setContentsMargins(0, 2, 0, 0)
             lay_item.addWidget(
                 self.setWindowBtn(cat, item),
-                alignment=Qt.AlignLeft)
+                alignment=Qt.AlignmentFlag.AlignLeft)
             lay_item.addWidget(
                 QLabel("<strong>IPS"+str(item)+"</strong>"),
-                alignment=Qt.AlignLeft)
+                alignment=Qt.AlignmentFlag.AlignLeft)
             self.buildIPSInfo(pv_name, lay_item, "H")
             lay_item.addWidget(
                 self.setupIPSControl(pv_name))

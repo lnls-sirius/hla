@@ -19,7 +19,7 @@ class MachShiftLabel(QWidget):
         pvname = pvname.substitute(prefix=prefix)
 
         self.label = SiriusLabel(self, pvname)
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         color_list = [
             SiriusFrame.Yellow,  # Users

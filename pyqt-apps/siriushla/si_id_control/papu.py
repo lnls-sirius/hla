@@ -103,7 +103,7 @@ class PAPUControlWindow(IDCommonControlWindow):
         lay.addLayout(hbox_enbl, 2, 1, 1, 3)
         lay.addWidget(self._ld_phsismov, 3, 0)
         lay.addLayout(hbox_mov, 3, 1, 1, 3)
-        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0)
+        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 4, 0)
 
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
@@ -111,7 +111,7 @@ class PAPUControlWindow(IDCommonControlWindow):
 
     def _statusWidget(self):
         self._ld_drivests = QLabel(
-            'Drive Status:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Drive Status:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lb_drivests = SiriusLabel(
             self, self.dev_pref.substitute(propty='DiagMessage-Mon'))
         self._lb_drivests.setStyleSheet('QLabel{min-width: 10em;}')
@@ -134,7 +134,7 @@ class PAPUControlWindow(IDCommonControlWindow):
         self._log = PyDMLogLabel(
             self, init_channel=self.dev_pref.substitute(propty='Log-Mon'))
         self._log.setSizePolicy(
-            QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding)
+            QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.MinimumExpanding)
         self._log.setAlternatingRowColors(True)
         self._log.maxCount = 2000
 
@@ -142,14 +142,14 @@ class PAPUControlWindow(IDCommonControlWindow):
         self._bt_logclear.clicked.connect(self._log.clear)
 
         gbox = QGroupBox('Status')
-        gbox.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        gbox.setSizePolicy(QSzPlcy.Policy.MinimumExpanding, QSzPlcy.Policy.Preferred)
         lay = QGridLayout(gbox)
         lay.addWidget(self._ld_drivests, 0, 0)
         lay.addWidget(self._lb_drivests, 0, 1)
         lay.addWidget(self._led_drivests, 0, 2)
-        lay.addWidget(self._pb_dtlsts, 0, 3, alignment=Qt.AlignRight)
+        lay.addWidget(self._pb_dtlsts, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self._log, 1, 0, 1, 4)
-        lay.addWidget(self._bt_logclear, 2, 0, 1, 4, alignment=Qt.AlignCenter)
+        lay.addWidget(self._bt_logclear, 2, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         return gbox
 
     def _auxCommandsWidget(self):
@@ -225,26 +225,26 @@ class PAPUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._ld_phsspdlim, 0, 0)
         lay.addWidget(self._sb_phsspdlim, 0, 1)
         lay.addWidget(self._lb_phsspdlim, 0, 2)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 1, 0)
         lay.addWidget(self._ld_pwrenbl, 2, 0)
         lay.addWidget(self._pb_pwrenbl, 2, 1)
-        lay.addWidget(self._led_pwrsts, 2, 2, alignment=Qt.AlignLeft)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        lay.addWidget(self._led_pwrsts, 2, 2, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 3, 0)
         lay.addWidget(self._ld_homeaxis, 4, 0)
         lay.addWidget(self._pb_home, 4, 1)
-        lay.addWidget(self._led_home, 4, 2, alignment=Qt.AlignLeft)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 5, 0)
+        lay.addWidget(self._led_home, 4, 2, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 5, 0)
         lay.addWidget(self._ld_parkspd, 6, 0)
         lay.addWidget(self._sb_parkspd, 6, 1)
         lay.addWidget(self._lb_parkspd, 6, 2)
         lay.addWidget(self._ld_park, 7, 0)
         lay.addWidget(self._pb_park, 7, 1)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 8, 0)
         lay.addWidget(self._ld_gotomin, 9, 0)
         lay.addWidget(self._pb_gotomin, 9, 1, 1, 2)
         lay.addWidget(self._ld_gotoop, 10, 0)
         lay.addWidget(self._pb_gotoop, 10, 1, 1, 2)
-        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 11, 0)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 11, 0)
         lay.addWidget(self._ld_clrerr, 12, 0)
         lay.addWidget(self._pb_clrerr, 12, 1)
 
@@ -335,7 +335,7 @@ class PAPUDetails(IDCommonDialog):
     def _setupUi(self):
         connbox = QGroupBox('Connection', self)
         flay = QFormLayout(connbox)
-        flay.setLabelAlignment(Qt.AlignRight)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         for pvn in ['Connected-Mon', 'MsgServerConnected-Mon',
                     'IoServerConnected-Mon', 'SerialConnected-Mon']:
             lbl = pvn.split('-')[0] + ':'
@@ -348,7 +348,7 @@ class PAPUDetails(IDCommonDialog):
                     'Code-Mon', 'DiagMessage-Mon']
         for row, pvn in enumerate(propties):
             lbl = QLabel(pvn.split('-')[0] + ':', self)
-            glay.addWidget(lbl, row, 0, alignment=Qt.AlignRight)
+            glay.addWidget(lbl, row, 0, alignment=Qt.AlignmentFlag.AlignRight)
             wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
             wid.showUnits = True
             if pvn == 'DiagMessage-Mon':
@@ -365,7 +365,7 @@ class PAPUDetails(IDCommonDialog):
             if c2v:
                 led = PyDMLedMultiChannel(self, c2v)
                 led.offColor = led.Yellow
-                glay.addWidget(led, row, 2, alignment=Qt.AlignLeft)
+                glay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.setStyleSheet(
             'QLabel{qproperty-alignment: AlignCenter; max-width: 12em;}')

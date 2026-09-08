@@ -10,7 +10,7 @@ class SiriusEnumComboBox(PyDMEnumComboBox):
     def __init__(self, parent, init_channel=None):
         """Initialize object."""
         super().__init__(parent=parent, init_channel=init_channel)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def wheelEvent(self, event):
         """Reimplement wheel event to ignore event when out of focus."""

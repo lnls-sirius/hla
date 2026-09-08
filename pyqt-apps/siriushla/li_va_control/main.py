@@ -120,9 +120,9 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         unit_name = pv_name+VGC_DETAILS["Pressure<br/>Readback"]+str(dev_gen)
         lay.addWidget(
             self.setupUnitView(unit_name),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         led = self.getVgcLed(led_name, id_num, led_config["sufix"])
-        lay.addWidget(led, alignment=Qt.AlignCenter)
+        lay.addWidget(led, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def getGroupWidgets(self, config, item, cat, orient):
         """ Select and build group widget """
@@ -171,7 +171,7 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         coord = [50, 82.5]
         title = QLabel(
             "<strong>LEGEND</strong>",
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         self.saveRelWid(
             title, [10, 10], coord)
         coord[1] += 5

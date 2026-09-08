@@ -33,14 +33,14 @@ class AutoStartDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Title
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         # General
         gbox_gen = QGroupBox('General')
@@ -55,10 +55,10 @@ class AutoStartDetails(SiriusDialog):
         gen_lay.addWidget(QLabel(self.syst_dict['23'][0]), 1, 1)
         gen_lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+self.syst_dict['23'][1]+'-Sel'),
-            1, 2, alignment=Qt.AlignRight)
+            1, 2, alignment=Qt.AlignmentFlag.AlignRight)
         gen_lay.addWidget(SiriusLabel(
             self, self.prefix+self.syst_dict['23'][1]+'-Sts',
-            alignment=Qt.AlignCenter), 1, 3)
+            alignment=Qt.AlignmentFlag.AlignCenter), 1, 3)
 
         # Diagnostics
         gbox_diag = QGroupBox('Diagnostics')
@@ -91,10 +91,10 @@ class AutoStartDetails(SiriusDialog):
         lay.addWidget(QLabel(self.syst_dict[key][0]), row, 1)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+self.syst_dict[key][1]+'-Sel'),
-            row, 2, alignment=Qt.AlignCenter)
+            row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(SiriusLedState(
             self, self.prefix+self.syst_dict[key][1]+'-Sts'),
-            row, 3, alignment=Qt.AlignCenter)
+            row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def _setupLabelLed(self, lay, key, val, row, is_alert):
         if is_alert:
@@ -104,4 +104,4 @@ class AutoStartDetails(SiriusDialog):
 
         lay.addWidget(QLabel(key), row, 0)
         lay.addWidget(QLabel(val[0]), row, 1)
-        lay.addWidget(led, row, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(led, row, 2, alignment=Qt.AlignmentFlag.AlignCenter)

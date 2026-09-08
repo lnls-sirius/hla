@@ -34,29 +34,29 @@ class RFInputsDetails(SiriusDialog):
     def _setupUi(self):
         lay = QGridLayout(self)
         self.setStyleSheet(DEFAULT_STYLESHEET)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QGridLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter), 0, 0)
         lay.addWidget(title_frame, 0, 0, 1, 9)
 
-        lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignCenter), 1, 2)
-        lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignCenter), 1, 3)
-        lay.addWidget(QLabel('Amp', alignment=Qt.AlignCenter), 1, 4)
-        lay.addWidget(QLabel('Phase', alignment=Qt.AlignCenter), 1, 5)
-        lay.addItem(QSpacerItem(24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 6)
-        lay.addWidget(QLabel('Power', alignment=Qt.AlignCenter), 1, 7, 1, 2)
+        lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignmentFlag.AlignCenter), 1, 2)
+        lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignmentFlag.AlignCenter), 1, 3)
+        lay.addWidget(QLabel('Amp', alignment=Qt.AlignmentFlag.AlignCenter), 1, 4)
+        lay.addWidget(QLabel('Phase', alignment=Qt.AlignmentFlag.AlignCenter), 1, 5)
+        lay.addItem(QSpacerItem(24, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 6)
+        lay.addWidget(QLabel('Power', alignment=Qt.AlignmentFlag.AlignCenter), 1, 7, 1, 2)
 
         row = 2
         for key, dic in self.syst_dict.items():
             lay.addWidget(QLabel(
-                key, alignment=Qt.AlignCenter), row, 0)
+                key, alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
             lay.addWidget(QLabel(
-                dic['Label'], alignment=Qt.AlignLeft), row, 1)
+                dic['Label'], alignment=Qt.AlignmentFlag.AlignLeft), row, 1)
             column = 2
             for k, val in dic.items():
                 if k != 'Label' and val != '-':
@@ -66,7 +66,7 @@ class RFInputsDetails(SiriusDialog):
                     column += 1
                 elif val == '-':
                     lay.addWidget(QLabel(
-                        '-', alignment=Qt.AlignCenter), row, column)
+                        '-', alignment=Qt.AlignmentFlag.AlignCenter), row, column)
                     column += 1
                 if column == 6:
                     column += 1
@@ -87,14 +87,14 @@ class RFInputsDetails(SiriusDialog):
             lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
             row += 1
             lay.addWidget(QLabel(
-                'Quench Condition 1 (Rev Cav/Fwd Cav)', alignment=Qt.AlignRight), 
+                'Quench Condition 1 (Rev Cav/Fwd Cav)', alignment=Qt.AlignmentFlag.AlignRight), 
                 row, 0, 1, 2)
-            lay.addWidget(quench_ratio, row, 4, 1, 6, alignment=Qt.AlignLeft)
+            lay.addWidget(quench_ratio, row, 4, 1, 6, alignment=Qt.AlignmentFlag.AlignLeft)
             row += 1
             lay.addWidget(QLabel(
-                'E-Quench (Fwd Cav/V Cav)', alignment=Qt.AlignRight), 
+                'E-Quench (Fwd Cav/V Cav)', alignment=Qt.AlignmentFlag.AlignRight), 
                 row, 0, 1, 2)
-            lay.addWidget(equench_ratio, row, 4, 1, 6, alignment=Qt.AlignLeft)
+            lay.addWidget(equench_ratio, row, 4, 1, 6, alignment=Qt.AlignmentFlag.AlignLeft)
             row += 1
             lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
 

@@ -135,7 +135,7 @@ class MPSControl(QWidget):
         for control_name in CTRL_TYPE:
             if self.getParamAll(has_title, pv_name, wid_type):
                 lb_title = QLabel(control_name)
-                lb_title.setAlignment(Qt.AlignCenter)
+                lb_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
             ctrl_widget = self.getCtrlWidget(
                 pv_name, CTRL_TYPE.get(control_name), config)
@@ -206,7 +206,7 @@ class MPSControl(QWidget):
             ctrl_widget = self.getTempWidget(
                 pv_name, TEMP_TYPE.get(temp_name))
             lay.addWidget(ctrl_widget, 1)
-            ctrl_widget.setAlignment(Qt.AlignCenter)
+            ctrl_widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return lay
 
     def genStringTempPV(self, name, prefix_num, name_num):
@@ -299,7 +299,7 @@ class MPSControl(QWidget):
         pos = [0, 0]
         for pos[axis] in range(1, len(item)+1):
             lbl_header = QLabel('<h4>'+item[pos[axis]-1]+'</h4>')
-            lbl_header.setAlignment(Qt.AlignCenter)
+            lbl_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
             layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)
             if axis == 0:
                 lbl_header.setStyleSheet(
@@ -310,7 +310,7 @@ class MPSControl(QWidget):
         ''' Display the water title label'''
         lbl_pv = LBL_WATER.get(pv_name)
         lbl_title_wid = QLabel(lbl_pv)
-        lbl_title_wid.setAlignment(Qt.AlignCenter)
+        lbl_title_wid.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return lbl_title_wid
 
     def setParamLabel(self, layout):
@@ -319,7 +319,7 @@ class MPSControl(QWidget):
         for _ in range(0, 2):
             for item in TEMP_TYPE:
                 lbl_param = QLabel(item)
-                lbl_param.setAlignment(Qt.AlignCenter)
+                lbl_param.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 layout.addWidget(lbl_param, 1, pos, 1, 1)
                 pos += 1
         return layout
@@ -331,7 +331,7 @@ class MPSControl(QWidget):
         pos = 0
         for item in item_list:
             lbl_header = QLabel('<h4>'+item+'</h4>')
-            lbl_header.setAlignment(Qt.AlignCenter)
+            lbl_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
             hd_glay.addWidget(lbl_header, 0, pos, 1, 3)
             pos += 3
 
@@ -472,7 +472,7 @@ class MPSControl(QWidget):
         if tab_type != 0:
             if_glay.addLayout(self.displayTempGroups(), 0, 0, 1, 1)
 
-        if_glay.setAlignment(Qt.AlignTop)
+        if_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
         wid.setLayout(if_glay)
 
         if tab_type == 0:
@@ -507,7 +507,7 @@ class MPSControl(QWidget):
         wid = QWidget()
         hd_hlay = QHBoxLayout()
         lbl_title = QLabel("<h2>Linac Machine Protection System</h2>")
-        lbl_title.setAlignment(Qt.AlignCenter)
+        lbl_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hd_hlay.addWidget(lbl_title, 10)
 
         btn_all = QPushButton("Hide/Show All")
@@ -524,6 +524,6 @@ class MPSControl(QWidget):
         if_glay = QGridLayout()
         if_glay.addWidget(self.displayTabs(), 1, 0, 1, 1)
         if_glay.addWidget(self.displayHeader(), 0, 0, 1, 1)
-        if_glay.setAlignment(Qt.AlignTop)
+        if_glay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.setLayout(if_glay)

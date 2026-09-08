@@ -45,6 +45,6 @@ class SiriusScaleIndicator(PyDMScaleIndicator):
         self._user_lower_limit = 0
         self._user_upper_limit = 0
 
-        self.value_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Minimum)
+        self.value_label.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Minimum)
         self.setup_widgets_for_orientation(
-            Qt.Horizontal, False, False, self._value_position)
+            Qt.Orientation.Horizontal, False, False, self._value_position)

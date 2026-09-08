@@ -111,16 +111,16 @@ class IVUControlWindow(IDCommonControlWindow):
         group.setLayout(lay)
 
         lay.addWidget(
-            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
         lay.addWidget(
-            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         lay.addWidget(
-            QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignCenter), 0, 3)
+            QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
 
         row = 1
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
@@ -134,7 +134,7 @@ class IVUControlWindow(IDCommonControlWindow):
             elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
-                lbl.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+                lbl.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
                 lbl.setMinimumWidth(125)
                 lbl.showUnits = True
                 lbl.setMaximumHeight(40)
@@ -152,7 +152,7 @@ class IVUControlWindow(IDCommonControlWindow):
 
         for row, (title, pv_info) in enumerate(self.AUXILIARY_PVS.items()):
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
             self._createParam(pv_info, lay, row)
@@ -168,7 +168,7 @@ class IVUControlWindow(IDCommonControlWindow):
 
         for row, (title, pv_info) in enumerate(self.SCAN_CONTROL_PVS.items()):
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
             button = self._createModeSwitchScans(pv_info, lay, row)
@@ -238,16 +238,16 @@ class IVUControlWindow(IDCommonControlWindow):
     def _ctrlModeWidget(self):
         gbox_ctrlmode = QGroupBox('Control Mode')
         lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
-        lay_ctrlmode.setAlignment(Qt.AlignCenter)
+        lay_ctrlmode.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label = QLabel("Is Remote")
-        lay_ctrlmode.addWidget(label, alignment=Qt.AlignRight)
+        lay_ctrlmode.addWidget(label, alignment=Qt.AlignmentFlag.AlignRight)
 
         self._led_ctrlmode = PyDMLed(
             self, self.dev_pref.substitute(propty='IsRemote-Mon'))
         self._led_ctrlmode.offColor = PyDMLed.Red
         self._led_ctrlmode.onColor = PyDMLed.LightGreen
-        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignLeft)
+        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignmentFlag.AlignLeft)
 
         return gbox_ctrlmode
 
@@ -292,8 +292,8 @@ class IVUControlWindow(IDCommonControlWindow):
 
         dev_lay_1 = QGridLayout()
         dev_title_1 = QLabel(f'<h4>{propty_1}</h4>',
-                            self, alignment=Qt.AlignCenter)
-        dev_lay_1.addWidget(dev_title_1, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+                            self, alignment=Qt.AlignmentFlag.AlignCenter)
+        dev_lay_1.addWidget(dev_title_1, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         for idx, lbl in enumerate(devsts_labels_1):
             pvname = self.dev_pref.substitute(propty=lbl)
             if "Mon" in lbl:
@@ -364,7 +364,7 @@ class IVUControlWindow(IDCommonControlWindow):
             lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.setMinimumWidth(125)
             lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, col, 1, 1)
             col += 1
 
@@ -557,11 +557,11 @@ class IVUControlDetails(IDCommonDialog):
         gbox_sts = QGroupBox('General Status', self)
         glay_sts = QGridLayout(gbox_sts)
 
-        glay_sts.addWidget(QLabel('<h4>Err</h4>'), 0, 1, alignment=Qt.AlignCenter)
-        glay_sts.addWidget(QLabel('<h4>Center</h4>'), 0, 3, alignment=Qt.AlignCenter)
-        glay_sts.addWidget(QLabel('<h4>EMStop</h4>'), 0, 5, alignment=Qt.AlignCenter)
-        glay_sts.addWidget(QLabel('<h4>Taper Limit</h4>'), 0, 7, alignment=Qt.AlignCenter)
-        glay_sts.addWidget(QLabel('<h4>Limit</h4>'), 0, 9, alignment=Qt.AlignCenter)
+        glay_sts.addWidget(QLabel('<h4>Err</h4>'), 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_sts.addWidget(QLabel('<h4>Center</h4>'), 0, 3, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_sts.addWidget(QLabel('<h4>EMStop</h4>'), 0, 5, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_sts.addWidget(QLabel('<h4>Taper Limit</h4>'), 0, 7, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_sts.addWidget(QLabel('<h4>Limit</h4>'), 0, 9, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for idx, sts in enumerate(err_sys):
             lin = idx + 1
@@ -573,7 +573,7 @@ class IVUControlDetails(IDCommonDialog):
             else:
                 ld_gen = SiriusLedState(self, pvname)
             glay_sts.addWidget(lbl, lin, 0)
-            glay_sts.addWidget(ld_gen, lin, 1, alignment=Qt.AlignCenter)
+            glay_sts.addWidget(ld_gen, lin, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for idx, sts in enumerate(center_sys):
             lin = idx + 1
@@ -581,8 +581,8 @@ class IVUControlDetails(IDCommonDialog):
             pv_info = f'Center_{sts}'
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gen = SiriusLedState(self, pvname)
-            glay_sts.addWidget(lbl, lin, 2, alignment=Qt.AlignCenter)
-            glay_sts.addWidget(ld_gen, lin, 3, alignment=Qt.AlignCenter)
+            glay_sts.addWidget(lbl, lin, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_sts.addWidget(ld_gen, lin, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for idx, sts in enumerate(em_stop):
             lin = idx + 1
@@ -590,8 +590,8 @@ class IVUControlDetails(IDCommonDialog):
             pv_info = f'{sts}_EMStop'
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gen = SiriusLedState(self, pvname)
-            glay_sts.addWidget(lbl, lin, 4, alignment=Qt.AlignCenter)
-            glay_sts.addWidget(ld_gen, lin, 5, alignment=Qt.AlignCenter)
+            glay_sts.addWidget(lbl, lin, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_sts.addWidget(ld_gen, lin, 5, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for idx, sts in enumerate(tap_lim):
             lin = idx + 1
@@ -599,8 +599,8 @@ class IVUControlDetails(IDCommonDialog):
             pv_info = f'{sts}_TaperLimit'
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gen = SiriusLedState(self, pvname)
-            glay_sts.addWidget(lbl, lin, 6, alignment=Qt.AlignCenter)
-            glay_sts.addWidget(ld_gen, lin, 7, alignment=Qt.AlignCenter)
+            glay_sts.addWidget(lbl, lin, 6, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_sts.addWidget(ld_gen, lin, 7, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for idx, sts in enumerate(lim):
             lin = idx + 1
@@ -608,8 +608,8 @@ class IVUControlDetails(IDCommonDialog):
             pv_info = f'{sts}_Limit'
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gen = SiriusLedState(self, pvname)
-            glay_sts.addWidget(lbl, lin, 8, alignment=Qt.AlignCenter)
-            glay_sts.addWidget(ld_gen, lin, 9, alignment=Qt.AlignCenter)
+            glay_sts.addWidget(lbl, lin, 8, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_sts.addWidget(ld_gen, lin, 9, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for idx, sts in enumerate(gen_sts):
             lin = idx + 1
@@ -617,8 +617,8 @@ class IVUControlDetails(IDCommonDialog):
             pv_info = f'{sts}'
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gen = SiriusLedState(self, pvname)
-            glay_sts.addWidget(lbl, lin, 10, alignment=Qt.AlignCenter)
-            glay_sts.addWidget(ld_gen, lin, 11, alignment=Qt.AlignCenter)
+            glay_sts.addWidget(lbl, lin, 10, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_sts.addWidget(ld_gen, lin, 11, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay_sts.addWidget(gbox_sts)
 
@@ -680,8 +680,8 @@ class IVUTempDetails(IDCommonDialog):
             pv_info = f"{gird}_Overrage"
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_gird = SiriusLedState(self, pvname)
-            glay.addWidget(title_gird, 0, col, alignment=Qt.AlignCenter)
-            glay.addWidget(ld_gird, 1, col, alignment=Qt.AlignCenter)
+            glay.addWidget(title_gird, 0, col, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay.addWidget(ld_gird, 1, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
         gbox.setStyleSheet(
             'QLabel{qproperty-alignment: AlignCenter; max-width: 12em;}')
@@ -695,16 +695,16 @@ class IVUTempDetails(IDCommonDialog):
             pv_info = f"WF_Interlock{i+1}"
             pvname = self.dev_pref.substitute(propty=pv_info)
             ld_intlk = SiriusLedState(self, pvname)
-            glay.addWidget(title_intlk, 2, col, alignment=Qt.AlignCenter)
-            glay.addWidget(ld_intlk, 3, col, alignment=Qt.AlignCenter)
+            glay.addWidget(title_intlk, 2, col, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay.addWidget(ld_intlk, 3, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay.addWidget(gbox)
 
         gbox_pos = QGroupBox('Current Position', self)
         glay_pos = QGridLayout(gbox_pos)
 
-        glay_pos.addWidget(QLabel("<h4>RTD</h4>"), 1, 0, alignment=Qt.AlignRight)
-        glay_pos.addWidget(QLabel("<h4>RTD</h4>"), 3, 0, alignment=Qt.AlignRight)
+        glay_pos.addWidget(QLabel("<h4>RTD</h4>"), 1, 0, alignment=Qt.AlignmentFlag.AlignRight)
+        glay_pos.addWidget(QLabel("<h4>RTD</h4>"), 3, 0, alignment=Qt.AlignmentFlag.AlignRight)
 
         for i in range(8):
             col = i + 1
@@ -713,8 +713,8 @@ class IVUTempDetails(IDCommonDialog):
             pvname = self.dev_pref.substitute(propty=pv_info)
             lbl_pos = SiriusLabel(self, pvname)
             lbl_pos.showUnits = True
-            glay_pos.addWidget(title, 0, col, alignment=Qt.AlignCenter)
-            glay_pos.addWidget(lbl_pos, 1, col, alignment=Qt.AlignCenter)
+            glay_pos.addWidget(title, 0, col, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_pos.addWidget(lbl_pos, 1, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for i in range(8):
             col = i + 1
@@ -723,16 +723,16 @@ class IVUTempDetails(IDCommonDialog):
             pvname = self.dev_pref.substitute(propty=pv_info)
             lbl_pos = SiriusLabel(self, pvname)
             lbl_pos.showUnits = True
-            glay_pos.addWidget(title, 2, col, alignment=Qt.AlignCenter)
-            glay_pos.addWidget(lbl_pos, 3, col, alignment=Qt.AlignCenter)
+            glay_pos.addWidget(title, 2, col, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_pos.addWidget(lbl_pos, 3, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay.addWidget(gbox_pos)
 
         gbox_set = QGroupBox('Settings', self)
         glay_set = QGridLayout(gbox_set)
 
-        glay_set.addWidget(QLabel("<h4>Alarm</h4>"), 1, 0, alignment=Qt.AlignRight)
-        glay_set.addWidget(QLabel("<h4>Alarm</h4>"), 3, 0, alignment=Qt.AlignRight)
+        glay_set.addWidget(QLabel("<h4>Alarm</h4>"), 1, 0, alignment=Qt.AlignmentFlag.AlignRight)
+        glay_set.addWidget(QLabel("<h4>Alarm</h4>"), 3, 0, alignment=Qt.AlignmentFlag.AlignRight)
 
         for i in range(8):
             col = i + 1
@@ -740,8 +740,8 @@ class IVUTempDetails(IDCommonDialog):
             pv_info = f"UpGird{i+1}_Alarm"
             pvname = self.dev_pref.substitute(propty=pv_info)
             lbl_set = SiriusLineEdit(self, pvname)
-            glay_set.addWidget(title, 0, col, alignment=Qt.AlignCenter)
-            glay_set.addWidget(lbl_set, 1, col, alignment=Qt.AlignCenter)
+            glay_set.addWidget(title, 0, col, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_set.addWidget(lbl_set, 1, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
         for i in range(8):
             col = i + 1
@@ -749,8 +749,8 @@ class IVUTempDetails(IDCommonDialog):
             pv_info = f"DnGird{i+1}_Alarm"
             pvname = self.dev_pref.substitute(propty=pv_info)
             lbl_set = SiriusLineEdit(self, pvname)
-            glay_set.addWidget(title, 2, col, alignment=Qt.AlignCenter)
-            glay_set.addWidget(lbl_set, 3, col, alignment=Qt.AlignCenter)
+            glay_set.addWidget(title, 2, col, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay_set.addWidget(lbl_set, 3, col, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay.addWidget(gbox_set)
 
@@ -777,8 +777,8 @@ class IVUTiltDetails(IDCommonDialog):
             title_ex = QLabel("<h4>"+ex+"</h4>")
             pvname = self.dev_pref.substitute(propty=ex)
             lbl_ex = SiriusLabel(self, pvname)
-            glay.addWidget(title_ex, 0, idx, alignment=Qt.AlignCenter)
-            glay.addWidget(lbl_ex, 1, idx, alignment=Qt.AlignCenter)
+            glay.addWidget(title_ex, 0, idx, alignment=Qt.AlignmentFlag.AlignCenter)
+            glay.addWidget(lbl_ex, 1, idx, alignment=Qt.AlignmentFlag.AlignCenter)
 
         gbox.setStyleSheet(
             'QLabel{qproperty-alignment: AlignCenter; max-width: 12em;}')
@@ -791,16 +791,16 @@ class IVUTiltDetails(IDCommonDialog):
         glay_set = QGridLayout(gbox_set)
         lay_h = QHBoxLayout()
 
-        glay_set.addWidget(QLabel("<h4>Offset UpTilt</h4>"), 0, 0, alignment=Qt.AlignCenter)
-        glay_set.addWidget(QLabel("<h4>Offset DnTilt</h4>"), 1, 0, alignment=Qt.AlignCenter)
+        glay_set.addWidget(QLabel("<h4>Offset UpTilt</h4>"), 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_set.addWidget(QLabel("<h4>Offset DnTilt</h4>"), 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
 
         pv_up = self.dev_pref.substitute(propty="OFFSET_UPTILT")
         uptilt = SiriusLabel(self, pv_up)
-        glay_set.addWidget(uptilt, 0, 1, alignment=Qt.AlignCenter)
+        glay_set.addWidget(uptilt, 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         pv_dn = self.dev_pref.substitute(propty="OFFSET_DNTILT")
         dntilt = SiriusLabel(self, pv_dn)
-        glay_set.addWidget(dntilt, 1, 1, alignment=Qt.AlignCenter)
+        glay_set.addWidget(dntilt, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay_h.addWidget(gbox_set)
 
@@ -808,20 +808,20 @@ class IVUTiltDetails(IDCommonDialog):
         glay_ctrl = QGridLayout(gbox_ctrl)
         lay_h = QHBoxLayout()
 
-        glay_ctrl.addWidget(QLabel("<h4>BYPASS UpTilt</h4>"), 0, 0, alignment=Qt.AlignCenter)
-        glay_ctrl.addWidget(QLabel("<h4>BYPASS DnTilt</h4>"), 1, 0, alignment=Qt.AlignCenter)
+        glay_ctrl.addWidget(QLabel("<h4>BYPASS UpTilt</h4>"), 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_ctrl.addWidget(QLabel("<h4>BYPASS DnTilt</h4>"), 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
 
         pv_info_up = self.dev_pref.substitute(propty="BYPASS_UPTILT")
         uptilt = PyDMStateButton(self, pv_info_up)
         ld_uptilt = PyDMLed(init_channel=pv_info_up)
-        glay_ctrl.addWidget(uptilt, 0, 1, alignment=Qt.AlignCenter)
-        glay_ctrl.addWidget(ld_uptilt, 0, 2, alignment=Qt.AlignCenter)
+        glay_ctrl.addWidget(uptilt, 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_ctrl.addWidget(ld_uptilt, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         pv_info_dn = self.dev_pref.substitute(propty="BYPASS_DNTILT")
         dntilt = PyDMStateButton(init_channel=pv_info_dn)
         ld_dntilt = PyDMLed(init_channel=pv_info_dn)
-        glay_ctrl.addWidget(dntilt, 1, 1, alignment=Qt.AlignCenter)
-        glay_ctrl.addWidget(ld_dntilt, 1, 2, alignment=Qt.AlignCenter)
+        glay_ctrl.addWidget(dntilt, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        glay_ctrl.addWidget(ld_dntilt, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
         lay_h.addWidget(gbox_set)
         lay_h.addWidget(gbox_ctrl)

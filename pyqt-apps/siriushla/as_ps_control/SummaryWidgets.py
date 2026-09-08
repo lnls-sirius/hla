@@ -408,7 +408,7 @@ class SummaryWidget(QWidget):
             widget.setStyleSheet(
                 '#'+name+'{min-width:'+str(width)+'em;'
                 'max-width:'+str(width)+'em;}')
-            widget.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+            widget.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
             widget.setVisible(name in self.visible_props)
 
         self.setStyleSheet("""
@@ -898,7 +898,7 @@ class SummaryHeader(QWidget):
             widget = QLabel(label, self)
             widget.setObjectName(idt)
             width = _widths[idt]
-            widget.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Preferred)
+            widget.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Preferred)
             widget.setStyleSheet(
                 'font-weight: bold; qproperty-alignment: AlignCenter;'
                 'min-width: {0}em; max-width: {0}em;'.format(width))

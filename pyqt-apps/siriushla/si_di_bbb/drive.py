@@ -44,7 +44,7 @@ class BbBSingleDriveSettingsWidget(QWidget):
             ld_drive = QLabel(
                 '<h3>Drive Pattern Generator</h3>',
                 self,
-                alignment=Qt.AlignCenter,
+                alignment=Qt.AlignmentFlag.AlignCenter,
             )
         else:
             ld_drive = QWidget(self)
@@ -52,12 +52,12 @@ class BbBSingleDriveSettingsWidget(QWidget):
             labd = QLabel(
                 f'<h3>Driver {self._driver_num:d}, NCO BITS: </h3>',
                 ld_drive,
-                alignment=Qt.AlignRight,
+                alignment=Qt.AlignmentFlag.AlignRight,
             )
-            labd.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+            labd.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             lab = SiriusLabel(ld_drive, self.dev_pref + 'BITS')
             lab.setStyleSheet('font-size: 13pt; font-weight: bold;')
-            lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+            lab.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             ld_drive.layout().addStretch()
             ld_drive.layout().addWidget(labd)
             ld_drive.layout().addWidget(lab)
@@ -118,7 +118,7 @@ class BbBSingleDriveSettingsWidget(QWidget):
             il_drive = QLabel(self)
             il_drive.setPixmap(pixmap)
             il_drive.setScaledContents(True)
-            lay.addWidget(il_drive, 14, 1, 1, 3, alignment=Qt.AlignCenter)
+            lay.addWidget(il_drive, 14, 1, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
         else:
             wid = QWidget(self)
             wid.setLayout(QHBoxLayout())
@@ -163,7 +163,7 @@ class BbBDriveSettingsWidget(QWidget):
     def _setupUi(self):
         self.setLayout(QGridLayout())
         ld_drive = QLabel(
-            '<h2>Drive Pattern Generators</h2>', self, alignment=Qt.AlignCenter
+            '<h2>Drive Pattern Generators</h2>', self, alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.layout().addWidget(ld_drive, 0, 0, 1, 5)
         for i in range(3):

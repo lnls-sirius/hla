@@ -41,25 +41,25 @@ class InjCtrlWindow(SiriusMainWindow):
 
         self._setupUi()
 
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         self.title = QLabel(
-            '<h3>Injection Control<h3>', self, alignment=Qt.AlignCenter)
+            '<h3>Injection Control<h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         self.title.setStyleSheet('QLabel{max-height:1.6em;}')
 
         self.wid_comm = self._setupMainBarWidget()
-        self.wid_comm.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        self.wid_comm.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
 
         self.wid_sett = self._setupSettingsWidget()
         self.wid_sett.setSizePolicy(
-            QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
+            QSzPlcy.Policy.Preferred, QSzPlcy.Policy.MinimumExpanding)
 
         self.wid_mon = self._setupMonitorWidget()
         self.wid_log = self._setupLogWidget()
         wid_row = QWidget()
-        wid_row.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        wid_row.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
         hbox_row = QHBoxLayout(wid_row)
         hbox_row.setContentsMargins(0, 0, 0, 0)
         hbox_row.setStretch(0, 3)
@@ -131,7 +131,7 @@ class InjCtrlWindow(SiriusMainWindow):
                 icon-size:12px;}
         """)
         lay_injsys.addWidget(
-            self.bt_is_tgl, 0, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
+            self.bt_is_tgl, 0, 1, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
 
         # EGun
         egun_dev = SiriusPVName(
@@ -169,7 +169,7 @@ class InjCtrlWindow(SiriusMainWindow):
         hbox_injsts.addWidget(self._lb_injcnt)
         self.wid_inj = QGroupBox('Injection', self)
         lay_inj = QGridLayout(self.wid_inj)
-        lay_inj.setAlignment(Qt.AlignCenter)
+        lay_inj.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay_inj.addWidget(self._pb_tiinj, 0, 0)
         lay_inj.addWidget(self._pb_topup, 0, 0)
         lay_inj.addWidget(self._pb_accum, 0, 0)
@@ -192,18 +192,18 @@ class InjCtrlWindow(SiriusMainWindow):
         # TopUp status
         self._lb_tusts = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpState-Sts'))
-        self._lb_tusts.setAlignment(Qt.AlignCenter)
+        self._lb_tusts.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_tusts.setStyleSheet('QLabel{max-height:2em;}')
         self._ld_tunow = QLabel(
-            'Now:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Now:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lb_tunow = ClockLabel(self)
         self._lb_tunow.setStyleSheet('QLabel{max-height:2em;}')
         self._ld_tunxt = QLabel(
-            'Next:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Next:', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._lb_tunxt = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpNextInj-Mon'))
         self._lb_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
-        self._lb_tunxt.setAlignment(Qt.AlignCenter)
+        self._lb_tunxt.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_tunxt.setStyleSheet('QLabel{max-height:2em;}')
         self.wid_tusts = QGroupBox('Top-up status')
         self.wid_tusts.setVisible(False)
@@ -217,7 +217,7 @@ class InjCtrlWindow(SiriusMainWindow):
         # Accum status
         self._lb_acsts = SiriusLabel(
             self, self._inj_prefix.substitute(propty='AccumState-Sts'))
-        self._lb_tusts.setAlignment(Qt.AlignCenter)
+        self._lb_tusts.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._lb_tusts.setStyleSheet('QLabel{max-height:2em;}')
         self.wid_acsts = QGroupBox('Accum status')
         self.wid_acsts.setVisible(False)
@@ -410,19 +410,19 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='HVOpVoltCmdSts-Mon'))
 
         # header
-        ld_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
-        ld_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter)
-        ld_mon = QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignCenter)
+        ld_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        ld_mon = QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Bucket list
         self._wid_bl = BucketList(
             self, prefix=self._prefix, min_size=15, show_graph=True)
-        self._wid_bl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
+        self._wid_bl.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.MinimumExpanding)
 
         wid1 = QWidget()
-        wid1.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        wid1.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
         glay1 = QGridLayout(wid1)
-        glay1.setAlignment(Qt.AlignTop)
+        glay1.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay1.addWidget(self._ld_injset, 0, 0)
         glay1.addWidget(self._led_injset, 0, 1)
         glay1.addWidget(self._ld_currtgt, 1, 0)
@@ -442,9 +442,9 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.setColumnStretch(3, 1)
 
         wid2 = QWidget()
-        wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        wid2.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Fixed)
         glay2 = QGridLayout(wid2)
-        glay2.setAlignment(Qt.AlignTop)
+        glay2.setAlignment(Qt.AlignmentFlag.AlignTop)
         glay2.addWidget(ld_sp, 0, 1)
         glay2.addWidget(ld_rb, 0, 2)
         glay2.addWidget(ld_mon, 0, 3)
@@ -486,8 +486,8 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
-        lay.addWidget(wid1, 0, 0, alignment=Qt.AlignTop)
-        lay.addWidget(wid2, 0, 1, alignment=Qt.AlignTop)
+        lay.addWidget(wid1, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(wid2, 0, 1, alignment=Qt.AlignmentFlag.AlignTop)
         lay.addWidget(self._wid_bl, 1, 0, 1, 2)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 4)
@@ -550,7 +550,7 @@ class InjCtrlWindow(SiriusMainWindow):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 6, 0, 0)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(self._ld_tuperd, 0, 0)
         lay.addWidget(self._sb_tuperd, 0, 1)
         lay.addWidget(self._lb_tuperd, 0, 2)
@@ -652,20 +652,20 @@ class InjCtrlWindow(SiriusMainWindow):
 
     def _create_groupwidget(self, title, sp_wids, rb_wids, aux_wids=None):
         hbox_sp = QHBoxLayout()
-        hbox_sp.setAlignment(Qt.AlignCenter)
+        hbox_sp.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbox_sp.setContentsMargins(0, 0, 0, 0)
         for wid in sp_wids:
             hbox_sp.addWidget(wid)
 
         hbox_rb = QHBoxLayout()
-        hbox_rb.setAlignment(Qt.AlignCenter)
+        hbox_rb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         hbox_rb.setContentsMargins(0, 0, 0, 0)
         for wid in rb_wids:
             hbox_rb.addWidget(wid)
 
         box = QGroupBox(title, self) if title else QWidget(self)
         lay = QVBoxLayout(box)
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         if not isinstance(box, QGroupBox):
             lay.setContentsMargins(0, 0, 0, 0)
         lay.addLayout(hbox_sp)
@@ -673,7 +673,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
         if aux_wids:
             hbox_aux = QHBoxLayout()
-            hbox_aux.setAlignment(Qt.AlignCenter)
+            hbox_aux.setAlignment(Qt.AlignmentFlag.AlignCenter)
             hbox_aux.setContentsMargins(0, 0, 0, 0)
             for wid in aux_wids:
                 hbox_aux.addWidget(wid)
@@ -684,7 +684,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
     def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             if self.wid_curr.underMouse():
                 self.showStatus.emit()
             elif self.wid_shift.underMouse():

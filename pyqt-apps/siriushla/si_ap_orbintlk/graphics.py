@@ -50,10 +50,10 @@ class GraphMonitorWidget(QWidget):
     def _setupTab(self, intlktype):
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         label = QLabel(
-            '<h3>'+intlktype+'</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>'+intlktype+'</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(label, 0, 0)
 
         if intlktype == 'Min.Sum. Threshold':
@@ -139,7 +139,7 @@ class GraphProptySelWidget(QWidget):
         self._label_intlk = QLabel('Interlock: ', self)
         self._cb_intlk = QComboBox(self)
         self._cb_intlk.setSizePolicy(
-            QSzPlcy.Expanding, QSzPlcy.Preferred)
+            QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         intlkitems = list(self._choose_plotopt.keys())
         self._cb_intlk.addItems(intlkitems)
         self._cb_intlk.setCurrentText(self._init_intlkval)
@@ -148,14 +148,14 @@ class GraphProptySelWidget(QWidget):
         self._cb_intlk.currentTextChanged.connect(
             self._set_plotopt_items)
 
-        self._label_comp = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_comp = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon = qta.icon('mdi.circle-outline')
         pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)))
         self._label_comp.setPixmap(pixmap)
-        self._label_comp.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_comp.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._cb_comp = QComboBox(self)
         self._cb_comp.setSizePolicy(
-            QSzPlcy.Expanding, QSzPlcy.Preferred)
+            QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Preferred)
         compitems = self._choose_plotopt[self._init_intlkval]
         self._cb_comp.addItems(compitems)
         self._cb_comp.currentTextChanged.connect(
@@ -203,13 +203,13 @@ class GraphLegendWidget(QWidget):
     def _setupUi(self):
         self._label_leg = QLabel('Legend: ', self)
 
-        self._label_symcur = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_symcur = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_cur = qta.icon(
             'fa5s.window-minimize', offset=(0.0, -0.4), rotated=-45,
             color='red' if self._plan == 'Y' else 'blue')
         pixmap_cur = icon_cur.pixmap(icon_cur.actualSize(QSize(20, 20)))
         self._label_symcur.setPixmap(pixmap_cur)
-        self._label_symcur.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_symcur.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._label_labcur = QLabel(self._metric + self._plan)
 
         self._label_symlim = QLabel()
@@ -222,39 +222,39 @@ class GraphLegendWidget(QWidget):
                      rotated=-45, color='black')])
         pixmap_lim = icon_lim.pixmap(icon_lim.actualSize(QSize(20, 20)))
         self._label_symlim.setPixmap(pixmap_lim)
-        self._label_symlim.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_symlim.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._label_lablim = QLabel(self._plan+' Thres RB')
 
-        self._label_sym0 = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_sym0 = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_s0 = qta.icon('mdi.cards-diamond-outline')
         pixmap = icon_s0.pixmap(icon_s0.actualSize(QSize(20, 20)))
         self._label_sym0.setPixmap(pixmap)
-        self._label_sym0.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_sym0.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._label_lab0 = QLabel(self._plan+' Min/Max Intlk Mon')
 
-        self._label_sym1 = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_sym1 = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_s1 = qta.icon('mdi.circle-outline')
         pixmap = icon_s1.pixmap(icon_s1.actualSize(QSize(20, 20)))
         self._label_sym1.setPixmap(pixmap)
-        self._label_sym0.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_sym0.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._label_lab1 = QLabel('X | Y Intlk Mon')
 
-        self._label_symnok = QLabel('', self, alignment=Qt.AlignRight)
+        self._label_symnok = QLabel('', self, alignment=Qt.AlignmentFlag.AlignRight)
         icon_nok = qta.icon('mdi.square', color='red')
         pixmap_nok = icon_nok.pixmap(icon_nok.actualSize(QSize(20, 20)))
         self._label_symnok.setPixmap(pixmap_nok)
-        self._label_symnok.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_symnok.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._label_labnok = QLabel('Intlk Triggered (Limit exceeded)')
 
         self._label_symok = QLabel()
         icon_ok = qta.icon('mdi.square', color='#00d900')
         pixmap_ok = icon_ok.pixmap(icon_ok.actualSize(QSize(20, 20)))
         self._label_symok.setPixmap(pixmap_ok)
-        self._label_symok.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_symok.setSizePolicy(QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Fixed)
         self._label_labok = QLabel('Intlk Off (All ok)')
 
         lay = QHBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self._label_leg)
         lay.addStretch()
