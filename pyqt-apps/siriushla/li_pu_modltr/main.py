@@ -103,7 +103,7 @@ class LIModltrWindow(SiriusMainWindow):
 
         lay_ilks.setVerticalSpacing(9)
         interlocks = [
-         'Run/Stop', 'PreHeat', 'Charge_Allowed', 'TrigOut_Allowed',
+         'Run_Stop', 'PreHeat', 'Charge_Allowed', 'TrigOut_Allowed',
          'Emer_Stop', 'CPS_ALL', 'Thy_Heat', 'Kly_Heat', 'LV_Rdy_OK',
          'HV_Rdy_OK', 'TRIG_Rdy_OK', 'MOD_Self_Fault', 'MOD_Sys_Ready',
          'TRIG_Norm', 'Pulse_Current']
