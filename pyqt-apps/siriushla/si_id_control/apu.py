@@ -227,8 +227,25 @@ class APUAlarmDetails(IDCommonDialog):
         self._ld_almaxctrl = QLabel('<h4>Axis Control</h4>', self)
 
         self._ld_almflag = QLabel('Flag', self)
-        self._lb_almflag = SiriusLabel(
-            self, self.dev_pref.substitute(propty='AlrmPhase-Mon'))
+        self._lb_almflag = SiriusLabel(self)
+        self._lb_almflag.setToolTip(
+            "0: DriveError\n"
+            "1: PowerOff\n"
+            "2: Lag\n"
+            "3: Overload\n"
+            "4: InputInvalid\n"
+            "5: EncoderError\n"
+            "6: Disabled\n"
+            "7: NotHomed\n"
+            "8: KillSwitchLow\n"
+            "9: KillSwitchHigh\n"
+            "10: LimitSwitchLow\n"
+            "11: LimitSwitchHigh\n"
+            "12: LimitLow\n"
+            "13: LimitHigh\n"
+            "14: HomeSwitch\n"
+            "15: AxisError")
+        self._lb_almflag.channel = self.dev_pref.substitute(propty='AlrmPhase-Mon')
 
         self._ld_almeid = QLabel('Error ID Code', self)
         self._lb_almeid = SiriusLabel(
