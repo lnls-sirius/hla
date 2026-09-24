@@ -24,10 +24,10 @@ class BbBMasksWidget(QWidget):
 
     def _setupUi(self):
         ld_exct_masks = QLabel(
-            '<h3>Excitation Masks</h3>', self, alignment=Qt.AlignCenter
+            '<h3>Excitation Masks</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter
         )
         ld_spec_masks = QLabel(
-            '<h3>Spectrum Averaging Masks</h3>', self, alignment=Qt.AlignCenter
+            '<h3>Spectrum Averaging Masks</h3>', self, alignment=Qt.AlignmentFlag.AlignCenter
         )
 
         graph_exct = WfmGraph(self)

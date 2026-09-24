@@ -3,7 +3,7 @@
 
 import os as _os
 import numpy as np
-
+from pathlib import Path
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
@@ -52,30 +52,30 @@ class ICTSummary(QWidget):
         base_name = _PVName('TL-Glob:AP-CurrInfo:TranspEff-Mon')
         self.lb_transpeff = SiriusLabel(
             self, base_name.substitute(prefix=self.prefix, sec=self.tl))
-        self.lb_transpeff.setAlignment(Qt.AlignCenter)
+        self.lb_transpeff.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay_transpeff = QVBoxLayout()
         lay_transpeff.addWidget(QLabel('<h4>Transport Efficiency [%]</h4>',
-                                       self, alignment=Qt.AlignCenter))
+                                       self, alignment=Qt.AlignmentFlag.AlignCenter))
         lay_transpeff.addWidget(self.lb_transpeff)
         lay.addLayout(lay_transpeff, 0, 0, 1, 2)
 
         for col, ict in enumerate(self.icts):
             txt_status = QLabel('Status: ', self,
-                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+                                alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             led_status = SiriusLedAlert(self, ict.substitute(
                 prefix=self.prefix, propty='ReliableMeas-Mon'))
             led_status.setObjectName(ict+'_status')
             txt_charge = QLabel(
-                'Charge: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                'Charge: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             lb_charge = SiriusLabel(
                 self, ict.substitute(prefix=self.prefix, propty='Charge-Mon'))
             lb_charge.setObjectName(ict+'_charge')
             lb_charge.setStyleSheet('max-width: 10em;')
             lay_ict = QGridLayout()
-            lay_ict.addWidget(QLabel(ict, self, alignment=Qt.AlignCenter),
+            lay_ict.addWidget(QLabel(ict, self, alignment=Qt.AlignmentFlag.AlignCenter),
                               0, 0, 1, 2)
             lay_ict.addWidget(txt_status, 1, 0)
-            lay_ict.addWidget(led_status, 1, 1, alignment=Qt.AlignLeft)
+            lay_ict.addWidget(led_status, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
             lay_ict.addWidget(txt_charge, 2, 0)
             lay_ict.addWidget(lb_charge, 2, 1)
             lay.addLayout(lay_ict, 1, col)
@@ -98,10 +98,15 @@ class ICTMonitoring(SiriusMainWindow):
         self.prefix = prefix
         self.icts = TL_2_ICTS[self.tl]
 
-        tmp_file = _substitute_in_file(
-            _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui',
+        file_path = _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui'
+        ui_file = _substitute_in_file(
+            file_path,
             {'TL': self.tl, 'ICT1': self.icts[0], 'ICT2': self.icts[1],
              'PREFIX': prefix + ('-' if prefix else '')})
+        path = Path(file_path)
+        tmp_file = str(path.with_name(f"temp_{path.name}"))
+        with open(tmp_file, "w") as file:
+            file.write(ui_file.getvalue())
         self.setWindowTitle(self.tl+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)
         self.setObjectName(self.tl+'App')
@@ -188,7 +193,7 @@ class _ICTSettings(SiriusDialog):
 
     def _setupUi(self):
         l_ictacq = QLabel('<h3>'+self.ict_prefix+' Settings</h3>', self,
-                          alignment=Qt.AlignCenter)
+                          alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.gbox_reliablemeas = self._setupReliableMeasWidget()
         self.gbox_generalsettings = self._setupICTGeneralSettingsWidget()
@@ -201,7 +206,7 @@ class _ICTSettings(SiriusDialog):
         self.bt_cal.setAutoDefault(False)
         self.bt_cal.setDefault(False)
         hlay_cal = QHBoxLayout()
-        hlay_cal.addItem(QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_cal.addItem(QSpacerItem(4, 2, QSzPlcy.Policy.Expanding, QSzPlcy.Policy.Fixed))
         hlay_cal.addWidget(self.bt_cal)
 
         self.setStyleSheet("""
@@ -238,7 +243,7 @@ class _ICTSettings(SiriusDialog):
             callback=self._updateReliableMeasLabels)
 
         gbox_reliablemeas = QGroupBox('ICT Measure Reliability Status', self)
-        gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        gbox_reliablemeas.setSizePolicy(QSzPlcy.Policy.Minimum, QSzPlcy.Policy.Fixed)
 
         self.label_reliablemeas0 = QLabel('', self)
         self.led_ReliableMeas0 = SiriusLedAlert(
@@ -308,8 +313,8 @@ class _ICTSettings(SiriusDialog):
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Digi = QGridLayout()
         lay_Digi.addWidget(l_DigiSts, 0, 0)
-        lay_Digi.addWidget(self.led_DigiSts, 0, 1, alignment=Qt.AlignLeft)
-        lay_Digi.addWidget(self.pb_DigiDetails, 0, 2, alignment=Qt.AlignLeft)
+        lay_Digi.addWidget(self.led_DigiSts, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_Digi.addWidget(self.pb_DigiDetails, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay_Digi.addWidget(l_DigiDelay, 1, 0)
         lay_Digi.addWidget(self.pydmspinbox_DigiDelay, 1, 1)
         lay_Digi.addWidget(self.pydmlabel_DigiDelay, 1, 2)
@@ -351,8 +356,8 @@ class _ICTSettings(SiriusDialog):
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Integ = QGridLayout()
         lay_Integ.addWidget(l_IntegSts, 0, 0)
-        lay_Integ.addWidget(self.led_IntegSts, 0, 1, alignment=Qt.AlignLeft)
-        lay_Integ.addWidget(self.pb_IntegDetails, 0, 2, alignment=Qt.AlignLeft)
+        lay_Integ.addWidget(self.led_IntegSts, 0, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay_Integ.addWidget(self.pb_IntegDetails, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay_Integ.addWidget(l_IntegDelay, 1, 0)
         lay_Integ.addWidget(self.pydmspinbox_IntegDelay, 1, 1)
         lay_Integ.addWidget(self.pydmlabel_IntegDelay, 1, 2)
@@ -371,15 +376,15 @@ class _ICTSettings(SiriusDialog):
 
         flay = QFormLayout()
         flay.addRow(l_sampletrg, hlay_sampletrg)
-        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         flay.addRow(QLabel('<h4>Triggers</h4>'))
         flay.addRow(label_Digi, lay_Digi)
-        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         flay.addRow(label_Inte, lay_Integ)
-        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         flay.addRow(l_thold, hlay_thold)
-        flay.setFormAlignment(Qt.AlignCenter)
-        flay.setLabelAlignment(Qt.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         gbox_generalsettings.setLayout(flay)
         return gbox_generalsettings
 
@@ -401,18 +406,18 @@ class _ICTCalibration(QWidget):
 
     def _setupUi(self):
         label_cal = QLabel('<h3>'+self.ict_prefix+' Calibration</h3>', self,
-                           alignment=Qt.AlignCenter)
+                           alignment=Qt.AlignmentFlag.AlignCenter)
         lay_meassettings = self._setupMeasSettingsLayout()
         [self.graph_rawread, lay_graphsettings] = self._setupGraph()
 
         glay = QGridLayout()
         glay.addWidget(label_cal, 0, 0, 1, 2)
         glay.addWidget(QLabel('<h4>Measurement Settings</h4>', self,
-                              alignment=Qt.AlignCenter), 1, 0)
-        glay.addLayout(lay_meassettings, 2, 0, alignment=Qt.AlignCenter)
+                              alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
+        glay.addLayout(lay_meassettings, 2, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         glay.addLayout(lay_graphsettings, 3, 0)
         glay.addWidget(QLabel('<h4>RawReadings Monitor</h4>', self,
-                              alignment=Qt.AlignCenter), 1, 1)
+                              alignment=Qt.AlignmentFlag.AlignCenter), 1, 1)
         glay.addWidget(self.graph_rawread, 2, 1, 2, 1)
         self.setLayout(glay)
         style = '#' + self.objectName() + """{
@@ -551,23 +556,23 @@ class _ICTCalibration(QWidget):
         flay = QFormLayout()
         flay.addRow(l_thold, hlay_thold)
         flay.addRow(l_hfreject, hlay_hfreject)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_2ndreaddy, hlay_2ndreaddy)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_samplecnt, hlay_samplecnt)
         flay.addRow(l_aperture, hlay_aperture)
         flay.addRow(l_samplerate, hlay_samplerate)
         flay.addRow(l_imped, hlay_imped)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_bcmrange, self.pydmspinbox_BCMRange)
         flay.addRow(l_range, hlay_range)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_calenbl, hlay_calenbl)
         flay.addRow(l_calcharge, hlay_calcharge)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
         flay.addRow(l_download, self.pydmpushbutton_Download)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
-        flay.setLabelAlignment(Qt.AlignRight)
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Preferred))
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
         return flay
 
     def _setupGraph(self):
@@ -585,19 +590,19 @@ class _ICTCalibration(QWidget):
         graph_rawread.setLabel('bottom', text='Index', color='gray')
         graph_rawread.addChannel(
             y_channel=self.ict_prefix.substitute(propty='RawPulse-Mon'),
-            name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
+            name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         graph_rawread.addChannel(
             y_channel=self.ict_prefix.substitute(propty='RawNoise-Mon'),
-            name='RawNoise', color='red', lineWidth=2, lineStyle=Qt.SolidLine)
+            name='RawNoise', color='red', lineWidth=2, lineStyle=Qt.PenStyle.SolidLine)
         leftAxis = graph_rawread.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curvePulse = graph_rawread.curveAtIndex(0)
         self.curveNoise = graph_rawread.curveAtIndex(1)
 
         label_graphsettings = QLabel('<h4>Graph Settings</h4>', self,
-                                     alignment=Qt.AlignHCenter)
+                                     alignment=Qt.AlignmentFlag.AlignHCenter)
         l_plot = QLabel('Plot first', self,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                        alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         l_points = QLabel(' points ', self)
         self.sb_nrpoints = QSpinBoxPlus(self)
         self.sb_nrpoints.setMinimum(0)
@@ -625,14 +630,14 @@ class _MyWaveformCurveItem(WaveformCurveItem):
         if self.y_waveform is None:
             return
         if self.x_waveform is None:
-            self.setData(y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float_))
+            self.setData(y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float64))
             return
         if self.x_waveform.shape[0] > self.y_waveform.shape[0]:
             self.x_waveform = self.x_waveform[:self.y_waveform.shape[0]]
         elif self.x_waveform.shape[0] < self.y_waveform.shape[0]:
             self.y_waveform = self.y_waveform[:self.x_waveform.shape[0]]
-        self.setData(x=self.x_waveform[0:POINTS_TO_PLOT].astype(np.float_),
-                     y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float_))
+        self.setData(x=self.x_waveform[0:POINTS_TO_PLOT].astype(np.float64),
+                     y=self.y_waveform[0:POINTS_TO_PLOT].astype(np.float64))
         self.needs_new_x = True
         self.needs_new_y = True
 

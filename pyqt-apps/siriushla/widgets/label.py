@@ -2,7 +2,7 @@
 
 from pyqtgraph import functions as func
 from qtpy.QtWidgets import QLabel, QApplication
-from qtpy.QtCore import Qt, Property, Q_ENUMS
+from qtpy.QtCore import Qt, Property
 from pydm.utilities import units
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
@@ -12,7 +12,7 @@ from pydm.utilities import is_pydm_app, is_qt_designer
 from siriuspy.clientarch import Time as _Time
 
 
-class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
+class SiriusLabel(TextFormatter, PyDMWidget, QLabel):
     """
     A QLabel with support for Channels and more from PyDM
 
@@ -26,7 +26,6 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         If True, label do not use unit convertion feature.
         Default to False.
     """
-    Q_ENUMS(DisplayFormat)
     DisplayFormat = DisplayFormat
     DisplayFormat.Time = 6
     DisplayFormat.BSMPUDCVersion = 7
@@ -35,11 +34,12 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
 
     def __init__(self, parent=None, init_channel=None, keep_unit=False, **kws):
         """Init."""
-        QLabel.__init__(self, parent, **kws)
+        super().__init__()
         PyDMWidget.__init__(self, init_channel=init_channel)
+        QLabel.__init__(self, parent, **kws)
         self.app = QApplication.instance()
         self.setTextFormat(Qt.PlainText)
-        self.setTextInteractionFlags(Qt.NoTextInteraction)
+        self.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
         self.setText("######")
         self._display_format_type = self.DisplayFormat.Default
         self._string_encoding = "utf_8"

@@ -1,6 +1,7 @@
 """Control the Correctors Graphic Displnay."""
 
 from pyqtgraph import mkPen
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QCheckBox, QLabel, QHBoxLayout, QGroupBox, \
     QSizePolicy as QSzPol
 from qtpy.QtGui import QColor
@@ -83,7 +84,7 @@ class CorrectorsWidget(BaseWidget):
         corrs = ('CH', 'CV')
         for chb, name, pvi, sty, wid in zip(chcboxs, names, pvs, stys, wids):
             pen = mkPen(QColor(0, 0, 0))
-            pen.setStyle(sty)
+            pen.setStyle(Qt.PenStyle(sty))
             pen.setWidth(wid)
             for pln, corr in zip(plns, corrs):
                 maxkick = InfLine(

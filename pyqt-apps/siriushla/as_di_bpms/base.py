@@ -43,7 +43,7 @@ class BaseWidget(QWidget):
             grpbx = QWidget(self)
         fbl = QFormLayout(grpbx)
         grpbx.layoutf = fbl
-        fbl.setLabelAlignment(Qt.AlignVCenter)
+        fbl.setLabelAlignment(Qt.AlignmentFlag.AlignVCenter)
         for prop in props:
             if len(prop) == 2:
                 pvs, txt = prop
@@ -106,7 +106,7 @@ class BaseWidget(QWidget):
         elif widtype == 'lineedit':
             wid = SiriusLineEdit(self, pvname)
             wid.setStyleSheet("QWidget{min-width:5em;}")
-            wid.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            wid.setSizePolicy(QSzPlcy.Policy.Maximum, QSzPlcy.Policy.Preferred)
             if prec is not None:
                 wid.precisionFromPV = False
                 wid.precision = prec
@@ -167,7 +167,7 @@ def get_custom_widget_class(CLASS):
         def __init__(self, parent=None, **kws):
             """Initialize object."""
             super().__init__(parent=parent, **kws)
-            self.setFocusPolicy(Qt.StrongFocus)
+            self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         def wheelEvent(self, event):
             """Reimplement wheel event to ignore event when out of focus."""
@@ -220,7 +220,7 @@ class BaseGraph(BaseWidget):
         cdta = self.graph.curveAtIndex(-1)
         cbx = QCheckBox(name, self)
         plt = cbx.palette()
-        plt.setColor(plt.WindowText, cdta.color)
+        plt.setColor(plt.ColorRole.WindowText, cdta.color)
         cbx.setPalette(plt)
         cbx.setChecked(True)
         self.vbl.addWidget(cbx)

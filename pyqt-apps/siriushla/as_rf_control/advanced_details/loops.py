@@ -38,12 +38,12 @@ class LoopsDetails(SiriusDialog):
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         title_frame = RFTitleFrame(self, self.system)
         lay_title = QVBoxLayout(title_frame)
         lay_title.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignmentFlag.AlignCenter))
 
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -70,7 +70,7 @@ class LoopsDetails(SiriusDialog):
 
     def _loopsControlLayout(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         gbox_gen = QGroupBox('General Controls')
@@ -97,54 +97,54 @@ class LoopsDetails(SiriusDialog):
 
         # Voltage Inc. Rate
         lb_vinc = SiriusLabel(self, self.prefix+chs_dict['29'][1]+'-RB',
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lb_vinc.showUnits = True
-        lay.addWidget(QLabel('29', alignment=Qt.AlignCenter), 3, 0)
+        lay.addWidget(QLabel('29', alignment=Qt.AlignmentFlag.AlignCenter), 3, 0)
         lay.addWidget(QLabel(chs_dict['29'][0]), 3, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['29'][1]+'-SP'),
-            3, 2, alignment=Qt.AlignRight)
+            3, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(lb_vinc, 3, 3)
 
         # # Phase Inc. Rate
         lb_pinc = SiriusLabel(self, self.prefix+chs_dict['28'][1]+'-RB',
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lb_pinc.showUnits = True
-        lay.addWidget(QLabel('28', alignment=Qt.AlignCenter), 4, 0)
+        lay.addWidget(QLabel('28', alignment=Qt.AlignmentFlag.AlignCenter), 4, 0)
         lay.addWidget(QLabel(chs_dict['28'][0]), 4, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['28'][1]+'-SP'),
-            4, 2, alignment=Qt.AlignRight)
+            4, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(lb_pinc, 4, 3)
 
         # Look Reference
-        lay.addWidget(QLabel('106', alignment=Qt.AlignCenter), 5, 0)
+        lay.addWidget(QLabel('106', alignment=Qt.AlignmentFlag.AlignCenter), 5, 0)
         lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
         lay.addWidget(SiriusPushButton(
             self, self.prefix+chs_dict['106'][1],
             'OFF', pressValue=1, releaseValue=0),
-            5, 2, alignment=Qt.AlignRight)
+            5, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['106'][1]),
-            5, 3, alignment=Qt.AlignCenter)
+            5, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # # Rect/Polar Mode Select
-        lay.addWidget(QLabel('114', alignment=Qt.AlignCenter), 6, 0)
+        lay.addWidget(QLabel('114', alignment=Qt.AlignmentFlag.AlignCenter), 6, 0)
         lay.addWidget(QLabel(chs_dict['114'][0]), 6, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['114'][1]+'-Sel'),
-            6, 2, alignment=Qt.AlignRight)
+            6, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['114'][1]+'-Sts',
-            alignment=Qt.AlignCenter), 6, 3)
+            alignment=Qt.AlignmentFlag.AlignCenter), 6, 3)
 
         # Quadrant Selection
-        lay.addWidget(QLabel('107', alignment=Qt.AlignCenter), 7, 0)
+        lay.addWidget(QLabel('107', alignment=Qt.AlignmentFlag.AlignCenter), 7, 0)
         lay.addWidget(QLabel(chs_dict['107'][0]), 7, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['107'][1]+'-Sel'),
-            7, 2, alignment=Qt.AlignRight)
+            7, 2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
-            alignment=Qt.AlignCenter), 7, 3)
+            alignment=Qt.AlignmentFlag.AlignCenter), 7, 3)
 
         # Limits
         pb_limit = QPushButton(
@@ -155,8 +155,8 @@ class LoopsDetails(SiriusDialog):
         pb_limit.setStyleSheet('min-width:8em')
         lay.addWidget(pb_limit, 9, 1)
 
-        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
-        lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
+        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed), 8, 0)
+        lay.addItem(QSpacerItem(40, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 4)
 
         # Amp Ref Min
         self._setupLabelEdit(lay, chs_dict, '26 mV', 0, 5)
@@ -169,27 +169,27 @@ class LoopsDetails(SiriusDialog):
         self._setupLabelEdit(lay, chs_dict, '30', 3, 5)
 
         # Phase Correction Control
-        lay.addWidget(QLabel('31', alignment=Qt.AlignCenter), 4, 5)
+        lay.addWidget(QLabel('31', alignment=Qt.AlignmentFlag.AlignCenter), 4, 5)
         lay.addWidget(QLabel(chs_dict['31'][0]), 4, 6)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+chs_dict['31'][1]+'-Sel'), 4, 7)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['31'][1]+'-Sts'),
-            4, 8, alignment=Qt.AlignHCenter)
+            4, 8, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Phase Correct Error
         lb_80 = SiriusLabel(self, self.prefix+chs_dict['80'][1],
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lb_80.showUnits = True
-        lay.addWidget(QLabel('80', alignment=Qt.AlignCenter), 5, 5)
+        lay.addWidget(QLabel('80', alignment=Qt.AlignmentFlag.AlignCenter), 5, 5)
         lay.addWidget(QLabel(chs_dict['80'][0]), 5, 6)
         lay.addWidget(lb_80, 5, 8)
 
         # Phase Correct Control
         lb_81 = SiriusLabel(self, self.prefix+chs_dict['81'][1],
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignmentFlag.AlignCenter)
         lb_81.showUnits = True
-        lay.addWidget(QLabel('81', alignment=Qt.AlignCenter), 6, 5)
+        lay.addWidget(QLabel('81', alignment=Qt.AlignmentFlag.AlignCenter), 6, 5)
         lay.addWidget(QLabel(chs_dict['81'][0]), 6, 6)
         lay.addWidget(lb_81, 6, 8)
 
@@ -200,7 +200,7 @@ class LoopsDetails(SiriusDialog):
 
     def _setupConditioningLayout(self, chs_dict):
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
 
         # Pulse Enable
@@ -218,9 +218,9 @@ class LoopsDetails(SiriusDialog):
         # Duty Cycle RB
         lb_condfreq = SiriusLabel(self, self.prefix+chs_dict['530'][1])
         lb_condfreq.showUnits = True
-        lay.addWidget(QLabel('530', alignment=Qt.AlignCenter), 1, 4)
+        lay.addWidget(QLabel('530', alignment=Qt.AlignmentFlag.AlignCenter), 1, 4)
         lay.addWidget(QLabel(chs_dict['530'][0]), 1, 5)
-        lay.addWidget(lb_condfreq, 1, 7, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_condfreq, 1, 7, alignment=Qt.AlignmentFlag.AlignCenter)
 
         row = 2
         if self.section == 'BO':
@@ -246,30 +246,30 @@ class LoopsDetails(SiriusDialog):
         label.showUnits = True
 
         lay.addWidget(QLabel(
-            key.split()[0], alignment=Qt.AlignCenter), row, column)
+            key.split()[0], alignment=Qt.AlignmentFlag.AlignCenter), row, column)
         lay.addWidget(QLabel(chs_dict[key][0]), row, column+1)
         lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, column+2)
-        lay.addWidget(label, row, column+3, alignment=Qt.AlignCenter)
+        lay.addWidget(label, row, column+3, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def _setupLedState(self, lay, chs_dict, key, row, has_button):
-        lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
+        lay.addWidget(QLabel(key, alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
         lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
 
         ending = ''
         if has_button:
             lay.addWidget(PyDMStateButton(
                 self, self.prefix+chs_dict[key][1]+'-Sel'),
-                row, 2, alignment=Qt.AlignCenter)
+                row, 2, alignment=Qt.AlignmentFlag.AlignCenter)
             ending = '-Sts'
 
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict[key][1]+ending),
-            row, 3, alignment=Qt.AlignCenter)
+            row, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def _specificLoopsLayout(self, rect_or_polar):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(9)
         chs_dict = self.syst_dict[rect_or_polar]
 
@@ -288,7 +288,7 @@ class LoopsDetails(SiriusDialog):
 
         title_lay = QHBoxLayout()
         title_lay.addWidget(QLabel(
-            f'<h3>{rect_or_polar} Loops</h3>', alignment=Qt.AlignCenter))
+            f'<h3>{rect_or_polar} Loops</h3>', alignment=Qt.AlignmentFlag.AlignCenter))
         title_lay.addWidget(SiriusLedState(
             self, self.prefix+self.syst_dict['Control']['Mode']))
 
@@ -305,10 +305,10 @@ class LoopsDetails(SiriusDialog):
 
         for grp_name, addrs in grp_dict.items():
             grp_lay = QVBoxLayout()
-            grp_lay.setAlignment(Qt.AlignTop)
+            grp_lay.setAlignment(Qt.AlignmentFlag.AlignTop)
             grp_lay.addLayout(
                 self._controlLayout(chs_dict[grp_name]['Control'], addrs))
-            grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
             grp_lay.addLayout(
                 self._statisticsLayout(chs_dict[grp_name], False))
             wid_grp = QWidget()
@@ -316,7 +316,7 @@ class LoopsDetails(SiriusDialog):
             grps.addTab(wid_grp, f'{grp_name} Loop')
 
         lay.addLayout(title_lay)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Policy.Ignored, QSzPlcy.Policy.Fixed))
         lay.addLayout(rect_lay)
         lay.addWidget(grps)
 
@@ -327,18 +327,18 @@ class LoopsDetails(SiriusDialog):
         lay.setHorizontalSpacing(18)
 
         lay.addWidget(QLabel(
-            'In-Phase', alignment=Qt.AlignCenter), 0, 2)
+            'In-Phase', alignment=Qt.AlignmentFlag.AlignCenter), 0, 2)
         lay.addWidget(QLabel(
-            'Quadrature', alignment=Qt.AlignCenter), 0, 3)
+            'Quadrature', alignment=Qt.AlignmentFlag.AlignCenter), 0, 3)
         lay.addWidget(QLabel(
-            'Amp', alignment=Qt.AlignCenter), 0, 4)
+            'Amp', alignment=Qt.AlignmentFlag.AlignCenter), 0, 4)
         lay.addWidget(QLabel(
-            'Phase', alignment=Qt.AlignCenter), 0, 5)
+            'Phase', alignment=Qt.AlignmentFlag.AlignCenter), 0, 5)
         if is_top_section:
             lay.addItem(QSpacerItem(
-                24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
+                24, 0, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 6)
             lay.addWidget(QLabel(
-                'Power', alignment=Qt.AlignCenter), 0, 7, 1, 2)
+                'Power', alignment=Qt.AlignmentFlag.AlignCenter), 0, 7, 1, 2)
 
         rows_dict = chs_dict
         if rect_or_polar != '':
@@ -349,9 +349,9 @@ class LoopsDetails(SiriusDialog):
         for key, dic in rows_dict.items():
             if key != 'Control':
                 lay.addWidget(QLabel(
-                    key, alignment=Qt.AlignCenter), row, 0)
+                    key, alignment=Qt.AlignmentFlag.AlignCenter), row, 0)
                 lay.addWidget(QLabel(
-                    dic['Label'], alignment=Qt.AlignLeft), row, 1)
+                    dic['Label'], alignment=Qt.AlignmentFlag.AlignLeft), row, 1)
                 column = 2
                 for k, val in dic.items():
                     if k != 'Label' and val != '-':
@@ -361,7 +361,7 @@ class LoopsDetails(SiriusDialog):
                         column += 1
                     elif val == '-':
                         lay.addWidget(QLabel(
-                            '-', alignment=Qt.AlignCenter), row, column)
+                            '-', alignment=Qt.AlignmentFlag.AlignCenter), row, column)
                         column += 1
                     if column == 6:
                         column += 1
@@ -371,16 +371,16 @@ class LoopsDetails(SiriusDialog):
 
     def _controlLayout(self, chs_dict, addrs):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Enable
-        lay.addWidget(QLabel(addrs[0], alignment=Qt.AlignCenter), 1, 0)
+        lay.addWidget(QLabel(addrs[0], alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
         lay.addWidget(QLabel(chs_dict[addrs[0]][0]), 1, 1)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+chs_dict[addrs[0]][1]+'-Sel'), 1, 2)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict[addrs[0]][1]+'-Sts'),
-            1, 3, alignment=Qt.AlignHCenter)
+            1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Input Selection
         if len(addrs) == 5:
@@ -393,11 +393,11 @@ class LoopsDetails(SiriusDialog):
 
         lb_inpsel = SiriusLabel(self, self.prefix+chs_dict[addrs[1]][1]+'-Sts')
         lb_inpsel.showUnits = True
-        lay.addWidget(QLabel(addrs[1], alignment=Qt.AlignCenter), row, column)
+        lay.addWidget(QLabel(addrs[1], alignment=Qt.AlignmentFlag.AlignCenter), row, column)
         lay.addWidget(QLabel(chs_dict[addrs[1]][0]), row, column+1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict[addrs[1]][1]+'-Sel'),
-            row, column+2, alignment=Qt.AlignRight)
+            row, column+2, alignment=Qt.AlignmentFlag.AlignRight)
         lay.addWidget(lb_inpsel, row, column+3)
 
         column += 4
@@ -411,7 +411,7 @@ class LoopsDetails(SiriusDialog):
             lb = SiriusLabel(self, self.prefix+chs_dict[keys[i]][1]+'-RB')
             lb.showUnits = True
             lay.addWidget(QLabel(
-                keys[i], alignment=Qt.AlignCenter), row, column)
+                keys[i], alignment=Qt.AlignmentFlag.AlignCenter), row, column)
             lay.addWidget(QLabel(chs_dict[keys[i]][0]), row, column+1)
             lay.addWidget(SiriusSpinbox(
                 self, self.prefix+chs_dict[keys[i]][1]+'-SP'), row, column+2)

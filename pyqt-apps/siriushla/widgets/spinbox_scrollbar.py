@@ -20,7 +20,7 @@ class PyDMSpinboxScrollbar(QWidget):
 
         self.spinbox = SiriusSpinbox(
             parent=self, init_channel=init_channel)
-        self.spinbox.setAlignment(Qt.AlignCenter)
+        self.spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.spinbox.setStyleSheet("SiriusSpinbox{min-height:1.29em;}")
         self.spinbox.setSizePolicy(QSzPol.Expanding, QSzPol.Preferred)
 

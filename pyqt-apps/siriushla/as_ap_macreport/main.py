@@ -36,15 +36,15 @@ class MacReportWindow(SiriusMainWindow):
         self._update_task = None
 
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
-        self.setFocus(True)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setFocus()
 
     def _setupUi(self):
         cwid = QWidget(self)
         self.setCentralWidget(cwid)
 
         title = QLabel('<h3>Machine Reports</h3>', self,
-                       alignment=Qt.AlignCenter)
+                       alignment=Qt.AlignmentFlag.AlignCenter)
 
         self._timesel_gbox = self._setupTimePeriodSelWidget()
         self._timesel_gbox.setObjectName('timesel_gbox')
@@ -83,10 +83,10 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(title, 0, 0, 1, 3)
         lay.addWidget(self._timesel_gbox, 1, 0)
         lay.addWidget(self._progress_list, 1, 1, 1, 2,
-                      alignment=Qt.AlignBottom)
+                      alignment=Qt.AlignmentFlag.AlignBottom)
         lay.addWidget(self._reports_wid, 2, 0, 1, 3)
-        lay.addWidget(self._pb_showpvsd, 4, 0, alignment=Qt.AlignLeft)
-        lay.addWidget(self._pb_showraw, 4, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self._pb_showpvsd, 4, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        lay.addWidget(self._pb_showraw, 4, 2, alignment=Qt.AlignmentFlag.AlignRight)
 
         self._updateUserShiftStats(setup=True)
         self._updateStoredCurrentStats(setup=True)
@@ -123,7 +123,7 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.dt_start, 0, 1)
         lay.addWidget(ld_tstop, 1, 0)
         lay.addWidget(self.dt_stop, 1, 1)
-        lay.addWidget(self.pb_search, 2, 1, alignment=Qt.AlignRight)
+        lay.addWidget(self.pb_search, 2, 1, alignment=Qt.AlignmentFlag.AlignRight)
         return wid
 
     def _setupUserShiftStatsWidget(self):
@@ -150,8 +150,8 @@ class MacReportWindow(SiriusMainWindow):
         lay = QGridLayout(wid)
         lay.setVerticalSpacing(0)
         lay.setHorizontalSpacing(0)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 0)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
+        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 0)
         lay.addWidget(LbHHeader('Programmed Time (h)'), 0, 1)
         lay.addWidget(self.lb_uspt, 0, 2)
         lay.addWidget(LbHHeader('Delivered Time (h)'), 1, 1)
@@ -191,7 +191,7 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rsbt, 16, 2)
         lay.addWidget(LbHHeader('Injection time (avg ± std) (h)'), 17, 1)
         lay.addWidget(self.lb_itav, 17, 2)
-        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
+        lay.addItem(QSpacerItem(120, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 0, 3)
         return wid
 
     def _updateUserShiftStats(self, setup=False):
@@ -287,7 +287,7 @@ class MacReportWindow(SiriusMainWindow):
         lay = QGridLayout(wid)
         lay.setVerticalSpacing(0)
         lay.setHorizontalSpacing(0)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(LbHHeader(
             'Current (avg ± std) (mA) (MB)'), 1, 0)
         lay.addWidget(LbHHeader('Time in MB mode (h)'), 2, 0)
@@ -407,7 +407,7 @@ class MacReportWindow(SiriusMainWindow):
         lay = QGridLayout(wid)
         lay.setVerticalSpacing(0)
         lay.setHorizontalSpacing(0)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(LbHHeader('Operational Time (h)'), 1, 0)
         lay.addWidget(LbHHeader('Operational Percentage (%)'), 2, 0)
         lay.addWidget(LbHHeader('Failures Time (h)'), 3, 0)

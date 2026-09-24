@@ -32,8 +32,8 @@ class HLTriggerSimple(BaseWidget):
             deltadelay=False, deltadelayraw=False):
         super().__init__(parent, device, prefix)
         flay = QFormLayout(self)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignCenter)
 
         l_TIstatus = QLabel('Status: ', self)
         ledmulti_TIStatus = PyDMLedMultiChannel(
@@ -114,20 +114,20 @@ class HLTriggerSimple(BaseWidget):
                 unit = '' if 'Raw' in tab else ' [us]'
                 wid = QWidget(self)
                 lay = QGridLayout(wid)
-                lay.setAlignment(Qt.AlignTop)
+                lay.setAlignment(Qt.AlignmentFlag.AlignTop)
                 lay.addWidget(
-                    QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignCenter)
+                    QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(
-                    QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignCenter)
+                    QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignmentFlag.AlignCenter)
                 lay.addWidget(
-                    QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignCenter)
+                    QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignmentFlag.AlignCenter)
                 devname = self.device.device_name
                 ll_obj_names = HLTimeSearch.get_ll_trigger_names(devname)
                 hl_obj_names = HLTimeSearch.get_hl_trigger_channels(devname)
                 for idx, objs in enumerate(zip(ll_obj_names, hl_obj_names)):
                     nam = QLabel(
                         objs[0] + '\n(' + objs[1] + ')', wid,
-                        alignment=Qt.AlignCenter)
+                        alignment=Qt.AlignmentFlag.AlignCenter)
                     spin = _SpinBox(
                         wid, init_channel=self.get_pvname(tab+'-SP'),
                         index=idx)
@@ -159,7 +159,7 @@ class HLTriggerDetailed(BaseWidget):
         self.my_layout.setVerticalSpacing(0)
         lab = QLabel('<h1>' + self.device.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 0, 0, 1, 2)
-        self.my_layout.setAlignment(lab, Qt.AlignCenter)
+        self.my_layout.setAlignment(lab, Qt.AlignmentFlag.AlignCenter)
 
         self.status_wid = QGroupBox('Status', self)
         self.my_layout.addWidget(self.status_wid, 1, 0)
@@ -349,7 +349,7 @@ class HLTriggerDetailed(BaseWidget):
         text = '<' if show else '>'
         but.setText(text)
         tooltip = ('Hide' if show else 'Show') + but.toolTip()[4:]
-        self.sender().setToolTip(tooltip)
+        but.setToolTip(tooltip)
         parent = but.parent()
         while parent is not None:
             parent.adjustSize()
@@ -371,10 +371,10 @@ class HLTriggerDetailed(BaseWidget):
         sc_area.setWidget(wid)
 
         lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignCenter)
-        lay.addWidget(QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignCenter)
-        lay.addWidget(QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
+        lay.addWidget(QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignmentFlag.AlignCenter)
+        lay.addWidget(QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignmentFlag.AlignCenter)
         ll_obj_names = HLTimeSearch.get_ll_trigger_names(
             self.device.device_name)
         for idx, obj in enumerate(ll_obj_names, 1):
@@ -390,8 +390,8 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(nam, idx, 0)
             lay.addWidget(spin, idx, 1)
             lay.addWidget(lbl, idx, 2)
-        sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
-        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        sc_area.setSizeAdjustPolicy(QScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
+        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         return wid_
 
 
@@ -446,7 +446,7 @@ class LLTriggers(QWidget):
         vl = QVBoxLayout(self)
         vl.addWidget(QLabel(
             '<h1>Low Level Triggers of '+hltrigger+'</h1>',
-            self, alignment=Qt.AlignCenter))
+            self, alignment=Qt.AlignmentFlag.AlignCenter))
         self.setObjectName(hltrigger.sec+'App')
 
         amc_list = set()
@@ -562,7 +562,7 @@ class HLTriggerList(BaseList):
         is_digital_input = HLTimeSearch.is_digital_input(devname)
         sp = rb = None
         if prop == 'name':
-            sp = QLabel(device.device_name, self, alignment=Qt.AlignCenter)
+            sp = QLabel(device.device_name, self, alignment=Qt.AlignmentFlag.AlignCenter)
         elif prop == 'status':
             init_channel = device.substitute(propty='Status-Mon')
             sp = SiriusLedAlert(self, init_channel=init_channel)

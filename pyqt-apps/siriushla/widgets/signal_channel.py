@@ -8,21 +8,22 @@ from pydm.widgets.channel import PyDMChannel
 
 class SiriusConnectionSignal(QObject, PyDMChannel):
     send_value_signal = Signal(
-        [int], [float], [str], [bool], [_np.ndarray], [list])
+        (int,), (float,), (str,), (bool,), (_np.ndarray,), (list,))
     new_value_signal = Signal(
-        [int], [float], [str], [bool], [_np.ndarray], [list])
+        (int,), (float,), (str,), (bool,), (_np.ndarray,), (list,))
     connection_state_signal = Signal(bool)
     write_access_signal = Signal(bool)
     enum_strings_signal = Signal(tuple)
     unit_signal = Signal(str)
     prec_signal = Signal(int)
     new_severity_signal = Signal(int)
-    upper_ctrl_limit_signal = Signal([float], [int])
-    lower_ctrl_limit_signal = Signal([float], [int])
+    upper_ctrl_limit_signal = Signal((float,), (int,))
+    lower_ctrl_limit_signal = Signal((float,), (int,))
 
     def __init__(self, address, **kws):
         QObject.__init__(self)
         PyDMChannel.__init__(self, address, **kws)
+        self.channel_connect = PyDMChannel.connect
 
         self.connection_slot = self._connection_slot
         self.value_slot = self._value_slot
@@ -38,7 +39,7 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
         self.channeltype = None
         self._value = None
         self.connected = None
-        self.connect()
+        self.channel_connect(self)
 
     def getvalue(self):
         if self.connected and self._value is not None:

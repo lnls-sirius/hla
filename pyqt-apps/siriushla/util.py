@@ -53,7 +53,7 @@ def connect_window(widget, w_class, parent, signal=None, **kwargs):
     widget.w_class = w_class
     widget.kwargs = kwargs
     signal.connect(lambda: app.open_window(
-        app.sender().w_class, parent=parent, **app.sender().kwargs))
+        widget.w_class, parent=parent, **widget.kwargs))
 
 
 def connect_newprocess(widget, cmd, is_window=True, parent=None, signal=None,

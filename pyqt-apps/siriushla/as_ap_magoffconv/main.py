@@ -45,13 +45,13 @@ class MagOffConvApp(SiriusMainWindow):
         self._matype_cb.currentIndexChanged.connect(
             self._fill_normalizer_layout)
         hlmatype = QHBoxLayout()
-        hlmatype.setAlignment(Qt.AlignLeft)
+        hlmatype.setAlignment(Qt.AlignmentFlag.AlignLeft)
         hlmatype.addWidget(matype_label)
         hlmatype.addWidget(self._matype_cb)
 
         # Layout to enter normalizer data
         self._lb_current = QLabel('Current [A]: ')
-        lb_arrow = QLabel('↔', self, alignment=Qt.AlignCenter)
+        lb_arrow = QLabel('↔', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lb_arrow.setStyleSheet('min-width:1.2em; max-width:1.2em;')
         self._lb_strength = QLabel('Strength: ')
         self._lb_energy = QLabel('Dipole Energy [GeV]: ')
@@ -76,21 +76,21 @@ class MagOffConvApp(SiriusMainWindow):
                 sb.setVisible(False)
 
         norm_lay = QGridLayout()
-        norm_lay.setAlignment(Qt.AlignLeft)
+        norm_lay.setAlignment(Qt.AlignmentFlag.AlignLeft)
         norm_lay.setHorizontalSpacing(5)
         norm_lay.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 0)
         norm_lay.addWidget(self._lb_current, 0, 1)
         norm_lay.addWidget(self._sb_current, 1, 1)
         norm_lay.addWidget(lb_arrow, 0, 2, 2, 1)
         norm_lay.addWidget(self._lb_strength, 0, 3)
         norm_lay.addWidget(self._sb_strength, 1, 3)
         norm_lay.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 4)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 4)
         norm_lay.addWidget(self._lb_energy, 0, 5)
         norm_lay.addWidget(self._sb_energy, 1, 5)
         norm_lay.addItem(
-            QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 6)
+            QSpacerItem(15, 1, QSzPlcy.Policy.Fixed, QSzPlcy.Policy.Ignored), 1, 6)
         norm_lay.addWidget(self._lb_quadfam_kl, 0, 7)
         norm_lay.addWidget(self._sb_quadfam_kl, 1, 7)
         self.norm_gb = QGroupBox('', self)
@@ -101,7 +101,7 @@ class MagOffConvApp(SiriusMainWindow):
         layout.setSpacing(20)
         layout.addWidget(
             QLabel('<h2>Offline Strength/Current Converter</h2>',
-                   self, alignment=Qt.AlignCenter))
+                   self, alignment=Qt.AlignmentFlag.AlignCenter))
         layout.addLayout(hlmatype)
         layout.addWidget(self.norm_gb)
         cw = QWidget(self)
@@ -109,7 +109,7 @@ class MagOffConvApp(SiriusMainWindow):
         cw.setStyleSheet("""#central_widget{min-width:42em;}""")
         cw.setLayout(layout)
         self.setCentralWidget(cw)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _fill_normalizer_layout(self, index):
         text = self.sender().currentText()

@@ -3,9 +3,9 @@
 from copy import deepcopy as _dcopy
 
 from qtpy.QtCore import Qt, Slot, Signal
-from qtpy.QtGui import QKeySequence, QPalette
+from qtpy.QtGui import QKeySequence, QPalette, QUndoStack
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
-    QUndoStack, QMessageBox
+    QMessageBox
 import qtawesome as qta
 
 from siriuspy.ramp import ramp
@@ -43,7 +43,7 @@ class RampMain(SiriusMainWindow):
         self._connSignals()
         self._addActions()
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)
@@ -207,12 +207,12 @@ class RampMain(SiriusMainWindow):
         if self.ramp_config is not None:
             if not self.ramp_config.synchronized:
                 pal = self.config_parameters.palette()
-                pal.setColor(QPalette.Text, Qt.red)
+                pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.red)
                 self.config_parameters.setPalette(pal)
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
                 pal = self.config_parameters.palette()
-                pal.setColor(QPalette.Text, Qt.black)
+                pal.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.black)
                 self.config_parameters.setPalette(pal)
                 self.config_parameters.setToolTip('')
 

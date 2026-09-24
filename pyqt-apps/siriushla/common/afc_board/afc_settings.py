@@ -36,13 +36,13 @@ class AFCAdvancedSettings(QWidget):
         else:
             tag = 'AFCv3.1 Settings'
         lab = QLabel(
-            f'<h2>{self.display} {tag}</h2>', self, alignment=Qt.AlignCenter)
+            f'<h2>{self.display} {tag}</h2>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lab)
 
         slot = RaBPMSearch.conv_devname_2_slot(self.display)
 
         lab_num = QLabel(
-            f'<h4>AMC-{slot}</h4>', self, alignment=Qt.AlignCenter)
+            f'<h4>AMC-{slot}</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(lab_num)
 
         pv_help = RaBPMSearch.get_bpm_pair(self.display)
@@ -51,7 +51,7 @@ class AFCAdvancedSettings(QWidget):
         else:
             lab_help = QLabel(
                 f'<h3>(also refers to {pv_help})</h3>',
-                    self, alignment=Qt.AlignCenter)
+                    self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lab_help)
 
         amc_lay = QHBoxLayout()
@@ -95,35 +95,35 @@ class AFCAdvancedSettings(QWidget):
 
         def add_volt_widgets(label, k, pv_name):
             lay = QGridLayout()
-            lbl_title = QLabel(f"<h5>{label}</h5>", alignment=Qt.AlignCenter)
+            lbl_title = QLabel(f"<h5>{label}</h5>", alignment=Qt.AlignmentFlag.AlignCenter)
             if k[:3] in ['AMC', 'RTM']:
-                lab_pv = QLabel(k[:3], alignment=Qt.AlignCenter)
+                lab_pv = QLabel(k[:3], alignment=Qt.AlignmentFlag.AlignCenter)
             else:
-                lab_pv = QLabel(k[:4], alignment=Qt.AlignCenter)
+                lab_pv = QLabel(k[:4], alignment=Qt.AlignmentFlag.AlignCenter)
             slab_pv = SiriusLabel(
                 self, f"{crate}:{ipmi_mngr_pvs.DIS}-AMC-{amc_number}:{pv_name}")
             slab_pv.showUnits = True
-            lay.addWidget(lab_pv, 0, 0, alignment=Qt.AlignCenter)
-            lay.addWidget(slab_pv, 0, 1, alignment=Qt.AlignCenter)
+            lay.addWidget(lab_pv, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+            lay.addWidget(slab_pv, 0, 1, alignment=Qt.AlignmentFlag.AlignCenter)
             return lbl_title, lay
 
         def add_curr_widgets(label, pv_name):
             lay = QGridLayout()
-            lbl_title = QLabel(f"<h5>{label}</h5>", alignment=Qt.AlignCenter)
+            lbl_title = QLabel(f"<h5>{label}</h5>", alignment=Qt.AlignmentFlag.AlignCenter)
             slab_pv = SiriusLabel(
                 self, f"{crate}:{ipmi_mngr_pvs.DIS}-AMC-{amc_number}:{pv_name}")
             slab_pv.showUnits = True
-            lay.addWidget(slab_pv, 0, 0, alignment=Qt.AlignCenter)
+            lay.addWidget(slab_pv, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
             return lbl_title, lay
 
         def add_temp_widgets(k, pv_name):
             lay = QGridLayout()
-            lab_pv = QLabel(k[4:], alignment=Qt.AlignCenter)
+            lab_pv = QLabel(k[4:], alignment=Qt.AlignmentFlag.AlignCenter)
             slab_pv = SiriusLabel(
                 self, f"{crate}:{ipmi_mngr_pvs.DIS}-AMC-{amc_number}:{pv_name}")
             slab_pv.showUnits = True
-            lay.addWidget(lab_pv, 0, 0, 1, 2, alignment=Qt.AlignLeft)
-            lay.addWidget(slab_pv, 0, 2, 1, 2, alignment=Qt.AlignRight)
+            lay.addWidget(lab_pv, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignLeft)
+            lay.addWidget(slab_pv, 0, 2, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
             return lay
 
         def add_led_alert(pv_name):
@@ -149,29 +149,29 @@ class AFCAdvancedSettings(QWidget):
                             lay = QGridLayout()
                             lay.setHorizontalSpacing(40)
                             lab_pv = QLabel("<h5>Current</h5>",
-                                            alignment=Qt.AlignCenter)
+                                            alignment=Qt.AlignmentFlag.AlignCenter)
                             slab_pv = SiriusLabel(
                                 self, f"{crate}:{ipmi_mngr_pvs.DIS}-AMC-{amc_number}:{pv_name}")
                             slab_pv.showUnits = True
                             lay.addWidget(lab_pv, 0, 0, 1, 2,
-                                          alignment=Qt.AlignLeft)
+                                          alignment=Qt.AlignmentFlag.AlignLeft)
                             lay.addWidget(slab_pv, 0, 2, 1, 2,
-                                          alignment=Qt.AlignRight)
+                                          alignment=Qt.AlignmentFlag.AlignRight)
                             layout.addLayout(lay, 0, 0)
                         if 'Volt' in pv_name and 'Volt' in str(k):
                             volt_title, volt_lay = add_volt_widgets(
                                 "Voltage", k, pv_name)
                             layout.addWidget(volt_title, 0, 0,
-                                             alignment=Qt.AlignCenter)
+                                             alignment=Qt.AlignmentFlag.AlignCenter)
                         if 'Curr' in pv_name and 'Curr' in str(k):
                             curr_title, curr_lay = add_curr_widgets(
                                 "Current", pv_name)
                             layout.addWidget(curr_title, 0, 1,
-                                             alignment=Qt.AlignCenter)
+                                             alignment=Qt.AlignmentFlag.AlignCenter)
                             layout.addLayout(
-                                volt_lay, row[section], 0, alignment=Qt.AlignCenter)
+                                volt_lay, row[section], 0, alignment=Qt.AlignmentFlag.AlignCenter)
                             layout.addLayout(
-                                curr_lay, row[section], 1, alignment=Qt.AlignCenter)
+                                curr_lay, row[section], 1, alignment=Qt.AlignmentFlag.AlignCenter)
                             row[section] += 1
                         if section == 'Temp':
                             temp_lay = add_temp_widgets(k, pv_name)
@@ -182,19 +182,19 @@ class AFCAdvancedSettings(QWidget):
                         led = add_led_alert(pv_name)
                         if 'Volt' in pv_name and 'Volt' in str(k):
                             volt_lay.addWidget(
-                                led, 0, 2, alignment=Qt.AlignCenter)
+                                led, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
                         elif 'Curr' in pv_name and 'Curr' in str(k):
                             curr_lay.addWidget(
-                                led, 0, 2, alignment=Qt.AlignCenter)
+                                led, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
                         elif 'Temp' in pv_name and 'Temp' in str(k):
                             temp_lay.addWidget(
-                                led, 0, 4, alignment=Qt.AlignRight)
+                                led, 0, 4, alignment=Qt.AlignmentFlag.AlignRight)
 
-        lay_sensor.addWidget(sections['Pwr'], 0, 0, alignment=Qt.AlignCenter)
-        lay_sensor.addWidget(sections['12V'], 1, 0, alignment=Qt.AlignCenter)
-        lay_sensor.addWidget(sections['VADJ'], 2, 0, alignment=Qt.AlignCenter)
-        lay_sensor.addWidget(sections['3V3'], 3, 0, alignment=Qt.AlignCenter)
-        lay_sensor.addWidget(sections['Temp'], 4, 0, alignment=Qt.AlignCenter)
+        lay_sensor.addWidget(sections['Pwr'], 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_sensor.addWidget(sections['12V'], 1, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_sensor.addWidget(sections['VADJ'], 2, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_sensor.addWidget(sections['3V3'], 3, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        lay_sensor.addWidget(sections['Temp'], 4, 0, alignment=Qt.AlignmentFlag.AlignCenter)
 
         area = QGroupBox('Sensors', self)
         lay_area = QHBoxLayout(area)
@@ -205,10 +205,10 @@ class AFCAdvancedSettings(QWidget):
         wid = QWidget(self)
         lay_fru = QGridLayout(wid)
         lay_fru.addWidget(
-            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter),
-            0, 0, alignment=Qt.AlignLeft)
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter),
+            0, 0, alignment=Qt.AlignmentFlag.AlignLeft)
         lay_fru.addWidget(
-            QLabel('<h4>Measurement</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>Measurement</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter), 0, 1)
 
         row = 1
         if self.display.dev == 'FOFBCtrl':
@@ -251,13 +251,13 @@ class AFCAdvancedSettings(QWidget):
 
             elif 'Cte' in pv_name:
                 crate = RaBPMSearch.conv_devname_2_cratename(self.display)
-                label = QLabel(k, alignment=Qt.AlignCenter)
+                label = QLabel(k, alignment=Qt.AlignmentFlag.AlignCenter)
                 slab_pv = SiriusLabel(
                     self, f"{crate}:{ipmi_mngr_pvs.DIS}-AMC-{amc_number}:{pv_name}"
                 )
 
-                lay_fru.addWidget(label, row, 0, alignment=Qt.AlignLeft)
-                lay_fru.addWidget(slab_pv, row, 1, alignment=Qt.AlignCenter)
+                lay_fru.addWidget(label, row, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+                lay_fru.addWidget(slab_pv, row, 1, alignment=Qt.AlignmentFlag.AlignCenter)
                 row += 1
 
         return self._group_area(wid, 'FRU')

@@ -44,7 +44,7 @@ class MainWindow(SiriusMainWindow):
         return self._csorb.isring
 
     def setupui(self):
-        self.setWindowModality(Qt.WindowModal)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         self.setWindowTitle(self.acc + " - SOFB")
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
@@ -53,9 +53,9 @@ class MainWindow(SiriusMainWindow):
         self.orbit_regist = self._create_orbit_registers()
         self.sofb_control = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.ioc_log)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.orbit_regist)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.sofb_control)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.ioc_log)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.orbit_regist)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.sofb_control)
 
         mwid = self._create_central_widget()
         self.setCentralWidget(mwid)
@@ -75,12 +75,13 @@ class MainWindow(SiriusMainWindow):
         # assign them to the clicked signal
         wid = QDockWidget(self)
         wid.setWindowTitle("Orbit Registers")
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sz_pol.setVerticalStretch(1)
         wid.setSizePolicy(sz_pol)
         wid.setFloating(False)
-        wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
-        wid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        wid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
+                        | QDockWidget.DockWidgetFeature.DockWidgetMovable)
+        wid.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
         wid.setObjectName('doc_OrbReg')
         wid.setStyleSheet("#doc_OrbReg{min-width:20em; min-height:14em;}")
 
@@ -92,12 +93,13 @@ class MainWindow(SiriusMainWindow):
     def _create_ioc_controllers(self):
         docwid = QDockWidget(self)
         docwid.setWindowTitle("IOC Control")
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sz_pol.setVerticalStretch(1)
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
-        docwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
-        docwid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        docwid.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetFloatable 
+                           | QDockWidget.DockWidgetFeature.DockWidgetMovable)
+        docwid.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
 
         ctrls = self.orb_regtr.get_registers_control()
         wid = SOFBControl(self, self.device, ctrls, self.prefix, self.acc)
@@ -107,7 +109,7 @@ class MainWindow(SiriusMainWindow):
     def _create_log_docwidget(self):
         docwid = QDockWidget(self)
         docwid.setWindowTitle('IOC Log')
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setObjectName('doc_IOCLog')

@@ -36,48 +36,48 @@ class BaslerCamSettings(QTabWidget):
         hbox_DevID = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='DeviceID', propty_type='cte')
-        hbox_DevID.setAlignment(Qt.AlignLeft)
+        hbox_DevID.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_DevVers = QLabel('Device Version:', self)
         hbox_DevVers = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='DeviceVersion', propty_type='cte')
-        hbox_DevVers.setAlignment(Qt.AlignLeft)
+        hbox_DevVers.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_DevModelName = QLabel('Device Model Name:', self)
         hbox_DevModelName = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='DeviceModelName', propty_type='cte')
-        hbox_DevModelName.setAlignment(Qt.AlignLeft)
+        hbox_DevModelName.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_DevVendorName = QLabel('Device Vendor Name:', self)
         hbox_DevVendorName = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='DeviceVendorName', propty_type='cte')
-        hbox_DevVendorName.setAlignment(Qt.AlignLeft)
+        hbox_DevVendorName.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_DevFirmVers = QLabel('Firmware Version:', self)
         hbox_DevFirmVers = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='DeviceFirmwareVersion', propty_type='cte')
-        hbox_DevFirmVers.setAlignment(Qt.AlignLeft)
+        hbox_DevFirmVers.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_SensorHeight = QLabel('Sensor Height [pixels]:', self)
         hbox_SensorHeight = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='SensorHeight', propty_type='cte')
-        hbox_SensorHeight.setAlignment(Qt.AlignLeft)
+        hbox_SensorHeight.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_SensorWidth = QLabel('Sensor Width [pixels]:', self)
         hbox_SensorWidth = create_propty_layout(
             parent=self, prefix=self.cam_prefix, width=15,
             propty='SensorWidth', propty_type='cte')
-        hbox_SensorWidth.setAlignment(Qt.AlignLeft)
+        hbox_SensorWidth.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         wid = QWidget()
         flay = QFormLayout(wid)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay.addRow(label_DevID, hbox_DevID)
         flay.addRow(label_DevVers, hbox_DevVers)
         flay.addRow(label_DevModelName, hbox_DevModelName)
@@ -97,7 +97,7 @@ class BaslerCamSettings(QTabWidget):
         self.lb_Temp = SiriusLabel(
             self, self.cam_prefix.substitute(propty='Temp-Mon'))
         self.lb_Temp.setStyleSheet('min-width:7.1em; max-width:7.1em;')
-        self.lb_Temp.setAlignment(Qt.AlignCenter)
+        self.lb_Temp.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.led_TempState = SiriusLedAlert(
             self, self.cam_prefix.substitute(propty='TempState-Mon'))
         self.led_TempState.setStyleSheet('min-width:1.29em; max-width:1.29em;')
@@ -136,8 +136,8 @@ class BaslerCamSettings(QTabWidget):
         
         wid = QWidget()
         flay = QFormLayout(wid)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay.addRow(label_Conn, hbox_Conn)
         flay.addRow(label_Temp, hbox_Temp)
         flay.addRow(label_LastErr, hbox_LastErr)
@@ -211,12 +211,12 @@ class BaslerCamSettings(QTabWidget):
         util.connect_window(self.pb_advanced, my_window, parent=self,
                             device=self.device, prefix=self.prefix)
         hbox_adv = QHBoxLayout()
-        hbox_adv.addWidget(self.pb_advanced, alignment=Qt.AlignRight)
+        hbox_adv.addWidget(self.pb_advanced, alignment=Qt.AlignmentFlag.AlignRight)
 
         wid = QWidget()
         flay = QFormLayout(wid)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay.addRow(label_CamEnbl, hbox_CamEnbl)
         flay.addRow(label_FrameCnt, hbox_FrameCnt)
         flay.addRow(label_AcqMode, hbox_AcqMode)
@@ -290,8 +290,8 @@ class BaslerCamSettings(QTabWidget):
 
         wid = QWidget()
         flay = QFormLayout(wid)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay.addRow(label_EnblAdjust, hbox_EnblAdjust)
         flay.addRow(label_AutoAdjust, hbox_AutoAdjust)
         flay.addRow(label_PixelScale, hbox_PixelScale)
@@ -350,8 +350,8 @@ class BaslerCamSettings(QTabWidget):
 
         wid = QWidget()
         flay = QFormLayout(wid)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay.addRow(label_MaxWidth, self.lb_MaxWidth)
         flay.addRow(label_MaxHeight, self.lb_MaxHeight)
         flay.addRow(label_ROIWidth, hbox_ROIWidth)
@@ -376,7 +376,7 @@ class BaslerCamAcqAdvSettings(QWidget):
     def _setupUi(self):
         label = QLabel('<h3>' + self.device +
                        ' Advanced Acquisition Settings</h3>',
-                       self, alignment=Qt.AlignHCenter)
+                       self, alignment=Qt.AlignmentFlag.AlignHCenter)
         label.setStyleSheet('max-height:1.29em;')
 
         label_DataType = QLabel('Data Type:', self)
@@ -445,8 +445,8 @@ class BaslerCamAcqAdvSettings(QWidget):
             propty='TransmDelay', propty_type='sprb')
 
         flay = QFormLayout(self)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
+        flay.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        flay.setFormAlignment(Qt.AlignmentFlag.AlignHCenter)
         flay.addRow(label)
         flay.addRow(label_DataType, hbox_DataType)
         flay.addRow(label_BwAssigned, hbox_BwAssigned)

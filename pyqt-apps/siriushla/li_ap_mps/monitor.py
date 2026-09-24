@@ -17,7 +17,7 @@ class MPSMonitor(QWidget):
 
     def _setupUi(self):
         lay = QGridLayout(self)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.title = QLabel('<h2>LI MPS Monitor</h2>', self)
         lay.addWidget(self.title, 0, 0, 1, 2)
@@ -29,13 +29,13 @@ class MPSMonitor(QWidget):
                 if 'Header' in status.keys():
                     for i, text in enumerate(status['Header']):
                         grid.addWidget(QLabel(text, self), 0, i+1,
-                                       alignment=Qt.AlignCenter)
+                                       alignment=Qt.AlignmentFlag.AlignCenter)
                     aux_row = 1
                     for text, ch_grp in status.items():
                         if text == 'Header':
                             continue
                         grid.addWidget(QLabel(text, self), aux_row, 0,
-                                       alignment=Qt.AlignCenter)
+                                       alignment=Qt.AlignmentFlag.AlignCenter)
                         for ch in ch_grp:
                             if not ch:
                                 continue
@@ -45,7 +45,7 @@ class MPSMonitor(QWidget):
                             led = PyDMLedMultiChannel(self)
                             led.set_channels2values(ch2vals)
                             grid.addWidget(led, aux_row, aux_col+1,
-                                           alignment=Qt.AlignCenter)
+                                           alignment=Qt.AlignmentFlag.AlignCenter)
                         aux_row += 1
                 else:
                     aux_row = 0
@@ -57,7 +57,7 @@ class MPSMonitor(QWidget):
                         if 'Heartbeat' in text:
                             led.setOffColor(PyDMLed.Yellow)
                         grid.addWidget(led, aux_row, 1,
-                                       alignment=Qt.AlignCenter)
+                                       alignment=Qt.AlignmentFlag.AlignCenter)
                         aux_row += 1
             elif isinstance(status, list):
                 for ch_grp in status:
@@ -68,7 +68,7 @@ class MPSMonitor(QWidget):
                         led = PyDMLedMultiChannel(self)
                         led.set_channels2values(ch2vals)
                         grid.addWidget(led, aux_row, aux_col,
-                                       alignment=Qt.AlignCenter)
+                                       alignment=Qt.AlignmentFlag.AlignCenter)
             row, col, rowc, colc = SEC_2_POS[sec]
             lay.addWidget(gbox, row, col, rowc, colc)
 

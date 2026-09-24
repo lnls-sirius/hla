@@ -39,7 +39,7 @@ class PUControlWindow(SiriusMainWindow):
         self.pu_widgets_dict = dict()
         self._setup_ui()
         self.setCentralWidget(self.main_widget)
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self._create_actions()
 
     def _setup_ui(self):

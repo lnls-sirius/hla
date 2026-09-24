@@ -122,7 +122,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         row = 0
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
             label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
@@ -135,7 +135,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
-                lbl.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+                lbl.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
                 lbl.setMinimumWidth(125)
                 lbl.showUnits = True
                 lbl.setMaximumHeight(40)
@@ -158,7 +158,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         for title, pv_info in self.AUX_CONTROL_PVS.items():
             if "Header" not in title:
                 label = QLabel(
-                    title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 lay.addWidget(label, row, 0)
 
             if title in ["Max. Speed", "Max. Acc."]:
@@ -176,16 +176,16 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     def _ctrlModeWidget(self):
         gbox_ctrlmode = QGroupBox('Control Mode')
         lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
-        lay_ctrlmode.setAlignment(Qt.AlignCenter)
+        lay_ctrlmode.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label = QLabel("Is Remote")
-        lay_ctrlmode.addWidget(label, alignment=Qt.AlignRight)
+        lay_ctrlmode.addWidget(label, alignment=Qt.AlignmentFlag.AlignRight)
 
         self._led_ctrlmode = PyDMLed(
             self, self.dev_pref.substitute(propty='IsRemote-Mon'))
         self._led_ctrlmode.offColor = PyDMLed.Red
         self._led_ctrlmode.onColor = PyDMLed.LightGreen
-        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignLeft)
+        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignmentFlag.AlignLeft)
 
         return gbox_ctrlmode
 
@@ -211,7 +211,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.setMinimumWidth(125)
             lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, col, 1, 1)
             col += 1
 
@@ -235,7 +235,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lbl = SiriusLabel(self, init_channel=pvname)
             lbl.setMinimumWidth(125)
             lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, col, 1, 1)
             col += 1
 
@@ -267,7 +267,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         lay.setContentsMargins(0, 0, 0, 0)
         wid.setLayout(lay)
 
-        label = QLabel(title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        label = QLabel(title, self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         lay.addWidget(label)
 
         if isinstance(pv_suffix, tuple):
@@ -279,11 +279,11 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             led = SiriusLabel(self, pvname)
         else:
             led = SiriusLedAlert(init_channel=pvname)
-        lay.addWidget(led, alignment=Qt.AlignLeft)
+        lay.addWidget(led, alignment=Qt.AlignmentFlag.AlignLeft)
 
         if pv_tuple:
             detailed_btn = self._createDetailedLedBtn(pv_tuple)
-            lay.addWidget(detailed_btn, alignment=Qt.AlignLeft)
+            lay.addWidget(detailed_btn, alignment=Qt.AlignmentFlag.AlignLeft)
 
         return wid
 
@@ -335,8 +335,8 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     def _createHeaders(self, pv_info, lay, row):
         col = 1
         for header_lbl in pv_info:
-            lbl = QLabel(header_lbl, self, alignment=Qt.AlignCenter)
-            lbl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+            lbl = QLabel(header_lbl, self, alignment=Qt.AlignmentFlag.AlignCenter)
+            lbl.setSizePolicy(QSzPlcy.Policy.Preferred, QSzPlcy.Policy.Maximum)
             lay.addWidget(lbl, row, col, 1, 2)
             col += 2
 
@@ -350,7 +350,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             pvname = self.dev_pref.substitute(propty=pv_info[(enum*2)+1])
             lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(lbl, row, col+1, 1, 1)
             col += 2
 

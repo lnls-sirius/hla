@@ -2,8 +2,8 @@
 import locale
 import numpy as np
 
-from qtpy.QtCore import QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 
 from pydm.widgets.line_edit import PyDMLineEdit
 
@@ -23,13 +23,13 @@ class SiriusLineEdit(PyDMLineEdit):
             decimal_point = locale.localeconv()['decimal_point']
             # decimal_point = '.'
             if self._show_units and self._unit != "":
-                re = QRegExp(
+                re = QRegularExpression(
                     '(-?)(0|([1-9][0-9]*))(\\{}[0-9]+)?( {})?'
                     .format(decimal_point, self._unit))
             else:
-                re = QRegExp('(-?)(0|([1-9][0-9]*))(\\{}[0-9]+)?'
+                re = QRegularExpression('(-?)(0|([1-9][0-9]*))(\\{}[0-9]+)?'
                              .format(decimal_point))
-            validator = QRegExpValidator(re, self)
+            validator = QRegularExpressionValidator(re, self)
             self.setValidator(validator)
         super().update_format_string()
 

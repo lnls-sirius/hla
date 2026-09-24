@@ -32,7 +32,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         self._setupUi()
 
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def _setupUi(self):
         wid = QWidget(self)
@@ -41,7 +41,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         title = QLabel(
             '<h3>' + self.device + ' Orbit Interlock Control</h3>',
-            self, alignment=Qt.AlignCenter)
+            self, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(title, 0, 0, 1, 2)
 
         try:
@@ -49,7 +49,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             other = down if self.device == up else up
             titlehelp = QLabel(
                 '<h3>(also refers to ' + other + ')</h3>',
-                self, alignment=Qt.AlignCenter)
+                self, alignment=Qt.AlignmentFlag.AlignCenter)
             lay.addWidget(titlehelp, 1, 0, 1, 2)
         except ValueError:
             pass
@@ -74,14 +74,14 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
     def _setupIntlkGenLayout(self):
         self._ld_genenbl = QLabel(
-            'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._sb_genenbl = PyDMStateButton(
             self, self.devpref.substitute(propty='IntlkEn-Sel'))
         self._led_genenbl = SiriusLedState(
             self, self.devpref.substitute(propty='IntlkEn-Sts'))
 
         self._ld_genclr = QLabel(
-            'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._bt_genclr = PyDMPushButton(
             self,
             init_channel=self.devpref.substitute(propty='IntlkClr-Cmd'),
@@ -93,19 +93,19 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         self._ld_intlkinst = QLabel(
             'Intantaneous Interlock: ', self,
-            alignment=Qt.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._led_intlkinst = SiriusLedAlert(
             self, self.devpref.substitute(propty='Intlk-Mon'))
 
         self._ld_intlkltc = QLabel(
             'Latch Interlock: ', self,
-            alignment=Qt.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._led_intlkltc = SiriusLedAlert(
             self, self.devpref.substitute(propty='IntlkLtc-Mon'))
 
         self._ld_minsumenbl = QLabel(
             'Min.Sum.Thres. Enable: ', self,
-            alignment=Qt.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         self._ld_minsumenbl.setToolTip(
             'If enabled, enable interlock only if minimum sum'
             ' threshold is exceeded.')
@@ -116,24 +116,24 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         self._ld_minsumlim = QLabel(
             'Min.Sum.Thres.[sum count]: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self._le_minsumlim = SiriusLineEdit(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-SP'))
         self._le_minsumlim.setStyleSheet('QLineEdit{max-width: 12em;}')
         self._lb_minsumlim = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-RB'))
-        self._lb_minsumlim.displayFormat = SiriusLabel.Exponential
+        self._lb_minsumlim.displayFormat = SiriusLabel.DisplayFormat.Exponential
         self._lb_minsumlim.precisionFromPV = False
         self._lb_minsumlim.precision = 16
         self._lb_minsumlim.showUnits = True
 
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignCenter)
+        lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self._ld_genenbl, 0, 0)
         lay.addWidget(self._sb_genenbl, 0, 1)
-        lay.addWidget(self._led_genenbl, 0, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self._led_genenbl, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(self._ld_genclr, 1, 0)
-        lay.addWidget(self._bt_genclr, 1, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self._bt_genclr, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self._ld_intlkinst, 2, 0)
         lay.addWidget(self._led_intlkinst, 2, 1)
         lay.addWidget(self._ld_intlkltc, 3, 0)
@@ -141,7 +141,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay.addItem(QSpacerItem(1, 15, QSzPlc.Ignored, QSzPlc.Fixed), 4, 0)
         lay.addWidget(self._ld_minsumenbl, 5, 0)
         lay.addWidget(self._sb_minsumenbl, 5, 1)
-        lay.addWidget(self._led_minsumenbl, 5, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self._led_minsumenbl, 5, 2, alignment=Qt.AlignmentFlag.AlignLeft)
         lay.addWidget(self._ld_minsumlim, 6, 0)
         lay.addWidget(self._le_minsumlim, 6, 1)
         lay.addWidget(self._lb_minsumlim, 6, 2)
@@ -152,24 +152,24 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_valx = QLabel(
             intlk+'. X ['+unit+']: ', self,
-            alignment=Qt.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         lb_valx = SiriusLabel(
             self, self.devpref.substitute(propty='Intlk'+intlk+'X-Mon'))
         ld_valy = QLabel(
             intlk+'. Y ['+unit+']: ', self,
-            alignment=Qt.AlignRight | Qt.AlignBottom)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         lb_valy = SiriusLabel(
             self, self.devpref.substitute(propty='Intlk'+intlk+'Y-Mon'))
 
         ld_enbl = QLabel(
-            'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+            'Enable: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         sb_enbl = PyDMStateButton(
             self, self.devpref.substitute(propty='Intlk'+intlk+'En-Sel'))
         led_enbl = SiriusLedState(
             self, self.devpref.substitute(propty='Intlk'+intlk+'En-Sts'))
 
         ld_clr = QLabel(
-            'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+            'Reset: ', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
         bt_clr = PyDMPushButton(
             self, init_channel=self.devpref.substitute(
                 propty='Intlk'+intlk+'Clr-Cmd'), pressValue=1)
@@ -180,7 +180,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_minx = QLabel(
             'Min.X Thres.['+unit+']: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_minx = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MinX-SP'))
         sb_minx.limitsFromChannel = False
@@ -191,7 +191,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_maxx = QLabel(
             'Max.X Thres.['+unit+']: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_maxx = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxX-SP'))
         sb_maxx.limitsFromChannel = False
@@ -202,7 +202,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_miny = QLabel(
             'Min.Y Thres.['+unit+']: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_miny = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MinY-SP'))
         sb_miny.limitsFromChannel = False
@@ -213,7 +213,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_maxy = QLabel(
             'Max.Y Thres.['+unit+']: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
+            alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         sb_maxy = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxY-SP'))
         sb_maxy.limitsFromChannel = False
@@ -223,29 +223,29 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxY-RB'))
 
         ld_leglow = QLabel(
-            'Lower', self, alignment=Qt.AlignCenter)
+            'Lower', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_leghigh = QLabel(
-            'Upper', self, alignment=Qt.AlignCenter)
+            'Upper', self, alignment=Qt.AlignmentFlag.AlignCenter)
 
         ld_leginst = QLabel(
-            '<h4>Instantaneous</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Instantaneous</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_leginst_x = QLabel(
-            'X', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'X', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         led_inst_xlow = SiriusLedAlert(
             self, self.devpref.substitute(propty='Intlk'+intlk+'LowerX-Mon'))
         led_inst_xhigh = SiriusLedAlert(
             self, self.devpref.substitute(propty='Intlk'+intlk+'UpperX-Mon'))
         ld_leginst_y = QLabel(
-            'Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Y', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         led_inst_ylow = SiriusLedAlert(
             self, self.devpref.substitute(propty='Intlk'+intlk+'LowerY-Mon'))
         led_inst_yhigh = SiriusLedAlert(
             self, self.devpref.substitute(propty='Intlk'+intlk+'UpperY-Mon'))
 
         ld_legltc = QLabel(
-            '<h4>Latch</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Latch</h4>', self, alignment=Qt.AlignmentFlag.AlignCenter)
         ld_legltc_x = QLabel(
-            'X', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'X', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         led_ltc_xlow = SiriusLedAlert(
             self, self.devpref.substitute(
                 propty='Intlk'+intlk+'LowerLtcX-Mon'))
@@ -253,7 +253,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(
                 propty='Intlk'+intlk+'UpperLtcX-Mon'))
         ld_legltc_y = QLabel(
-            'Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Y', self, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         led_ltc_ylow = SiriusLedAlert(
             self, self.devpref.substitute(
                 propty='Intlk'+intlk+'LowerLtcY-Mon'))
@@ -262,7 +262,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
                 propty='Intlk'+intlk+'UpperLtcY-Mon'))
 
         lay_mon = QGridLayout()
-        lay_mon.setAlignment(Qt.AlignCenter)
+        lay_mon.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay_mon.addWidget(ld_leglow, 0, 1)
         lay_mon.addWidget(ld_leghigh, 0, 2)
         lay_mon.addWidget(ld_leginst, 1, 0)
@@ -281,7 +281,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay_mon.addWidget(led_ltc_yhigh, 6, 2)
 
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.addWidget(ld_valx, 0, 0)
         lay.addWidget(lb_valx, 0, 1)
         lay.addWidget(ld_valy, 1, 0)
@@ -290,7 +290,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(sb_enbl, 2, 1)
         lay.addWidget(led_enbl, 2, 2)
         lay.addWidget(ld_clr, 3, 0)
-        lay.addWidget(bt_clr, 3, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(bt_clr, 3, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(ld_minx, 4, 0)
         lay.addWidget(sb_minx, 4, 1)
         lay.addWidget(lb_minx, 4, 2)

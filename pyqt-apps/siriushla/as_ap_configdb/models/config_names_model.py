@@ -32,12 +32,12 @@ class ConfigNamesModel(QAbstractListModel):
         """Return number of columns."""
         return 1
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         """Return data at index."""
         if not index.isValid():
             return None
 
-        if role != Qt.DisplayRole:
+        if role != Qt.ItemDataRole.DisplayRole:
             return None
 
         return self._items[index.row()]

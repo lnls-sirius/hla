@@ -48,7 +48,7 @@ class AllowedBucketsMatrix(SelectionWidget, PyDMWidget):
 
     def get_widgets(self):
         widgets = list()
-        sz_polc = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sz_polc = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         for idx in range(864):
             wid = QWidget(self.parent())
             led = SiriusLedAlert()

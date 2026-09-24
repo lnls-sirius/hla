@@ -340,7 +340,7 @@ class EmittanceMeasure(QWidget):
                 prefix=self._prefix))
         gb.layout().addWidget(spnbox)
         gb.layout().addWidget(lbl)
-        gb.layout().setAlignment(Qt.AlignTop)
+        gb.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
 
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
@@ -582,9 +582,9 @@ def gettransmat(elem, L, K1=None, B=None):
 
 def _calc_moments(axis, proj):
     dx = axis[1]-axis[0]
-    Norm = np.trapz(proj, dx=dx)
-    cen = np.trapz(proj*axis, dx=dx)/Norm
-    sec = np.trapz(proj*axis*axis, dx=dx)/Norm
+    Norm = np.trapezoid(proj, dx=dx)
+    cen = np.trapezoid(proj*axis, dx=dx)/Norm
+    sec = np.trapezoid(proj*axis*axis, dx=dx)/Norm
     std = np.sqrt(sec - cen*cen)
     return cen, std
 

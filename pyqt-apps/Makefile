@@ -25,7 +25,7 @@ uninstall:
 install-all: install install-designer
 
 develop-install: develop-uninstall
-	$(PIP) install --no-deps -e ./
+	$(PIP) install --config-settings editable_mode=strict --no-deps -e ./
 
 develop-uninstall:
 	$(PIP) uninstall -y $(PACKAGE)
