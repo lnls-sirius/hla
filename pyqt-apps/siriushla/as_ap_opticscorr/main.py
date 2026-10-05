@@ -1619,6 +1619,29 @@ class SITuneCorrWindow(SiriusMainWindow):
             pressValue=1,
             init_channel=self.ioc_prefix.substitute(propty="ApplyDelta-Cmd"),
         )
+        self.bt_apply.setStyleSheet('#button {\
+                    min-height: 45px; max-height: 45px;}')
+
+        self.bt_calc = PyDMPushButton(
+                    self, '', pressValue=1,
+            init_channel=self.ioc_prefix.substitute(propty='CalcDelta-Cmd'))
+        self.bt_calc.setIcon(qta.icon('mdi.calculator-variant'))
+        self.bt_calc.setToolTip('Calculate Correction')
+        self.bt_calc.setObjectName('button')
+        # policy = QSzPly(QSzPly.Preferred, QSzPly.Preferred)
+        # policy.setWidthForHeight(True)
+        # self.bt_calc.setSizePolicy(policy)
+        self.bt_calc.setStyleSheet('#button {\
+            min-height: 45px; min-width: 45px;\
+            max-height: 45px; max-width: 45px;\
+            icon-size: 40px;}')
+        # self.bt_calc.setStyleSheet('#button {icon-size: 40px;}')
+        # rules = (
+        #     '[{"name": "EnblRule", "property": "Enable", ' +
+        #     '"expression": "not ch[0]", "channels": [{"channel": "' +
+        #     self.ioc_prefix.substitute(propty='LoopState-Sts') +
+        #     '", "trigger": true}]}]')
+        # self.bt_calc.rules = rules
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
@@ -1633,7 +1656,8 @@ class SITuneCorrWindow(SiriusMainWindow):
         lay.addWidget(self.lb_mon, 0, 3)
         lay.addWidget(self.lb_prmmonx, 1, 3)
         lay.addWidget(self.lb_prmmony, 2, 3)
-        lay.addWidget(self.bt_apply, 3, 1)
+        lay.addWidget(self.bt_calc, 3, 1)
+        lay.addWidget(self.bt_apply, 3, 2)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 5)
         lay.setColumnStretch(2, 5)
