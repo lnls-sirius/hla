@@ -8,7 +8,13 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
     QTabWidget, QWidget, QLabel, QGroupBox, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
-from pyqtgraph import mkBrush, FillBetweenItem
+from pyqtgraph import (
+    mkBrush,
+    FillBetweenItem,
+    InfiniteLine as _InfLine,
+    mkPen as _Pen,
+    PlotDataItem as _PlotDataItem,
+)
 
 from pydm.widgets import PyDMPushButton
 
@@ -437,6 +443,19 @@ class BiasFBDetailDialog(SiriusDialog):
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
         self._curve_bias_vs_injcurr = curve
 
+        self._curve_injcurr_goal = _InfLine(
+            angle=0,
+            movable=False,
+            pen=_Pen(color=(160, 32, 240), width=1.5, style=Qt.DashLine),
+            name="Goal Inj. Current",
+        )
+        self.graph_pred.addItem(self._curve_injcurr_goal)
+        self._curve_injcurr_goal.setVisible(False)
+        self.graph_pred.legend.addItem(
+            _PlotDataItem(pen=self._curve_injcurr_goal.pen),
+            "Goal Inj. Current"
+        )
+
         self.graph_pred.addItem(self._curve_gp_fill_std)
         self.graph_pred.autoRangeX = True
         self.graph_pred.autoRangeY = True
@@ -468,7 +487,21 @@ class BiasFBDetailDialog(SiriusDialog):
         self._chn_injcurr.new_value_signal[float].connect(
             self._plot_bias_vs_injcurr)
 
+        self._chn_injcurr_goal = SiriusConnectionSignal(
+              self._inj_prefix.substitute(propty='BiasFBGoalInjCurr-Mon')
+        )
+        self._chn_injcurr_goal.new_value_signal[float].connect(
+            self._update_goal_injcurr
+        )
+
         return self.graph_pred
+
+    def _update_goal_injcurr(self, dcurr):
+        visible = False
+        if dcurr is not None:
+            self._curve_injcurr_goal.setPos(dcurr)
+            visible = True
+        self._curve_injcurr_goal.setVisible(visible)
 
     def _plot_gp_prediction_confidance(self, _):
         avg = self._chn_gp_injcurr_avg.value
