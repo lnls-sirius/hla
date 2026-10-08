@@ -491,12 +491,12 @@ class BiasFBDetailDialog(SiriusDialog):
             self._inj_prefix.substitute(propty='BiasFBTargetInjCurr-Mon')
         )
         self._chn_injcurr_goal.new_value_signal[float].connect(
-            self._update_goal_injcurr
+            self._update_target_injcurr
         )
 
         return self.graph_pred
 
-    def _update_goal_injcurr(self, dcurr):
+    def _update_target_injcurr(self, dcurr):
         visible = False
         if dcurr is not None:
             self._curve_injcurr_goal.setPos(dcurr)
