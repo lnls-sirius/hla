@@ -443,17 +443,17 @@ class BiasFBDetailDialog(SiriusDialog):
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
         self._curve_bias_vs_injcurr = curve
 
-        self._curve_injcurr_goal = _InfLine(
+        self._curve_injcurr_tgt = _InfLine(
             angle=0,
             movable=False,
             pen=_Pen(color=(160, 32, 240), width=1.5, style=Qt.DashLine),
-            name="Goal Inj. Current",
+            name="Target Inj. Current",
         )
-        self.graph_pred.addItem(self._curve_injcurr_goal)
-        self._curve_injcurr_goal.setVisible(False)
+        self.graph_pred.addItem(self._curve_injcurr_tgt)
+        self._curve_injcurr_tgt.setVisible(False)
         self.graph_pred.legend.addItem(
-            _PlotDataItem(pen=self._curve_injcurr_goal.pen),
-            "Goal Inj. Current"
+            _PlotDataItem(pen=self._curve_injcurr_tgt.pen),
+            "Target Inj. Current"
         )
 
         self.graph_pred.addItem(self._curve_gp_fill_std)
@@ -487,10 +487,10 @@ class BiasFBDetailDialog(SiriusDialog):
         self._chn_injcurr.new_value_signal[float].connect(
             self._plot_bias_vs_injcurr)
 
-        self._chn_injcurr_goal = SiriusConnectionSignal(
+        self._chn_injcurr_tgt = SiriusConnectionSignal(
             self._inj_prefix.substitute(propty='BiasFBTargetInjCurr-Mon')
         )
-        self._chn_injcurr_goal.new_value_signal[float].connect(
+        self._chn_injcurr_tgt.new_value_signal[float].connect(
             self._update_target_injcurr
         )
 
@@ -499,9 +499,9 @@ class BiasFBDetailDialog(SiriusDialog):
     def _update_target_injcurr(self, dcurr):
         visible = False
         if dcurr is not None:
-            self._curve_injcurr_goal.setPos(dcurr)
+            self._curve_injcurr_tgt.setPos(dcurr)
             visible = True
-        self._curve_injcurr_goal.setVisible(visible)
+        self._curve_injcurr_tgt.setVisible(visible)
 
     def _plot_gp_prediction_confidance(self, _):
         avg = self._chn_gp_injcurr_avg.value
