@@ -488,7 +488,8 @@ class BiasFBDetailDialog(SiriusDialog):
             self._plot_bias_vs_injcurr)
 
         self._chn_injcurr_goal = SiriusConnectionSignal(
-              self._inj_prefix.substitute(propty='BiasFBGoalInjCurr-Mon')
+            #   self._inj_prefix.substitute(propty='BiasFBGoalInjCurr-Mon')
+            'Test-Glob:AP-Test:GoalInjCurr-Mon'  # temp test
         )
         self._chn_injcurr_goal.new_value_signal[float].connect(
             self._update_goal_injcurr
