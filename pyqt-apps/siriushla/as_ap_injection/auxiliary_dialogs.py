@@ -487,15 +487,30 @@ class BiasFBDetailDialog(SiriusDialog):
         self._chn_injcurr.new_value_signal[float].connect(
             self._plot_bias_vs_injcurr)
 
+        # self._chn_injcurr_goal = SiriusConnectionSignal(
+        #     self._inj_prefix.substitute(propty='BiasFBGoalInjCurr-Mon')
+        # )
+        # self._chn_injcurr_goal.new_value_signal[float].connect(
+        #     self._update_goal_injcurr
+        # )
         self._chn_injcurr_goal = SiriusConnectionSignal(
-            #   self._inj_prefix.substitute(propty='BiasFBGoalInjCurr-Mon')
-            'Test-Glob:AP-Test:GoalInjCurr-Mon'  # temp test
+            self._inj_prefix.substitute(propty='Log-Mon')
         )
-        self._chn_injcurr_goal.new_value_signal[float].connect(
-            self._update_goal_injcurr
+        self._chn_injcurr_goal.new_value_signal[str].connect(
+            self._test_update_target_injcurr
         )
 
         return self.graph_pred
+
+    def _test_update_target_injcurr(self, value):
+        """."""
+        if 'BiasFB required' in value:
+            print(value)
+            st = value.split(' ')
+            for s in st:
+                if 'mA' in s:
+                    dcurr = float(s.replace('mA', ''))
+            self._update_goal_injcurr(dcurr)
 
     def _update_goal_injcurr(self, dcurr):
         visible = False
