@@ -9,7 +9,9 @@ from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.search import IDSearch
 
+from ..common.epics.wrapper import PyEpicsWrapper
 from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
 from .apu import APUSummaryHeader, APUSummaryWidget
@@ -205,6 +207,14 @@ class IDControl(SiriusMainWindow):
         self.blctrl_dsbl_act = QAction("Disable Beamline Control", self)
         self.blctrl_dsbl_act.triggered.connect(
             lambda: self._set_beamline_control(False))
+        self.blctrl_do_parked = QAction("Do parked", self)
+        self.blctrl_do_parked.triggered.connect(
+            lambda: self._move_all_ids(state='bmin')
+        )
+        self.blctrl_set_bmax = QAction(r"Set to Bₘₐₓ", self)
+        self.blctrl_set_bmax.triggered.connect(
+            lambda: self._move_all_ids(state='bmax')
+        )
 
     @Slot(bool)
     def _set_beamline_control(self, state):
@@ -218,12 +228,203 @@ class IDControl(SiriusMainWindow):
             except TypeError:
                 pass
 
+    def _put_pv(self, pvname, value):
+        """Put value to PV."""
+        try:
+            wrapper = PyEpicsWrapper(pvname)
+            wrapper.put(value)
+            return wrapper.check(value, wait=0.1)
+        except Exception:
+            return False
+
+    @Slot(str)
+    def _move_all_ids(self, state):
+        """Move IDs to Bmin/Bmax position.
+
+        Args:
+            state (str): state of all IDs maximum ou minimum magnetic field
+                'bmin' or 'bmax'
+        """
+        for widget in self._id_widgets:
+            try:
+                devname = widget.dev_pref
+                if not devname:
+                    continue
+                idname = str(widget._device) if hasattr(
+                    widget, '_device') else str(devname)
+                params = IDSearch.conv_idname_2_parameters(idname)
+                devstr = str(devname)
+
+                if state == 'bmin':
+                    if 'APU' in devstr:
+                        try:
+                            if params.KPARAM_PARKED is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='Phase-SP'),
+                                    params.KPARAM_PARKED,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='DevCtrl-Cmd'),
+                                3,
+                            )
+                        except Exception:
+                            pass
+                    # elif 'EPU' in devstr: TODO
+                    #     try:
+                    #         if params.KPARAM_PARKED is not None:
+                    #             self._put_pv(
+                    #                 devname.substitute(propty='Gap-SP'),
+                    #                 params.KPARAM_PARKED,
+                    #             )
+                    #         self._put_pv(
+                    #             devname.substitute(propty='ChangeGap-Cmd'),
+                    #             1,
+                    #         )
+                    #     except Exception:
+                    #         pass
+                    elif 'UE' in devstr:
+                        try:
+                            if params.KPARAM_PARKED is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_PARKED,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='KParamChange-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+                    elif 'DELTA' in devstr:
+                        try:
+                            if params.KPARAM_PARKED is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_PARKED,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='KParamChange-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+                    elif 'IVU' in devstr:
+                        try:
+                            if params.KPARAM_PARKED is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_PARKED,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='KParamChange-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+                    elif 'VPU' in devstr:
+                        try:
+                            if params.KPARAM_PARKED is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_PARKED,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='MoveStart-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+
+                elif state == 'bmax':
+                    if 'APU' in devstr:
+                        try:
+                            if params.KPARAM_MIN is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='Phase-SP'),
+                                    params.KPARAM_MIN,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='DevCtrl-Cmd'),
+                                3,
+                            )
+                        except Exception:
+                            pass
+                    # elif 'EPU' in devstr: TODO
+                    #     try:
+                    #         if params.KPARAM_MAX is not None:
+                    #             self._put_pv(
+                    #                 devname.substitute(propty='Gap-SP'),
+                    #                 params.KPARAM_MAX,
+                    #             )
+                    #         self._put_pv(
+                    #             devname.substitute(propty='ChangeGap-Cmd'),
+                    #             1,
+                    #         )
+                    #     except Exception:
+                    #         pass
+                    elif 'UE' in devstr:
+                        try:
+                            if params.KPARAM_MIN is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_MIN,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='KParamChange-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+                    elif 'DELTA' in devstr:
+                        try:
+                            if params.KPARAM_MAX is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_MAX,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='KParamChange-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+                    elif 'IVU' in devstr:
+                        try:
+                            if params.KPARAM_MIN is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_MIN,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='KParamChange-Cmd'),
+                                1
+                            )
+                        except Exception:
+                            pass
+                    elif 'VPU' in devstr:
+                        try:
+                            if params.KPARAM_MIN is not None:
+                                self._put_pv(
+                                    devname.substitute(propty='KParam-SP'),
+                                    params.KPARAM_MIN,
+                                )
+                            self._put_pv(
+                                devname.substitute(propty='MoveStart-Cmd'),
+                                1,
+                            )
+                        except Exception:
+                            pass
+            except Exception:
+                continue
+
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         point = event.pos()
         menu = QMenu("Actions", self)
         menu.addAction(self.blctrl_enbl_act)
         menu.addAction(self.blctrl_dsbl_act)
+        menu.addAction(self.blctrl_do_parked)
+        menu.addAction(self.blctrl_set_bmax)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)
