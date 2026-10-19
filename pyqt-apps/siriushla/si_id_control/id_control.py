@@ -260,7 +260,7 @@ class IDControl(SiriusMainWindow):
                         try:
                             if params.KPARAM_PARKED is not None:
                                 self._put_pv(
-                                    devname.substitute(propty='KParam-SP'),
+                                    devname.substitute(propty='Phase-SP'),
                                     params.KPARAM_PARKED,
                                 )
                             self._put_pv(
@@ -376,7 +376,7 @@ class IDControl(SiriusMainWindow):
                         try:
                             if params.KPARAM_MIN is not None:
                                 self._put_pv(
-                                    devname.substitute(propty='KParam-SP'),
+                                    devname.substitute(propty='Phase-SP'),
                                     params.KPARAM_MIN,
                                 )
                             self._put_pv(
