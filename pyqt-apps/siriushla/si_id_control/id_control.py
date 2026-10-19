@@ -269,7 +269,7 @@ class IDControl(SiriusMainWindow):
                             )
                         except Exception:
                             pass
-                    # elif 'EPU' in devstr:
+                    # elif 'EPU' in devstr: TODO
                     #     try:
                     #         if params.KPARAM_PARKED is not None:
                     #             self._put_pv(
@@ -278,18 +278,6 @@ class IDControl(SiriusMainWindow):
                     #             )
                     #         self._put_pv(
                     #             devname.substitute(propty='ChangeGap-Cmd'),
-                    #             1,
-                    #         )
-                    #     except Exception:
-                    #         pass
-                    #     try:
-                    #         if params.PPARAM_PARKED is not None:
-                    #             self._put_pv(
-                    #                 devname.substitute(propty='Phase-SP'),
-                    #                 params.PPARAM_PARKED,
-                    #             )
-                    #         self._put_pv(
-                    #             devname.substitute(propty='ChangePhase-Cmd'),
                     #             1,
                     #         )
                     #     except Exception:
@@ -307,30 +295,6 @@ class IDControl(SiriusMainWindow):
                             )
                         except Exception:
                             pass
-                        # try:
-                        #     if params.PPARAM_PARKED is not None:
-                        #         self._put_pv(
-                        #             devname.substitute(propty='PParam-SP'),
-                        #             params.PPARAM_PARKED,
-                        #         )
-                        #     self._put_pv(
-                        #         devname.substitute(propty='PParamChange-Cmd'),
-                        #         1
-                        #     )
-                        # except Exception:
-                        #     pass
-                        # try:
-                        #     if params.CPARAM_PARKED is not None:
-                        #         self._put_pv(
-                        #             devname.substitute(propty='CParam-SP'),
-                        #             params.CPARAM_PARKED,
-                        #         )
-                        #     self._put_pv(
-                        #         devname.substitute(propty='CParamChange-Cmd'),
-                        #         1,
-                        #     )
-                        # except Exception:
-                        #     pass
                     elif 'DELTA' in devstr:
                         try:
                             if params.KPARAM_PARKED is not None:
@@ -385,19 +349,7 @@ class IDControl(SiriusMainWindow):
                             )
                         except Exception:
                             pass
-                        # try:
-                        #     if params.PPARAM_MIN is not None:
-                        #         self._put_pv(
-                        #             devname.substitute(propty='PParam-SP'),
-                        #             params.PPARAM_MIN,
-                        #         )
-                        #     self._put_pv(
-                        #         devname.substitute(propty='DevCtrl-Cmd'),
-                        #         3,
-                        #     )
-                        # except Exception:
-                        #     pass
-                    # elif 'EPU' in devstr:
+                    # elif 'EPU' in devstr: TODO
                     #     try:
                     #         if params.KPARAM_MAX is not None:
                     #             self._put_pv(
@@ -406,18 +358,6 @@ class IDControl(SiriusMainWindow):
                     #             )
                     #         self._put_pv(
                     #             devname.substitute(propty='ChangeGap-Cmd'),
-                    #             1,
-                    #         )
-                    #     except Exception:
-                    #         pass
-                    #     try:
-                    #         if params.PPARAM_MAX is not None:
-                    #             self._put_pv(
-                    #                 devname.substitute(propty='Phase-SP'),
-                    #                 params.PPARAM_MAX,
-                    #             )
-                    #         self._put_pv(
-                    #             devname.substitute(propty='ChangePhase-Cmd'),
                     #             1,
                     #         )
                     #     except Exception:
@@ -435,30 +375,6 @@ class IDControl(SiriusMainWindow):
                             )
                         except Exception:
                             pass
-                        # try:
-                        #     if params.PPARAM_MAX is not None:
-                        #         self._put_pv(
-                        #             devname.substitute(propty='PParam-SP'),
-                        #             params.PPARAM_MAX,
-                        #         )
-                        #     self._put_pv(
-                        #         devname.substitute(propty='PParamChange-Cmd'),
-                        #         1,
-                        #     )
-                        # except Exception:
-                        #     pass
-                        # try:
-                        #     if params.CPARAM_MAX is not None:
-                        #         self._put_pv(
-                        #             devname.substitute(propty='CParam-SP'),
-                        #             params.CPARAM_MAX,
-                        #         )
-                        #     self._put_pv(
-                        #         devname.substitute(propty='CParamChange-Cmd'),
-                        #         1,
-                        #     )
-                        # except Exception:
-                        #     pass
                     elif 'DELTA' in devstr:
                         try:
                             if params.KPARAM_MAX is not None:
