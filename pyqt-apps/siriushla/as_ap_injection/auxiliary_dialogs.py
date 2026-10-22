@@ -443,17 +443,18 @@ class BiasFBDetailDialog(SiriusDialog):
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
         self._curve_bias_vs_injcurr = curve
 
-        self._curve_injcurr_tgt = _InfLine(
+        _ideal_injcurr_name = "Ideal Inj. Current"
+        self._curve_ideal_injcurr = _InfLine(
             angle=0,
             movable=False,
             pen=_Pen(color=(160, 32, 240), width=1.5, style=Qt.DashLine),
-            name="Target Inj. Current",
+            name=_ideal_injcurr_name,
         )
-        self.graph_pred.addItem(self._curve_injcurr_tgt)
-        self._curve_injcurr_tgt.setVisible(False)
+        self.graph_pred.addItem(self._curve_ideal_injcurr)
+        self._curve_ideal_injcurr.setVisible(False)
         self.graph_pred.legend.addItem(
-            _PlotDataItem(pen=self._curve_injcurr_tgt.pen),
-            "Target Inj. Current"
+            _PlotDataItem(pen=self._curve_ideal_injcurr.pen),
+            _ideal_injcurr_name
         )
 
         self.graph_pred.addItem(self._curve_gp_fill_std)
@@ -487,21 +488,21 @@ class BiasFBDetailDialog(SiriusDialog):
         self._chn_injcurr.new_value_signal[float].connect(
             self._plot_bias_vs_injcurr)
 
-        self._chn_injcurr_tgt = SiriusConnectionSignal(
-            self._inj_prefix.substitute(propty='TopUpTgtInjCurr-Mon')
+        self._chn_ideal_injcurr = SiriusConnectionSignal(
+            self._inj_prefix.substitute(propty='TopUpIdealInjCurr-Mon')
         )
-        self._chn_injcurr_tgt.new_value_signal[float].connect(
-            self._update_target_injcurr
+        self._chn_ideal_injcurr.new_value_signal[float].connect(
+            self._update_ideal_injcurr
         )
 
         return self.graph_pred
 
-    def _update_target_injcurr(self, dcurr):
+    def _update_ideal_injcurr(self, dcurr):
         visible = False
         if dcurr is not None:
-            self._curve_injcurr_tgt.setPos(dcurr)
+            self._curve_ideal_injcurr.setPos(dcurr)
             visible = True
-        self._curve_injcurr_tgt.setVisible(visible)
+        self._curve_ideal_injcurr.setVisible(visible)
 
     def _plot_gp_prediction_confidance(self, _):
         avg = self._chn_gp_injcurr_avg.value
