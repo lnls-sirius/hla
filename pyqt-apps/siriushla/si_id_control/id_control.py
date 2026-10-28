@@ -9,6 +9,7 @@ from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.devices import IDOrchestra
 
 from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
@@ -31,8 +32,10 @@ class IDControl(SiriusMainWindow):
         self.setWindowIcon(get_id_icon())
         self._id_widgets = list()
         self._channels_mov = list()
+        self._idorchestra = IDOrchestra()
         self._setupUi()
         self._create_actions()
+        self._setup_id_orchestra()
 
     def _setupUi(self):
         cwid = QWidget()
@@ -193,10 +196,29 @@ class IDControl(SiriusMainWindow):
             self._id_widgets.append(ue_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
                 prefix=self._prefix, propty='Moving-Mon'))
-            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
-            self._channels_mov.append(ch_mov)
+        ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+        self._channels_mov.append(ch_mov)
 
         return lay
+
+    def _setup_id_orchestra(self):
+        """Setup IDOrchestra with all IDs."""
+        try:
+            for widget in self._id_widgets:
+                try:
+                    idname = str(widget._device) if hasattr(widget, '_device') else None
+                    if idname is None and hasattr(widget, 'dev_pref'):
+                        # try to get original device name
+                        try:
+                            idname = str(widget._device)
+                        except Exception:
+                            pass
+                    if idname:
+                        self._idorchestra.add_id(idname)
+                except Exception:
+                    continue
+        except Exception:
+            pass
 
     def _create_actions(self):
         self.blctrl_enbl_act = QAction("Enable Beamline Control", self)
@@ -205,6 +227,14 @@ class IDControl(SiriusMainWindow):
         self.blctrl_dsbl_act = QAction("Disable Beamline Control", self)
         self.blctrl_dsbl_act.triggered.connect(
             lambda: self._set_beamline_control(False))
+        self.blctrl_do_parked = QAction("Do parked", self)
+        self.blctrl_do_parked.triggered.connect(
+            lambda: self._move_all_ids(state='bmin')
+        )
+        self.blctrl_set_bmax = QAction(r"Set to Bₘₐₓ", self)
+        self.blctrl_set_bmax.triggered.connect(
+            lambda: self._move_all_ids(state='bmax')
+        )
 
     @Slot(bool)
     def _set_beamline_control(self, state):
@@ -218,12 +248,39 @@ class IDControl(SiriusMainWindow):
             except TypeError:
                 pass
 
+    @Slot(str)
+    def _move_all_ids(self, state):
+        """Move IDs to Bmin/Bmax position.
+
+        Args:
+            state (str): state of all IDs maximum ou minimum magnetic field
+                'bmin' or 'bmax'
+        """
+        try:
+            if not hasattr(self, '_idorchestra') or self._idorchestra is None:
+                self._idorchestra = IDOrchestra()
+                self._setup_id_orchestra()
+            if state == 'bmin':
+                try:
+                    self._idorchestra.cmd_park_all()
+                except Exception:
+                    pass
+            elif state == 'bmax':
+                try:
+                    self._idorchestra.cmd_bmax_all()
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         point = event.pos()
         menu = QMenu("Actions", self)
         menu.addAction(self.blctrl_enbl_act)
         menu.addAction(self.blctrl_dsbl_act)
+        menu.addAction(self.blctrl_do_parked)
+        menu.addAction(self.blctrl_set_bmax)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)
