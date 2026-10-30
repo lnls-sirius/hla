@@ -73,6 +73,7 @@ def get_object(ismenubar=True, parent=None):
             ts_apps = self._create_section_menu('TS', 'TS')
             si_apps = self._create_section_menu('SI', 'SI')
             id_apps = self._create_id_menu()
+            bl_apps = self._create_bl_menu()
             tool_apps = self._create_tool_menu()
             it_apps = self._create_it_menu()
 
@@ -84,6 +85,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level0(ts_apps)
             self.add_object_to_level0(si_apps)
             self.add_object_to_level0(id_apps)
+            self.add_object_to_level0(bl_apps)
             self.add_object_to_level0(tool_apps)
             self.add_object_to_level0(it_apps)
 
@@ -562,6 +564,18 @@ def get_object(ismenubar=True, parent=None):
 
             VA = self._set_va_menu('it')
             self.add_object_to_level1(menu, VA)
+
+            return menu
+
+        def _create_bl_menu(self):
+            menu = LEVEL1('BL', self)
+
+            tat_m1 = LEVEL2A('TAT M1', menu)
+            tat_m1.setIcon(qta.icon('mdi.mirror'))
+            self.connect_newprocess(
+                tat_m1, ['sirius-hla-bl-ap-tat-m1.py', 'TAT:A:PP01:A']
+            )
+            self.add_object_to_level1(menu, tat_m1)
 
             return menu
 
