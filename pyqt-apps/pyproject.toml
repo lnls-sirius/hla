@@ -69,6 +69,7 @@ script-files = [
     "scripts/sirius-hla-as-ti-evr.py",
     "scripts/sirius-hla-as-ti-fout.py",
     "scripts/sirius-hla-bl-ap-imgproc.py",
+    "scripts/sirius-hla-bl-ap-tat-m1.py",
     "scripts/sirius-hla-bo-ap-chargemon.py",
     "scripts/sirius-hla-bo-ap-chromcorr.py",
     "scripts/sirius-hla-bo-ap-injcontrol.py",
