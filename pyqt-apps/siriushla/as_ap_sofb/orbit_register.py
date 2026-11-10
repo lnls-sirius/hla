@@ -1,28 +1,48 @@
 """Creates the Contextes Menus for the Register."""
 
-from functools import partial as _part
+import json as _json
+import uuid as _uuid
 from datetime import datetime as _datetime
-import numpy as _np
-from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
-    QScrollArea, QLabel, QPushButton, QSizePolicy, QGridLayout, QVBoxLayout, \
-    QHBoxLayout, QDialog, QComboBox, QLineEdit
-from qtpy.QtCore import Signal, Qt
-from qtpy.QtGui import QDoubleValidator
-import qtawesome as qta
+from functools import partial as _part
 
+import numpy as _np
+import qtawesome as qta
+from qtpy.QtCore import QProcess as _QProcess, Qt, QTimer as _QTimer, Signal
+from qtpy.QtGui import QDoubleValidator
+from qtpy.QtNetwork import QLocalServer as _QLocalServer
+from qtpy.QtWidgets import (
+    QComboBox,
+    QDialog,
+    QFileDialog,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
+from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.sofb.utils import si_calculate_bump as _calculate_bump
-from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
+
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
-from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
-    QDoubleSpinBoxPlus
+from siriushla.util import connect_newprocess as _connect_newprocess
+from siriushla.widgets import (
+    QDoubleSpinBoxPlus,
+    SiriusConnectionSignal as _ConnSig,
+)
 
 
 class OrbitRegisters(QWidget):
     """."""
 
-    def __init__(self, parent, device, prefix='', acc=None, nr_registers=9):
+    def __init__(self, parent, device, prefix="", acc=None, nr_registers=9):
         """."""
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
@@ -31,26 +51,31 @@ class OrbitRegisters(QWidget):
         self.devpref = self.device.substitute(prefix=prefix)
         self.acc = acc.upper()
         self._orbits = {
-            'ref': [
-                _ConnSig(self.devpref.substitute(propty='RefOrbX-RB')),
-                _ConnSig(self.devpref.substitute(propty='RefOrbY-RB'))],
-            'bpm': [
-                _ConnSig(self.devpref.substitute(propty='BPMOffsetX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='BPMOffsetY-Mon'))],
-            'mat': _ConnSig(self.devpref.substitute(propty='RespMat-RB')),
-            }
-        if self.acc in {'TB', 'TS', 'SI'}:
-            self._orbits['sp'] = [
-                _ConnSig(self.devpref.substitute(propty='SPassOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='SPassOrbY-Mon'))]
-        if self.acc in {'SI', 'BO'}:
-            self._orbits['mti'] = [
-                _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbY-Mon'))]
-        if self.acc == 'SI':
-            self._orbits['orb'] = [
-                _ConnSig(self.devpref.substitute(propty='SlowOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='SlowOrbY-Mon'))]
+            "ref": [
+                _ConnSig(self.devpref.substitute(propty="RefOrbX-RB")),
+                _ConnSig(self.devpref.substitute(propty="RefOrbY-RB")),
+            ],
+            "bpm": [
+                _ConnSig(self.devpref.substitute(propty="BPMOffsetX-Mon")),
+                _ConnSig(self.devpref.substitute(propty="BPMOffsetY-Mon")),
+            ],
+            "mat": _ConnSig(self.devpref.substitute(propty="RespMat-RB")),
+        }
+        if self.acc in {"TB", "TS", "SI"}:
+            self._orbits["sp"] = [
+                _ConnSig(self.devpref.substitute(propty="SPassOrbX-Mon")),
+                _ConnSig(self.devpref.substitute(propty="SPassOrbY-Mon")),
+            ]
+        if self.acc in {"SI", "BO"}:
+            self._orbits["mti"] = [
+                _ConnSig(self.devpref.substitute(propty="MTurnIdxOrbX-Mon")),
+                _ConnSig(self.devpref.substitute(propty="MTurnIdxOrbY-Mon")),
+            ]
+        if self.acc == "SI":
+            self._orbits["orb"] = [
+                _ConnSig(self.devpref.substitute(propty="SlowOrbX-Mon")),
+                _ConnSig(self.devpref.substitute(propty="SlowOrbY-Mon")),
+            ]
 
         self.setupui()
 
@@ -73,7 +98,7 @@ class OrbitRegisters(QWidget):
 
         scr_ar_wid = QWidget()
         scr_ar.setWidget(scr_ar_wid)
-        scr_ar_wid.setObjectName('scr_ar_wid')
+        scr_ar_wid.setObjectName("scr_ar_wid")
         scr_ar_wid.setStyleSheet("""
             #scr_ar_wid{
                 min-width:40em; min-height:10em;
@@ -88,8 +113,13 @@ class OrbitRegisters(QWidget):
         self.registers = []
         for i in range(self._nr_registers):
             reg = OrbitRegister(
-                self, self.device, self._orbits, i+1,
-                prefix=self.prefix, acc=self.acc)
+                self,
+                self.device,
+                self._orbits,
+                i + 1,
+                prefix=self.prefix,
+                acc=self.acc,
+            )
             vbl.addWidget(reg)
             self.registers.append(reg)
 
@@ -98,19 +128,19 @@ class OrbitRegisters(QWidget):
         ctrls = dict()
         for reg in self.registers:
             ctrls[reg.name] = dict()
-            ctrls[reg.name]['x'] = dict()
-            ctrls[reg.name]['x']['signal'] = reg.new_orbx_signal
-            ctrls[reg.name]['x']['getvalue'] = reg.getorbx
-            ctrls[reg.name]['y'] = dict()
-            ctrls[reg.name]['y']['signal'] = reg.new_orby_signal
-            ctrls[reg.name]['y']['getvalue'] = reg.getorby
+            ctrls[reg.name]["x"] = dict()
+            ctrls[reg.name]["x"]["signal"] = reg.new_orbx_signal
+            ctrls[reg.name]["x"]["getvalue"] = reg.getorbx
+            ctrls[reg.name]["y"] = dict()
+            ctrls[reg.name]["y"]["signal"] = reg.new_orby_signal
+            ctrls[reg.name]["y"]["getvalue"] = reg.getorby
         return ctrls
 
 
 class OrbitRegister(QWidget):
     """Create the Context Menu for the Registers."""
 
-    DEFAULT_DIR = '/home/sirius/shared/screens-iocs'
+    DEFAULT_DIR = "/home/sirius/shared/screens-iocs"
 
     MAX_BUMP_CURR = 10  # [mA]
 
@@ -118,32 +148,36 @@ class OrbitRegister(QWidget):
     new_orby_signal = Signal(_np.ndarray)
     new_string_signal = Signal(str)
 
-    def __init__(self, parent, device, orbits, idx, prefix='', acc='SI'):
+    def __init__(self, parent, device, orbits, idx, prefix="", acc="SI"):
         """Initialize the Context Menu."""
         super(OrbitRegister, self).__init__(parent)
         self.idx = idx
         self.prefix = prefix
         self.device = _PVName(device)
         self.devpref = self.device.substitute(prefix=prefix)
-        text = acc.lower() + 'orb'
-        self.setObjectName(text+str(idx))
-        self.EXT = (f'.{acc.lower()}orb', f'.{acc.lower()}dorb')
-        self.EXT_FLT = f'Sirius Orbit Files (*.{text});;' +\
-            f'Sirius Delta Orbit Files (*.{acc.lower()}dorb)'
-        self._config_type = acc.lower() + '_orbit'
+        text = acc.lower() + "orb"
+        self.setObjectName(text + str(idx))
+        self.EXT = (f".{acc.lower()}orb", f".{acc.lower()}dorb")
+        self.EXT_FLT = (
+            f"Sirius Orbit Files (*.{text});;"
+            + f"Sirius Delta Orbit Files (*.{acc.lower()}dorb)"
+        )
+        self._config_type = acc.lower() + "_orbit"
         self._client = ConfigDBClient(config_type=self._config_type)
         self._csorb = SOFBFactory.create(acc.upper())
-        self.string_status = 'Empty'
-        self.name = 'Register {0:d}'.format(self.idx)
+        self.string_status = "Empty"
+        self.name = "Register {0:d}".format(self.idx)
         self._chn_curr = _ConnSig(
-            _PVName('SI-Glob:AP-CurrInfo:Current-Mon').substitute(
-                prefix=prefix))
+            _PVName("SI-Glob:AP-CurrInfo:Current-Mon").substitute(
+                prefix=prefix
+            )
+        )
 
         self.setup_ui()
 
         self._orbits = orbits
         self.last_dir = self.DEFAULT_DIR
-        self.filename = ''
+        self.filename = ""
         self._orbx = _np.zeros(self._csorb.nr_bpms)
         self._orby = _np.zeros(self._csorb.nr_bpms)
 
@@ -163,10 +197,12 @@ class OrbitRegister(QWidget):
 
     def setup_ui(self):
         """Set up Ui of Context Menu."""
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             #{}{{
                 min-width:11.29em;
-            }}""".format(self.objectName()))
+            }}""".format(self.objectName())
+        )
         hbl = QHBoxLayout(self)
 
         btn = QPushButton(self.name, self)
@@ -189,96 +225,115 @@ class OrbitRegister(QWidget):
         btn.setMenu(menu)
         btn.clicked.connect(btn.showMenu)
 
-        act = menu.addAction('Get From &File')
-        act.setIcon(qta.icon('mdi.file-download-outline'))
+        act = menu.addAction("Get From &File")
+        act.setIcon(qta.icon("mdi.file-download-outline"))
         act.triggered.connect(self._load_orbit_from_file)
-        act = menu.addAction('Get From &ServConf')
-        act.setIcon(qta.icon('mdi.cloud-download-outline'))
+        act = menu.addAction("Get From &ServConf")
+        act.setIcon(qta.icon("mdi.cloud-download-outline"))
         act.triggered.connect(self._load_orbit_from_servconf)
-        menu2 = menu.addMenu('Get from &IOC')
-        menu2.setIcon(qta.icon('mdi.download-network-outline'))
-        if self._csorb.acc == 'SI':
-            act = menu2.addAction('&SlowOrb')
-            act.setIcon(qta.icon('mdi.turtle'))
-            act.triggered.connect(_part(self._register_orbit, 'orb'))
+        menu2 = menu.addMenu("Get from &IOC")
+        menu2.setIcon(qta.icon("mdi.download-network-outline"))
+        if self._csorb.acc == "SI":
+            act = menu2.addAction("&SlowOrb")
+            act.setIcon(qta.icon("mdi.turtle"))
+            act.triggered.connect(_part(self._register_orbit, "orb"))
         if self._csorb.isring:
-            act = menu2.addAction('&MTurnOrb')
-            act.setIcon(qta.icon('mdi.alarm-multiple'))
-            act.triggered.connect(_part(self._register_orbit, 'mti'))
-        if self._csorb.acc.upper() != 'BO':
-            act = menu2.addAction('S&PassOrb')
-            act.setIcon(qta.icon('mdi.clock-fast'))
-            act.triggered.connect(_part(self._register_orbit, 'sp'))
-        act = menu2.addAction('&RefOrb')
-        act.triggered.connect(_part(self._register_orbit, 'ref'))
-        act = menu2.addAction('&BPM Offsets')
-        act.setIcon(qta.icon('mdi.currency-sign'))
-        act.triggered.connect(_part(self._register_orbit, 'bpm'))
-        act = menu2.addAction('RespMat')
-        act.setIcon(qta.icon('mdi.matrix'))
+            act = menu2.addAction("&MTurnOrb")
+            act.setIcon(qta.icon("mdi.alarm-multiple"))
+            act.triggered.connect(_part(self._register_orbit, "mti"))
+        if self._csorb.acc.upper() != "BO":
+            act = menu2.addAction("S&PassOrb")
+            act.setIcon(qta.icon("mdi.clock-fast"))
+            act.triggered.connect(_part(self._register_orbit, "sp"))
+        act = menu2.addAction("&RefOrb")
+        act.triggered.connect(_part(self._register_orbit, "ref"))
+        act = menu2.addAction("&BPM Offsets")
+        act.setIcon(qta.icon("mdi.currency-sign"))
+        act.triggered.connect(_part(self._register_orbit, "bpm"))
+        act = menu2.addAction("RespMat")
+        act.setIcon(qta.icon("mdi.matrix"))
         act.triggered.connect(self._open_matrix_sel)
-        act = menu.addAction('&Edit Orbit')
-        act.setIcon(qta.icon('mdi.table-edit'))
+        act = menu.addAction("&Edit Orbit")
+        act.setIcon(qta.icon("mdi.table-edit"))
         act.triggered.connect(self._edit_orbit)
-        if self._csorb.acc == 'SI':
-            act = menu.addAction('Create &Bump')
-            act.setIcon(qta.icon(
-                'mdi.chart-bell-curve', scale_factor=1.2, offset=(-0.2, 0.2)))
-            act.triggered.connect(self._create_bump)
-        act = menu.addAction('&Clear')
-        act.setIcon(qta.icon('mdi.delete-empty'))
+        if self._csorb.acc == "SI":
+            act = menu.addAction("Create &Bumkdhjkgkp")
+            act.setIcon(
+                qta.icon(
+                    "mdi.chart-bell-curve",
+                    scale_factor=1.2,
+                    offset=(-0.2, 0.2),
+                )
+            )
+            # act.triggered.connect(self._create_bump) # ----> mudei aki
+            act.triggered.connect(self._open_bumps_process)
+            # act = QPushButton('Status', menu) # ----> e aki
+            # act.setIcon(qta.icon('mdi.view-split-vertical')) # ----> aki
+            # _connect_newprocess(act, "sirius-hla-si-ap-bumps.py")
+        act = menu.addAction("&Clear")
+        act.setIcon(qta.icon("mdi.delete-empty"))
         act.triggered.connect(self._reset_orbit)
-        act = menu.addAction('Save To File')
-        act.setIcon(qta.icon('mdi.file-upload-outline'))
+        act = menu.addAction("Save To File")
+        act.setIcon(qta.icon("mdi.file-upload-outline"))
         act.triggered.connect(self._save_orbit_to_file)
-        act = menu.addAction('Save To ServConf')
-        act.setIcon(qta.icon('mdi.cloud-upload-outline'))
+        act = menu.addAction("Save To ServConf")
+        act.setIcon(qta.icon("mdi.cloud-upload-outline"))
         act.triggered.connect(self._save_orbit_to_servconf)
+
+    def _open_bumps_process(self):
+        dialog = _BumpProcessDialog(self)
+        try:
+            dialog.run()
+        finally:
+            dialog.deleteLater()
 
     def _reset_orbit(self):
         zer = _np.zeros(self._orbx.shape)
-        self._update_and_emit('Empty', zer, zer.copy(), '')
+        self._update_and_emit("Empty", zer, zer.copy(), "")
 
     def _register_orbit(self, flag, _):
         pvx, pvy = self._orbits.get(flag, (None, None))
         if not pvx or not pvy:
-            self._update_and_emit('Error: wrong specification.')
+            self._update_and_emit("Error: wrong specification.")
             return
         if not pvx.connected or not pvy.connected:
             self._update_and_emit(
-                'Error: PV {0:s} not connected.'.format(pvx.address))
+                "Error: PV {0:s} not connected.".format(pvx.address)
+            )
             return
         self._update_and_emit(
-            'Orbit Registered.', pvx.getvalue(), pvy.getvalue())
+            "Orbit Registered.", pvx.getvalue(), pvy.getvalue()
+        )
 
     def _open_matrix_sel(self):
         wid = QDialog(self)
-        wid.setObjectName(self._csorb.acc+'App')
+        wid.setObjectName(self._csorb.acc + "App")
         wid.setLayout(QVBoxLayout())
 
         cbbox = QComboBox(wid)
         cbbox.setEditable(True)
         cbbox.setMaxVisibleItems(10)
         corrnames = self._csorb.ch_names + self._csorb.cv_names
-        if self._csorb.acc in {'SI', 'BO'}:
-            corrnames.append('RF')
+        if self._csorb.acc in {"SI", "BO"}:
+            corrnames.append("RF")
         cbbox.addItems(corrnames)
-        wid.layout().addWidget(QLabel('Choose the corrector:', wid))
+        wid.layout().addWidget(QLabel("Choose the corrector:", wid))
         wid.layout().addWidget(cbbox)
 
         ledit = QDoubleSpinBoxPlus(wid)
-        ledit.setMinimum(float('-inf'))
-        ledit.setMaximum(float('inf'))
+        ledit.setMinimum(float("-inf"))
+        ledit.setMaximum(float("inf"))
         ledit.setValue(1.0)
-        wid.layout().addWidget(QLabel('Choose the Kick [urad]:', wid))
+        wid.layout().addWidget(QLabel("Choose the Kick [urad]:", wid))
         wid.layout().addWidget(ledit)
         ledit.valueChanged.connect(_part(self._accept_mat_sel, ledit, cbbox))
         cbbox.currentIndexChanged.connect(
-            _part(self._accept_mat_sel, ledit, cbbox))
+            _part(self._accept_mat_sel, ledit, cbbox)
+        )
 
         hlay = QHBoxLayout()
-        cancel = QPushButton('Cancel', wid)
-        confirm = QPushButton('Ok', wid)
+        cancel = QPushButton("Cancel", wid)
+        confirm = QPushButton("Ok", wid)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
         confirm.clicked.connect(_part(self._accept_mat_sel, ledit, cbbox))
@@ -298,67 +353,67 @@ class OrbitRegister(QWidget):
         idx = cbbox.currentIndex()
         corr = cbbox.currentText()
         kick = ledit.value()
-        pvm = self._orbits.get('mat')
+        pvm = self._orbits.get("mat")
         if pvm is None or not pvm.connected:
             self._update_and_emit(
-                'Error: PV {0:s} not connected.'.format(pvm.address))
+                "Error: PV {0:s} not connected.".format(pvm.address)
+            )
             return
         val = pvm.getvalue()
         orbs = val.reshape(-1, self._csorb.nr_corrs)[:, idx]
-        orbx = orbs[:len(orbs)//2] * kick
-        orby = orbs[len(orbs)//2:] * kick
-        self._update_and_emit(
-            'RespMat: {0:s}'.format(corr), orbx, orby)
+        orbx = orbs[: len(orbs) // 2] * kick
+        orby = orbs[len(orbs) // 2 :] * kick
+        self._update_and_emit("RespMat: {0:s}".format(corr), orbx, orby)
 
     def _edit_orbit(self):
         orbx = self.orbx
         orby = self.orby
 
         wid = QDialog(self)
-        wid.setObjectName(self._csorb.acc+'App')
+        wid.setObjectName(self._csorb.acc + "App")
         wid.setLayout(QVBoxLayout())
 
         hbl = QHBoxLayout()
         wid.layout().addLayout(hbl)
-        hbl.addWidget(QLabel('X = ', wid))
+        hbl.addWidget(QLabel("X = ", wid))
         multx = QLineEdit(wid)
         multx.setValidator(QDoubleValidator())
-        multx.setText('1.0')
+        multx.setText("1.0")
         # multx.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
         multx.setAlignment(Qt.AlignCenter)
-        multx.setStyleSheet('max-width:5em;')
+        multx.setStyleSheet("max-width:5em;")
         hbl.addWidget(multx)
-        hbl.addWidget(QLabel('*X   +   ', wid))
+        hbl.addWidget(QLabel("*X   +   ", wid))
         addx = QLineEdit(wid)
         addx.setValidator(QDoubleValidator())
-        addx.setText('0.0')
+        addx.setText("0.0")
         addx.setAlignment(Qt.AlignCenter)
-        addx.setStyleSheet('max-width:5em;')
+        addx.setStyleSheet("max-width:5em;")
         hbl.addWidget(addx)
-        hbl.addWidget(QLabel(' [um]', wid))
+        hbl.addWidget(QLabel(" [um]", wid))
 
         hbl = QHBoxLayout()
         wid.layout().addLayout(hbl)
-        hbl.addWidget(QLabel('Y = ', wid))
+        hbl.addWidget(QLabel("Y = ", wid))
         multy = QLineEdit(wid)
         multy.setValidator(QDoubleValidator())
-        multy.setText('1.0')
+        multy.setText("1.0")
         # multy.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
         multy.setAlignment(Qt.AlignCenter)
-        multy.setStyleSheet('max-width:5em;')
+        multy.setStyleSheet("max-width:5em;")
         hbl.addWidget(multy)
-        hbl.addWidget(QLabel('*Y   +   ', wid))
+        hbl.addWidget(QLabel("*Y   +   ", wid))
         addy = QLineEdit(wid)
         addy.setValidator(QDoubleValidator())
-        addy.setText('0.0')
+        addy.setText("0.0")
         addy.setAlignment(Qt.AlignCenter)
-        addy.setStyleSheet('max-width:5em;')
+        addy.setStyleSheet("max-width:5em;")
         hbl.addWidget(addy)
-        hbl.addWidget(QLabel(' [um]', wid))
+        hbl.addWidget(QLabel(" [um]", wid))
 
         hlay = QHBoxLayout()
-        cancel = QPushButton('Cancel', wid)
-        confirm = QPushButton('Ok', wid)
+        cancel = QPushButton("Cancel", wid)
+        confirm = QPushButton("Ok", wid)
         confirm.setDefault(True)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
@@ -378,30 +433,36 @@ class OrbitRegister(QWidget):
         plusy = float(addy.text())
         orbx = mltx * orbx + plusx
         orby = mlty * orby + plusy
-        txt = ''
-        txt += f'multx = {mltx:5.1f} offx = {plusx:7.1f}\n'
-        txt += f'multy = {mlty:5.1f} offy = {plusy:7.1f}'
+        txt = ""
+        txt += f"multx = {mltx:5.1f} offx = {plusx:7.1f}\n"
+        txt += f"multy = {mlty:5.1f} offy = {plusy:7.1f}"
         self._update_and_emit(txt, orbx, orby)
 
     def _create_bump(self):
         curr = self._chn_curr.value
         if curr is None:
             QMessageBox.warning(
-                self, 'Warning', 'Could not read current value.',
-                QMessageBox.Ok)
+                self,
+                "Warning",
+                "Could not read current value.",
+                QMessageBox.Ok,
+            )
         elif curr > OrbitRegister.MAX_BUMP_CURR:
             ans = QMessageBox.question(
-                self, 'Are you Sure?',
-                f'Stored current is above {OrbitRegister.MAX_BUMP_CURR}mA ' +
-                f'({curr:.2f}mA),\nare you sure you want to continue?',
-                QMessageBox.Yes, QMessageBox.Cancel)
+                self,
+                "Are you Sure?",
+                f"Stored current is above {OrbitRegister.MAX_BUMP_CURR}mA "
+                + f"({curr:.2f}mA),\nare you sure you want to continue?",
+                QMessageBox.Yes,
+                QMessageBox.Cancel,
+            )
             if ans != QMessageBox.Yes:
                 return
 
         def _add_entry(index):
             cbox = self.sender()
             text = cbox.itemText(index)
-            if not text.startswith('other'):
+            if not text.startswith("other"):
                 return
             win = LoadConfigDialog(self._config_type, self)
             confname, status = win.exec_()
@@ -412,76 +473,76 @@ class OrbitRegister(QWidget):
             cbox.setCurrentIndex(index)
 
         wid = QDialog(self)
-        wid.setObjectName(self._csorb.acc+'App')
+        wid.setObjectName(self._csorb.acc + "App")
         lay = QGridLayout()
         wid.setLayout(lay)
 
         row = 0
-        lay.addWidget(QLabel('Base Orbit ', wid), row, 0)
+        lay.addWidget(QLabel("Base Orbit ", wid), row, 0)
         orbcombo = QComboBox(wid)
-        orbcombo.addItems(['Register', 'ref_orb', 'bba_orb', 'other...'])
+        orbcombo.addItems(["Register", "ref_orb", "bba_orb", "other..."])
         orbcombo.setCurrentIndex(1)
         orbcombo.activated.connect(_add_entry)
         lay.addWidget(orbcombo, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('Section', wid), row, 0)
+        lay.addWidget(QLabel("Section", wid), row, 0)
         sscombo = QComboBox(wid)
-        ssnames = [f'{d:02d}' for d in range(1, 21)]
+        ssnames = [f"{d:02d}" for d in range(1, 21)]
         sscombo.addItems(ssnames)
         sscombo.setMaxVisibleItems(7)
-        sscombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
+        sscombo.setStyleSheet("QComboBox{combobox-popup: 0;}")
         lay.addWidget(sscombo, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('Subsection', wid), row, 0)
+        lay.addWidget(QLabel("Subsection", wid), row, 0)
         sbcombo = QComboBox(wid)
-        names = ['SS', 'C1', 'C2', 'BC']
+        names = ["SS", "C1", "C2", "BC"]
         sbcombo.addItems(names)
         sbcombo.setMaxVisibleItems(5)
-        sbcombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
+        sbcombo.setStyleSheet("QComboBox{combobox-popup: 0;}")
         lay.addWidget(sbcombo, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('\u03B8<sub>x</sub> [urad]', wid), row, 0)
+        lay.addWidget(QLabel("\u03b8<sub>x</sub> [urad]", wid), row, 0)
         angx = QLineEdit(wid)
         angx.setValidator(QDoubleValidator())
-        angx.setText('0.0')
+        angx.setText("0.0")
         angx.setAlignment(Qt.AlignCenter)
-        angx.setStyleSheet('max-width:5em;')
+        angx.setStyleSheet("max-width:5em;")
         lay.addWidget(angx, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('X [um] ', wid), row, 0)
+        lay.addWidget(QLabel("X [um] ", wid), row, 0)
         posx = QLineEdit(wid)
         posx.setValidator(QDoubleValidator())
-        posx.setText('0.0')
+        posx.setText("0.0")
         posx.setAlignment(Qt.AlignCenter)
-        posx.setStyleSheet('max-width:5em;')
+        posx.setStyleSheet("max-width:5em;")
         lay.addWidget(posx, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('\u03B8<sub>y</sub> [urad]', wid), row, 0)
+        lay.addWidget(QLabel("\u03b8<sub>y</sub> [urad]", wid), row, 0)
         angy = QLineEdit(wid)
         angy.setValidator(QDoubleValidator())
-        angy.setText('0.0')
+        angy.setText("0.0")
         angy.setAlignment(Qt.AlignCenter)
-        angy.setStyleSheet('max-width:5em;')
+        angy.setStyleSheet("max-width:5em;")
         lay.addWidget(angy, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('Y [um] ', wid), row, 0)
+        lay.addWidget(QLabel("Y [um] ", wid), row, 0)
         posy = QLineEdit(wid)
         posy.setValidator(QDoubleValidator())
-        posy.setText('0.0')
+        posy.setText("0.0")
         posy.setAlignment(Qt.AlignCenter)
-        posy.setStyleSheet('max-width:5em;')
+        posy.setStyleSheet("max-width:5em;")
         lay.addWidget(posy, row, 1)
 
         row += 1
         hlay = QHBoxLayout()
-        cancel = QPushButton('Cancel', wid)
-        confirm = QPushButton('Ok', wid)
+        cancel = QPushButton("Cancel", wid)
+        confirm = QPushButton("Ok", wid)
         confirm.setDefault(True)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
@@ -500,12 +561,12 @@ class OrbitRegister(QWidget):
         if not index:
             orbx = _np.array(self.orbx)
             orby = _np.array(self.orby)
-        elif index == orbcombo.count()-1:
+        elif index == orbcombo.count() - 1:
             return
         else:
             orbs = self._client.get_config_value(confname)
-            orbx = _np.array(orbs['x'])
-            orby = _np.array(orbs['y'])
+            orbx = _np.array(orbs["x"])
+            orby = _np.array(orbs["y"])
 
         agx = float(angx.text())
         agy = float(angy.text())
@@ -513,43 +574,48 @@ class OrbitRegister(QWidget):
         psy = float(posy.text())
         sec = sscombo.currentText()
         sub = sbcombo.currentText()
-        if sub == 'SS':
-            sub = 'SA'
+        if sub == "SS":
+            sub = "SA"
             if not int(sec) % 2:
-                sub = 'SB'
-            elif not (int(sec)+1) % 4:
-                sub = 'SP'
-        orbx, orby = _calculate_bump(orbx, orby, sec+sub, agx, agy, psx, psy)
+                sub = "SB"
+            elif not (int(sec) + 1) % 4:
+                sub = "SP"
+        orbx, orby = _calculate_bump(orbx, orby, sec + sub, agx, agy, psx, psy)
 
-        txt = f'Bump@{sec+sub}; ref={confname}; '
-        txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}'
+        txt = f"Bump@{sec + sub}; ref={confname}; "
+        txt += f"ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}"
         self._update_and_emit(txt, orbx, orby)
 
     def _save_orbit_to_file(self, _):
-        header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
-        header += '# ' + 'BPMX [um]         BPMY [um]             Name' + '\n'
+        header = "# " + _datetime.now().strftime("%Y/%m/%d-%H:%M:%S") + "\n"
+        header += "# " + "BPMX [um]         BPMY [um]             Name" + "\n"
         filename = QFileDialog.getSaveFileName(
-            caption='Define a File Name to Save the Orbit',
+            caption="Define a File Name to Save the Orbit",
             directory=self.last_dir,
-            filter=self.EXT_FLT)
+            filter=self.EXT_FLT,
+        )
         fname = filename[0]
         if not fname:
             return
-        fname += '' if fname.endswith(self.EXT) else self.EXT[0]
+        fname += "" if fname.endswith(self.EXT) else self.EXT[0]
         data = _np.array(
-            [self.orbx, self.orby, self._csorb.bpm_names], dtype=object)
+            [self.orbx, self.orby, self._csorb.bpm_names], dtype=object
+        )
         _np.savetxt(
-            fname, data.T, header=header, fmt='%+18.8e %+18.8e      %s')
-        self._update_and_emit('Orbit Saved: ', self.orbx, self.orby, fname)
+            fname, data.T, header=header, fmt="%+18.8e %+18.8e      %s"
+        )
+        self._update_and_emit("Orbit Saved: ", self.orbx, self.orby, fname)
 
     def _load_orbit_from_file(self):
         filename = QFileDialog.getOpenFileName(
-            caption='Select an Orbit File.', directory=self.last_dir,
-            filter=self.EXT_FLT)
+            caption="Select an Orbit File.",
+            directory=self.last_dir,
+            filter=self.EXT_FLT,
+        )
         if not filename[0]:
             return
         orbx, orby = _np.loadtxt(filename[0], unpack=True, usecols=(0, 1))
-        self._update_and_emit('Orbit Loaded: ', orbx, orby, filename[0])
+        self._update_and_emit("Orbit Loaded: ", orbx, orby, filename[0])
 
     def _load_orbit_from_servconf(self):
         win = LoadConfigDialog(self._config_type, self)
@@ -559,8 +625,10 @@ class OrbitRegister(QWidget):
     def _set_orbit(self, confname):
         data = self._client.get_config_value(confname)
         self._update_and_emit(
-            'Orbit Loaded: '+confname,
-            _np.array(data['x']), _np.array(data['y']))
+            "Orbit Loaded: " + confname,
+            _np.array(data["x"]),
+            _np.array(data["y"]),
+        )
 
     def _save_orbit_to_servconf(self):
         win = SaveConfigDialog(self._config_type, self)
@@ -568,26 +636,218 @@ class OrbitRegister(QWidget):
         win.show()
 
     def _save_orbit(self, confname):
-        data = {'x': self._orbx.tolist(), 'y': self.orby.tolist()}
+        data = {"x": self._orbx.tolist(), "y": self.orby.tolist()}
         try:
             self._client.insert_config(confname, data)
         except (ConfigDBException, TypeError) as err:
-            QMessageBox.warning(self, 'Warning', str(err), QMessageBox.Ok)
+            QMessageBox.warning(self, "Warning", str(err), QMessageBox.Ok)
 
-    def _update_and_emit(self, string, orbx=None, orby=None, fname=''):
+    def _update_and_emit(self, string, orbx=None, orby=None, fname=""):
         if orbx is None or orby is None:
             self.string_status = string
             self.new_string_signal.emit(self.string_status)
             return
         self._orbx = orbx
         self._orby = orby
-        pure_name = ''
+        pure_name = ""
         path = self.last_dir
         if fname:
-            path, pure_name = fname.rsplit('/', 1)
+            path, pure_name = fname.rsplit("/", 1)
         self.string_status = string + pure_name
         self.filename = fname
         self.last_dir = path
         self.new_orbx_signal.emit(orbx)
         self.new_orby_signal.emit(orby)
         self.new_string_signal.emit(self.string_status)
+
+
+class _BumpProcessDialog(QDialog):
+    """Own one external bumps process and its originating register."""
+
+    MAX_MESSAGE = 1024 * 1024
+
+    def __init__(self, register):
+        super().__init__(register)
+        self._register = register
+        self._socket = None
+        self._buffer = bytearray()
+        self._applied = False
+        self._closing = False
+        self._last_id = 0
+        self._channel = "si-bumps-" + _uuid.uuid4().hex
+        self.setWindowTitle("SI Bumps")
+        self.setObjectName("SIApp")
+        layout = QVBoxLayout(self)
+        layout.addWidget(
+            QLabel(
+                "Edit the bump in the external SI Bumps window.\n"
+                "Close this dialog to cancel the operation.",
+                self,
+            )
+        )
+        cancel = QPushButton("Cancel", self)
+        cancel.clicked.connect(self.reject)
+        layout.addWidget(cancel)
+        self._server = _QLocalServer(self)
+        self._server.setSocketOptions(_QLocalServer.UserAccessOption)
+        self._server.newConnection.connect(self._connected)
+        self._process = _QProcess(self)
+        self._process.setProcessChannelMode(_QProcess.ForwardedChannels)
+        self._process.finished.connect(self._finished)
+        self._process.errorOccurred.connect(self._process_error)
+        self._startup_timer = _QTimer(self)
+        self._startup_timer.setSingleShot(True)
+        self._startup_timer.timeout.connect(self._startup_timeout)
+
+    def run(self):
+        if not self._server.listen(self._channel):
+            QMessageBox.warning(
+                self._register, "SI Bumps", self._server.errorString()
+            )
+            return
+        # Schedule launch inside the modal event loop. The SOFB event loop
+        # continues to serve IPC while user edits in the external process.
+        _QTimer.singleShot(0, self._launch)
+        try:
+            self.exec_()
+        finally:
+            self._cleanup()
+
+    def _launch(self):
+        self._startup_timer.start(30000)
+        self._process.start(
+            "sirius-hla-si-ap-bumps.py", ["--register-channel", self._channel]
+        )
+
+    def _connected(self):
+        while self._server.hasPendingConnections():
+            socket = self._server.nextPendingConnection()
+            if self._socket is not None:
+                socket.abort()
+                socket.deleteLater()
+                continue
+            self._socket = socket
+            self._startup_timer.stop()
+            socket.readyRead.connect(self._receive)
+            socket.disconnected.connect(self._peer_closed)
+            self._receive()
+
+    def _receive(self):
+        self._buffer.extend(bytes(self._socket.readAll()))
+        if len(self._buffer) > self.MAX_MESSAGE:
+            self.reject()
+            return
+        while b"\n" in self._buffer and not self._closing:
+            line, _, rest = self._buffer.partition(b"\n")
+            self._buffer = bytearray(rest)
+            request_id = None
+            try:
+                request = _json.loads(line.decode("utf-8"))
+                if not isinstance(request, dict) or request.get("v") != 1:
+                    raise ValueError("Unsupported protocol.")
+                request_id = request.get("id")
+                if type(request_id) is not int or request_id <= self._last_id:
+                    raise ValueError("Invalid or repeated request id.")
+                self._last_id = request_id
+                result = self._handle(request)
+                response = dict(v=1, id=request_id, ok=True, **result)
+            except Exception as error:
+                response = dict(v=1, id=request_id, ok=False, error=str(error))
+            try:
+                payload = _json.dumps(response, allow_nan=False) + "\n"
+            except (ValueError, TypeError):
+                payload = (
+                    _json.dumps(
+                        dict(
+                            v=1,
+                            id=request_id,
+                            ok=False,
+                            error="Register contains non-finite or invalid data.",
+                        )
+                    )
+                    + "\n"
+                )
+            self._socket.write(payload.encode("utf-8"))
+
+    def _handle(self, request):
+        register = self._register
+        operation = request.get("op")
+        if operation == "context":
+            current = register._chn_curr.value
+            if current is not None:
+                current = float(current)
+                if not _np.isfinite(current):
+                    current = None
+            return dict(
+                name=register.name,
+                current=current,
+                nr_bpms=register._csorb.nr_bpms,
+            )
+        if operation == "get_orbit":
+            return dict(x=register.orbx.tolist(), y=register.orby.tolist())
+        if operation != "set_orbit":
+            raise ValueError("Unknown operation.")
+        if self._applied:
+            raise ValueError("This session already updated the register.")
+        text = request.get("text")
+        if not isinstance(text, str) or len(text) > 4096:
+            raise ValueError("Invalid orbit description.")
+        x = _np.asarray(request["x"], dtype=float)
+        y = _np.asarray(request["y"], dtype=float)
+        expected = (register._csorb.nr_bpms,)
+        if (
+            x.shape != expected
+            or y.shape != expected
+            or not _np.isfinite(x).all()
+            or not _np.isfinite(y).all()
+        ):
+            raise ValueError("Invalid orbit dimensions or non-finite values.")
+        register._update_and_emit(text, x.copy(), y.copy())
+        self._applied = True
+        return {}
+
+    def _peer_closed(self):
+        # The child may still be shutting down. finished() normally handles
+        # this; the timer also covers a child stuck after losing the socket.
+        if not self._closing:
+            self._startup_timer.start(3000)
+
+    def _startup_timeout(self):
+        if not self._closing:
+            QMessageBox.warning(
+                self,
+                "SI Bumps",
+                "The external application did not connect "
+                "or did not finish after disconnecting.",
+            )
+            self.reject()
+
+    def _process_error(self, error):
+        if self._closing or error != _QProcess.FailedToStart:
+            return
+        self._startup_timer.stop()
+        QMessageBox.warning(self, "SI Bumps", self._process.errorString())
+        self.reject()
+
+    def _finished(self, exit_code, exit_status):
+        if self._closing:
+            return
+        self._startup_timer.stop()
+        if exit_code != 0 or exit_status == _QProcess.CrashExit:
+            QMessageBox.warning(
+                self,
+                "SI Bumps",
+                "The external application exited with an error. "
+                "See the terminal for details.",
+            )
+        self.accept()
+
+    def _cleanup(self):
+        self._closing = True
+        self._startup_timer.stop()
+        if self._socket is not None:
+            self._socket.abort()
+        self._server.close()
+        if self._process.state() != _QProcess.NotRunning:
+            self._process.kill()
+            self._process.waitForFinished(1000)
