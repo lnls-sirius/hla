@@ -16,6 +16,7 @@ from .apu import APUSummaryHeader, APUSummaryWidget
 from .delta import DELTASummaryHeader, DELTASummaryWidget
 from .ivu import IVUSummaryHeader, IVUSummaryWidget
 from .vpu import VPUSummaryHeader, VPUSummaryWidget
+from .s3pw import S3PWSummaryHeader, S3PWSummaryWidget
 from .ue import UESummaryHeader, UESummaryWidget
 from .util import get_id_icon
 
@@ -69,6 +70,9 @@ class IDControl(SiriusMainWindow):
         self._gbox_vpu = QGroupBox('VPU', self)
         self._gbox_vpu.setLayout(self._setupVPULayout())
 
+        self._gbox_s3pw = QGroupBox('S3PW', self)
+        self._gbox_s3pw.setLayout(self._setupS3PWLayout())
+
         self._gbox_ue = QGroupBox('UE', self)
         self._gbox_ue.setLayout(self._setupUELayout())
 
@@ -87,6 +91,7 @@ class IDControl(SiriusMainWindow):
         laysa.addWidget(self._gbox_delta)
         laysa.addWidget(self._gbox_ivu)
         laysa.addWidget(self._gbox_vpu)
+        laysa.addWidget(self._gbox_s3pw)
         laysa.addWidget(self._gbox_ue)
         scarea.setWidget(scr_ar_wid)
 
@@ -172,6 +177,28 @@ class IDControl(SiriusMainWindow):
             vpu_wid = VPUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(vpu_wid)
             self._id_widgets.append(vpu_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
+
+        return lay
+
+    def _setupS3PWLayout(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+
+        self._s3pw_header = S3PWSummaryHeader(self)
+        lay.addWidget(self._s3pw_header)
+
+        idlist = [
+            'SI-15SP:ID-S3PW',
+        ]
+        
+        for idname in idlist:
+            s3pw_wid = S3PWSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(s3pw_wid)
+            self._id_widgets.append(s3pw_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
                 prefix=self._prefix, propty='Moving-Mon'))
             ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
