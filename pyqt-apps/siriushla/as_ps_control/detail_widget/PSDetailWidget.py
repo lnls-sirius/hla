@@ -112,13 +112,26 @@ class _BaseDetailWidget(QWidget):
         time_str += '.{:03d}'.format(int(1e3*(value % 1)))
         return time_str
 
+    def _get_pvname(self, field, prefixed_psname=None):
+        if prefixed_psname is None:
+            prefixed_psname = self._prefixed_psname
+        pvname = SiriusPVName(prefixed_psname)
+        pvname = pvname.substitute(propty=pvname.propty_name + field)
+        return pvname
+
     def _powerStateLayout(self):
         self.state_button = PyDMStateButton(
-            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sel")
+            parent=self,
+            init_channel=self._get_pvname("PwrState-Sel")
+        )
         self.pwrstate_led = SiriusLedState(
-            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sts")
+            parent=self,
+            init_channel=self._get_pvname("PwrState-Sts")
+        )
         self.pwrstate_label = SiriusLabel(
-            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sts")
+            parent=self,
+            init_channel=self._get_pvname("PwrState-Sts")
+        )
         self.pwrstate_label.setObjectName("pwrstate_label")
 
         layout = QGridLayout()
@@ -135,18 +148,22 @@ class _BaseDetailWidget(QWidget):
         current_mon_label = QLabel("Mon")
 
         self.current_sp_wid = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Current-SP")
+            self, self._get_pvname("Current-SP")
+        )
         self.current_rb_val = SiriusLabel(
-            self, self._prefixed_psname+":Current-RB", keep_unit=True)
+            self, self._get_pvname("Current-RB"), keep_unit=True
+        )
         self.current_rb_val.showUnits = True
         self.current_mon_val = SiriusLabel(
-            self, self._prefixed_psname+":Current-Mon", keep_unit=True)
+            self, self._get_pvname("Current-Mon"), keep_unit=True
+        )
         self.current_mon_val.showUnits = True
 
         if has_refmon:
             current_ref_label = QLabel("Ref Mon")
             self.current_ref_val = SiriusLabel(
-                self, self._prefixed_psname+":CurrentRef-Mon", keep_unit=True)
+                self, self._get_pvname("CurrentRef-Mon"), keep_unit=True
+            )
             self.current_ref_val.showUnits = True
 
         if prec is not None:
@@ -182,9 +199,9 @@ class _BaseDetailWidget(QWidget):
         return layout
 
     def _metricLayout(self, prec=None, has_refmon=True):
-        metric_sp_ch = self._prefixed_psname+":"+self._metric+"-SP"
-        metric_rb_ch = self._prefixed_psname+":"+self._metric+"-RB"
-        metric_mon_ch = self._prefixed_psname+":"+self._metric+"-Mon"
+        metric_sp_ch = self._get_pvname(self._metric + "-SP")
+        metric_rb_ch = self._get_pvname(self._metric + "-RB")
+        metric_mon_ch = self._get_pvname(self._metric + "-Mon")
 
         metric_sp_label = QLabel("Setpoint")
         metric_rb_label = QLabel("Readback")
@@ -199,7 +216,7 @@ class _BaseDetailWidget(QWidget):
         self.metric_mon_val.showUnits = True
 
         if has_refmon:
-            metric_ref_ch = self._prefixed_psname+":"+self._metric+"Ref-Mon"
+            metric_ref_ch = self._get_pvname(self._metric + "Ref-Mon")
             metric_ref_label = QLabel("Ref Mon")
             self.metric_ref_val = SiriusLabel(
                 parent=self, init_channel=metric_ref_ch, keep_unit=True)
@@ -429,7 +446,8 @@ class PSDetailWidget(_BaseDetailWidget):
         self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
         self.version_cte = SiriusLabel(
-            self, self._prefixed_psname + ":Version-Cte")
+            self, self._get_pvname("Version-Cte")
+        )
         self.version_cte.displayFormat = \
             SiriusLabel.DisplayFormat.BSMPUDCVersion
         self.version_cte.setObjectName("version_cte_label")
@@ -441,7 +459,8 @@ class PSDetailWidget(_BaseDetailWidget):
 
         self.tstamp_boot = QLabel('', self)
         self.tstamp_boot_ch = SiriusConnectionSignal(
-            self._prefixed_psname + ":TimestampBoot-Cte")
+            self._get_pvname("TimestampBoot-Cte")
+        )
         self.tstamp_boot_ch.new_value_signal[float].connect(
             self._tstamp_boot_met)
         self.tstamp_boot.setObjectName("tstamp_boot_label")
@@ -454,7 +473,8 @@ class PSDetailWidget(_BaseDetailWidget):
 
         self.tstamp_update = QLabel('', self)
         self.tstamp_update_ch = SiriusConnectionSignal(
-            self._prefixed_psname + ":TimestampUpdate-Mon")
+            self._get_pvname("TimestampUpdate-Mon")
+        )
         self.tstamp_update_ch.new_value_signal[float].connect(
             self._tstamp_update_met)
         self.tstamp_update.setObjectName("tstamp_update_label")
@@ -489,7 +509,9 @@ class PSDetailWidget(_BaseDetailWidget):
             devname=self._psname, database=self._db, interlock='IntlkSoft',
             auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.soft_intlk_led = SiriusLedAlert(
-            parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
+            parent=self,
+            init_channel=self._get_pvname("IntlkSoft-Mon")
+        )
 
         self.hard_label = QLabel('Hard', self, alignment=Qt.AlignCenter)
         self.hard_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
@@ -501,7 +523,9 @@ class PSDetailWidget(_BaseDetailWidget):
             devname=self._psname, database=self._db, interlock='IntlkHard',
             auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.hard_intlk_led = SiriusLedAlert(
-            parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
+            parent=self,
+            init_channel=self._get_pvname("IntlkHard-Mon")
+        )
 
         iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
                       if re.match('IntlkIIB.*Labels-Cte', k)]
@@ -519,8 +543,14 @@ class PSDetailWidget(_BaseDetailWidget):
 
             chs2vals = dict()
             for aux in self._auxdev:
-                chs2vals.update({self._prefixed_psname+aux+":"+intlk+"-Mon": 0
-                                 for intlk in iib_intlks})
+                dic_ = dict()
+                for intlk in iib_intlks:
+                    pvname = self._get_pvname(
+                        intlk+"-Mon",
+                        prefixed_psname=self._prefixed_psname + aux,
+                    )
+                    dic_[pvname] = 0
+                chs2vals.update(dic_)
             self.iib_intlk_led = PyDMLedMultiChannel(self, chs2vals)
 
         alarms = ['Alarms', ] if 'Alarms-Mon' in self._db else []
@@ -540,15 +570,22 @@ class PSDetailWidget(_BaseDetailWidget):
 
             chs2vals = dict()
             for aux in self._auxdev:
-                chs2vals.update({self._prefixed_psname+aux+":"+alarm+"-Mon": 0
-                                 for alarm in alarms})
+                dic_ = dict()
+                for alarm in alarms:
+                    pvname = self._get_pvname(
+                        alarm + "-Mon",
+                        prefixed_psname=self._prefixed_psname + aux,
+                    )
+                    dic_[pvname] = 0
+                chs2vals.update(dic_)
             self.alarm_led = PyDMLedMultiChannel(
                 self, chs2vals,
                 color_list=[PyDMLed.Yellow, PyDMLed.LightGreen, PyDMLed.Gray])
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
-            init_channel=self._prefixed_psname + ":Reset-Cmd")
+            init_channel=self._get_pvname("Reset-Cmd")
+        )
         self.reset_bt.setObjectName('reset_bt')
         self.reset_bt.setStyleSheet(
             '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
@@ -575,15 +612,19 @@ class PSDetailWidget(_BaseDetailWidget):
 
     def _opModeLayout(self):
         self.opmode_sp = PyDMEnumComboBox(
-            self, self._prefixed_psname + ":OpMode-Sel")
+            self, self._get_pvname("OpMode-Sel")
+        )
         self.opmode_sp.setObjectName("opmode_sp_cbox")
         self.opmode_rb = SiriusLabel(
-            self, self._prefixed_psname + ":OpMode-Sts")
+            self, self._get_pvname("OpMode-Sts")
+        )
         self.opmode_rb.setObjectName("opmode_rb_label")
         self.ctrlmode_led = SiriusLedAlert(
-            self, self._prefixed_psname + ":CtrlMode-Mon")
+            self, self._get_pvname("CtrlMode-Mon")
+        )
         self.ctrlmode_label = SiriusLabel(
-            self, self._prefixed_psname + ":CtrlMode-Mon")
+            self, self._get_pvname("CtrlMode-Mon")
+        )
         self.ctrlmode_label.setObjectName("ctrlmode_label")
 
         ctrlmode_layout = QHBoxLayout()
@@ -599,13 +640,17 @@ class PSDetailWidget(_BaseDetailWidget):
 
     def _ctrlLoopLayout(self):
         self.ctrlloop_btn = PyDMStateButton(
-            parent=self, init_channel=self._prefixed_psname + ":CtrlLoop-Sel",
-            invert=True)
+            parent=self,
+            init_channel=self._get_pvname("CtrlLoop-Sel"),
+            invert=True
+        )
         self.ctrlloop_label = SiriusLabel(
-            parent=self, init_channel=self._prefixed_psname + ":CtrlLoop-Sts")
+            parent=self, init_channel=self._get_pvname("CtrlLoop-Sts")
+        )
         self.ctrlloop_label.setObjectName('ctrlloop_label')
         self.ctrlloop_led = SiriusLedState(
-            parent=self, init_channel=self._prefixed_psname + ":CtrlLoop-Sts")
+            parent=self, init_channel=self._get_pvname("CtrlLoop-Sts")
+        )
         self.ctrlloop_led.setOffColor(SiriusLedState.LightGreen)
         self.ctrlloop_led.setOnColor(SiriusLedState.DarkGreen)
 
@@ -624,20 +669,20 @@ class PSDetailWidget(_BaseDetailWidget):
         self.tab_siggen = QTabWidget(self)
         self.tab_siggen.setObjectName(self._psname.sec+'Tab')
 
-        enbl_mon_ca = self._prefixed_psname + ':CycleEnbl-Mon'
-        type_sp_ca = self._prefixed_psname + ':CycleType-Sel'
-        type_rb_ca = self._prefixed_psname + ':CycleType-Sts'
-        nrcycles_sp_ca = self._prefixed_psname + ':CycleNrCycles-SP'
-        nrcycles_rb_ca = self._prefixed_psname + ':CycleNrCycles-RB'
-        index_ca = self._prefixed_psname + ':CycleIndex-Mon'
-        freq_sp_ca = self._prefixed_psname + ':CycleFreq-SP'
-        freq_rb_ca = self._prefixed_psname + ':CycleFreq-RB'
-        ampl_sp_ca = self._prefixed_psname + ':CycleAmpl-SP'
-        ampl_rb_ca = self._prefixed_psname + ':CycleAmpl-RB'
-        offset_sp_ca = self._prefixed_psname + ':CycleOffset-SP'
-        offset_rb_ca = self._prefixed_psname + ':CycleOffset-RB'
-        auxparam_sp_ca = self._prefixed_psname + ':CycleAuxParam-SP'
-        auxparam_rb_ca = self._prefixed_psname + ':CycleAuxParam-RB'
+        enbl_mon_ca = self._get_pvname('CycleEnbl-Mon')
+        type_sp_ca = self._get_pvname('CycleType-Sel')
+        type_rb_ca = self._get_pvname('CycleType-Sts')
+        nrcycles_sp_ca = self._get_pvname('CycleNrCycles-SP')
+        nrcycles_rb_ca = self._get_pvname('CycleNrCycles-RB')
+        index_ca = self._get_pvname('CycleIndex-Mon')
+        freq_sp_ca = self._get_pvname('CycleFreq-SP')
+        freq_rb_ca = self._get_pvname('CycleFreq-RB')
+        ampl_sp_ca = self._get_pvname('CycleAmpl-SP')
+        ampl_rb_ca = self._get_pvname('CycleAmpl-RB')
+        offset_sp_ca = self._get_pvname('CycleOffset-SP')
+        offset_rb_ca = self._get_pvname('CycleOffset-RB')
+        auxparam_sp_ca = self._get_pvname('CycleAuxParam-SP')
+        auxparam_rb_ca = self._get_pvname('CycleAuxParam-RB')
 
         # Params
         self.cycle_enbl_label = QLabel('Enabled', self)
@@ -759,8 +804,8 @@ class PSDetailWidget(_BaseDetailWidget):
         return layout
 
     def _iocModeLayout(self):
-        idff_mode_sel = self._prefixed_psname + ':IDFFMode-Sel'
-        idff_mode_sts = self._prefixed_psname + ':IDFFMode-Sts'
+        idff_mode_sel = self._get_pvname('IDFFMode-Sel')
+        idff_mode_sts = self._get_pvname('IDFFMode-Sts')
 
         idff_mode_label = QLabel('IDFF', self)
         idff_mode_btn = PyDMStateButton(self, idff_mode_sel)
@@ -775,7 +820,7 @@ class PSDetailWidget(_BaseDetailWidget):
         return layout
 
     def _genParamsLayout(self):
-        queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
+        queue_size_ca = self._get_pvname('PRUCtrlQueueSize-Mon')
         queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = SiriusLabel(self, queue_size_ca)
 
@@ -786,7 +831,7 @@ class PSDetailWidget(_BaseDetailWidget):
         layout.addWidget(queue_size_rb_label, 0, 1)
 
         if 'DCLink' not in self._prefixed_psname:
-            syncpulse_cmd_ca = self._prefixed_psname + ':SyncPulse-Cmd'
+            syncpulse_cmd_ca = self._get_pvname('SyncPulse-Cmd')
             syncpulse_cmd_lb = QLabel('Sync Pulse Cmd', self)
             syncpulse_cmd_btn = PyDMPushButton(
                 parent=self, icon=qta.icon('fa5s.step-forward'), pressValue=1,
@@ -842,11 +887,11 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # create auxiliary channels
         self._scopedur_ch_rb = SiriusConnectionSignal(
-            self._prefixed_psname + ':ScopeDuration-RB')
+            self._get_pvname('ScopeDuration-RB'))
         self._scopefreq_ch_rb = SiriusConnectionSignal(
-            self._prefixed_psname + ':ScopeFreq-RB')
+            self._get_pvname('ScopeFreq-RB'))
         self._wfmfreq_ch_rb = SiriusConnectionSignal(
-            self._prefixed_psname + ':ParamWfmRefFreq-Cte')
+            self._get_pvname('ParamWfmRefFreq-Cte'))
 
         # fill graph, label and show layout
         self._wfm_chs, self._wfm_nrpts = dict(), dict()
@@ -860,7 +905,7 @@ class PSDetailWidget(_BaseDetailWidget):
         for idx, suf in enumerate(suf2color):
             propty = 'Wfm' + suf
             color = suf2color[suf]
-            channel = self._prefixed_psname + ':' + propty
+            channel = self._get_pvname('' + propty)
 
             # initialize nrpts
             self._wfm_nrpts[suf] = 0
@@ -905,12 +950,12 @@ class PSDetailWidget(_BaseDetailWidget):
     def _wfmparamsLayout(self):
         # --- scope groupbox ----
 
-        src_sp = self._prefixed_psname + ':ScopeSrcAddr-SP'
-        src_rb = self._prefixed_psname + ':ScopeSrcAddr-RB'
-        freq_sp = self._prefixed_psname + ':ScopeFreq-SP'
-        freq_rb = self._prefixed_psname + ':ScopeFreq-RB'
-        dur_sp = self._prefixed_psname + ':ScopeDuration-SP'
-        dur_rb = self._prefixed_psname + ':ScopeDuration-RB'
+        src_sp = self._get_pvname('ScopeSrcAddr-SP')
+        src_rb = self._get_pvname('ScopeSrcAddr-RB')
+        freq_sp = self._get_pvname('ScopeFreq-SP')
+        freq_rb = self._get_pvname('ScopeFreq-RB')
+        dur_sp = self._get_pvname('ScopeDuration-SP')
+        dur_rb = self._get_pvname('ScopeDuration-RB')
 
         self.scope_src_label = QLabel('Source', self)
         self.scope_src_sp_sb = SiriusHexaSpinbox(self, src_sp)
@@ -967,20 +1012,20 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # --- wfm groupbox ---
 
-        wfm_selected_mon = self._prefixed_psname + ':WfmSelected-Mon'
-        wfm_syncmode_sel = self._prefixed_psname + ':WfmSyncMode-Sel'
-        wfm_syncmode_sts = self._prefixed_psname + ':WfmSyncMode-Sts'
-        wfm_freq_sp = self._prefixed_psname + ':WfmFreq-SP'
-        wfm_freq_rb = self._prefixed_psname + ':WfmFreq-RB'
-        wfm_gain_sp = self._prefixed_psname + ':WfmGain-SP'
-        wfm_gain_rb = self._prefixed_psname + ':WfmGain-RB'
-        wfm_offset_sp = self._prefixed_psname + ':WfmOffset-SP'
-        wfm_offset_rb = self._prefixed_psname + ':WfmOffset-RB'
+        wfm_selected_mon = self._get_pvname('WfmSelected-Mon')
+        wfm_syncmode_sel = self._get_pvname('WfmSyncMode-Sel')
+        wfm_syncmode_sts = self._get_pvname('WfmSyncMode-Sts')
+        wfm_freq_sp = self._get_pvname('WfmFreq-SP')
+        wfm_freq_rb = self._get_pvname('WfmFreq-RB')
+        wfm_gain_sp = self._get_pvname('WfmGain-SP')
+        wfm_gain_rb = self._get_pvname('WfmGain-RB')
+        wfm_offset_sp = self._get_pvname('WfmOffset-SP')
+        wfm_offset_rb = self._get_pvname('WfmOffset-RB')
 
-        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
-        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
-        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
-        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+        wfm_index_ca = self._get_pvname('WfmIndex-Mon')
+        wfm_count_ca = self._get_pvname('WfmSyncPulseCount-Mon')
+        wfm_updateauto_ca = self._get_pvname('WfmUpdateAuto-Sts')
+        wfm_updateauto_sel = self._get_pvname('WfmUpdateAuto-Sel')
 
         self.wfm_selected_label = QLabel('Wfm Selected', self)
         self.wfm_selected_mon = SiriusLabel(self, wfm_selected_mon)
@@ -1186,7 +1231,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
         self.version_label.setObjectName("version_label")
         self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.version_cte = SiriusLabel(
-            self, self._prefixed_psname + ":Version-Cte")
+            self, self._get_pvname("Version-Cte"))
         self.version_cte.setObjectName("version_cte_label")
         self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
@@ -1194,11 +1239,11 @@ class LIPSDetailWidget(_BaseDetailWidget):
         self.tstamp_boot_label.setObjectName("tstamp_label")
         self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.tstamp_boot_cte = SiriusLabel(
-            self, self._prefixed_psname + ":TimestampBoot-Cte")
+            self, self._get_pvname("TimestampBoot-Cte"))
         self.tstamp_boot_cte.setObjectName("tstamp_cte_label")
         self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.tstamp_boot_cte_ch = SiriusConnectionSignal(
-            self._prefixed_psname + ":TimestampBoot-Cte")
+            self._get_pvname("TimestampBoot-Cte"))
         self.tstamp_boot_cte_ch.new_value_signal[float].connect(
             self._tstamp_boot_cte_met)
 
@@ -1207,11 +1252,11 @@ class LIPSDetailWidget(_BaseDetailWidget):
         self.tstamp_update_label.setSizePolicy(
             QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.tstamp_update_mon = SiriusLabel(
-            self, self._prefixed_psname + ":TimestampUpdate-Mon")
+            self, self._get_pvname("TimestampUpdate-Mon"))
         self.tstamp_update_mon.setObjectName("tstampupdate_mon_label")
         self.tstamp_update_mon.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.tstamp_update_mon_ch = SiriusConnectionSignal(
-            self._prefixed_psname + ":TimestampUpdate-Mon")
+            self._get_pvname("TimestampUpdate-Mon"))
         self.tstamp_update_mon_ch.new_value_signal[float].connect(
             self._tstamp_update_mon_met)
 
@@ -1219,7 +1264,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
         self.conn_label.setObjectName("net_label")
         self.conn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.conn_sts = SiriusLabel(
-            self, self._prefixed_psname + ":Connected-Mon")
+            self, self._get_pvname("Connected-Mon"))
         self.conn_sts.setObjectName("net_cte_label")
         self.conn_sts.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
@@ -1252,7 +1297,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
         if self._psname.dev == 'Spect':
             self.intlk_led = LISpectIntlkLed(self)
         else:
-            ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {
+            ch2vals = {self._get_pvname('StatusIntlk-Mon'): {
                 'value': _PS_LI_INTLK, 'comp': 'lt'}}
             self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
 
@@ -1267,15 +1312,15 @@ class LIPSDetailWidget(_BaseDetailWidget):
     def _paramsLayout(self):
         temp_label = QLabel('Temperature', self)
         self.temp_mon_label = SiriusLabel(
-            self, self._prefixed_psname + ':Temperature-Mon')
+            self, self._get_pvname('Temperature-Mon'))
 
         loadv_label = QLabel('Load Voltage', self)
         self.loadv_mon_label = SiriusLabel(
-            self, self._prefixed_psname + ':LoadVoltage-Mon')
+            self, self._get_pvname('LoadVoltage-Mon'))
 
         busv_label = QLabel('Bus Voltage', self)
         self.busv_mon_label = SiriusLabel(
-            self, self._prefixed_psname + ':BusVoltage-Mon')
+            self, self._get_pvname('BusVoltage-Mon'))
 
         layout = QGridLayout()
         layout.addWidget(temp_label, 0, 0, Qt.AlignRight)
@@ -1354,12 +1399,12 @@ class DCLinkDetailWidget(PSDetailWidget):
 
     def _opModeLayout(self):
         self.opmode_rb = SiriusLabel(
-            self, self._prefixed_psname + ":OpMode-Sts")
+            self, self._get_pvname("OpMode-Sts"))
         self.opmode_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode_led = SiriusLedAlert(
-            self, self._prefixed_psname + ":CtrlMode-Mon")
+            self, self._get_pvname("CtrlMode-Mon"))
         self.ctrlmode_label = SiriusLabel(
-            self, self._prefixed_psname + ":CtrlMode-Mon")
+            self, self._get_pvname("CtrlMode-Mon"))
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
         ctrlmode_layout = QHBoxLayout()
@@ -1386,17 +1431,17 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         self.current_mon_label = QLabel("Mon")
 
         self.current_sp_widget = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Voltage-SP")
+            self, self._get_pvname("Voltage-SP"))
         self.current_rb_val = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-RB", keep_unit=True)
+            self, self._get_pvname("Voltage-RB"), keep_unit=True)
         self.current_rb_val.showUnits = True
         self.current_rb_val.precFromPV = True
         self.current_ref_val = SiriusLabel(
-            self, self._prefixed_psname+":VoltageRef-Mon", keep_unit=True)
+            self, self._get_pvname("VoltageRef-Mon"), keep_unit=True)
         self.current_ref_val.showUnits = True
         self.current_ref_val.precFromPV = True
         self.current_mon_val = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-Mon", keep_unit=True)
+            self, self._get_pvname("Voltage-Mon"), keep_unit=True)
         self.current_mon_val.showUnits = True
         self.current_mon_val.precFromPV = True
 
@@ -1418,7 +1463,7 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         for auxmeas in self._auxmeasures:
             text = auxmeas.split('-')[0]
             label = SiriusLabel(
-                self, self._prefixed_psname + ':' + auxmeas)
+                self, self._get_pvname(auxmeas))
             label.showUnits = True
             layout.addRow(text, label)
 
@@ -1444,17 +1489,17 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_mon_label = QLabel("Mon")
 
         self.cap_bank_sp_widget = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":CapacitorBankVoltage-SP")
+            self, self._get_pvname("CapacitorBankVoltage-SP"))
         self.cap_bank_rb_val = SiriusLabel(
-            self, self._prefixed_psname + ":CapacitorBankVoltage-RB",
+            self, self._get_pvname("CapacitorBankVoltage-RB"),
             keep_unit=True)
         self.cap_bank_rb_val.showUnits = True
         self.cap_bank_ref_val = SiriusLabel(
-            self, self._prefixed_psname + ":CapacitorBankVoltageRef-Mon",
+            self, self._get_pvname("CapacitorBankVoltageRef-Mon"),
             keep_unit=True)
         self.cap_bank_ref_val.showUnits = True
         self.cap_bank_mon_val = SiriusLabel(
-            self, self._prefixed_psname + ":CapacitorBankVoltage-Mon",
+            self, self._get_pvname("CapacitorBankVoltage-Mon"),
             keep_unit=True)
         self.cap_bank_mon_val.showUnits = True
 
@@ -1476,7 +1521,7 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
 
         for auxmeas in self._auxmeasures:
             pydmlbl = SiriusLabel(
-                self, self._prefixed_psname + ':' + auxmeas)
+                self, self._get_pvname(auxmeas))
             layout.addRow(auxmeas.split('-')[0], pydmlbl)
 
         pbaux = QPushButton(
@@ -1590,10 +1635,10 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
     def _opModeLayout(self):
         self.opmode_sp = PyDMEnumComboBox(
-            self, self._prefixed_psname + ":OpMode-Sel")
+            self, self._get_pvname("OpMode-Sel"))
         self.opmode_sp.setObjectName("opmode_sp_cbox")
         self.opmode_rb = SiriusLabel(
-            self, self._prefixed_psname + ":OpMode-Sts")
+            self, self._get_pvname("OpMode-Sts"))
         self.opmode_rb.setObjectName("opmode_rb_label")
 
         layout = QGridLayout()
@@ -1609,13 +1654,13 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         current_mon_label = QLabel("Mon")
 
         self.current_raw_sp = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":CurrentRaw-SP")
+            self, self._get_pvname("CurrentRaw-SP"))
         self.current_raw_rb = SiriusLabel(
-            self, self._prefixed_psname+":CurrentRaw-RB")
+            self, self._get_pvname("CurrentRaw-RB"))
         self.current_raw_ref = SiriusLabel(
-            self, self._prefixed_psname+":CurrentRawRef-Mon")
+            self, self._get_pvname("CurrentRawRef-Mon"))
         self.current_raw_mon = SiriusLabel(
-            self, self._prefixed_psname+":CurrentRaw-Mon")
+            self, self._get_pvname("CurrentRaw-Mon"))
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
@@ -1636,16 +1681,16 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         voltage_mn_label = QLabel("Mon")
 
         self.voltage_sp = PyDMLinEditScrollbar(
-            self, self._prefixed_psname + ":Voltage-SP")
+            self, self._get_pvname("Voltage-SP"))
         self.voltage_sp.lineedit.precisionFromPV = False
         self.voltage_sp.lineedit.precision = 6
         self.voltage_rb = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-RB", keep_unit=True)
+            self, self._get_pvname("Voltage-RB"), keep_unit=True)
         self.voltage_rb.precisionFromPV = False
         self.voltage_rb.precision = 6
         self.voltage_rb.showUnits = True
         self.voltage_mn = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-Mon", keep_unit=True)
+            self, self._get_pvname("Voltage-Mon"), keep_unit=True)
         self.voltage_mn.precisionFromPV = False
         self.voltage_mn.precision = 6
         self.voltage_mn.showUnits = True
@@ -1667,12 +1712,12 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         voltage_mn_label = QLabel("Mon")
 
         self.voltage_raw_sp = PyDMLinEditScrollbar(
-            self, self._prefixed_psname + ":VoltageRaw-SP")
+            self, self._get_pvname("VoltageRaw-SP"))
         self.voltage_raw_rb = SiriusLabel(
-            self, self._prefixed_psname+":VoltageRaw-RB", keep_unit=True)
+            self, self._get_pvname("VoltageRaw-RB"), keep_unit=True)
         self.voltage_rb.showUnits = True
         self.voltage_raw_mn = SiriusLabel(
-            self, self._prefixed_psname+":VoltageRaw-Mon", keep_unit=True)
+            self, self._get_pvname("VoltageRaw-Mon"), keep_unit=True)
         self.voltage_raw_mn.showUnits = True
 
         layout = QGridLayout()
@@ -1702,7 +1747,8 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
                 alarm_bt, InterlockWindow, self,
                 devname=self._psname, database=self._db, interlock=pvn)
             alarm_led = SiriusLedAlert(
-                parent=self, init_channel=self._prefixed_psname+':'+pvn+'-Mon')
+                parent=self, init_channel=self._get_pvname(pvn+'-Mon')
+            )
             alarm_led.onColor = alarm_led.Yellow
 
             layout.addWidget(alarm_bt, row, 0)
@@ -1712,7 +1758,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
-            init_channel=self._prefixed_psname + ":AlarmsAmpLtcRst-Cmd")
+            init_channel=self._get_pvname("AlarmsAmpLtcRst-Cmd"))
         self.reset_bt.setObjectName('reset_bt')
         self.reset_bt.setStyleSheet(
             '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
@@ -1729,77 +1775,77 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         ctlmode_lb = QLabel(
             'CurrLoopMode', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.ctlmode_cb = PyDMEnumComboBox(
-            self, self._prefixed_psname + ':CurrLoopMode-Sel')
+            self, self._get_pvname('CurrLoopMode-Sel'))
         self.ctlmode_lb = SiriusLabel(
-            self, self._prefixed_psname + ':CurrLoopMode-Sts')
+            self, self._get_pvname('CurrLoopMode-Sts'))
 
         ctlkp_lb = QLabel(
             'CurrLoopKp', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.ctlkp_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':CurrLoopKp-SP')
+            self, self._get_pvname('CurrLoopKp-SP'))
         self.ctlkp_sp.limitsFromChannel = False
         self.ctlkp_sp.setMinimum(0.0)
         self.ctlkp_sp.setMaximum(2**31 - 1)
         self.ctlkp_rb = SiriusLabel(
-            self, self._prefixed_psname + ':CurrLoopKp-RB')
+            self, self._get_pvname('CurrLoopKp-RB'))
 
         ctlti_lb = QLabel(
             'CurrLoopKi', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.ctlti_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':CurrLoopKi-SP')
+            self, self._get_pvname('CurrLoopKi-SP'))
         self.ctlti_sp.limitsFromChannel = False
         self.ctlti_sp.setMinimum(0.0)
         self.ctlti_sp.setMaximum(2**31 - 1)
         self.ctlti_rb = SiriusLabel(
-            self, self._prefixed_psname + ':CurrLoopKi-RB')
+            self, self._get_pvname('CurrLoopKi-RB'))
 
         cgain_lb = QLabel(
             'CurrGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.cgain_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':CurrGain-SP')
+            self, self._get_pvname('CurrGain-SP'))
         self.cgain_sp.precisionFromPV = False
         self.cgain_sp.precision = 8
         self.cgain_sp.limitsFromChannel = False
         self.cgain_sp.setMinimum(-1)
         self.cgain_sp.setMaximum(+1)
         self.cgain_rb = SiriusLabel(
-            self, self._prefixed_psname + ':CurrGain-RB')
+            self, self._get_pvname('CurrGain-RB'))
         self.cgain_rb.precisionFromPV = False
         self.cgain_rb.precision = 8
 
         coffs_lb = QLabel(
             'CurrOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.coffs_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':CurrOffset-SP')
+            self, self._get_pvname('CurrOffset-SP'))
         self.coffs_sp.limitsFromChannel = False
         self.coffs_sp.setMinimum(-100)
         self.coffs_sp.setMaximum(+100)
         self.coffs_rb = SiriusLabel(
-            self, self._prefixed_psname + ':CurrOffset-RB')
+            self, self._get_pvname('CurrOffset-RB'))
 
         vgain_lb = QLabel(
             'VoltGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.vgain_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':VoltGain-SP')
+            self, self._get_pvname('VoltGain-SP'))
         self.vgain_sp.precisionFromPV = False
         self.vgain_sp.precision = 8
         self.vgain_sp.limitsFromChannel = False
         self.vgain_sp.setMinimum(-1)
         self.vgain_sp.setMaximum(+1)
         self.vgain_rb = SiriusLabel(
-            self, self._prefixed_psname + ':VoltGain-RB')
+            self, self._get_pvname('VoltGain-RB'))
         self.vgain_rb.precisionFromPV = False
         self.vgain_rb.precision = 8
 
         voffs_lb = QLabel(
             'VoltOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.voffs_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':VoltOffset-SP')
+            self, self._get_pvname('VoltOffset-SP'))
         self.voffs_sp.limitsFromChannel = False
         self.voffs_sp.setMinimum(-100)
         self.voffs_sp.setMaximum(+100)
         self.voffs_rb = SiriusLabel(
-            self, self._prefixed_psname + ':VoltOffset-RB')
+            self, self._get_pvname('VoltOffset-RB'))
 
         widgetparms = QWidget()
         lay = QGridLayout(widgetparms)
@@ -1831,23 +1877,23 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         testlima_lb = QLabel(
             'Limit A', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.testlima_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':TestLimA-SP')
+            self, self._get_pvname('TestLimA-SP'))
         self.testlima_rb = SiriusLabel(
-            self, self._prefixed_psname + ':TestLimA-RB')
+            self, self._get_pvname('TestLimA-RB'))
 
         testlimb_lb = QLabel(
             'Limit B', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.testlimb_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':TestLimB-SP')
+            self, self._get_pvname('TestLimB-SP'))
         self.testlimb_rb = SiriusLabel(
-            self, self._prefixed_psname + ':TestLimB-RB')
+            self, self._get_pvname('TestLimB-RB'))
 
         testwaveper_lb = QLabel(
             'Wave Period', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.testwaveper_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':TestWavePeriod-SP')
+            self, self._get_pvname('TestWavePeriod-SP'))
         self.testwaveper_rb = SiriusLabel(
-            self, self._prefixed_psname + ':TestWavePeriod-RB')
+            self, self._get_pvname('TestWavePeriod-RB'))
 
         widgettest = QWidget()
         lay = QGridLayout(widgettest)
@@ -1870,10 +1916,10 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         # # current waveform
         self.graph_curr = SiriusWaveformPlot()
         self.graph_curr.addChannel(
-            y_channel=self._prefixed_psname + ':LAMPCurrentData',
+            y_channel=self._get_pvname('LAMPCurrentData'),
             name='Current', color='blue', lineWidth=1)
         self.graph_curr.addChannel(
-            y_channel=self._prefixed_psname + ':LAMPCurrentRefData',
+            y_channel=self._get_pvname('LAMPCurrentRefData'),
             name='CurrentRef', color='green', lineWidth=1)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
@@ -1889,7 +1935,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         # # voltage waveform
         self.graph_volt = SiriusWaveformPlot()
         self.graph_volt.addChannel(
-            y_channel=self._prefixed_psname + ':LAMPVoltageData',
+            y_channel=self._get_pvname('LAMPVoltageData'),
             name='Voltage', color='blue', lineWidth=1)
         # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_volt.autoRangeX = True
@@ -1916,7 +1962,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         hbox_show = QHBoxLayout()
         hbox_show.setSpacing(9)
         for pvs, color in pvsuf2color.items():
-            pvname = self._prefixed_psname.substitute(propty='Current'+pvs)
+            pvname = self._get_pvname('Current'+pvs)
             legtxt = pvs.replace('-', '')
             self.graph_chist.addYChannel(
                 y_channel=pvname, name=legtxt, color=color, lineWidth=1)
@@ -1954,32 +2000,32 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         fofbacc_lb = QLabel(
             'Accumulator', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbacc_mon = SiriusLabel(
-            self, self._prefixed_psname + ':FOFBAcc-Mon')
+            self, self._get_pvname('FOFBAcc-Mon'))
         self.fofbacc_mon.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         fofbaccgain_lb = QLabel(
             'Acc. Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccgain_sp = PyDMLineEdit(
-            self, self._prefixed_psname + ':FOFBAccGain-SP')
+            self, self._get_pvname('FOFBAccGain-SP'))
         self.fofbaccgain_sp.precisionFromPV = False
         self.fofbaccgain_sp.precision = 8
         self.fofbaccgain_rb = SiriusLabel(
-            self, self._prefixed_psname + ':FOFBAccGain-RB')
+            self, self._get_pvname('FOFBAccGain-RB'))
         self.fofbaccgain_rb.precisionFromPV = False
         self.fofbaccgain_rb.precision = 8
 
         fofbaccfreeze_lb = QLabel(
             'Acc. Freeze', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccfreeze_sp = PyDMEnumComboBox(
-            self, self._prefixed_psname + ':FOFBAccFreeze-Sel')
+            self, self._get_pvname('FOFBAccFreeze-Sel'))
         self.fofbaccfreeze_rb = SiriusLabel(
-            self, self._prefixed_psname + ':FOFBAccFreeze-Sts')
+            self, self._get_pvname('FOFBAccFreeze-Sts'))
 
         fofbaccclear_lb = QLabel(
             'Acc. Clear', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccclear_bt = PyDMPushButton(
             parent=self, icon=qta.icon('mdi.sync'), pressValue=1,
-            init_channel=self._prefixed_psname + ":FOFBAccClear-Cmd")
+            init_channel=self._get_pvname("FOFBAccClear-Cmd"))
         self.fofbaccclear_bt.setObjectName('accclear_bt')
         self.fofbaccclear_bt.setStyleSheet(
             '#accclear_bt{min-width:25px; max-width:25px; icon-size:20px;}')
@@ -1988,11 +2034,11 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             'Max. Sat. Current', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccmaxsat_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':FOFBAccSatMax-SP')
+            self, self._get_pvname('FOFBAccSatMax-SP'))
         self.fofbaccmaxsat_sp.precisionFromPV = False
         self.fofbaccmaxsat_sp.precision = 8
         self.fofbaccmaxsat_rb = SiriusLabel(
-            self, self._prefixed_psname + ':FOFBAccSatMax-RB')
+            self, self._get_pvname('FOFBAccSatMax-RB'))
         self.fofbaccmaxsat_rb.precisionFromPV = False
         self.fofbaccmaxsat_rb.precision = 8
 
@@ -2000,11 +2046,11 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             'Min. Sat. Current', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccminsat_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':FOFBAccSatMin-SP')
+            self, self._get_pvname('FOFBAccSatMin-SP'))
         self.fofbaccminsat_sp.precisionFromPV = False
         self.fofbaccminsat_sp.precision = 8
         self.fofbaccminsat_rb = SiriusLabel(
-            self, self._prefixed_psname + ':FOFBAccSatMin-RB')
+            self, self._get_pvname('FOFBAccSatMin-RB'))
         self.fofbaccminsat_rb.precisionFromPV = False
         self.fofbaccminsat_rb.precision = 8
 
@@ -2012,9 +2058,9 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             'Filter Gain', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccfiltgain_sp = PyDMLineEdit(
-            self, self._prefixed_psname + ':FOFBAccFilterGain-SP')
+            self, self._get_pvname('FOFBAccFilterGain-SP'))
         self.fofbaccfiltgain_rb = SiriusLabel(
-            self, self._prefixed_psname + ':FOFBAccFilterGain-RB')
+            self, self._get_pvname('FOFBAccFilterGain-RB'))
 
         widctrl = QWidget()
         lay = QGridLayout(widctrl)
@@ -2054,10 +2100,10 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             gph_fofbcoeffs[plane].title = 'InvRespMatRow'+plane+' Coefficients'
             gph_fofbcoeffs[plane].setBackgroundColor(QColor(255, 255, 255))
             gph_fofbcoeffs[plane].addChannel(
-                y_channel=self._prefixed_psname+':InvRespMatRow'+plane+'-SP',
+                y_channel=self._get_pvname('InvRespMatRow'+plane+'-SP'),
                 name='SP', color=colorsp, lineWidth=2, symbol='o')
             gph_fofbcoeffs[plane].addChannel(
-                y_channel=self._prefixed_psname+':InvRespMatRow'+plane+'-RB',
+                y_channel=self._get_pvname('InvRespMatRow'+plane+'-RB'),
                 name='RB', color=colorrb, lineWidth=2, symbol='o')
 
         self.show_coeff_sp = QCheckBox('SP')
@@ -2092,10 +2138,10 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         gph_filt.title = 'Filter Coefficients'
         gph_filt.setBackgroundColor(QColor(255, 255, 255))
         gph_filt.addChannel(
-            y_channel=self._prefixed_psname+':FOFBAccFilter-SP',
+            y_channel=self._get_pvname('FOFBAccFilter-SP'),
             name='SP', color='darkBlue', lineWidth=2, symbol='o')
         gph_filt.addChannel(
-            y_channel=self._prefixed_psname+':FOFBAccFilter-RB',
+            y_channel=self._get_pvname('FOFBAccFilter-RB'),
             name='RB', color='blue', lineWidth=2, symbol='o')
 
         self.show_filt_sp = QCheckBox('SP')
@@ -2154,6 +2200,13 @@ class PSAuxMeasWidget(SiriusDialog):
 
         self._setupUi()
         self.setStyleSheet('SiriusLabel{qproperty-alignment: AlignCenter;}')
+
+    def _get_pvname(self, field, prefixed_psname=None):
+        if prefixed_psname is None:
+            prefixed_psname = self._prefixed_psname
+        pvname = SiriusPVName(prefixed_psname)
+        pvname = pvname.substitute(propty=pvname.propty_name + field)
+        return pvname
 
     def _setupUi(self):
         text_psname = QLabel('<h3>' + self._psname[0] + '</h3>', self,
@@ -2219,7 +2272,7 @@ class PSAuxMeasWidget(SiriusDialog):
             for pv in half1:
                 text = pv.split('-')[0]
                 lbl = SiriusLabel(
-                    self, self._prefixed_psname.substitute(propty=pv),
+                    self, self._get_pvname(pv),
                     keep_unit=True)
                 lbl.showUnits = True
                 flay1.addRow(text, lbl)
@@ -2230,7 +2283,7 @@ class PSAuxMeasWidget(SiriusDialog):
             for pv in half2:
                 text = pv.split('-')[0]
                 lbl = SiriusLabel(
-                    self, self._prefixed_psname.substitute(propty=pv),
+                    self, self._get_pvname(pv),
                     keep_unit=True)
                 lbl.showUnits = True
                 flay2.addRow(text, lbl)
@@ -2242,7 +2295,7 @@ class PSAuxMeasWidget(SiriusDialog):
             for pv in self.auxmeas:
                 text = pv.split('-')[0] if 'SOFB' not in pv else pv
                 lbl = SiriusLabel(
-                    self, self._prefixed_psname.substitute(propty=pv),
+                    self, self._get_pvname(pv),
                     keep_unit=True)
                 lbl.showUnits = True
                 lbl.setObjectName('auxmeaslabel')
@@ -2296,6 +2349,13 @@ class PSParamsWidget(SiriusDialog):
         self.setStyleSheet(
             'SiriusLabel{qproperty-alignment: AlignVCenter;}')
 
+    def _get_pvname(self, field, prefixed_psname=None):
+        if prefixed_psname is None:
+            prefixed_psname = self._prefixed_psname
+        pvname = SiriusPVName(prefixed_psname)
+        pvname = pvname.substitute(propty=pvname.propty_name + field)
+        return pvname
+
     def _setupUi(self):
         lay = QVBoxLayout(self)
         lay.setSpacing(15)
@@ -2321,7 +2381,7 @@ class PSParamsWidget(SiriusDialog):
         text = 'Update Command'
         wid = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.redo-alt'), pressValue=1,
-            init_channel=self._prefixed_psname + ":ParamUpdate-Cmd")
+            init_channel=self._get_pvname("ParamUpdate-Cmd"))
         wid.setObjectName('updt_bt')
         wid.setStyleSheet(
             '#updt_bt{min-width:25px; max-width:25px; icon-size:20px;}')
@@ -2329,7 +2389,7 @@ class PSParamsWidget(SiriusDialog):
 
         # Params
         for param in self.params:
-            pvname = self._prefixed_psname + ':' + param
+            pvname = self._get_pvname(param)
             text = param.split('-')[0].split('Param')[1]
             if 'Intlk' in pvname or 'Analog' in pvname:
                 wid = self._create_table_wid(pvname)
