@@ -1,20 +1,23 @@
 """S3PW Control Module."""
 
-from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
-    QPushButton, QHBoxLayout, QGridLayout, QVBoxLayout
 import qtawesome as qta
+
+from qtpy.QtCore import Qt, QSize
+from qtpy.QtWidgets import QFrame, QGroupBox, QLabel, QWidget, \
+    QPushButton, QHBoxLayout, QGridLayout, QVBoxLayout
+
 from pydm.widgets import PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriushla.util import connect_newprocess, connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     SiriusLedState, SiriusLineEdit, SiriusEnumComboBox, \
     PyDMStateButton, SiriusTimePlot
 from ..widgets.dialog import StatusDetailDialog
 
-from .base import IDCommonControlWindow, IDCommonDialog, \
-    IDCommonSummaryBase, IDCommonSummaryHeader, IDCommonSummaryWidget
+from .base import IDCommonControlWindow, IDCommonDialog, IDCommonSummaryBase, \
+    IDCommonSummaryHeader, IDCommonSummaryWidget
 
 
 class S3PWControlWindow(IDCommonControlWindow):
@@ -83,12 +86,43 @@ class S3PWControlWindow(IDCommonControlWindow):
             "StateMon": "FlyFirstPos-Mon"
         },
     }
+    
+    def _setupUi(self):
+        cwid = QWidget()
+        self.setCentralWidget(cwid)
+        lay = QVBoxLayout(cwid)
 
-    def _mainControlsWidget(self):
+        label_title = QLabel(
+            '<h3>'+self._device+' Control - '+self._beamline+'</h3 >', self,
+            alignment=Qt.AlignCenter)
+        label_title.setStyleSheet('max-height:1.29em;')
+
+        lay.addWidget(label_title, Qt.AlignCenter)
+        lay.addWidget(self._s3pwContent())
+
+    def _s3pwContent(self):
+        frame = QFrame()
+        lay = QVBoxLayout(frame)
+
+        lay.addWidget(self._graphFrame())
+        lay.addWidget(self._monitoringFrame())
+        lay.addWidget(self._footerFrame())
+
+        return frame
+
+    def _graphFrame(self):
+        frame = QFrame()
+        lay = QHBoxLayout(frame)
+
+        lay.addWidget(self._temperatureGroup())
+        lay.addWidget(self._vacuumGroup())
+
+        return frame
+
+    def _temperatureGroup(self):
         group = QGroupBox('Temperature')
-        lay = QGridLayout()
+        lay = QGridLayout(group)
         lay.setContentsMargins(12, 12, 12, 12)
-        group.setLayout(lay)
 
         self.timeplot = SiriusTimePlot(parent=self, background='w')
         timespan = 60*60*6
@@ -107,7 +141,50 @@ class S3PWControlWindow(IDCommonControlWindow):
 
         return group
 
-    def _statusWidget(self):
+    def _vacuumGroup(self):
+        group = QGroupBox('Vacuum')
+        lay = QGridLayout(group)
+        lay.setContentsMargins(12, 12, 12, 12)
+
+        self.timeplot = SiriusTimePlot(parent=self, background='w')
+        timespan = 60*60*6
+        colors = ['blue', 'red', 'green', 'magenta']
+        self.timeplot.timeSpan = timespan  # [s]
+        self.timeplot.bufferSize = 2*timespan  # [2 samples/s]
+        self.timeplot.autoRangeY = True
+        self.timeplot.showXGrid = True
+        self.timeplot.showYGrid = True
+        self.timeplot.setLabel('left', text='Charge', units='C', color='gray')
+        self.timeplot.setObjectName('timeplot')
+        self.timeplot.setStyleSheet(
+            '#timeplot{min-width:28em; min-height: 18em;}')
+
+        lay.addWidget(self.timeplot, 0, 0, 1, 3)
+
+        return group
+
+    def _monitoringFrame(self):
+        frame = QFrame()
+        lay = QHBoxLayout(frame)
+
+        right_frame = QFrame()
+        right_lay = QVBoxLayout(right_frame)
+
+        right_lay.addWidget(self._powerGroup()) # broken, review
+        right_lay.addWidget(self._heaterGroup())
+
+        left_frame = QFrame()
+        left_lay = QVBoxLayout(left_frame)
+
+        left_lay.addWidget(self._statusGroup())
+        left_lay.addWidget(self._compressorGroup())
+
+        lay.addWidget(right_frame)
+        lay.addWidget(left_frame)
+
+        return frame
+
+    def _statusGroup(self):
         statusbox = QGroupBox("Status")
         lay = QGridLayout(statusbox)
 
@@ -188,23 +265,19 @@ class S3PWControlWindow(IDCommonControlWindow):
             labels=alarm_labels, section="ID", title=f'Alarm Details',
         )
 
-
-        warning_opr_lay = QGridLayout()
         propty_pwr = 'PowerOff-Mon'
         pvname_pwr = self.dev_pref.substitute(propty=propty_pwr)
         pwr_lbl = QLabel("Power Off")
         pwr_led = SiriusLedAlert(self, pvname_pwr)
-        warning_opr_lay.addWidget(pwr_lbl, 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        warning_opr_lay.addWidget(pwr_led, 0, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        lay.addWidget(pwr_lbl, 6, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lay.addWidget(pwr_led, 6, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
 
         propty_ko = 'KillOverride-Mon'
         pvname_ko = self.dev_pref.substitute(propty=propty_ko)
         ko_led = SiriusLedAlert(self, pvname_ko)
         ko_lbl = QLabel("Kill Override")
-        warning_opr_lay.addWidget(ko_lbl, 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        warning_opr_lay.addWidget(ko_led, 1, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
-
-        # lay.addLayout(warning_opr_lay)
+        lay.addWidget(ko_lbl, 7, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lay.addWidget(ko_led, 7, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
 
         propty = 'DeviceStatus-Mon'
         devsts_labels = [
@@ -221,25 +294,26 @@ class S3PWControlWindow(IDCommonControlWindow):
             'One or more kill SW reached',
         ]
         pvname = self.dev_pref.substitute(propty=propty)
-        dev_lay = QGridLayout()
+
         dev_title = QLabel(f'<h4>{propty}</h4>',
                             self, alignment=Qt.AlignCenter)
-        dev_lay.addWidget(dev_title, 0, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(dev_title, 8, 0, 1, 2, alignment=Qt.AlignCenter)
         for idx, lbl in enumerate(devsts_labels):
             sts_lbl = QLabel(lbl)
-            irow = idx + 1
+            irow = idx + 9
             read_sts = SiriusLedState(self, pvname, bit=idx)
             if lbl not in ['Control enabled', 'Moving']:
                 read_sts.onColor = SiriusLedState.Red
             else:
                 read_sts.onColor = SiriusLedState.Yellow
-            dev_lay.addWidget(read_sts, irow, 0)
-            dev_lay.addWidget(sts_lbl, irow, 1)
-        # lay.addLayout(dev_lay)
-        # lay.addStretch()
+            lay.addWidget(read_sts, irow, 0)
+            lay.addWidget(sts_lbl, irow, 1)
 
-        compressorbox = QGroupBox("Compressor")
-        lay = QGridLayout(compressorbox)
+        return statusbox
+
+    def _compressorGroup(self):
+        group = QGroupBox("Compressor")
+        lay = QGridLayout(group)
 
         lb_glob = QLabel("Compressor 1", alignment=Qt.AlignHCenter)
         idff_pref = _PVName(f"SI-{self.dev_pref.sub}:BS-IDFF")
@@ -281,49 +355,11 @@ class S3PWControlWindow(IDCommonControlWindow):
         lay.addWidget(lbl, 5, 0)
         lay.addWidget(btn, 5, 1)
 
-
-        group = QWidget()
-        lay = QGridLayout(group)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(statusbox, 0, 0)
-        lay.addWidget(compressorbox, 1, 0)
-
-        return group        
-
-    def _ctrlModeWidget(self):
-        group = QGroupBox('Vacuum')
-        group.setMaximumHeight(310)
-        lay = QGridLayout()
-        lay.setContentsMargins(12, 12, 12, 12)
-        group.setLayout(lay)
-
-        self.timeplot = SiriusTimePlot(parent=self, background='w')
-        timespan = 60*60*6
-        colors = ['blue', 'red', 'green', 'magenta']
-        self.timeplot.timeSpan = timespan  # [s]
-        self.timeplot.bufferSize = 2*timespan  # [2 samples/s]
-        self.timeplot.autoRangeY = True
-        self.timeplot.showXGrid = True
-        self.timeplot.showYGrid = True
-        self.timeplot.setLabel('left', text='Charge', units='C', color='gray')
-        self.timeplot.setObjectName('timeplot')
-        self.timeplot.setStyleSheet(
-            '#timeplot{min-width:28em; min-height: 18em;}')
-
-        lay.addWidget(self.timeplot, 0, 0, 1, 3)
-
         return group
 
-    def _beamLinesCtrlWidget(self):
-        # return QWidget()
-        pass
-
-    def _auxCommandsWidget(self):
-        # scan controls
-        scangroup = QGroupBox('Power Supplies')
-        scanlay = QGridLayout()
-        scanlay.setContentsMargins(3, 3, 3, 3)
-        scangroup.setLayout(scanlay)
+    def _powerGroup(self):
+        group = QGroupBox('Power Supplies')
+        lay = QVBoxLayout(group)
 
         # row = 0
         # for title, pv_info in self.SCANS_PVS.items():
@@ -343,34 +379,48 @@ class S3PWControlWindow(IDCommonControlWindow):
         #         raise NotImplementedError
         #     row += 1
         
-        scanlay.addWidget(
-            QLabel('<h4>Current</h4>', self, alignment=Qt.AlignCenter), 0, 1)
-        scanlay.addWidget(
-            QLabel('<h4>Current Ramp</h4>', self, alignment=Qt.AlignCenter), 0, 2)
-        scanlay.addWidget(
-            QLabel('<h4>Interlock</h4>', self, alignment=Qt.AlignCenter), 0, 3)
+        comm_frame = QFrame()
+        comm_lay = QGridLayout(comm_frame)
+
+        comm_lbl = QLabel("PS2 Communication")
+        comm_sts = SiriusLedState(self)
+        comm_lay.addWidget(comm_sts, 0, 0,  alignment=Qt.AlignRight | Qt.AlignVCenter)
+        comm_lay.addWidget(comm_lbl, 0, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        lay.addWidget(comm_frame)
+
+        gframe = QFrame()
+        glay = QGridLayout(gframe)
+        glay.addWidget(QLabel('<h4>Current</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        glay.addWidget(QLabel('<h4>Current Ramp</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+        glay.addWidget(QLabel('<h4>Interlock</h4>', self, alignment=Qt.AlignCenter), 0, 3)
 
         row = 1
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
             label = QLabel(
                 title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
             label.setFixedWidth(150)
-            scanlay.addWidget(label, row, 0)
+            glay.addWidget(label, row, 0)
 
             if isinstance(pv_info, dict):
                 if "Cmd" in pv_info:
-                    self._createCmdBtns(pv_info, scanlay, row)
+                    self._createCmdBtns(pv_info, glay, row)
                 elif "StateMon" in pv_info:
-                    self._createLedState(pv_info, scanlay, row)
+                    self._createLedState(pv_info, glay, row)
                 else:
-                    self._createParam(pv_info, scanlay, row)
+                    self._createParam(pv_info, glay, row)
             else:
                 raise NotImplementedError
             row += 1
 
 
-        # auxiliary parameters
-        auxgbox = QGroupBox('Heaters', self)
+
+        lay.addWidget(gframe)
+
+        return group
+
+    def _heaterGroup(self):
+        group = QGroupBox('Heaters')
+        lay = QGridLayout(group)
 
         self._speed_lim = QLabel('Max Speed [mm/s]', self)
         self._spin_box_sl = SiriusSpinbox(
@@ -412,36 +462,38 @@ class S3PWControlWindow(IDCommonControlWindow):
             self._pb_dtls, S3PWDetails, self,
             prefix=self._prefix, device=self._device)
 
-        auxlay = QGridLayout(auxgbox)
-        auxlay.addWidget(self._speed_lim, 0, 0)
-        auxlay.addWidget(self._spin_box_sl, 0, 1)
-        auxlay.addWidget(self._lb_spin_box_sl, 0, 2)
-        auxlay.addWidget(self._ld_periodlen, 1, 0)
-        auxlay.addWidget(self._lb_periodlen, 1, 1)
-        auxlay.addWidget(self._ld_kpark, 2, 0)
-        auxlay.addWidget(self._lb_kpark, 2, 1)
-        auxlay.addWidget(self._ld_ppark, 3, 0)
-        auxlay.addWidget(self._lb_ppark, 3, 1)
-        auxlay.addWidget(self._ld_cpark, 4, 0)
-        auxlay.addWidget(self._lb_cpark, 4, 1)
-        auxlay.addWidget(self._lb_park, 5, 0)
-        auxlay.addWidget(self._pb_park, 5, 1)
-        auxlay.addWidget(self._pb_dtls, 6, 0)
+        lay.addWidget(self._speed_lim, 0, 0)
+        lay.addWidget(self._spin_box_sl, 0, 1)
+        lay.addWidget(self._lb_spin_box_sl, 0, 2)
+        lay.addWidget(self._ld_periodlen, 1, 0)
+        lay.addWidget(self._lb_periodlen, 1, 1)
+        lay.addWidget(self._ld_kpark, 2, 0)
+        lay.addWidget(self._lb_kpark, 2, 1)
+        lay.addWidget(self._ld_ppark, 3, 0)
+        lay.addWidget(self._lb_ppark, 3, 1)
+        lay.addWidget(self._ld_cpark, 4, 0)
+        lay.addWidget(self._lb_cpark, 4, 1)
+        lay.addWidget(self._lb_park, 5, 0)
+        lay.addWidget(self._pb_park, 5, 1)
+        lay.addWidget(self._pb_dtls, 6, 0)
 
-        auxgbox.setStyleSheet(
+        group.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
-
-        group = QWidget()
-        lay = QGridLayout(group)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(scangroup, 0, 0)
-        lay.addWidget(auxgbox, 1, 0)
 
         return group
 
-    def _ffSettingsWidget(self):
-        quenchbox = QGroupBox('Quench')
-        lay = QGridLayout(quenchbox)
+    def _footerFrame(self):
+        frame = QFrame()
+        lay = QHBoxLayout(frame)
+
+        lay.addWidget(self._quenchGroup())
+        lay.addWidget(self._interlockGroup())
+
+        return frame
+
+    def _quenchGroup(self):
+        group = QGroupBox('Quench')
+        lay = QGridLayout(group)
 
         hlay = QHBoxLayout()
         lb_glob = QLabel(
@@ -474,10 +526,13 @@ class S3PWControlWindow(IDCommonControlWindow):
         lay.setColumnStretch(2, 1)
         lay.setColumnStretch(3, 1)
 
-        interlockbox = QGroupBox('Interlock')
+        return group
 
-        hlay = QHBoxLayout(interlockbox)
-        hlay.setAlignment(Qt.AlignCenter)
+    def _interlockGroup(self):
+        group = QGroupBox('Interlock')
+        hlay = QHBoxLayout(group)
+        hlay.setAlignment(Qt.AlignHCenter)
+        
         emergency_btn = PyDMPushButton(self, label='Emergency')
         # emergency_btn.setToolTip('Stop all motion, lock all brakes.')
         # emergency_btn.channel = self.dev_pref.substitute(propty='Abort-Cmd')
@@ -489,13 +544,7 @@ class S3PWControlWindow(IDCommonControlWindow):
 
         hlay.addWidget(emergency_btn)
         hlay.addWidget(remote_reset_btn)
-        # hlay.addStretch()
-
-        group = QWidget()
-        lay = QGridLayout(group)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(quenchbox, 0, 0)
-        lay.addWidget(interlockbox, 0, 1)
+        hlay.addStretch()
 
         return group
 
@@ -503,7 +552,7 @@ class S3PWControlWindow(IDCommonControlWindow):
         lbl = QLabel(
             f'{label}', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led = SiriusLedAlert(self, pvname)
-        led.setMaximumWidth(40)
+        # led.setMaximumWidth(40)
         btn = QPushButton('', self)
         btn.setIcon(qta.icon('fa5s.ellipsis-v'))
 
@@ -532,6 +581,14 @@ class S3PWControlWindow(IDCommonControlWindow):
             cb = widtype(self, init_channel=pvname)
             lay.addWidget(cb, row, 1, 1, 1)
 
+        if "RB" in pv_info:
+            pvname = self.dev_pref.substitute(propty=pv_info["RB"])
+            lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
+            lbl.setMinimumWidth(125)
+            lbl.showUnits = True
+            lbl.setAlignment(Qt.AlignCenter)
+            lay.addWidget(lbl, row, 2, 1, 1)
+
         if "Btn" in pv_info:
             pvname = self.dev_pref.substitute(propty=pv_info["Btn"])
             btn = PyDMPushButton(self, label='')
@@ -541,17 +598,17 @@ class S3PWControlWindow(IDCommonControlWindow):
             btn.setMaximumWidth(25)
             btn.setStyleSheet(
                 '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
-            lay.addWidget(cb, row, 1, 1, 1)
+            lay.addWidget(btn, row, 3, 1, 1)
 
-        for col, key in {2: "RB", 3: "Mon"}.items():
-            if key not in pv_info:
-                continue
-            pvname = self.dev_pref.substitute(propty=pv_info[key])
-            lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
-            lbl.setMinimumWidth(125)
-            lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lbl, row, col, 1, 1)
+        # for col, key in {2: "RB", 3: "Mon"}.items():
+        #     if key not in pv_info:
+        #         continue
+        #     pvname = self.dev_pref.substitute(propty=pv_info[key])
+        #     lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
+        #     lbl.setMinimumWidth(125)
+        #     lbl.showUnits = True
+        #     lbl.setAlignment(Qt.AlignCenter)
+        #     lay.addWidget(lbl, row, col, 1, 1)
 
 
 class S3PWSummaryBase(IDCommonSummaryBase):
