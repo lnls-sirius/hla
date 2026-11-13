@@ -91,8 +91,8 @@ class IDControl(SiriusMainWindow):
         laysa.addWidget(self._gbox_delta)
         laysa.addWidget(self._gbox_ivu)
         laysa.addWidget(self._gbox_vpu)
-        laysa.addWidget(self._gbox_s3pw)
         laysa.addWidget(self._gbox_ue)
+        laysa.addWidget(self._gbox_s3pw)
         scarea.setWidget(scr_ar_wid)
 
         lay = QGridLayout(cwid)
