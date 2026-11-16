@@ -110,6 +110,7 @@ class IDControl(SiriusMainWindow):
             'SI-09SA:ID-APU22',
             'SI-17SA:ID-APU22',
             'SI-20SB:ID-APU22',
+            'SI-16SB:ID-APU58',
         ]
         for idname in idlist:
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
