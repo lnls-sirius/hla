@@ -97,10 +97,29 @@ class EVRMonLed(_BaseMonLedMultiChan):
     """BPM monitor led."""
 
     def __init__(self, parent=None, device='', prefix=''):
-        p2v = {'RefClkLocked-Mon': 1}
+        p2v = {
+            'RefClkLocked-Mon': 1,
+            'AllClksLockedLtc-Mon': 1,
+        }
         super().__init__(
             parent, device=device, propties2values=p2v, prefix=prefix,
             command='sirius-hla-as-ti-afc.py')
+        self.stateColors = [
+            QLed.LightGreen,  # all ok
+            QLed.Yellow,  # warning, lock latchs raised
+            QLed.Red,  # real problem, AFC not locked
+            QLed.Gray,  # disconnected
+        ]
+
+    def _update_statuses(self):
+        state = 0
+        if not self._connected:
+            state = 3
+        elif not self._address2status['RefClkLocked-Mon']:
+            state = 2
+        elif not self._address2status['AllClksLockedLtc-Mon']:
+            state = 1
+        self.setState(state)
 
 
 class FOFBCtrlMonLed(QLed, PyDMWidget):
