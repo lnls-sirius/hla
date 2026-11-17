@@ -518,6 +518,7 @@ def get_object(ismenubar=True, parent=None):
                 'SI-10SB:ID-DELTA52',
                 'SI-11SP:ID-UE44',
                 'SI-14SB:ID-IVU18',
+                'SI-16SB:ID-APU58',
                 'SI-17SA:ID-APU22',
                 'SI-20SB:ID-APU22',
             ]

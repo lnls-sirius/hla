@@ -108,6 +108,7 @@ class IDControl(SiriusMainWindow):
 
         idlist = [
             'SI-09SA:ID-APU22',
+            'SI-16SB:ID-APU58',
             'SI-17SA:ID-APU22',
             'SI-20SB:ID-APU22',
         ]
