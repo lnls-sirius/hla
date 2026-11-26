@@ -165,47 +165,48 @@ def get_object(ismenubar=True, parent=None):
             asdifctdig = QAction('AS-DI-FCT', osci)
             util.connect_newprocess(
                 asdifctdig,
-                ['gvncviewer', Scopes.AS_DI_FCTDIG],
+                ['gvncviewer', Scopes.AS_DI_FCT.ipaddr],
                 is_window=False,
             )
             asdifpmdig = QAction('AS-DI-FPM', osci)
             util.connect_newprocess(
                 asdifpmdig,
-                ['gvncviewer', Scopes.AS_DI_FPMDIG],
+                ['gvncviewer', Scopes.AS_DI_FPM.ipaddr],
                 is_window=False,
             )
             lidiict = QAction('LI-DI-ICT', osci)
             util.connect_newprocess(
-                lidiict, ['gvncviewer', Scopes.LI_DI_ICTOSC], is_window=False
+                lidiict, ['gvncviewer', Scopes.LI_DI_ICT.ipaddr],
+                is_window=False
             )
             lipumodltr = QAction('LI-PU-MODLTR', osci)
             util.connect_newprocess(
                 lipumodltr,
-                ['gvncviewer', Scopes.LI_PU_OSC_MODLTR],
+                ['gvncviewer', Scopes.LI_PU_MODLTR.ipaddr],
                 is_window=False,
             )
             tbpuinjbo = QAction('TB-PU-InjBO', osci)
             util.connect_newprocess(
                 tbpuinjbo,
-                ['gvncviewer', Scopes.TB_PU_OSC_INJBO],
+                ['gvncviewer', Scopes.TB_PU_INJBO.ipaddr],
                 is_window=False,
             )
             tspuejebo = QAction('TS-PU-EjeBO', osci)
             util.connect_newprocess(
                 tspuejebo,
-                ['gvncviewer', Scopes.TS_PU_OSC_EJEBO],
+                ['gvncviewer', Scopes.TS_PU_EJEBO.ipaddr],
                 is_window=False,
             )
             tspuinjsi = QAction('TS-PU-InjSI', osci)
             util.connect_newprocess(
                 tspuinjsi,
-                ['gvncviewer', Scopes.TS_PU_OSC_INJSI],
+                ['gvncviewer', Scopes.TS_PU_INJSI.ipaddr],
                 is_window=False,
             )
             sipuinjsi = QAction('SI-PU-InjSI', osci)
             util.connect_newprocess(
                 sipuinjsi,
-                ['gvncviewer', Scopes.SI_PU_OSC_INJSI],
+                ['gvncviewer', Scopes.SI_PU_INJSI.ipaddr],
                 is_window=False,
             )
 
