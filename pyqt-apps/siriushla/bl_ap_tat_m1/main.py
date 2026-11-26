@@ -11,7 +11,7 @@ import qtawesome as qta
 from ..widgets import SiriusLedState, SiriusPushButton, \
     SiriusSpinbox, PyDMLedMultiChannel
     
-from .util import Mirror, UPWARD, DOWNWARD
+from .util import Mirror, DIRECTIONS
 
 
 class BLTATMirror(QWidget):
@@ -68,38 +68,42 @@ class BLTATMirror(QWidget):
         mirror_state_frame = QGroupBox("Mirror state")
         mirror_state_frame.setLayout(mirror_state_lay)
 
-        mirror_state_lay.addWidget(self.set_elevate_bundle(
-            'Upward', UPWARD, 'fa.arrow-circle-o-up'))
-        mirror_state_lay.addWidget(self.set_elevate_bundle(
-            'Downward', DOWNWARD, 'fa.arrow-circle-o-down'))
+        up_frame = self.set_elevate_bundle(DIRECTIONS['Up'])
+        down_frame = self.set_elevate_bundle(DIRECTIONS['Down'])
+
+        mirror_state_lay.addWidget(up_frame)
+        mirror_state_lay.addWidget(down_frame)
 
         return mirror_state_frame
 
-    def set_elevate_bundle(self, label, value, icon):
-        layout = QVBoxLayout()
+    def set_elevate_bundle(self, direction):
+        frame = QFrame()
+        layout = QVBoxLayout(frame)
         layout.setAlignment(Qt.AlignCenter)
 
-        frame = QFrame()
-        frame.setLayout(layout)
         frame.setToolTip(
-            f"{label} mirror motor position, sending to {value} mm\n"
-            f"Light Green Led -> Motor in {value} ± 0.1 mm position\n"
+            f"{direction['Name']} mirror motor position, sending to {direction['Value']} mm\n"
+            f"Light Green Led -> Motor sensor activated\n"
              "Dark Green Led -> Motor out of desired position")
 
-        ch2val = {self.mirror.rbv: {
-            'value': value, 'comp': 'cl', 'abs_tol': 1e-1}}
+        limits = direction.get('Limits', {})
+        ch2val = dict()
+        for key, pv in limits.items():
+            ch2val[pv] = {'value': True, 'comp': 'eq'}
+        
         led = PyDMLedMultiChannel(self, channels2values=ch2val)
         led.setOffColor(SiriusLedState.DarkGreen)
-        layout.addWidget(led)
 
         button = SiriusPushButton(
             init_channel=self.mirror.set)
-        button.pressValue = value
-        button.setText(f" {label}")
-        button.setIcon(qta.icon(icon))
+        button.pressValue = direction['Value']
+        button.setText(f" {direction['Name']}")
+        button.setIcon(qta.icon(direction['Icon']))
         button.setIconSize(QSize(24,24))
         button.setMaximumSize(240, 30)
         button.setMinimumSize(240, 30)
+
+        layout.addWidget(led)
         layout.addWidget(button)
 
         return frame
