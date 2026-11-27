@@ -5,9 +5,7 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
     QLabel, QTabWidget
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import ETypes as _et
-from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed, \
     SiriusLabel
 
@@ -39,8 +37,16 @@ class InterlockListWidget(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        ch = self._devname.substitute(
-            prefix=_VACA_PREFIX, propty=self._interlock+'-Mon')
+        if self._devname.dis != 'PS':
+            # special case, for power supplies that are not
+            # Magnet Power Supplies (PS discipline)
+            ch = self._devname.substitute(
+                prefix=_VACA_PREFIX,
+                propty=self._devname.propty_name + self._interlock + "-Mon",
+            )
+        else:
+            ch = self._devname.substitute(
+                prefix=_VACA_PREFIX, propty=self._interlock+'-Mon')
         lay = QGridLayout()
         hbox = QHBoxLayout()
         hbox.addWidget(QLabel('Value: ', self))
