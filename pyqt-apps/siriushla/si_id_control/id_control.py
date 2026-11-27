@@ -231,10 +231,6 @@ class IDControl(SiriusMainWindow):
         self.blctrl_do_parked.triggered.connect(
             lambda: self._move_all_ids(state='bmin')
         )
-        self.blctrl_set_bmax = QAction(r"Set to Bₘₐₓ", self)
-        self.blctrl_set_bmax.triggered.connect(
-            lambda: self._move_all_ids(state='bmax')
-        )
 
     @Slot(bool)
     def _set_beamline_control(self, state):
@@ -250,11 +246,11 @@ class IDControl(SiriusMainWindow):
 
     @Slot(str)
     def _move_all_ids(self, state):
-        """Move IDs to Bmin/Bmax position.
+        """Move IDs to Bmin position.
 
         Args:
             state (str): state of all IDs maximum ou minimum magnetic field
-                'bmin' or 'bmax'
+                'bmin'
         """
         try:
             if not hasattr(self, '_idorchestra') or self._idorchestra is None:
@@ -263,11 +259,6 @@ class IDControl(SiriusMainWindow):
             if state == 'bmin':
                 try:
                     self._idorchestra.cmd_park_all()
-                except Exception:
-                    pass
-            elif state == 'bmax':
-                try:
-                    self._idorchestra.cmd_bmax_all()
                 except Exception:
                     pass
         except Exception:
@@ -280,7 +271,6 @@ class IDControl(SiriusMainWindow):
         menu.addAction(self.blctrl_enbl_act)
         menu.addAction(self.blctrl_dsbl_act)
         menu.addAction(self.blctrl_do_parked)
-        menu.addAction(self.blctrl_set_bmax)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)
